@@ -8,5 +8,6 @@ import com.marijannovak.autismhelper.common.listeners.GeneralListener
  */
 interface ILoginRepository {
     fun checkLoggedIn(): FirebaseUser?
-    fun login(email : String, password : String, listener : GeneralListener<FirebaseUser>)
+    fun register(email : String, password : String, listener : GeneralListener<FirebaseUser>)
+    fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>)
 }

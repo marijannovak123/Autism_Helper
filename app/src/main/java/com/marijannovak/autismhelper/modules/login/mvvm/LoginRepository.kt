@@ -7,8 +7,8 @@ import com.marijannovak.autismhelper.common.listeners.GeneralListener
 /**
  * Created by Marijan on 23.3.2018..
  */
+//todo: google sign in
 class LoginRepository : ILoginRepository {
-
     private var authService : FirebaseAuth
     private var currentUser : FirebaseUser? = null
 
@@ -16,14 +16,15 @@ class LoginRepository : ILoginRepository {
         authService = FirebaseAuth.getInstance()
     }
 
-    override fun login(email: String, password: String, listener : GeneralListener<FirebaseUser>) {
+    override fun register(email: String, password: String, listener : GeneralListener<FirebaseUser>) {
         authService.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful){
                         currentUser = authService.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
-                        listener.onFailure(Throwable("Registering failed"))
+                        val exception = task.exception ?: Exception("Unknown error")
+                        listener.onFailure(Throwable(exception.message))
                     }
                 }
     }
@@ -34,5 +35,18 @@ class LoginRepository : ILoginRepository {
             return it
         }
         return null
+    }
+
+    override fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>) {
+        authService.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful){
+                        currentUser = authService.currentUser
+                        listener.onSucces(currentUser!!)
+                    } else {
+                        val exception = task.exception ?: Exception("Unknown error")
+                        listener.onFailure(Throwable(exception.message))
+                    }
+                }
     }
 }

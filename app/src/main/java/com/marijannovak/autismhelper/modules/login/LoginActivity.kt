@@ -18,7 +18,14 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        init()
+
         viewModel.checkLogin()
+    }
+
+    private fun init() {
+        btnRegister.setOnClickListener { viewModel.register("marijannovak123@gmail.com", "lozinka123") }
+        btnLogin.setOnClickListener { viewModel.login("marijannovak123@gmail.com", "lozinka123") }
     }
 
     override fun createViewModel(): LoginViewModel {

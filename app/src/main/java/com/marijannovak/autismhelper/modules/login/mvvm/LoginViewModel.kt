@@ -10,25 +10,35 @@ import com.marijannovak.autismhelper.common.listeners.GeneralListener
  */
 class LoginViewModel(private val repository: ILoginRepository) : BaseViewModel<FirebaseUser>() {
 
+    val loginRegisterListener : GeneralListener<FirebaseUser>
+
+    init {
+        loginRegisterListener = object : GeneralListener<FirebaseUser>{
+            override fun onSucces(model: FirebaseUser) {
+                stateLiveData.value = Enums.State.CONTENT
+                contentLiveData.value = model
+            }
+
+            override fun onFailure(t: Throwable) {
+                stateLiveData.value = Enums.State.ERROR
+                errorLiveData.value = t
+            }
+        }
+    }
+
     fun checkLogin() {
         val user = repository.checkLoggedIn()
         user?.let { contentLiveData.value = it }
     }
 
-    fun login(email : String, password : String) {
+    fun register(email : String, password : String) {
         stateLiveData.value = Enums.State.LOADING
 
-        repository.login(email, password, object : GeneralListener<FirebaseUser> {
-            override fun onFailure(t: Throwable) {
-                stateLiveData.value = Enums.State.ERROR
-                errorLiveData.value = t
-            }
+        repository.register(email, password, loginRegisterListener)
+    }
 
-            override fun onSucces(model: FirebaseUser) {
-                stateLiveData.value = Enums.State.CONTENT
-                contentLiveData.value = model
-            }
-        })
+    fun login(email: String, password: String) {
+        repository.login(email, password, loginRegisterListener)
     }
 
 }
