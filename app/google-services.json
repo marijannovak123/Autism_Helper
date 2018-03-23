@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "20481588793",
+    "firebase_url": "https://autism-helper.firebaseio.com",
+    "project_id": "autism-helper",
+    "storage_bucket": "autism-helper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20481588793:android:4ebf51c93602ff0a",
+        "android_client_info": {
+          "package_name": "com.marijannovak.autismhelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20481588793-mo6oebvp2j6mqc38hb9gojqbhr74qe7s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marijannovak.autismhelper",
+            "certificate_hash": "e11f6ed42380a9a80fa1aefc2499ea8b292a1a8a"
+          }
+        },
+        {
+          "client_id": "20481588793-au0stimvf37g7mi20vurrchtjhv2o594.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkgaXdR3f0rQDHvaQu9Uyk81fhhqLS01c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20481588793-au0stimvf37g7mi20vurrchtjhv2o594.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
