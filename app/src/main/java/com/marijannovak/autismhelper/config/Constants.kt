@@ -5,6 +5,6 @@ package com.marijannovak.autismhelper.config
  */
 class Constants {
     companion object {
-        val BASE_URL = "https://autism-helper.firebaseio.com/api/"
+        const val BASE_URL = "https://autism-helper.firebaseio.com/api/"
     }
 }

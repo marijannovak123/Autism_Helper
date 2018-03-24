@@ -33,7 +33,6 @@ class LoginViewModel(private val repository: ILoginRepository) : BaseViewModel<F
 
     fun register(email : String, password : String) {
         stateLiveData.value = Enums.State.LOADING
-
         repository.register(email, password, loginRegisterListener)
     }
 

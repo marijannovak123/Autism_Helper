@@ -8,12 +8,21 @@ import com.marijannovak.autismhelper.common.listeners.GeneralListener
  * Created by Marijan on 23.3.2018..
  */
 //todo: google sign in
+//todo: post user to db to save his data
 class LoginRepository : ILoginRepository {
     private var authService : FirebaseAuth
     private var currentUser : FirebaseUser? = null
 
     init {
         authService = FirebaseAuth.getInstance()
+    }
+
+    override fun checkLoggedIn() : FirebaseUser? {
+        currentUser = authService.currentUser
+        currentUser?.let {
+            return it
+        }
+        return null
     }
 
     override fun register(email: String, password: String, listener : GeneralListener<FirebaseUser>) {
@@ -27,14 +36,6 @@ class LoginRepository : ILoginRepository {
                         listener.onFailure(Throwable(exception.message))
                     }
                 }
-    }
-
-    override fun checkLoggedIn() : FirebaseUser? {
-        currentUser = authService.currentUser
-        currentUser?.let {
-            return it
-        }
-        return null
     }
 
     override fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>) {
