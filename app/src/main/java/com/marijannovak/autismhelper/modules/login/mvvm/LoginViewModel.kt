@@ -1,14 +1,18 @@
 package com.marijannovak.autismhelper.modules.login.mvvm
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.enums.Enums
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
+import com.marijannovak.autismhelper.models.User
+import io.reactivex.CompletableObserver
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by Marijan on 23.3.2018..
  */
-class LoginViewModel(private val repository: ILoginRepository) : BaseViewModel<FirebaseUser>() {
+class LoginViewModel(private val repository: ILoginRepository, private val syncRepository : ISyncRepository) : BaseViewModel<FirebaseUser>() {
 
     val loginRegisterListener : GeneralListener<FirebaseUser>
 
@@ -38,6 +42,23 @@ class LoginViewModel(private val repository: ILoginRepository) : BaseViewModel<F
 
     fun login(email: String, password: String) {
         repository.login(email, password, loginRegisterListener)
+    }
+
+    //todo: when logging in, post user to db..check if exists first, dl users and check, then post/patch
+    fun syncUser(user : User) {
+        repository.syncUser(user).subscribeWith(object : CompletableObserver{
+            override fun onComplete() {
+                Log.e("Test", "complete")
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                e?.let { Log.e("Test", e.message) }
+            }
+        })
     }
 
 }

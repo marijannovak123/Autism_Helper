@@ -1,34 +1,54 @@
 package com.marijannovak.autismhelper.models
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
+
 /**
  * Created by Marijan on 23.3.2018..
  */
+@Entity(tableName = TABLE_USER)
 data class User (
-        private var name: String?,
-        private var id: Int?,
-        private var isAdmin: Boolean?
+         var name: String?,
+         @PrimaryKey
+         var id: Int?,
+         var isAdmin: Boolean?,
+         var email : String?
 )
 
+@Entity(tableName = TABLE_ANSWERS)
 data class Answer (
-        private var text: String?,
-        private var isCorrect: Boolean?
+         @PrimaryKey
+         var id : Int?,
+         var text: String?,
+         var isCorrect: Boolean?,
+         var questionId: String?
 )
 
+@Entity(tableName = TABLE_CATEGORIES)
 data class Category(
-        private var id: Int?,
-        private var name: String?
+         @PrimaryKey
+         var id: Int?,
+         var name: String?
 )
 
+@Entity(tableName = TABLE_QUESTIONS)
 data class Question(
-        private var text: String?,
-        private var id: Int?,
-        private var categoryId: Int?,
-        private var typeId: Int?,
-        private var extraData: String?,
-        private var answers : List<Answer>?
+         var text: String?,
+         @PrimaryKey
+         var id: Int?,
+         var categoryId: Int?,
+         var typeId: Int?,
+         var extraData: String?
 )
 
+@Entity(tableName = TABLE_QUESTION_TYPES)
 data class QuestionType(
-        private var id: Int?,
-        private var name: String?
+         @PrimaryKey
+         var id: Int?,
+         var name: String?
 )

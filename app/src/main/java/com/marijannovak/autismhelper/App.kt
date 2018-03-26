@@ -2,7 +2,7 @@ package com.marijannovak.autismhelper
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import com.marijannovak.database.AppDatabase
+import com.marijannovak.autismhelper.database.AppDatabase
 
 /**
  * Created by Marijan on 26.3.2018..
@@ -24,6 +24,10 @@ class App : Application() {
                 databaseInstance = Room.databaseBuilder(context, AppDatabase::class.java,"autism-helper-db").build()
             }
                 return databaseInstance!!
-            }
+        }
+
+        fun closeDB() {
+            this.databaseInstance = null
+        }
      }
 }

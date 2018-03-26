@@ -6,8 +6,10 @@ import android.os.Bundle
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
+import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
+import com.marijannovak.autismhelper.modules.login.mvvm.SyncRepository
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
@@ -29,7 +31,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun createViewModel(): LoginViewModel {
-        return LoginViewModel(LoginRepository())
+        return LoginViewModel(LoginRepository(), SyncRepository())
     }
 
     override fun subscribeToData() {

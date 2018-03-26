@@ -3,6 +3,11 @@ package com.marijannovak.autismhelper.modules.login.mvvm
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
+import com.marijannovak.autismhelper.models.User
+import com.marijannovak.autismhelper.network.APIService
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Marijan on 23.3.2018..
@@ -49,5 +54,13 @@ class LoginRepository : ILoginRepository {
                         listener.onFailure(Throwable(exception.message))
                     }
                 }
+    }
+
+    override fun syncUser(user: User): Completable {
+        return APIService
+                .getApi()
+                .syncUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }
