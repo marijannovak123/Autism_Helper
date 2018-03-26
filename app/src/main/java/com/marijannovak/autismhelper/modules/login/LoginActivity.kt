@@ -35,9 +35,13 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun subscribeToData() {
-        viewModel.getContentLD().observe(this, Observer { startMainActivity() } )
+        viewModel.getContentLD().observe(this, Observer { startSync() } )
         viewModel.getErrorLD().observe(this, Observer { throwable -> showError(throwable!!) })
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
+    }
+
+    private fun startSync() {
+        viewModel.syncData()
     }
 
     private fun startMainActivity() {
@@ -52,6 +56,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     private fun handleState(state : State) {
         when(state) {
             State.LOADING -> pbLoading.show()
+            State.NEXT -> startMainActivity()
             else -> pbLoading.hide()
         }
     }

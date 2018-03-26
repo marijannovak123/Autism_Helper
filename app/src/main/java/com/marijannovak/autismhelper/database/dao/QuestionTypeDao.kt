@@ -2,7 +2,6 @@ package com.marijannovak.autismhelper.database.dao
 
 import android.arch.persistence.room.*
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
-import com.marijannovak.autismhelper.models.Question
 import com.marijannovak.autismhelper.models.QuestionType
 import io.reactivex.Flowable
 
@@ -12,10 +11,10 @@ import io.reactivex.Flowable
 @Dao
 interface QuestionTypeDao {
     @Query("SELECT * FROM $TABLE_QUESTION_TYPES")
-    fun getQuestionTypes() : Flowable<List<Question>>
+    fun getQuestionTypes() : Flowable<List<QuestionType>>
 
     @Query("SELECT * FROM $TABLE_QUESTION_TYPES WHERE id = :id")
-    fun getQuestionTypeById(id : Int) : Flowable<Question>
+    fun getQuestionTypeById(id : Int) : Flowable<QuestionType>
 
     @Query("SELECT COUNT(*) FROM $TABLE_QUESTION_TYPES")
     fun getQuestionTypeCount() : Int
@@ -31,4 +30,7 @@ interface QuestionTypeDao {
 
     @Delete
     fun deleteMultiple(questionTypes : List<QuestionType>)
+
+    @Query("DELETE FROM $TABLE_QUESTION_TYPES")
+    fun deleteTable()
 }

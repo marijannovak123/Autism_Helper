@@ -23,4 +23,6 @@ interface UserDao {
     @Delete
     fun delete(user : User)
 
+    @Query("DELETE FROM $TABLE_USER")
+    fun deleteTable()
 }

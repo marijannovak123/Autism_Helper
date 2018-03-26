@@ -17,7 +17,6 @@ class LoginViewModel(private val repository: ILoginRepository,
                      private val syncRepository : ISyncRepository)
     : BaseViewModel<User>() {
 
-    //todo: generic single observer, generic dispose add
     fun checkLogin() {
         repository.checkLoggedIn()
                 .subscribeWith(object : MaybeObserver<User> {
@@ -38,18 +37,17 @@ class LoginViewModel(private val repository: ILoginRepository,
 
                     override fun onError(e: Throwable?) {
                         stateLiveData.value = State.ERROR
-                        errorLiveData.value = e ?: Throwable("Unknown error")
+                        errorLiveData.value = e ?: unknownError()
                     }
                 })
     }
-
 
     fun register(email : String, password : String) {
         stateLiveData.value = State.LOADING
         repository.register(email, password, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                val user = User(model.displayName, model.uid, model.email)
-                syncUser(user)
+                //todo: more data from form
+                saveUserToFirebase(User(model.displayName, model.uid, model.email))
             }
 
             override fun onFailure(t: Throwable) {
@@ -60,6 +58,7 @@ class LoginViewModel(private val repository: ILoginRepository,
     }
 
     fun login(email: String, password: String) {
+        stateLiveData.value = State.LOADING
         repository.login(email, password, object : GeneralListener<FirebaseUser>{
             override fun onSucces(model: FirebaseUser) {
                 fetchUserData(model.uid)
@@ -91,13 +90,13 @@ class LoginViewModel(private val repository: ILoginRepository,
 
            override fun onError(e: Throwable?) {
                stateLiveData.value = State.ERROR
-               errorLiveData.value = e ?: Throwable("Unknown error")
+               errorLiveData.value = e ?: unknownError()
            }
        })
     }
 
-    fun syncUser(user : User) {
-        repository.syncUser(user).subscribeWith(object : CompletableObserver {
+    fun saveUserToFirebase(user : User) {
+        repository.saveUserToFirebase(user).subscribeWith(object : CompletableObserver {
             override fun onComplete() {
                 repository.saveUser(user)
                 stateLiveData.value = State.CONTENT
@@ -110,9 +109,33 @@ class LoginViewModel(private val repository: ILoginRepository,
 
             override fun onError(e: Throwable?) {
                 stateLiveData.value = State.ERROR
-                errorLiveData.value = e ?: Throwable("Unknown error")
+                errorLiveData.value = e ?: unknownError()
             }
         })
     }
 
+    fun syncData() {
+        syncRepository.syncData(object : SingleObserver<Boolean> {
+            override fun onSuccess(syncDone: Boolean?) {
+                if(syncDone!!) {
+                    stateLiveData.value = State.NEXT
+                } else {
+                    stateLiveData.value = State.ERROR
+                    errorLiveData.value = unknownError()
+                }
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                syncRepository.deleteDataTables()
+                stateLiveData.value = State.ERROR
+                errorLiveData.value = e ?: unknownError()
+            }
+        })
+    }
+
+    fun unknownError() = Throwable("Unknown error")
 }

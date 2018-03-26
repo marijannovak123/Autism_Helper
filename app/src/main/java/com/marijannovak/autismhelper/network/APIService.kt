@@ -44,7 +44,6 @@ class APIService private constructor(){
                     .addInterceptor { chain ->
                         val original = chain.request()
                         val httpUrl = original!!.url()
-
                         val newHttpUrl = httpUrl.newBuilder().addQueryParameter(FIREBASE_AUTH, FIREBASE_API_KEY).build()
                         val requestBuilder = original.newBuilder().url(newHttpUrl)
                         val request = requestBuilder.build()

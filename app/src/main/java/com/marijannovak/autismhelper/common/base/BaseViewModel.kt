@@ -24,8 +24,8 @@ abstract class BaseViewModel<T> : ViewModel() {
     protected var compositeDisposable = CompositeDisposable()
 
     override fun onCleared() {
-        super.onCleared()
         compositeDisposable.dispose()
+        super.onCleared()
     }
 
     fun getContentLD() : MutableLiveData<T> = this.contentLiveData

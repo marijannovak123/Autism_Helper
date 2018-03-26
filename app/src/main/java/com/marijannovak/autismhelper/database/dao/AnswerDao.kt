@@ -32,4 +32,7 @@ interface AnswerDao {
 
     @Delete
     fun deleteMultiple(answers : List<Answer>)
+
+    @Query("DELETE FROM $TABLE_ANSWERS")
+    fun deleteTable()
 }

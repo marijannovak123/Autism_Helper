@@ -14,7 +14,7 @@ interface ILoginRepository {
     fun checkLoggedIn(): Maybe<User>
     fun register(email : String, password : String, listener : GeneralListener<FirebaseUser>)
     fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>)
-    fun syncUser(user : User) : Completable
+    fun saveUserToFirebase(user : User) : Completable
     fun saveUser(user : User)
     fun fetchUserData(userId: String): Single<User>
 }

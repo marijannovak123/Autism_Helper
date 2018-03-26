@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.database.dao
 
 import android.arch.persistence.room.*
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
 import com.marijannovak.autismhelper.models.Question
 import io.reactivex.Flowable
 
@@ -36,4 +37,7 @@ interface QuestionDao {
 
     @Delete
     fun deleteMultiple(questions : List<Question>)
+
+    @Query("DELETE FROM $TABLE_QUESTIONS")
+    fun deleteTable()
 }

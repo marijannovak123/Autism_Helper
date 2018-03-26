@@ -60,10 +60,10 @@ class LoginRepository : ILoginRepository {
                 }
     }
 
-    override fun syncUser(user: User): Completable {
+    override fun saveUserToFirebase(user: User): Completable {
         return APIService
                 .getApi()
-                .syncUser(user.id!!, user)
+                .putUser(user.id, user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

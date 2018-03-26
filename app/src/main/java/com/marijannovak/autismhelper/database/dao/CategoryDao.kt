@@ -32,4 +32,7 @@ interface CategoryDao {
 
     @Delete
     fun deleteMultiple(categories : List<Category>)
+
+    @Query("DELETE FROM $TABLE_CATEGORIES")
+    fun deleteTable()
 }
