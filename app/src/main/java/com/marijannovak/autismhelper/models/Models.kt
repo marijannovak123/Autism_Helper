@@ -16,8 +16,8 @@ data class User (
          var name: String?,
          @PrimaryKey
          var id: Int?,
-         var isAdmin: Boolean?,
-         var email : String?
+         var email : String?,
+         var password : String?
 )
 
 @Entity(tableName = TABLE_ANSWERS)

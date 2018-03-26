@@ -59,7 +59,7 @@ class LoginRepository : ILoginRepository {
     override fun syncUser(user: User): Completable {
         return APIService
                 .getApi()
-                .syncUser(user)
+                .syncUser(user.id!!, user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

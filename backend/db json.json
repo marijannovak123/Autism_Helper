@@ -1,0 +1,95 @@
+{
+    "api": 
+    {
+        "users" : 
+        [
+            {
+                "name" : "marijan",
+                "id" : 0,
+                "email" : "marijannovak123",
+                "password" : "lozinka123",
+                "isAdmin" : true
+            }
+        ],
+
+        "questions": 
+        [
+            {
+                "text" : "2+2?",
+                "id" : 0,
+                "categoryId" : 0,
+                "typeId" : 0,
+                "extraData" : ""
+            },
+
+            {
+                "text" : "2/2?",
+                "id" : 1,
+                "categoryId" : 0,
+                "typeId" : 0,
+                "extraData" : ""
+            },
+
+            {
+                "text" : "2/2?",
+                "id" : 2,
+                "categoryId" : 1,
+                "typeId" : 0,
+                "extraData" : "#1ccc42"
+            }
+
+        ],
+
+        "answers" : [
+            {"id" : 0, "text" : "1", "isCorrect" : true, "questionId" : 0},
+            {"id" : 1, "text" : "8", "isCorrect" : false, "questionId" : 0}, 
+            {"id" : 2, "text" : "2", "isCorrect" : false, "questionId" : 0},
+            {"id" : 3, "text" : "4", "isCorrect" : false, "questionId" : 0},
+            {"id" : 4, "text" : "1", "isCorrect" : true, "questionId" : 1},
+            {"id" : 5, "text" : "8", "isCorrect" : false, "questionId" : 1}, 
+            {"id" : 6, "text" : "2", "isCorrect" : false, "questionId" : 1},
+            {"id" : 7, "text" : "4", "isCorrect" : false, "questionId" : 1},
+            {"id" : 8, "text" : "Blue", "isCorrect" : false, "questionId" : 2},
+            {"id" : 9, "text" : "Purple", "isCorrect" : false, "questionId" : 2},
+            {"id" : 10, "text" : "Green", "isCorrect" : true, "questionId" : 2}, 
+            {"id" : 11, "text" : "Red", "isCorrect" : false, "questionId" : 2}
+        ],
+
+        "categories" : 
+        [
+            {
+                "id" : 0,
+                "name" : "math"
+            },
+
+            {
+                "id" : 1,
+                "name" : "colors"
+            }
+        ],
+
+        "question-types" : 
+        [
+            {
+                "id" : 0,
+                "name" : "Pick correct answer"
+            },
+
+            {
+                "id" : 1,
+                "name" : "True/false"
+            },
+
+            {
+                "id" : 2,
+                "name" : "Matching"
+            },
+
+            {
+                "id" : 3,
+                "name" : "Guess emotion"
+            }
+        ]
+    }
+}
+ 

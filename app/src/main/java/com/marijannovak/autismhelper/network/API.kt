@@ -8,7 +8,8 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 /**
  * Created by Marijan on 22.3.2018..
@@ -24,10 +25,10 @@ interface API {
     @GET("question-types.json")
     fun getQuestionTypes() : Single<List<QuestionType>>
 
-    @GET("users.json")
-    fun getUser(username : String) : Single<User>
+    @GET("users/{userId}.json")
+    fun getUser(@Path("userId") userId : Int) : Single<User>
 
-    @POST("users.json")
-    fun syncUser(@Body user : User) : Completable
+    @PUT("users/{userId}.json")
+    fun syncUser(@Path("userId") userId : Int, @Body user : User) : Completable
 
 }
