@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Marijan on 23.3.2018..
  */
 class APIService private constructor(){
-
+    //todo: timeout
     companion object {
 
         var retrofit : Retrofit? = null

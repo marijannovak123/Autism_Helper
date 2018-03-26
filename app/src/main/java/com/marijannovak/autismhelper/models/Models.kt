@@ -2,11 +2,13 @@ package com.marijannovak.autismhelper.models
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.support.annotation.NonNull
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
+import org.jetbrains.annotations.NotNull
 
 /**
  * Created by Marijan on 23.3.2018..
@@ -15,9 +17,8 @@ import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 data class User (
          var name: String?,
          @PrimaryKey
-         var id: Int?,
-         var email : String?,
-         var password : String?
+         var id: String,
+         var email : String?
 )
 
 @Entity(tableName = TABLE_ANSWERS)

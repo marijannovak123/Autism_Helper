@@ -5,10 +5,8 @@
         [
             {
                 "name" : "marijan",
-                "id" : 0,
-                "email" : "marijannovak123",
-                "password" : "lozinka123",
-                "isAdmin" : true
+                "id" : "someid",
+                "email" : "marijannovak123"
             }
         ],
 

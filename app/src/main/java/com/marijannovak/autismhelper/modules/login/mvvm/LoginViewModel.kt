@@ -1,54 +1,107 @@
 package com.marijannovak.autismhelper.modules.login.mvvm
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.BaseViewModel
-import com.marijannovak.autismhelper.common.enums.Enums
+import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.models.User
 import io.reactivex.CompletableObserver
+import io.reactivex.MaybeObserver
+import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 
 /**
  * Created by Marijan on 23.3.2018..
  */
-class LoginViewModel(private val repository: ILoginRepository, private val syncRepository : ISyncRepository) : BaseViewModel<FirebaseUser>() {
+class LoginViewModel(private val repository: ILoginRepository,
+                     private val syncRepository : ISyncRepository)
+    : BaseViewModel<User>() {
 
-    val loginRegisterListener : GeneralListener<FirebaseUser>
+    //todo: generic single observer, generic dispose add
+    fun checkLogin() {
+        repository.checkLoggedIn()
+                .subscribeWith(object : MaybeObserver<User> {
+                    override fun onSuccess(user: User?) {
+                       user?.let {
+                           contentLiveData.value = it
+                           stateLiveData.value = State.CONTENT
+                       }
+                    }
 
-    init {
-        loginRegisterListener = object : GeneralListener<FirebaseUser>{
+                    override fun onComplete() {
+                        //NOOP
+                    }
+
+                    override fun onSubscribe(d: Disposable?) {
+                        compositeDisposable.add(d)
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        stateLiveData.value = State.ERROR
+                        errorLiveData.value = e ?: Throwable("Unknown error")
+                    }
+                })
+    }
+
+
+    fun register(email : String, password : String) {
+        stateLiveData.value = State.LOADING
+        repository.register(email, password, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                stateLiveData.value = Enums.State.CONTENT
-                contentLiveData.value = model
+                val user = User(model.displayName, model.uid, model.email)
+                syncUser(user)
             }
 
             override fun onFailure(t: Throwable) {
-                stateLiveData.value = Enums.State.ERROR
+                stateLiveData.value = State.ERROR
                 errorLiveData.value = t
             }
-        }
-    }
-
-    fun checkLogin() {
-        val user = repository.checkLoggedIn()
-        user?.let { contentLiveData.value = it }
-    }
-
-    fun register(email : String, password : String) {
-        stateLiveData.value = Enums.State.LOADING
-        repository.register(email, password, loginRegisterListener)
+        })
     }
 
     fun login(email: String, password: String) {
-        repository.login(email, password, loginRegisterListener)
+        repository.login(email, password, object : GeneralListener<FirebaseUser>{
+            override fun onSucces(model: FirebaseUser) {
+                fetchUserData(model.uid)
+            }
+
+            override fun onFailure(t: Throwable) {
+                stateLiveData.value = State.ERROR
+                errorLiveData.value = t
+            }
+        })
     }
 
-    //todo: when logging in, post user to db..check if exists first, dl users and check, then post/patch
+    private fun fetchUserData(userId : String) {
+       repository.fetchUserData(userId).subscribeWith(object : SingleObserver<User>{
+           override fun onSuccess(user: User?) {
+               if(user != null) {
+                   repository.saveUser(user)
+                   stateLiveData.value = State.CONTENT
+                   contentLiveData.value = user
+               } else {
+                   stateLiveData.value = State.ERROR
+                   errorLiveData.value = Throwable("Null response")
+               }
+           }
+
+           override fun onSubscribe(d: Disposable?) {
+               compositeDisposable.add(d)
+           }
+
+           override fun onError(e: Throwable?) {
+               stateLiveData.value = State.ERROR
+               errorLiveData.value = e ?: Throwable("Unknown error")
+           }
+       })
+    }
+
     fun syncUser(user : User) {
-        repository.syncUser(user).subscribeWith(object : CompletableObserver{
+        repository.syncUser(user).subscribeWith(object : CompletableObserver {
             override fun onComplete() {
-                Log.e("Test", "complete")
+                repository.saveUser(user)
+                stateLiveData.value = State.CONTENT
+                contentLiveData.value = user
             }
 
             override fun onSubscribe(d: Disposable?) {
@@ -56,7 +109,8 @@ class LoginViewModel(private val repository: ILoginRepository, private val syncR
             }
 
             override fun onError(e: Throwable?) {
-                e?.let { Log.e("Test", e.message) }
+                stateLiveData.value = State.ERROR
+                errorLiveData.value = e ?: Throwable("Unknown error")
             }
         })
     }

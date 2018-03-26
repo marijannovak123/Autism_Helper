@@ -3,17 +3,20 @@ package com.marijannovak.autismhelper.modules.login.mvvm
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
+import com.marijannovak.autismhelper.database.AppDatabase
 import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.network.APIService
 import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.doAsync
 
 /**
  * Created by Marijan on 23.3.2018..
  */
 //todo: google sign in
-//todo: post user to db to save his data
 class LoginRepository : ILoginRepository {
     private var authService : FirebaseAuth
     private var currentUser : FirebaseUser? = null
@@ -22,12 +25,13 @@ class LoginRepository : ILoginRepository {
         authService = FirebaseAuth.getInstance()
     }
 
-    override fun checkLoggedIn() : FirebaseUser? {
-        currentUser = authService.currentUser
-        currentUser?.let {
-            return it
-        }
-        return null
+    override fun checkLoggedIn() : Maybe<User> {
+        return AppDatabase
+                .getUserDao()
+                .getUser()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
     }
 
     override fun register(email: String, password: String, listener : GeneralListener<FirebaseUser>) {
@@ -60,6 +64,20 @@ class LoginRepository : ILoginRepository {
         return APIService
                 .getApi()
                 .syncUser(user.id!!, user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun saveUser(user: User) {
+        doAsync {
+            AppDatabase.getUserDao().saveUser(user)
+        }
+    }
+
+    override fun fetchUserData(userId : String): Single<User> {
+        return APIService
+                .getApi()
+                .getUser(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

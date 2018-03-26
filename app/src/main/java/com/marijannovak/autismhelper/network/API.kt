@@ -26,9 +26,9 @@ interface API {
     fun getQuestionTypes() : Single<List<QuestionType>>
 
     @GET("users/{userId}.json")
-    fun getUser(@Path("userId") userId : Int) : Single<User>
+    fun getUser(@Path("userId") userId : String) : Single<User>
 
     @PUT("users/{userId}.json")
-    fun syncUser(@Path("userId") userId : Int, @Body user : User) : Completable
+    fun syncUser(@Path("userId") userId : String, @Body user : User) : Completable
 
 }

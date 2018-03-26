@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
-
+//todo: tab layout register/login
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -25,7 +25,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         viewModel.checkLogin()
     }
 
-    private fun init() {
+    private fun init() {//todo: get from edittexts and validate
         btnRegister.setOnClickListener { viewModel.register("marijannovak123@gmail.com", "lozinka123") }
         btnLogin.setOnClickListener { viewModel.login("marijannovak123@gmail.com", "lozinka123") }
     }
