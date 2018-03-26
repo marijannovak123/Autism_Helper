@@ -1,6 +1,8 @@
 package com.marijannovak.autismhelper.network
 
+import com.marijannovak.autismhelper.App.Companion.FIREBASE_API_KEY
 import com.marijannovak.autismhelper.config.Constants
+import com.marijannovak.autismhelper.config.Constants.Companion.FIREBASE_AUTH
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -37,7 +39,17 @@ class APIService private constructor(){
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-            return OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
+            return OkHttpClient.Builder()
+                    .addInterceptor(httpLoggingInterceptor)
+                    .addInterceptor { chain ->
+                        val original = chain.request()
+                        val httpUrl = original!!.url()
+
+                        val newHttpUrl = httpUrl.newBuilder().addQueryParameter(FIREBASE_AUTH, FIREBASE_API_KEY).build()
+                        val requestBuilder = original.newBuilder().url(newHttpUrl)
+                        val request = requestBuilder.build()
+                        chain.proceed(request)
+                    }.build()
         }
     }
 }
