@@ -1,4 +1,4 @@
-package com.marijannovak.autismhelper.modules.login.mvvm
+package com.marijannovak.autismhelper.sync
 
 import io.reactivex.SingleObserver
 

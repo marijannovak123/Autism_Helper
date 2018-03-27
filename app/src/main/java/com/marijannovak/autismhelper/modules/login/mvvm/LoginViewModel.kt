@@ -5,6 +5,7 @@ import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.models.User
+import com.marijannovak.autismhelper.sync.ISyncRepository
 import io.reactivex.CompletableObserver
 import io.reactivex.MaybeObserver
 import io.reactivex.SingleObserver
@@ -22,7 +23,7 @@ class LoginViewModel(private val repository: ILoginRepository,
                 .subscribeWith(object : MaybeObserver<User> {
                     override fun onSuccess(user: User?) {
                        user?.let {
-                           contentLiveData.value = it
+                           contentLiveData.value = listOf(it)
                            stateLiveData.value = State.CONTENT
                        }
                     }
@@ -77,7 +78,7 @@ class LoginViewModel(private val repository: ILoginRepository,
                if(user != null) {
                    repository.saveUser(user)
                    stateLiveData.value = State.CONTENT
-                   contentLiveData.value = user
+                   contentLiveData.value = listOf(user)
                } else {
                    stateLiveData.value = State.ERROR
                    errorLiveData.value = Throwable("Null response")
@@ -100,7 +101,7 @@ class LoginViewModel(private val repository: ILoginRepository,
             override fun onComplete() {
                 repository.saveUser(user)
                 stateLiveData.value = State.CONTENT
-                contentLiveData.value = user
+                contentLiveData.value = listOf(user)
             }
 
             override fun onSubscribe(d: Disposable?) {

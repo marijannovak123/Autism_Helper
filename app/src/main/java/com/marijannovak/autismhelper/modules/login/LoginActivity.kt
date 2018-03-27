@@ -3,19 +3,21 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
-import com.marijannovak.autismhelper.modules.login.mvvm.SyncRepository
+import com.marijannovak.autismhelper.sync.SyncRepository
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 
-class LoginActivity : ViewModelActivity<LoginViewModel>() {
-//todo: tab layout register/login
+class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
+
+    //todo: tab layout register/login
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -49,15 +51,23 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         startActivity(intent)
     }
 
-    private fun showError(throwable: Throwable) {
+    override fun showError(throwable: Throwable) {
         toast(throwable.message.toString())
     }
 
-    private fun handleState(state : State) {
+    override fun handleState(state : State) {
         when(state) {
-            State.LOADING -> pbLoading.show()
+            State.LOADING -> {
+                pbLoading.show()
+                llContent.visibility = View.GONE
+            }
+
             State.NEXT -> startMainActivity()
-            else -> pbLoading.hide()
+
+            else -> {
+                pbLoading.hide()
+                llContent.visibility = View.VISIBLE
+            }
         }
     }
 }

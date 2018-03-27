@@ -25,7 +25,7 @@ data class Answer (
          var id : Int?,
          var text: String?,
          var isCorrect: Boolean?,
-         var questionId: String?
+         var questionId: Int?
 )
 
 @Entity(tableName = TABLE_CATEGORIES)

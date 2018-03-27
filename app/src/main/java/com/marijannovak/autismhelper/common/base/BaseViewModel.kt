@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.internal.subscriptions.ArrayCompositeSubscription
 
 /**
  * Base class for ViewModels
@@ -17,7 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class BaseViewModel<T> : ViewModel() {
 
-    protected var contentLiveData = MutableLiveData<T>()
+    protected var contentLiveData = MutableLiveData<List<T>>()
     protected var errorLiveData = MutableLiveData<Throwable>()
     protected var stateLiveData = MutableLiveData<State>()
 
@@ -28,7 +29,7 @@ abstract class BaseViewModel<T> : ViewModel() {
         super.onCleared()
     }
 
-    fun getContentLD() : MutableLiveData<T> = this.contentLiveData
+    fun getContentLD() : MutableLiveData<List<T>> = this.contentLiveData
     fun getErrorLD() : MutableLiveData<Throwable> = this.errorLiveData
     fun getStateLD() : MutableLiveData<State> = this.stateLiveData
 
