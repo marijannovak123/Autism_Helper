@@ -31,7 +31,6 @@ class LoginRepository : ILoginRepository {
                 .getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-
     }
 
     override fun register(email: String, password: String, listener : GeneralListener<FirebaseUser>) {

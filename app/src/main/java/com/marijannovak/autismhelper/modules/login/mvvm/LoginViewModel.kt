@@ -6,6 +6,7 @@ import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.sync.ISyncRepository
+import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.MaybeObserver
 import io.reactivex.SingleObserver
@@ -20,7 +21,7 @@ class LoginViewModel(private val repository: ILoginRepository,
 
     fun checkLogin() {
         repository.checkLoggedIn()
-                .subscribeWith(object : MaybeObserver<User> {
+                .subscribe(object : MaybeObserver<User> {
                     override fun onSuccess(user: User?) {
                        user?.let {
                            contentLiveData.value = listOf(it)
@@ -48,7 +49,7 @@ class LoginViewModel(private val repository: ILoginRepository,
         repository.register(email, password, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
                 //todo: more data from form
-                saveUserToFirebase(User(model.displayName, model.uid, model.email))
+                saveUserToFirebase(model.mapToUser())
             }
 
             override fun onFailure(t: Throwable) {
@@ -73,7 +74,7 @@ class LoginViewModel(private val repository: ILoginRepository,
     }
 
     private fun fetchUserData(userId : String) {
-       repository.fetchUserData(userId).subscribeWith(object : SingleObserver<User>{
+       repository.fetchUserData(userId).subscribe(object : SingleObserver<User>{
            override fun onSuccess(user: User?) {
                if(user != null) {
                    repository.saveUser(user)
@@ -97,7 +98,7 @@ class LoginViewModel(private val repository: ILoginRepository,
     }
 
     fun saveUserToFirebase(user : User) {
-        repository.saveUserToFirebase(user).subscribeWith(object : CompletableObserver {
+        repository.saveUserToFirebase(user).subscribe(object : CompletableObserver {
             override fun onComplete() {
                 repository.saveUser(user)
                 stateLiveData.value = State.CONTENT
@@ -116,7 +117,7 @@ class LoginViewModel(private val repository: ILoginRepository,
     }
 
     fun syncData() {
-        syncRepository.syncData(object : SingleObserver<Boolean> {
+        syncRepository.syncData().subscribe(object : SingleObserver<Boolean> {
             override fun onSuccess(syncDone: Boolean?) {
                 if(syncDone!!) {
                     stateLiveData.value = State.NEXT

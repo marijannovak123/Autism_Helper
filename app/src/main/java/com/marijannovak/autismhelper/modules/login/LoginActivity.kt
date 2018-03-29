@@ -49,6 +49,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     private fun startMainActivity() {
         intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     override fun showError(throwable: Throwable) {

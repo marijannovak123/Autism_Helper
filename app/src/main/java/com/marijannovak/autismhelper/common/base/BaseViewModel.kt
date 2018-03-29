@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.common.base
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
+import com.marijannovak.autismhelper.database.AppDatabase
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.internal.subscriptions.ArrayCompositeSubscription
 
@@ -26,6 +27,7 @@ abstract class BaseViewModel<T> : ViewModel() {
 
     override fun onCleared() {
         compositeDisposable.dispose()
+        AppDatabase.closeDB()
         super.onCleared()
     }
 

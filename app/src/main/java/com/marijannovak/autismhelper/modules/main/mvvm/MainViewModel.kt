@@ -19,9 +19,9 @@ class MainViewModel(private val repository : IMainRepository)
                         stateLiveData.value = Enums.State.CONTENT
                     }
 
-                    override fun onNext(t: List<Category>?) {
-                        if(t != null) {
-                            contentLiveData.value = t
+                    override fun onNext(categories: List<Category>?) {
+                        if(categories != null) {
+                            contentLiveData.value = categories
                         } else {
                             errorLiveData.value = Throwable("Null response")
                         }
