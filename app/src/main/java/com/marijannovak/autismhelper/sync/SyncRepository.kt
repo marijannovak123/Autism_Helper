@@ -1,15 +1,13 @@
 package com.marijannovak.autismhelper.sync
 
 import com.marijannovak.autismhelper.database.AppDatabase
-import com.marijannovak.autismhelper.models.*
+import com.marijannovak.autismhelper.models.Answer
+import com.marijannovak.autismhelper.models.Category
+import com.marijannovak.autismhelper.models.Question
+import com.marijannovak.autismhelper.models.QuestionType
 import com.marijannovak.autismhelper.network.APIService
-import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Function4
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 

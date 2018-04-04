@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.database.AppDatabase
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.internal.subscriptions.ArrayCompositeSubscription
 
 /**
  * Base class for ViewModels

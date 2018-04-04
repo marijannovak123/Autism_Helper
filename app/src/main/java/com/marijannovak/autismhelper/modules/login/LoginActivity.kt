@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.R.layout.activity_login
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.LoginSignupListener
