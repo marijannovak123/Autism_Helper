@@ -1,7 +1,7 @@
 package com.marijannovak.autismhelper.network
 
-import com.marijannovak.autismhelper.App.Companion.FIREBASE_API_KEY
-import com.marijannovak.autismhelper.config.Constants
+import com.marijannovak.autismhelper.config.Constants.Companion.BASE_URL
+import com.marijannovak.autismhelper.config.Constants.Companion.FIREBASE_API_KEY
 import com.marijannovak.autismhelper.config.Constants.Companion.FIREBASE_AUTH
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +25,7 @@ class APIService private constructor(){
         fun getRetrofitService() : Retrofit {
             if(retrofit == null) {
                 retrofit = Retrofit.Builder()
-                        .baseUrl(Constants.BASE_URL)
+                        .baseUrl(BASE_URL)
                         .client(getHttpClient())
                         .addConverterFactory(GsonConverterFactory.create())
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

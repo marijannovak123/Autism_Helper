@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".modules.login.SignupFragment">
+
+    <EditText
+        style="@style/signupEditTextStyle"
+        android:id="@+id/etEmail"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:drawableStart="@drawable/ic_mail"
+        android:nextFocusForward="@id/etUsername"/>
+
+    <EditText
+        style="@style/signupEditTextStyle"
+        android:id="@+id/etUsername"
+        android:hint="@string/username"
+        android:inputType="text"
+        android:drawableStart="@drawable/ic_account_circle"
+        android:nextFocusForward="@id/etPassword"/>
+
+    <EditText
+        style="@style/signupEditTextStyle"
+        android:id="@+id/etPassword"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:drawableStart="@drawable/ic_lock"
+        android:nextFocusForward="@id/etConfirmPassword"/>
+
+    <EditText
+        style="@style/signupEditTextStyle"
+        android:id="@+id/etConfirmPassword"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        android:drawableStart="@drawable/ic_lock"
+        android:nextFocusForward="@id/etDateOfBirth"/>
+
+    <EditText
+        style="@style/signupEditTextStyle"
+        android:id="@+id/etDateOfBirth"
+        android:hint="@string/date_of_birth"
+        android:inputType="date"
+        android:drawableStart="@drawable/ic_date_range"
+        android:cursorVisible="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSignUp"
+        android:text="@string/sign_up"
+        android:layout_margin="20dp"/>
+
+</LinearLayout>

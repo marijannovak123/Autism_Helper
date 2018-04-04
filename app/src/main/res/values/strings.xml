@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">AutismHelper</string>
+
     <string name="register">Register</string>
     <string name="login">Login</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="sign_up">Sign Up</string>
+
+    <string name="passwords_not_same">Passwords are not equal</string>
+    <string name="date_invalid">Date must be between 1970 and current date</string>
+    <string name="username_invalid">Username has to be at least 5 characters long</string>
+    <string name="password_invalid">Password must contain at least 8 characters</string>
+    <string name="malformed_email">Malformed email</string>
+
 </resources>

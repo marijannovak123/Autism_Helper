@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.modules.main
 
+import android.app.ActivityManager.isUserAMonkey
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +19,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Category>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        isUserAMonkey()
         viewModel.loadCategories()
     }
 
