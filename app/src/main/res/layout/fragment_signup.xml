@@ -45,7 +45,11 @@
         android:hint="@string/date_of_birth"
         android:inputType="date"
         android:drawableStart="@drawable/ic_date_range"
-        android:cursorVisible="false"/>
+        android:cursorVisible="false"
+        android:editable="false"
+        android:clickable="true"
+        android:focusable="false"
+        tools:ignore="KeyboardInaccessibleWidget" />
 
     <Button
         android:layout_width="wrap_content"

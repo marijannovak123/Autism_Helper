@@ -9,6 +9,7 @@ import android.view.ViewGroup
 
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.listeners.LoginSignupListener
+import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
 
@@ -17,6 +18,12 @@ class LoginFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btnGoogleSignIn.setOnClickListener { listener!!.onGoogleSignIn() }
     }
 
     override fun onAttach(context: Context) {

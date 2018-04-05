@@ -8,4 +8,5 @@ import io.reactivex.Flowable
  */
 interface IMainRepository {
     fun loadCategories(): Flowable<List<Category>>
+    fun logout()
 }

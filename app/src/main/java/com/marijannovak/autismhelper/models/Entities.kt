@@ -16,7 +16,8 @@ data class User (
          var username: String?,
          @PrimaryKey
          var id: String,
-         var email : String?
+         var email : String?,
+         var dateOfBirth : Long
 )
 
 @Entity(tableName = TABLE_ANSWERS)

@@ -3,7 +3,7 @@ package com.marijannovak.autismhelper.database.dao
 import android.arch.persistence.room.*
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 import com.marijannovak.autismhelper.models.User
-import io.reactivex.Maybe
+import io.reactivex.Single
 
 /**
  * Created by Marijan on 26.3.2018..
@@ -12,7 +12,7 @@ import io.reactivex.Maybe
 interface UserDao {
 
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getUser() : Maybe<User>
+    fun getUser() : Single<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveUser(user: User)

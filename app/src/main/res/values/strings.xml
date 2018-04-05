@@ -16,5 +16,9 @@
     <string name="username_invalid">Username has to be at least 5 characters long</string>
     <string name="password_invalid">Password must contain at least 8 characters</string>
     <string name="malformed_email">Malformed email</string>
+    <string name="logout">Logout</string>
+    <string name="update_username_dob">Would you like to update your username and date of birth?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

@@ -29,5 +29,7 @@ class App : Application() {
         fun closeDB() {
             this.databaseInstance = null
         }
+
+        fun getAppContext() = context
      }
 }

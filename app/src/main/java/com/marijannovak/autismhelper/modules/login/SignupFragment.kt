@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.modules.login
 
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -33,23 +34,32 @@ class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         super.onViewCreated(view, savedInstanceState)
 
         initListeners()
+        insertTestData()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun insertTestData() {
+        etEmail.setText("marijannovak123@gmail.com")
+        etUsername.setText("marijannovak123")
+        etPassword.setText("lozinka123")
+        etConfirmPassword.setText("lozinka123")
+        selectedDate = Date(774620151000)
+        etDateOfBirth.setText("${selectedDate!!.day}.${selectedDate!!.month}.${selectedDate!!.year}")
     }
 
     private fun initListeners() {
         btnSignUp.setOnClickListener { attemptSignup() }
-        etDateOfBirth.setOnFocusChangeListener { _, _ ->  showDatePickerDialog()}
+        etDateOfBirth.setOnClickListener { showDatePickerDialog()}
     }
 
     private fun showDatePickerDialog() {
-        //todo: set initial time to selected, fix behavior
-        val datePicker = DatePicker.newInstance(context!!, this)
-        datePicker.show()
+        DatePicker.newInstance(context!!, this, selectedDate).show()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onDateSet(view: android.widget.DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         selectedDate = Date(year, month, dayOfMonth)
-        etDateOfBirth.setText(dayOfMonth.toString() + "." + month + "." + year)
-        etDateOfBirth.clearFocus()
+        etDateOfBirth.setText(dayOfMonth.toString() + "." + (month - 1) + "." + year)
     }
 
     private fun attemptSignup() {

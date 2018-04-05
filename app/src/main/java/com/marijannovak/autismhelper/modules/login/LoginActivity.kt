@@ -3,11 +3,14 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.view.View
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.LoginSignupListener
+import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.adapters.LoginSignupPagerAdapter
@@ -31,17 +34,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>(), LoginSignupList
         initPagerAdapter()
     }
 
-    private fun initPagerAdapter() {
-        pagerAdapter = LoginSignupPagerAdapter(supportFragmentManager)
-        pagerLoginSignup.adapter = pagerAdapter
-        tabLayout.setupWithViewPager(pagerLoginSignup)
-    }
-
-    //private fun init() {//todo: get from edittexts and validate
-    //    btnRegister.setOnClickListener { viewModel.register("marijannovak123@gmail.com", "lozinka123") }
-    //    btnLogin.setOnClickListener { viewModel.login("marijannovak123@gmail.com", "lozinka123") }
-    //}
-
     override fun createViewModel(): LoginViewModel {
         return LoginViewModel(LoginRepository(), SyncRepository())
     }
@@ -50,6 +42,12 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>(), LoginSignupList
         viewModel.getContentLD().observe(this, Observer { startSync() } )
         viewModel.getErrorLD().observe(this, Observer { throwable -> showError(throwable!!) })
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
+    }
+
+    private fun initPagerAdapter() {
+        pagerAdapter = LoginSignupPagerAdapter(supportFragmentManager)
+        pagerLoginSignup.adapter = pagerAdapter
+        tabLayout.setupWithViewPager(pagerLoginSignup)
     }
 
     private fun startSync() {
@@ -67,26 +65,48 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>(), LoginSignupList
     }
 
     override fun handleState(state : State) {
-       //when(state) {
-       //    State.LOADING -> {
-       //        pbLoading.show()
-       //        llContent.visibility = View.GONE
-       //    }
+       when(state) {
+           State.LOADING -> {
+               pbLoading.show()
+               llContent.visibility = View.GONE
+           }
 
-       //    State.NEXT -> startMainActivity()
+           State.NEXT -> startMainActivity()
 
-       //    else -> {
-       //        pbLoading.hide()
-       //        llContent.visibility = View.VISIBLE
-       //    }
-       //}
+           else -> {
+               pbLoading.hide()
+               llContent.visibility = View.VISIBLE
+           }
+       }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == RESULT_CODE_GOOGLE_SIGNIN) {
+            data?.let {
+                viewModel.googleSignIn(it)
+            }
+        }
     }
 
     override fun onLogin(email: String, password: String) {
-        Snackbar.make(pbLoading, "login", 0)
+       viewModel.login(email, password)
+    }
+
+    override fun onGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        val signInIntent = googleSignInClient.signInIntent
+
+        startActivityForResult(signInIntent, RESULT_CODE_GOOGLE_SIGNIN)
     }
 
     override fun onSignup(signupRequest: SignupRequest) {
-        Snackbar.make(pbLoading, "signup", 0)
+       viewModel.register(signupRequest)
     }
 }
