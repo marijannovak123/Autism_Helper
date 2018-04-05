@@ -20,5 +20,7 @@
     <string name="update_username_dob">Would you like to update your username and date of birth?</string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
+    <string name="btn_sign_in">Sign in</string>
+    <string name="input_errors">Incorrect input</string>
 
 </resources>

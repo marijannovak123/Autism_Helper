@@ -10,7 +10,7 @@ class Constants {
         const val BASE_URL = "https://autism-helper.firebaseio.com/api/"
         const val FIREBASE_AUTH = "auth"
         const val FIREBASE_API_KEY = "2Sm3l55sGpTgeojlAnyREqj5KOwcks1kx379XidA"
-        const val RESULT_CODE_GOOGLE_SIGNIN = 9001;
+        const val RESULT_CODE_GOOGLE_SIGNIN = 9001
         //endregion
 
         //region local db

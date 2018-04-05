@@ -11,6 +11,7 @@ class LoginSignupPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerA
     private var currentFragment : Fragment? = null
 
     override fun getItem(position: Int): Fragment {
+        currentFragment = null
         currentFragment = when(position) {
             0 -> LoginFragment.newInstance()
             else -> SignupFragment.newInstance()

@@ -18,12 +18,13 @@ import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.utils.DatePicker
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.fragment_signup.*
+import org.jetbrains.anko.support.v4.toast
 import java.util.*
 
 class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private var listener: LoginSignupListener? = null
-    private var selectedDate: Date? = null
+    private var selectedDate: Calendar = Calendar.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,17 +35,6 @@ class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         super.onViewCreated(view, savedInstanceState)
 
         initListeners()
-        insertTestData()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun insertTestData() {
-        etEmail.setText("marijannovak123@gmail.com")
-        etUsername.setText("marijannovak123")
-        etPassword.setText("lozinka123")
-        etConfirmPassword.setText("lozinka123")
-        selectedDate = Date(774620151000)
-        etDateOfBirth.setText("${selectedDate!!.day}.${selectedDate!!.month}.${selectedDate!!.year}")
     }
 
     private fun initListeners() {
@@ -58,8 +48,10 @@ class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: android.widget.DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        selectedDate = Date(year, month, dayOfMonth)
-        etDateOfBirth.setText(dayOfMonth.toString() + "." + (month - 1) + "." + year)
+        selectedDate.set(Calendar.YEAR, year)
+        selectedDate.set(Calendar.MONTH, month)
+        selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        etDateOfBirth.setText(dayOfMonth.toString() + "." + (month + 1) + "." + year)
     }
 
     private fun attemptSignup() {
@@ -74,31 +66,42 @@ class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         if (!InputValidator.validate(email, VALIDATION_EMAIL)) {
             valid = false
             etEmail.error = resources.getString(R.string.malformed_email)
+        } else {
+            etEmail.error = null
         }
 
         if (!InputValidator.validate(password, VALIDATION_PASSWORD)) {
             valid = false
             etPassword.error = resources.getString(R.string.password_invalid)
+        } else {
+            etPassword.error = null
         }
 
         if (!InputValidator.validate(username, VALIDATION_USERNAME)) {
             valid = false
             etUsername.error = resources.getString(R.string.username_invalid)
+        } else {
+            etUsername.error = null
         }
 
         if (!InputValidator.validateDate(selectedDate)) {
             valid = false
             etDateOfBirth.error = resources.getString(R.string.date_invalid)
+        } else {
+            etDateOfBirth.error = null
         }
 
         if (!password.equals(confirmPassword)) {
             valid = false
             etConfirmPassword.error = resources.getString(R.string.passwords_not_same)
+        } else {
+            etConfirmPassword.error = null
         }
 
         if(valid)
-            listener!!.onSignup(SignupRequest(email, username, password, selectedDate!!.time))
-
+            listener!!.onSignup(SignupRequest(email, username, password, selectedDate.timeInMillis))
+        else
+            toast(R.string.input_errors)
     }
 
     override fun onAttach(context: Context) {

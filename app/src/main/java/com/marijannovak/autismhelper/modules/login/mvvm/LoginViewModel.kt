@@ -92,8 +92,8 @@ class LoginViewModel(private val repository: ILoginRepository,
     private fun checkIfUserAlreadyExists(userId: String): Boolean {
         var isSuccess = false
         repository.checkIfUserExists(userId).subscribe(object : SingleObserver<Boolean> {
-                override fun onSuccess(t: Boolean?) {
-                    t?.let { isSuccess = it }
+                override fun onSuccess(exists: Boolean?) {
+                    exists?.let { isSuccess = it }
                 }
 
                 override fun onSubscribe(d: Disposable?) {
@@ -114,7 +114,6 @@ class LoginViewModel(private val repository: ILoginRepository,
            override fun onSuccess(user: User?) {
                if(user != null) {
                    repository.saveUser(user)
-                   stateLiveData.value = State.CONTENT
                    contentLiveData.value = listOf(user)
                } else {
                    stateLiveData.value = State.ERROR
@@ -137,7 +136,6 @@ class LoginViewModel(private val repository: ILoginRepository,
         repository.saveUserToFirebase(user).subscribe(object : CompletableObserver {
             override fun onComplete() {
                 repository.saveUser(user)
-                stateLiveData.value = State.CONTENT
                 contentLiveData.value = listOf(user)
             }
 

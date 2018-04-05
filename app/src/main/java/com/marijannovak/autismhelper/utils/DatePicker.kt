@@ -10,10 +10,10 @@ class DatePicker : DialogFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(context: Context, listener: DatePickerDialog.OnDateSetListener, date: Date?) : DatePickerDialog {
+        fun newInstance(context: Context, listener: DatePickerDialog.OnDateSetListener, date: Calendar?) : DatePickerDialog {
 
             date?.let {
-                return DatePickerDialog(context, listener, it.year, it.month, it.day)
+                return DatePickerDialog(context, listener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
             }
 
             val c = Calendar.getInstance()

@@ -6,7 +6,6 @@ import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.models.User
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Single
 
 /**
