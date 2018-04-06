@@ -21,7 +21,7 @@ import com.marijannovak.autismhelper.sync.SyncRepository
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 
-class LoginActivity : ViewModelActivity<LoginViewModel, User>(), LoginSignupListener {
+class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
 
     private var pagerAdapter: LoginSignupPagerAdapter? = null
 

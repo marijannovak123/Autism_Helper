@@ -21,6 +21,39 @@
         android:orientation="vertical"
         android:gravity="center">
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <ImageButton
+                android:background="@drawable/ic_supervisor_account_black_24dp"
+                android:id="@+id/btnParent"
+                style="@style/menu_parent_child_style" />
+
+            <TextView
+                android:text="@string/parent"
+                style="@style/menu_parent_child_button_text" />
+
+        </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+           <ImageButton
+               android:background="@drawable/ic_child_care_black_24dp"
+               android:id="@+id/btnChild"
+               style="@style/menu_parent_child_style"/>
+
+           <TextView
+               android:text="@string/child"
+               style="@style/menu_parent_child_button_text" />
+
+
+       </LinearLayout>
+
+
+    </LinearLayout>
 </RelativeLayout>

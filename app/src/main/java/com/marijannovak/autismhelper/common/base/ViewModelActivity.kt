@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
 
-abstract class ViewModelActivity<T : ViewModel, in M> : AppCompatActivity() {
+abstract class ViewModelActivity<T : ViewModel> : AppCompatActivity() {
 
     protected lateinit var viewModel : T
 
@@ -16,6 +16,9 @@ abstract class ViewModelActivity<T : ViewModel, in M> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         this.viewModel = createViewModel()
         subscribeToData()
     }

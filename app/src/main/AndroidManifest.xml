@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".modules.main.MainActivity" />
+        <activity android:name=".modules.parent.ParentActivity" />
+        <activity android:name=".modules.child.ChildActivity"></activity>
     </application>
 
 </manifest>

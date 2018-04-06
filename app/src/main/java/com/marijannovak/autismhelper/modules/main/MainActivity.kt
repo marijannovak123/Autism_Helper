@@ -9,29 +9,50 @@ import android.view.MenuItem
 import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.enums.Enums
+import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.models.Category
+import com.marijannovak.autismhelper.modules.child.ChildActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
+import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
-import com.marijannovak.autismhelper.utils.PromptDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 
-class MainActivity : ViewModelActivity<MainViewModel, Category>() {
+class MainActivity : ViewModelActivity<MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        PromptDialog.show(this, "Test", "yes", "no", object : () -> Unit {
-            override fun invoke() {
-               toast("yes")
-            }
-        })
+        //PromptDialog.show(this, "Test", "yes", "no", object : () -> Unit {
+        //    override fun invoke() {
+        //       toast("yes")
+        //    }
+        //})
+//
+        //viewModel.loadCategories()
 
-        viewModel.loadCategories()
+        init()
+    }
+
+    private fun init() {
+        btnParent.setOnClickListener { btnParent -> startActivity(btnParent) }
+        btnChild.setOnClickListener { btnChild -> startActivity(btnChild) }
+    }
+
+    private fun startActivity(view: View) {
+        when(view.id) {
+            R.id.btnChild -> {
+                val intent = Intent(this, ChildActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.btnParent -> {
+                val intent = Intent(this, ParentActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     override fun createViewModel(): MainViewModel {
@@ -49,14 +70,14 @@ class MainActivity : ViewModelActivity<MainViewModel, Category>() {
             Log.e("test", category.name)
     }
 
-    override fun handleState(state: Enums.State) {
+    override fun handleState(state: State) {
         when(state) {
-            Enums.State.LOADING -> {
+            State.LOADING -> {
                 pbLoading.show()
                 llContent.visibility = View.GONE
             }
 
-            Enums.State.HOME -> {
+            State.HOME -> {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()

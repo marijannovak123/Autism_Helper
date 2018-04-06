@@ -23,8 +23,10 @@ class MainViewModel(private val repository : IMainRepository, private val syncRe
                     override fun onNext(categories: List<Category>?) {
                         if(categories != null) {
                             contentLiveData.value = categories
+                            stateLiveData.value = State.CONTENT
                         } else {
                             errorLiveData.value = Throwable("Null response")
+                            stateLiveData.value = State.ERROR
                         }
 
                     }
