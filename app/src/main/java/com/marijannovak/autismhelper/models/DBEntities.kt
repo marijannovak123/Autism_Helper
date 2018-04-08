@@ -2,8 +2,9 @@ package com.marijannovak.autismhelper.models
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILDREN
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILD_SCORES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
@@ -13,17 +14,34 @@ import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
  */
 @Entity(tableName = TABLE_USER)
 data class User (
-         var username: String?,
-         @PrimaryKey
-         var id: String,
-         var email : String?,
-         var dateOfBirth : Long
+    var username: String?,
+    @PrimaryKey
+    var id: String,
+    var email: String?,
+    var children: List<Child>
 )
 
-@Entity(tableName = TABLE_ANSWERS)
+@Entity(tableName = TABLE_CHILDREN)
+data class Child (
+        @PrimaryKey
+        var id: Int,
+        var name: String?,
+        var sex: String?,
+        var parentId: String,
+        var dateOfBirth: Long
+)
+
+@Entity(tableName = TABLE_CHILD_SCORES)
+data class ChildScore (
+        @PrimaryKey(autoGenerate = true)
+        var id: Int,
+        var childId: Int,
+        var timestamp: Long,
+        var score: Long
+)
+
+
 data class Answer (
-         @PrimaryKey
-         var id : Int?,
          var text: String?,
          var isCorrect: Boolean?,
          var questionId: Int?
@@ -37,13 +55,14 @@ data class Category(
 )
 
 @Entity(tableName = TABLE_QUESTIONS)
-data class Question(
+data class Question (
          var text: String?,
          @PrimaryKey
          var id: Int?,
          var categoryId: Int?,
          var typeId: Int?,
-         var extraData: String?
+         var extraData: String?,
+         var answers : List<Answer>
 )
 
 @Entity(tableName = TABLE_QUESTION_TYPES)
