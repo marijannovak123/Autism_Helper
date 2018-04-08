@@ -3,36 +3,41 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.view.View
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
-import com.marijannovak.autismhelper.common.listeners.LoginSignupListener
+import com.marijannovak.autismhelper.config.Constants
+import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
-import com.marijannovak.autismhelper.models.Child
+import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGNUP
 import com.marijannovak.autismhelper.models.SignupRequest
-import com.marijannovak.autismhelper.models.User
-import com.marijannovak.autismhelper.modules.login.adapters.LoginSignupPagerAdapter
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
+import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.toast
 
-class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
-
-    private var pagerAdapter: LoginSignupPagerAdapter? = null
+class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        viewModel.checkLogin()
+        viewModel.checkLoggedIn()
 
-        initPagerAdapter()
+        initListeners()
+    }
+
+    private fun initListeners() {
+        btnLogin.setOnClickListener { attemptLogin() }
+        btnGoogleSignIn.setOnClickListener { googleSignIn() }
+        btnRegister.setOnClickListener { startSignUpActivity() }
+        tvForgotPassword.setOnClickListener { attemptForgotPassword() }
     }
 
     override fun createViewModel(): LoginViewModel {
@@ -43,12 +48,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
         viewModel.getContentLD().observe(this, Observer { startSync() } )
         viewModel.getErrorLD().observe(this, Observer { throwable -> showError(throwable!!) })
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
-    }
-
-    private fun initPagerAdapter() {
-        pagerAdapter = LoginSignupPagerAdapter(supportFragmentManager)
-        pagerLoginSignup.adapter = pagerAdapter
-        tabLayout.setupWithViewPager(pagerLoginSignup)
     }
 
     private fun startSync() {
@@ -62,7 +61,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
     }
 
     override fun showError(throwable: Throwable) {
-        toast(throwable.message.toString())
+        snackbarMessage(throwable.message.toString())
     }
 
     override fun handleState(state : State) {
@@ -74,6 +73,8 @@ class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
 
            State.NEXT -> startMainActivity()
 
+           State.SUCCESS -> snackbarMessage(getString(R.string.success))
+
            else -> {
                pbLoading.hide()
                llContent.visibility = View.VISIBLE
@@ -81,21 +82,26 @@ class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
        }
     }
 
+    private fun snackbarMessage(message: String?) {
+        Snackbar.make(llContent, message ?: "Null", Snackbar.LENGTH_SHORT).show()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == RESULT_CODE_GOOGLE_SIGNIN) {
+        if (requestCode == RESULT_CODE_GOOGLE_SIGNIN) {
             data?.let {
                 viewModel.googleSignIn(it)
+            }
+        } else if (requestCode == RESULT_CODE_SIGNUP) {
+            data?.let {
+                val signupRequest = it.extras.getSerializable(KEY_SIGNUP_REQUEST) as SignupRequest
+                signUp(signupRequest)
             }
         }
     }
 
-    override fun onLogin(email: String, password: String) {
-       viewModel.login(email, password)
-    }
-
-    override fun onGoogleSignIn() {
+    private fun googleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -107,7 +113,56 @@ class LoginActivity : ViewModelActivity<LoginViewModel>(), LoginSignupListener {
         startActivityForResult(signInIntent, RESULT_CODE_GOOGLE_SIGNIN)
     }
 
-    override fun onSignup(signupRequest: SignupRequest) {
+    private fun signUp(signupRequest: SignupRequest) {
        viewModel.register(signupRequest)
+    }
+
+    private fun startSignUpActivity() {
+        val intent = Intent(this, SignUpActivity::class.java)
+        startActivityForResult(intent, RESULT_CODE_SIGNUP)
+    }
+
+    private fun attemptLogin() {
+        val email = etEmail.text.toString().trim()
+        val password = etPassword.text.toString().trim()
+
+        var valid = true
+
+        if (!InputValidator.validate(email, Constants.VALIDATION_EMAIL)) {
+            valid = false
+            etEmail.error = resources.getString(R.string.malformed_email)
+        } else {
+            etEmail.error = null
+        }
+
+        if (!InputValidator.validate(password, Constants.VALIDATION_PASSWORD)) {
+            valid = false
+            etPassword.error = resources.getString(R.string.password_invalid)
+        } else {
+            etPassword.error = null
+        }
+
+        if(valid)
+            viewModel.login(email, password)
+        else
+            snackbarMessage(getString(R.string.input_errors))
+    }
+
+    private fun attemptForgotPassword() {
+        val email = etEmail.text.toString().trim()
+        var valid = true
+
+        if(!InputValidator.validate(email, Constants.VALIDATION_EMAIL)) {
+            valid = false
+            etEmail.error = resources.getString(R.string.error_invalid_email)
+        } else {
+            etEmail.error = null
+        }
+
+        if(valid)
+            viewModel.forgotPassword(email)
+        else
+            snackbarMessage(getString(R.string.input_errors))
+
     }
 }

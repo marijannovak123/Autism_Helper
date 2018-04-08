@@ -58,6 +58,17 @@ class LoginRepository : ILoginRepository {
                 }
     }
 
+    override fun forgotPassword(email: String, listener: GeneralListener<Any>) {
+        authService.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        listener.onSucces(Any())
+                    } else {
+                        listener.onFailure(task.exception ?: Exception("Unknown error"))
+                    }
+                }
+    }
+
     override fun googleSignIn(data: Intent, listener: GeneralListener<FirebaseUser>) {
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         try {

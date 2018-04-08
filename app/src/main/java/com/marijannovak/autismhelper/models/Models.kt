@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.models
 
 import android.arch.persistence.room.PrimaryKey
+import java.io.Serializable
 
 
 data class Child (
@@ -10,7 +11,7 @@ data class Child (
         var sex: String?,
         var parentId: String,
         var dateOfBirth: Long
-)
+) : Serializable
 
 data class Answer (
         var text: String?,

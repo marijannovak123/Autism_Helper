@@ -13,16 +13,15 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Marijan on 23.3.2018..
  */
 class APIService private constructor(){
-    //todo: timeout
-    companion object {
 
-        var retrofit : Retrofit? = null
+    companion object {
+        private var retrofit : Retrofit? = null
 
         fun getApi() : API {
             return getRetrofitService().create(API::class.java)
         }
 
-        fun getRetrofitService() : Retrofit {
+        private fun getRetrofitService() : Retrofit {
             if(retrofit == null) {
                 retrofit = Retrofit.Builder()
                         .baseUrl(BASE_URL)
@@ -35,7 +34,7 @@ class APIService private constructor(){
             return retrofit!!
         }
 
-        fun getHttpClient() : OkHttpClient {
+        private fun getHttpClient() : OkHttpClient {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 

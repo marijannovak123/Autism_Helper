@@ -20,7 +20,7 @@ class LoginViewModel(private val repository: ILoginRepository,
                      private val syncRepository : ISyncRepository)
     : BaseViewModel<User>() {
 
-    fun checkLogin() {
+    fun checkLoggedIn() {
         repository.checkLoggedIn()
                 .subscribe(object : SingleObserver<User> {
                     override fun onSuccess(user: User?) {
@@ -66,6 +66,18 @@ class LoginViewModel(private val repository: ILoginRepository,
 
             override fun onFailure(t: Throwable) {
                 stateLiveData.value = State.ERROR
+                errorLiveData.value = t
+            }
+        })
+    }
+
+    fun forgotPassword(email: String) {
+        repository.forgotPassword(email, object: GeneralListener<Any>{
+            override fun onSucces(model: Any) {
+                stateLiveData.value = State.SUCCESS
+            }
+
+            override fun onFailure(t: Throwable) {
                 errorLiveData.value = t
             }
         })

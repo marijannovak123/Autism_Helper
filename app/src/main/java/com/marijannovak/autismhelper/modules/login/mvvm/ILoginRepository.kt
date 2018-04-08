@@ -20,4 +20,5 @@ interface ILoginRepository {
     fun fetchUserData(userId: String): Single<User>
     fun googleSignIn(data: Intent, listener: GeneralListener<FirebaseUser>)
     fun checkIfUserExists(userId: String): Single<Boolean>
+    fun forgotPassword(email: String, listener: GeneralListener<Any>)
 }

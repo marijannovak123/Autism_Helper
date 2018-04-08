@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.main
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -10,25 +11,14 @@ import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
-import com.marijannovak.autismhelper.database.AppDatabase
 import com.marijannovak.autismhelper.models.Category
-import com.marijannovak.autismhelper.models.Question
-import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.child.ChildActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
-import io.reactivex.Scheduler
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.DisposableSubscriber
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.Android
-import org.jetbrains.anko.toast
 
 class MainActivity : ViewModelActivity<MainViewModel>() {
 
@@ -112,7 +102,7 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
     }
 
     override fun showError(throwable: Throwable) {
-        toast(throwable.message.toString())
+        Snackbar.make(llContent, throwable.message.toString(), Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

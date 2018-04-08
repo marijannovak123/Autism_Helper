@@ -17,7 +17,7 @@ abstract class ViewModelActivity<T : ViewModel> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        //supportActionBar?.setDisplayShowTitleEnabled(false)
 
         this.viewModel = createViewModel()
         subscribeToData()
