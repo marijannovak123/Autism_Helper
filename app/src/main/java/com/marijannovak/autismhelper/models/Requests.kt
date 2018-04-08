@@ -4,5 +4,5 @@ data class SignupRequest(
         var email: String,
         var username: String,
         var password: String,
-        var dateOfBirth: Long
+        var children : List<Child>
 )

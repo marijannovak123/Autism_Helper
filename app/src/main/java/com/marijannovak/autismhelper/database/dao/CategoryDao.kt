@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.database.dao
 
 import android.arch.persistence.room.*
-import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.models.Category
 import io.reactivex.Flowable
@@ -18,7 +17,7 @@ interface CategoryDao {
     @Query("SELECT * FROM $TABLE_CATEGORIES WHERE id = :id")
     fun getCategoryById(id : Int) : Flowable<Category>
 
-    @Query("SELECT COUNT(*) FROM $TABLE_ANSWERS")
+    @Query("SELECT COUNT(*) FROM $TABLE_CATEGORIES")
     fun getCategoryCount() : Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

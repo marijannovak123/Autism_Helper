@@ -11,13 +11,13 @@ import io.reactivex.Flowable
 @Dao
 interface QuestionDao {
 
-    @Query("SELECT * FROM questions")
+    @Query("SELECT * FROM $TABLE_QUESTIONS")
     fun getQuestions() : Flowable<List<Question>>
 
-    @Query("SELECT * FROM questions WHERE id = :id")
+    @Query("SELECT * FROM $TABLE_QUESTIONS WHERE id = :id")
     fun getQuestionById(id : Int) : Flowable<Question>
 
-    @Query("SELECT COUNT(*) FROM questions")
+    @Query("SELECT COUNT(*) FROM $TABLE_QUESTIONS")
     fun getQuestionCount() : Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

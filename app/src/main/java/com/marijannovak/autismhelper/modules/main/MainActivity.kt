@@ -10,14 +10,24 @@ import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
+import com.marijannovak.autismhelper.database.AppDatabase
 import com.marijannovak.autismhelper.models.Category
+import com.marijannovak.autismhelper.models.Question
+import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.child.ChildActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
+import io.reactivex.Scheduler
+import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.DisposableSubscriber
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.Android
 import org.jetbrains.anko.toast
 
 class MainActivity : ViewModelActivity<MainViewModel>() {
@@ -34,6 +44,17 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
 //
         //viewModel.loadCategories()
 
+        //AppDatabase.getUserDao().getUser().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(object : SingleObserver<User> {
+        //    override fun onSuccess(t: User?) {
+        //        Log.e("tag", "hehe")
+        //    }
+//
+        //    override fun onSubscribe(d: Disposable?) {
+        //    }
+//
+        //    override fun onError(e: Throwable?) {
+        //    }
+        //})
         init()
     }
 

@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.models
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
-import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILDREN
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILD_SCORES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
@@ -21,16 +20,6 @@ data class User (
     var children: List<Child>
 )
 
-@Entity(tableName = TABLE_CHILDREN)
-data class Child (
-        @PrimaryKey
-        var id: Int,
-        var name: String?,
-        var sex: String?,
-        var parentId: String,
-        var dateOfBirth: Long
-)
-
 @Entity(tableName = TABLE_CHILD_SCORES)
 data class ChildScore (
         @PrimaryKey(autoGenerate = true)
@@ -38,13 +27,6 @@ data class ChildScore (
         var childId: Int,
         var timestamp: Long,
         var score: Long
-)
-
-
-data class Answer (
-         var text: String?,
-         var isCorrect: Boolean?,
-         var questionId: Int?
 )
 
 @Entity(tableName = TABLE_CATEGORIES)

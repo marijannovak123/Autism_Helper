@@ -14,9 +14,9 @@ class Constants {
         //endregion
 
         //region local db
-        const val DB_NAME = "autism-helper-db"
+        const val DB_NAME = "autism_helper_db"
         const val TABLE_USER = "user"
-        const val TABLE_ANSWERS = "answers"
+        const val TABLE_CHILD_SCORES = "child_scores"
         const val TABLE_QUESTIONS = "questions"
         const val TABLE_QUESTION_TYPES = "question_types"
         const val TABLE_CATEGORIES = "categories"

@@ -4,9 +4,37 @@
         "users" : 
         [
             {
-                "name" : "marijan",
+                "username" : "marijan",
                 "id" : "someid",
-                "email" : "marijannovak123"
+                "email" : "marijannovak123",
+                "children" : 
+                [
+                    {
+                        "id": 10120,
+                        "name" : "Koko",
+                        "sex" : "M",
+                        "parentId": "someId",
+                        "dateOfBirth" : 12321312321
+                    },
+
+                    {
+                        "id": 32123,
+                        "name": "Christine",
+                        "sex": "F",
+                        "parentId":"someId",
+                        "dateOfBirth": 2321324234
+                    }
+            
+                ]
+            }
+        ],
+
+        "child_scores" :
+        [   
+            {
+                "childId" : 10120,
+                "timestamp" : 1235567234,
+                "score" : 100
             }
         ],
 
@@ -17,7 +45,14 @@
                 "id" : 0,
                 "categoryId" : 0,
                 "typeId" : 0,
-                "extraData" : ""
+                "extraData" : "",
+                "answers": 
+                [
+                    {"questionId" : 0, "text" : "1", "isCorrect" : true},
+                	{"questionId" : 0, "text" : "8", "isCorrect" : false}, 
+                    {"questionId" : 0, "text" : "2", "isCorrect" : false},
+                    {"questionId" : 0, "text" : "4", "isCorrect" : false}
+                ]
             },
 
             {
@@ -25,7 +60,14 @@
                 "id" : 1,
                 "categoryId" : 0,
                 "typeId" : 0,
-                "extraData" : ""
+                "extraData" : "",
+                "answers" : 
+                [
+                    {"questionId" : 1, "text" : "1", "isCorrect" : true},
+                    {"questionId" : 1, "text" : "8", "isCorrect" : false}, 
+                    {"questionId" : 1, "text" : "2", "isCorrect" : false},
+                    {"questionId" : 1, "text" : "4", "isCorrect" : false}                
+                ]
             },
 
             {
@@ -33,24 +75,16 @@
                 "id" : 2,
                 "categoryId" : 1,
                 "typeId" : 0,
-                "extraData" : "#1ccc42"
+                "extraData" : "#1ccc42",
+                "answers":
+                [ 
+                    {"questionId" : 2, "text" : "Blue", "isCorrect" : false},
+                    {"questionId" : 2, "text" : "Purple", "isCorrect" : false},
+                    {"questionId" : 2, "text" : "Green", "isCorrect" : true}, 
+                    {"questionId" : 2, "text" : "Red", "isCorrect" : false}
+                ]
             }
 
-        ],
-
-        "answers" : [
-            {"id" : 0, "text" : "1", "isCorrect" : true, "questionId" : 0},
-            {"id" : 1, "text" : "8", "isCorrect" : false, "questionId" : 0}, 
-            {"id" : 2, "text" : "2", "isCorrect" : false, "questionId" : 0},
-            {"id" : 3, "text" : "4", "isCorrect" : false, "questionId" : 0},
-            {"id" : 4, "text" : "1", "isCorrect" : true, "questionId" : 1},
-            {"id" : 5, "text" : "8", "isCorrect" : false, "questionId" : 1}, 
-            {"id" : 6, "text" : "2", "isCorrect" : false, "questionId" : 1},
-            {"id" : 7, "text" : "4", "isCorrect" : false, "questionId" : 1},
-            {"id" : 8, "text" : "Blue", "isCorrect" : false, "questionId" : 2},
-            {"id" : 9, "text" : "Purple", "isCorrect" : false, "questionId" : 2},
-            {"id" : 10, "text" : "Green", "isCorrect" : true, "questionId" : 2}, 
-            {"id" : 11, "text" : "Red", "isCorrect" : false, "questionId" : 2}
         ],
 
         "categories" : 

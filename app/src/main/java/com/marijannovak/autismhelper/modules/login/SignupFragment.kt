@@ -14,17 +14,20 @@ import com.marijannovak.autismhelper.common.listeners.LoginSignupListener
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_PASSWORD
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_USERNAME
+import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.utils.DatePicker
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.fragment_signup.*
 import org.jetbrains.anko.support.v4.toast
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
-
+//todo : add children
     private var listener: LoginSignupListener? = null
     private var selectedDate: Calendar = Calendar.getInstance()
+    private var childrenList: List<Child> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -99,7 +102,7 @@ class SignupFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         }
 
         if(valid)
-            listener!!.onSignup(SignupRequest(email, username, password, selectedDate.timeInMillis))
+            listener!!.onSignup(SignupRequest(email, username, password, childrenList))
         else
             toast(R.string.input_errors)
     }

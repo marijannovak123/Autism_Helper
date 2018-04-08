@@ -83,13 +83,10 @@ class LoginRepository : ILoginRepository {
         return APIService
                 .getApi()
                 .getUser(userId)
-                .flatMap { user ->
-                    if(user.dateOfBirth > 0
-                            && user.id.isNotEmpty()
-                            && user.email != null
-                            && user.email!!.isNotEmpty()
-                            && user.username != null
-                            && user.username!!.isNotEmpty())
+                .flatMap { user: User ->
+                    if(user.id.isNotEmpty() && user.username != null
+                            && user.username!!.isNotEmpty() && user.email != null
+                            && user.email!!.isNotEmpty())
                         Single.just(true)
                     else Single.just(false)
                 }

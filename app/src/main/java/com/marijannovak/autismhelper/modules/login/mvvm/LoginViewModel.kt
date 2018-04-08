@@ -12,7 +12,7 @@ import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
-
+//todo: add children functionality in app and after google sign in
 /**
  * Created by Marijan on 23.3.2018..
  */
@@ -75,11 +75,7 @@ class LoginViewModel(private val repository: ILoginRepository,
         stateLiveData.value = State.LOADING
         repository.googleSignIn(data, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                if(checkIfUserAlreadyExists(model.uid))
-                    fetchUserData(model.uid)
-                else {
-                    saveUserToFirebase(model.mapToUser())
-                }
+                checkIfUserAlreadyExists(model)
             }
 
             override fun onFailure(t: Throwable) {
@@ -89,11 +85,15 @@ class LoginViewModel(private val repository: ILoginRepository,
         })
     }
 
-    private fun checkIfUserAlreadyExists(userId: String): Boolean {
-        var isSuccess = false
-        repository.checkIfUserExists(userId).subscribe(object : SingleObserver<Boolean> {
+    private fun checkIfUserAlreadyExists(user: FirebaseUser) {
+        repository.checkIfUserExists(user.uid).subscribe(object : SingleObserver<Boolean> {
                 override fun onSuccess(exists: Boolean?) {
-                    exists?.let { isSuccess = it }
+                    exists?.let {
+                        if(it)
+                            fetchUserData(user.uid)
+                        else
+                            saveUserToFirebase(user.mapToUser())
+                    }
                 }
 
                 override fun onSubscribe(d: Disposable?) {
@@ -101,24 +101,25 @@ class LoginViewModel(private val repository: ILoginRepository,
                 }
 
                 override fun onError(e: Throwable?) {
-                    //noop
+                    stateLiveData.value = State.ERROR
+                    errorLiveData.value = e
                 }
             }
         )
 
-        return isSuccess
     }
 
     private fun fetchUserData(userId : String) {
        repository.fetchUserData(userId).subscribe(object : SingleObserver<User>{
            override fun onSuccess(user: User?) {
-               if(user != null) {
+               user?.let {
                    repository.saveUser(user)
                    contentLiveData.value = listOf(user)
-               } else {
-                   stateLiveData.value = State.ERROR
-                   errorLiveData.value = Throwable("Null response")
+                   return
                }
+
+               stateLiveData.value = State.ERROR
+               errorLiveData.value = Throwable("Null response")
            }
 
            override fun onSubscribe(d: Disposable?) {

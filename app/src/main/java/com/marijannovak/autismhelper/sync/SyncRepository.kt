@@ -27,7 +27,7 @@ class SyncRepository : ISyncRepository {
                         } else Single.error(Throwable("Category sync failed"))
                 }
                 .flatMap {
-                    questionTypes: List<QuestionType> -> {}
+                    questionTypes: List<QuestionType> ->
                         if(questionTypes.isNotEmpty()) {
                             saveQuestionTypes(questionTypes)
                             APIService.getApi().getQuestions()
@@ -36,14 +36,8 @@ class SyncRepository : ISyncRepository {
                 .flatMap {questions: List<Question> ->
                         if(questions.isNotEmpty()) {
                             saveQuestions(questions)
-                            APIService.getApi().getAnswers()
-                        } else Single.error(Throwable("Questions sync failed"))
-                }
-                .flatMap { answers: List<Answer> ->
-                        if(answers.isNotEmpty()) {
-                            saveAnswers(answers)
                             Single.just(true)
-                        } else Single.error(Throwable("Answers sync failed"))
+                        } else Single.error(Throwable("Questions sync failed"))
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,13 +48,6 @@ class SyncRepository : ISyncRepository {
             AppDatabase.getQuestionDao().deleteTable()
             AppDatabase.getCategoriesDao().deleteTable()
             AppDatabase.getQuestionTypeDao().deleteTable()
-            AppDatabase.getAnswerDao().deleteTable()
-        }
-    }
-
-    private fun saveAnswers(answers: List<Answer>) {
-        doAsync {
-            AppDatabase.getAnswerDao().saveAnswers(answers)
         }
     }
 

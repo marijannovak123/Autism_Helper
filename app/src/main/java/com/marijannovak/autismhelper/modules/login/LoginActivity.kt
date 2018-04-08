@@ -11,6 +11,7 @@ import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.LoginSignupListener
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
+import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.adapters.LoginSignupPagerAdapter
