@@ -32,6 +32,11 @@ class Constants {
         const val VALIDATION_PASSWORD = "password"
         const val VALIDATION_DATE = "date"
         const val VALIDATION_USERNAME = "username"
+        const val VALIDATION_NAME = "name"
+        //endregion
+
+        //region child id
+        const val CHILD_ID_SUFFIX = "CHILD"
         //endregion
     }
 }

@@ -6,7 +6,7 @@ import java.io.Serializable
 
 data class Child (
         @PrimaryKey
-        var id: Int,
+        var id: String,
         var name: String?,
         var sex: String?,
         var parentId: String,

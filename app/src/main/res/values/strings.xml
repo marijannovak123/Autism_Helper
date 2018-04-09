@@ -42,5 +42,7 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="success">Success</string>
     <string name="child_name">Child name</string>
+    <string name="confirm">Confirm</string>
+    <string name="add_child_profile">Add child to profile</string>
 
 </resources>

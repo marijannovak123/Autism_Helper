@@ -1,10 +1,13 @@
 package com.marijannovak.autismhelper.utils
 
+import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
+import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_PASSWORD
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_USERNAME
 import com.marijannovak.autismhelper.models.Child
 import java.util.*
+import kotlin.collections.HashMap
 
 class InputValidator {
 
@@ -30,19 +33,32 @@ class InputValidator {
             return valid
         }
 
-        fun validateChild(child: Child): Boolean {
+        fun validateChild(child: Child): HashMap<String, String> {
 
-            var valid = true
+            var errorMap = HashMap<String, String>()
 
             val dobCalender = Calendar.getInstance()
             dobCalender.time = Date(child.dateOfBirth)
 
-            if(child.id < 0 || child.name == null || child.name!!.length < 5
-                    || child.sex != null || child.sex!!.isEmpty()
-                    || !validateDate(dobCalender) || child.parentId.isEmpty())
-                        valid = false
+            if(child.name == null) {
+                errorMap[VALIDATION_NAME] = "Null name!"
+                return errorMap
+            }
 
-            return valid
+            if(child.name!!.isEmpty())
+                errorMap[VALIDATION_NAME] = "Insert name!"
+
+            if(child.name!!.length < 2)
+                errorMap[VALIDATION_NAME] = "Name too short!"
+
+            if(child.dateOfBirth <= 0)
+                errorMap[VALIDATION_DATE] = "Insert date!"
+
+            if(!validateDate(dobCalender))
+                errorMap[VALIDATION_DATE] = "Date incorrect!"
+
+
+            return errorMap
         }
 
 

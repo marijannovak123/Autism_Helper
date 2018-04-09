@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -13,11 +14,14 @@ import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGNUP
+import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
+import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
+import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
@@ -28,10 +32,19 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        //DialogHelper.showAddChildDialog(this, User("Koko", "iidj", "koko@roko.com", emptyList()), object: (Child) -> Unit {
+        //    override fun invoke(child: Child) {
+        //        Log.e(this.javaClass.name, "${child.id} ${child.name} ${child.sex} ${child.dateOfBirth} ${child.parentId}")
+        //    }
+//
+        //})
+
         viewModel.checkLoggedIn()
 
         initListeners()
     }
+
+
 
     private fun initListeners() {
         btnLogin.setOnClickListener { attemptLogin() }
@@ -50,6 +63,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
     }
 
+    //todo: add child before syncing or anything, running signup even..different case for google signup
     private fun startSync() {
         viewModel.syncData()
     }

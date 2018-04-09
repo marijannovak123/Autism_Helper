@@ -16,7 +16,7 @@ import org.jetbrains.anko.design.snackbar
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
-//todo: add children dialog
+
     private var childrenList : List<Child> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +31,6 @@ class SignUpActivity : AppCompatActivity() {
         val username = etUsername.text.toString().trim()
         val password = etPassword.text.toString().trim()
         val confirmPassword = etConfirmPassword.text.toString().trim()
-
-        //this.childrenList += Child(1,"Koko", "M", "mmm", 213123123)
 
         var valid = true
 
@@ -57,7 +55,7 @@ class SignUpActivity : AppCompatActivity() {
             etUsername.error = null
         }
 
-        if (!password.equals(confirmPassword)) {
+        if (password != confirmPassword) {
             valid = false
             etConfirmPassword.error = resources.getString(R.string.passwords_not_same)
         } else {
