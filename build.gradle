@@ -4,7 +4,7 @@ buildscript {
     ext.kotlin_version = '1.2.31'
 
     ext {
-        supportLibraryVersion = '27.1.0'
+        supportLibraryVersion = '27.1.1'
         constraintLayoutVersion = '1.0.2'
         archLifecycleVersion = '1.1.0'
         archLifecycleCompilerVersion = '1.0.0'

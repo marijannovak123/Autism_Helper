@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.modules.main
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +18,7 @@ import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.design.snackbar
 
 class MainActivity : ViewModelActivity<MainViewModel>() {
 
@@ -26,7 +26,7 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //PromptDialog.show(this, "Test", "yes", "no", object : () -> Unit {
+        //DialogHelper.show(this, "Test", "yes", "no", object : () -> Unit {
         //    override fun invoke() {
         //       toast("yes")
         //    }
@@ -102,7 +102,7 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
     }
 
     override fun showError(throwable: Throwable) {
-        Snackbar.make(llContent, throwable.message.toString(), Snackbar.LENGTH_SHORT).show()
+        snackbar(llContent, throwable.message.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

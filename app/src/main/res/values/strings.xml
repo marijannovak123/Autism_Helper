@@ -41,5 +41,6 @@
     <string name="dont_have_acc">Don\'t have an account?</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="success">Success</string>
+    <string name="child_name">Child name</string>
 
 </resources>

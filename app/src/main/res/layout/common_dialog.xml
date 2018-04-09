@@ -14,8 +14,7 @@
         android:textSize="20sp"
         android:id="@+id/tvDialogMessage"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
-        />
+        android:layout_marginBottom="30dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,12 +24,11 @@
 
         <Button
             android:id="@+id/btnPositive"
-            style="@style/style_prompt_button" />
+            style="@style/style_prompt_button"/>
         <Button
             android:id="@+id/btnNegative"
             style="@style/style_prompt_button"/>
 
     </LinearLayout>
-
 
 </LinearLayout>

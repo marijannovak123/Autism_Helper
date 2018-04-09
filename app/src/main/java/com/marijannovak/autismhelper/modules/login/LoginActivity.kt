@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.View
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,6 +20,7 @@ import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.design.snackbar
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
@@ -83,7 +83,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     private fun snackbarMessage(message: String?) {
-        Snackbar.make(llContent, message ?: "Null", Snackbar.LENGTH_SHORT).show()
+        snackbar(llContent, message ?: "null")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

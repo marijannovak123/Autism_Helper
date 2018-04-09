@@ -12,6 +12,7 @@ import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import org.jetbrains.anko.design.snackbar
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
@@ -66,7 +67,7 @@ class SignUpActivity : AppCompatActivity() {
         if(valid)
             sendRequest(SignupRequest(email, username, password, this.childrenList))
         else
-            Snackbar.make(btnSignUp, R.string.input_errors, Snackbar.LENGTH_SHORT).show()
+            snackbar(btnSignUp, R.string.input_errors)
     }
 
     private fun sendRequest(signupRequest: SignupRequest) {
