@@ -3,13 +3,13 @@ package com.marijannovak.autismhelper.modules.main.mvvm
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.models.Category
-import com.marijannovak.autismhelper.sync.ISyncRepository
+import com.marijannovak.autismhelper.common.repo.IDataRepository
 import io.reactivex.subscribers.DisposableSubscriber
 
 /**
  * Created by Marijan on 23.3.2018..
  */
-class MainViewModel(private val repository : IMainRepository, private val syncRepository: ISyncRepository)
+class MainViewModel(private val repository : IMainRepository, private val dataRepository: IDataRepository)
     : BaseViewModel<Category>() {
 
     fun loadCategories() {
@@ -42,16 +42,16 @@ class MainViewModel(private val repository : IMainRepository, private val syncRe
     }
 
     fun logout() {
-        syncRepository.deleteDataTables()
-        repository.logout()
+        dataRepository.deleteDataTables()
+        dataRepository.logOut()
 
         stateLiveData.value = State.HOME
     }
 
-    fun getParentPassword() = repository.getParentPassword()
+    fun getParentPassword() = dataRepository.getParentPassword()
 
     fun saveParentPassword(password: String) {
-        repository.saveParentPassword(password)
+        dataRepository.saveParentPassword(password)
     }
 
 }

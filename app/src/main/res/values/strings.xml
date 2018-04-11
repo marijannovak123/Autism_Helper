@@ -45,5 +45,6 @@
     <string name="add_another_child">Add another child</string>
     <string name="name">Name</string>
     <string name="choose_parent_password">Choose parent password</string>
+    <string name="google_sign_in">Sign In     </string>
 
 </resources>

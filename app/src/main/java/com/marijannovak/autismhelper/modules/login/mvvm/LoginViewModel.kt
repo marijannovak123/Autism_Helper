@@ -7,7 +7,7 @@ import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.models.User
-import com.marijannovak.autismhelper.sync.ISyncRepository
+import com.marijannovak.autismhelper.common.repo.IDataRepository
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
@@ -16,7 +16,7 @@ import io.reactivex.disposables.Disposable
  * Created by Marijan on 23.3.2018..
  */
 class LoginViewModel(private val repository: ILoginRepository,
-                     private val syncRepository : ISyncRepository)
+                     private val dataRepository : IDataRepository)
     : BaseViewModel<User>() {
 
     fun checkLoggedIn() {
@@ -156,7 +156,7 @@ class LoginViewModel(private val repository: ILoginRepository,
     }
 
     fun syncData() {
-        syncRepository.syncData().subscribe(object : SingleObserver<Boolean> {
+        dataRepository.syncData().subscribe(object : SingleObserver<Boolean> {
             override fun onSuccess(syncDone: Boolean?) {
                 if(syncDone!!) {
                     stateLiveData.value = State.NEXT
@@ -171,7 +171,7 @@ class LoginViewModel(private val repository: ILoginRepository,
             }
 
             override fun onError(e: Throwable?) {
-                syncRepository.deleteDataTables()
+                dataRepository.deleteDataTables()
                 stateLiveData.value = State.ERROR
                 errorLiveData.value = e ?: unknownError()
             }

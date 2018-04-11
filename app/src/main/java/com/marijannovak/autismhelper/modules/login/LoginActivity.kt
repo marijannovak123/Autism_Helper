@@ -3,7 +3,10 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.marijannovak.autismhelper.R
@@ -19,11 +22,13 @@ import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.modules.main.MainActivity
-import com.marijannovak.autismhelper.sync.SyncRepository
+import com.marijannovak.autismhelper.common.repo.DataRepository
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.wrapContent
+import org.w3c.dom.Text
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
@@ -33,9 +38,13 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        viewModel.checkLoggedIn()
-
         initListeners()
+        customizeGoogleSignInButton()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkLoggedIn()
     }
 
     private fun initListeners() {
@@ -45,12 +54,19 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         tvForgotPassword.setOnClickListener { forgotPasswordDialog() }
     }
 
-    override fun createViewModel() = LoginViewModel(LoginRepository(), SyncRepository())
+    override fun createViewModel() = LoginViewModel(LoginRepository(), DataRepository())
 
     override fun subscribeToData() {
         viewModel.getContentLD().observe(this, Observer { users -> addChildDialog(users!![0]) } )
         viewModel.getErrorLD().observe(this, Observer { throwable -> showError(throwable!!) })
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
+    }
+
+    private fun customizeGoogleSignInButton() {
+
+
+        val tvGoogleSignIn = btnGoogleSignIn.getChildAt(0) as TextView
+        tvGoogleSignIn.text = getString(R.string.google_sign_in)
     }
 
     private fun startMainActivity() {

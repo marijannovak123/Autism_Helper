@@ -1,10 +1,12 @@
-package com.marijannovak.autismhelper.sync
+package com.marijannovak.autismhelper.common.repo
 
+import com.google.firebase.auth.FirebaseAuth
 import com.marijannovak.autismhelper.database.AppDatabase
 import com.marijannovak.autismhelper.models.Category
 import com.marijannovak.autismhelper.models.Question
 import com.marijannovak.autismhelper.models.QuestionType
 import com.marijannovak.autismhelper.network.APIService
+import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +15,7 @@ import org.jetbrains.anko.doAsync
 /**
  * Created by Marijan on 26.3.2018..
  */
-class SyncRepository : ISyncRepository {
+class DataRepository : IDataRepository {
     override fun syncData(): Single<Boolean> {
         return APIService
                 .getApi()
@@ -42,6 +44,17 @@ class SyncRepository : ISyncRepository {
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
+    override fun logOut() {
+        val authService = FirebaseAuth.getInstance()
+        authService.signOut()
+
+        doAsync {
+            AppDatabase.getUserDao().deleteTable()
+        }
+
+        PrefsHelper.setLoggedIn(false)
+    }
+
     override fun deleteDataTables() {
         doAsync {
             AppDatabase.getQuestionDao().deleteTable()
@@ -68,4 +81,9 @@ class SyncRepository : ISyncRepository {
         }
     }
 
+    override fun getParentPassword(): String = PrefsHelper.getParentPassword()
+
+    override fun saveParentPassword(password: String) {
+        PrefsHelper.setParentPassword(password)
+    }
 }

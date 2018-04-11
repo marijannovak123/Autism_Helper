@@ -15,7 +15,7 @@ import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
-import com.marijannovak.autismhelper.sync.SyncRepository
+import com.marijannovak.autismhelper.common.repo.DataRepository
 import com.marijannovak.autismhelper.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.design.snackbar
@@ -56,7 +56,7 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
         })
     }
 
-    override fun createViewModel() = MainViewModel(MainRepository(), SyncRepository())
+    override fun createViewModel() = MainViewModel(MainRepository(), DataRepository())
 
     override fun subscribeToData() {
         viewModel.getContentLD().observe(this, Observer { categories -> setUpUi(categories!!) } )

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llContent"
     android:orientation="vertical"
     android:gravity="center"
@@ -23,7 +24,9 @@
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#000000">
 
         <EditText
             style="@style/signupEditTextStyle"
@@ -48,7 +51,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:weightSum="2"
-        android:layout_margin="10dp">
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp">
 
         <Button
             android:layout_width="match_parent"
@@ -58,8 +63,10 @@
             android:text="@string/login"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"
+            android:padding="10dp"
             android:backgroundTint="@color/colorPrimary"/>
 
         <com.google.android.gms.common.SignInButton
@@ -77,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dont_have_acc"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="40dp"/>
 
     <Button
         android:layout_width="match_parent"
@@ -86,6 +93,7 @@
         android:id="@+id/btnRegister"
         android:textColor="@color/white"
         android:backgroundTint="@color/colorPrimary"
+        android:padding="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"/>
