@@ -44,5 +44,7 @@
     <string name="child_name">Child name</string>
     <string name="confirm">Confirm</string>
     <string name="add_child_profile">Add child to profile</string>
+    <string name="error">Error</string>
+    <string name="which_email_forgotten_password">Which email should we send a password reset link?</string>
 
 </resources>

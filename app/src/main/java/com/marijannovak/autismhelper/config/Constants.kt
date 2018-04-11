@@ -35,8 +35,10 @@ class Constants {
         const val VALIDATION_NAME = "name"
         //endregion
 
-        //region child id
+        //region child related constants
         const val CHILD_ID_SUFFIX = "CHILD"
+        val GENDERS = listOf("Male", "Female")
         //endregion
+
     }
 }

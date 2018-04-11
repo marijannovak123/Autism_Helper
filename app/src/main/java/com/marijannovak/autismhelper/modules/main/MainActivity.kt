@@ -66,9 +66,8 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
         }
     }
 
-    override fun createViewModel(): MainViewModel {
-        return MainViewModel(MainRepository(), SyncRepository())
-    }
+    override fun createViewModel() = MainViewModel(MainRepository(), SyncRepository())
+
 
     override fun subscribeToData() {
         viewModel.getContentLD().observe(this, Observer { categories -> setUpUi(categories!!) } )

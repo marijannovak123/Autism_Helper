@@ -11,14 +11,15 @@ import android.widget.Spinner
 import android.widget.TextView
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.config.Constants.Companion.CHILD_ID_SUFFIX
+import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
+import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
 import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.User
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.selector
 import java.util.*
-import kotlin.collections.HashMap
 
 class DialogHelper {
 
@@ -36,6 +37,42 @@ class DialogHelper {
             context.selector(title, stringList,
                     { _, i  -> confirmListener(i)})
         }
+
+        @SuppressLint("InflateParams")
+        fun showForgotPasswordDialog(context: Context, confirmListener: (String) -> Unit) {
+            val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+            val inflater = LayoutInflater.from(context)
+            val alertView = inflater.inflate(R.layout.dialog_forgot_password, null)
+
+            builder.setView(alertView)
+            builder.setCancelable(false)
+            val alertDialog = builder.create()
+
+            val message = alertView.findViewById<TextView>(R.id.tvMessage)
+            val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+            val etEmail = alertView.findViewById<EditText>(R.id.etEmail)
+
+            message.text = context.getString(R.string.which_email_forgotten_password)
+
+            btnPositive.setOnClickListener {
+                val email = etEmail.text.toString().trim()
+
+                if (InputValidator.validate(email, VALIDATION_EMAIL)) {
+                    confirmListener(email)
+                    alertDialog.dismiss()
+                } else {
+                    etEmail.error = context.getString(R.string.malformed_email)
+                }
+            }
+
+            btnNegative.setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            alertDialog.show()
+        }
+
 //todo: test correct data set
         @SuppressLint("InflateParams")
         fun showAddChildDialog(context: Context, user: User, confirmListener: (Child) -> Unit) {
@@ -44,6 +81,7 @@ class DialogHelper {
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
             val inflater = LayoutInflater.from(context)
             val alertView = inflater.inflate(R.layout.dialog_add_child, null)
+
             builder.setView(alertView)
             builder.setCancelable(false)
             val alertDialog = builder.create()
@@ -53,19 +91,18 @@ class DialogHelper {
             val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
             val etName = alertView.findViewById<EditText>(R.id.etChildName)
             val etDateOfBirth = alertView.findViewById<EditText>(R.id.etChildDateOfBirth)
-            val spSex = alertView.findViewById<Spinner>(R.id.spSex)
+    val spGender = alertView.findViewById<Spinner>(R.id.spSex)
 
-            spSex.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listOf("M", "F"))
+    spGender.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, GENDERS)
             message.text = context.getString(R.string.add_child_profile)
             etDateOfBirth.setOnClickListener { showDatePicker(context, selectedDate, etDateOfBirth) }
 
-            btnPositive.text = context.getString(R.string.confirm)
             btnPositive.setOnClickListener {
                 val name = etName.text.toString().trim()
                 val dateOfBirth = selectedDate.timeInMillis
 
                 val childId = user.id + CHILD_ID_SUFFIX + user.children.size
-                val child = Child(childId, name, spSex.selectedItem.toString(), user.id, dateOfBirth)
+                val child = Child(childId, name, spGender.selectedItem.toString(), user.id, dateOfBirth)
 
                 val errors = InputValidator.validateChild(child)
 
@@ -77,11 +114,11 @@ class DialogHelper {
                 }
             }
 
-            btnNegative.text = context.getString(R.string.cancel)
             btnNegative.setOnClickListener { alertDialog.dismiss() }
 
             alertDialog.show()
         }
+
 
         private fun handleChildAddErrors(errors: HashMap<String, String>, etName: EditText, etDateOfBirth: EditText) {
             if(errors.isEmpty())  {
@@ -98,14 +135,12 @@ class DialogHelper {
 
         @SuppressLint("SetTextI18n")
         private fun showDatePicker(context: Context, date: Calendar, etDate: EditText) {
-
             val onDateSet = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 date.set(Calendar.YEAR, year)
                 date.set(Calendar.MONTH, month)
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 etDate.setText("${date[Calendar.DAY_OF_MONTH]}.${date[Calendar.MONTH]+1}.${date[Calendar.YEAR]}")
             }
-
             DatePicker.newInstance(context, onDateSet, date).show()
         }
 

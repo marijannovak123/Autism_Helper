@@ -34,12 +34,11 @@ class InputValidator {
         }
 
         fun validateChild(child: Child): HashMap<String, String> {
-
-            var errorMap = HashMap<String, String>()
+            val errorMap = HashMap<String, String>()
 
             val dobCalender = Calendar.getInstance()
             dobCalender.time = Date(child.dateOfBirth)
-
+            //todo: string res
             if(child.name == null) {
                 errorMap[VALIDATION_NAME] = "Null name!"
                 return errorMap
@@ -62,14 +61,6 @@ class InputValidator {
         }
 
 
-        private fun validateDate(selectedDate:Calendar): Boolean {
-            var valid = true
-
-            if(selectedDate.before(Date(0)) || selectedDate.after(Calendar.getInstance()))
-                valid = false
-
-            return valid
-        }
-
+        private fun validateDate(selectedDate: Calendar) = !(selectedDate.before(Date(0)) || selectedDate.after(Calendar.getInstance()))
     }
 }
