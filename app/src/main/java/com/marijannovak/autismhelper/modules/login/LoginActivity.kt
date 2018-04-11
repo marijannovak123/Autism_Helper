@@ -13,16 +13,21 @@ import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGNUP
+import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
+import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
+import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
+
+    private val childrenList = ArrayList<Child>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,25 +42,21 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         btnLogin.setOnClickListener { attemptLogin() }
         btnGoogleSignIn.setOnClickListener { googleSignIn() }
         btnRegister.setOnClickListener { startSignUpActivity() }
-        tvForgotPassword.setOnClickListener { attemptForgotPassword() }
+        tvForgotPassword.setOnClickListener { forgotPasswordDialog() }
     }
 
     override fun createViewModel() = LoginViewModel(LoginRepository(), SyncRepository())
 
     override fun subscribeToData() {
-        viewModel.getContentLD().observe(this, Observer { startSync() } )
+        viewModel.getContentLD().observe(this, Observer { users -> addChildDialog(users!![0]) } )
         viewModel.getErrorLD().observe(this, Observer { throwable -> showError(throwable!!) })
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
-    }
-
-    //todo: add child before syncing or anything, running signup even..different case for google signup
-    private fun startSync() {
-        viewModel.syncData()
     }
 
     private fun startMainActivity() {
         intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(0,0)
         finish()
     }
 
@@ -65,20 +66,33 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     override fun handleState(state : State) {
        when(state) {
-           State.LOADING -> {
-               pbLoading.show()
-               llContent.visibility = View.GONE
-           }
+           State.LOADING -> showLoading(true)
 
            State.NEXT -> startMainActivity()
 
            State.SUCCESS -> snackbarMessage(getString(R.string.success))
 
+           State.SYNC -> viewModel.syncData()
+
            else -> {
-               pbLoading.hide()
+               showLoading(false)
                llContent.visibility = View.VISIBLE
            }
        }
+    }
+
+    private fun addChildDialog(user: User) {
+        DialogHelper.showAddChildDialog(this, user.id, childrenList.size, object: (Child, Boolean) -> Unit {
+            override fun invoke(child: Child, another: Boolean) {
+                childrenList += child
+                if(another) {
+                    addChildDialog(user)
+                } else {
+                    val userWithChildren = user.copy(children = childrenList)
+                    viewModel.uploadAndSaveUser(userWithChildren)
+                }
+            }
+        })
     }
 
     private fun snackbarMessage(message: String?) {
@@ -95,7 +109,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         } else if (requestCode == RESULT_CODE_SIGNUP) {
             data?.let {
                 val signupRequest = it.extras.getSerializable(KEY_SIGNUP_REQUEST) as SignupRequest
-                signUp(signupRequest)
+                viewModel.register(signupRequest)
             }
         }
     }
@@ -110,10 +124,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         val signInIntent = googleSignInClient.signInIntent
 
         startActivityForResult(signInIntent, RESULT_CODE_GOOGLE_SIGNIN)
-    }
-
-    private fun signUp(signupRequest: SignupRequest) {
-       viewModel.register(signupRequest)
     }
 
     private fun startSignUpActivity() {
@@ -147,21 +157,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             snackbarMessage(getString(R.string.input_errors))
     }
 
-    private fun attemptForgotPassword() {
-        val email = etEmail.text.toString().trim()
-        var valid = true
-
-        if(!InputValidator.validate(email, Constants.VALIDATION_EMAIL)) {
-            valid = false
-            etEmail.error = resources.getString(R.string.error_invalid_email)
-        } else {
-            etEmail.error = null
-        }
-
-        if(valid)
-            viewModel.forgotPassword(email)
-        else
-            snackbarMessage(getString(R.string.input_errors))
-
+    private fun forgotPasswordDialog() {
+        DialogHelper.showForgotPasswordDialog(this, object: (String) -> Unit {
+            override fun invoke(email: String) {
+                viewModel.forgotPassword(email)
+            }
+        })
     }
 }

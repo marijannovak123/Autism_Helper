@@ -12,7 +12,6 @@ import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
-//todo: add children functionality in app and after google sign in
 /**
  * Created by Marijan on 23.3.2018..
  */
@@ -21,33 +20,18 @@ class LoginViewModel(private val repository: ILoginRepository,
     : BaseViewModel<User>() {
 
     fun checkLoggedIn() {
-        repository.checkLoggedIn()
-                .subscribe(object : SingleObserver<User> {
-                    override fun onSuccess(user: User?) {
-                       user?.let {
-                           contentLiveData.value = listOf(it)
-                           stateLiveData.value = State.NEXT
-                           return
-                       }
-                        stateLiveData.value = State.CONTENT
-                    }
-
-                    override fun onSubscribe(d: Disposable?) {
-                        compositeDisposable.add(d)
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        stateLiveData.value = State.ERROR
-                    }
-                })
+        if(repository.isLoggedIn()) {
+            stateLiveData.value = State.NEXT
+        } else {
+            stateLiveData.value = State.CONTENT
+        }
     }
-
 
     fun register(signupRequest: SignupRequest) {
         stateLiveData.value = State.LOADING
         repository.register(signupRequest, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                saveUserToFirebase(model.mapToUser(signupRequest))
+                contentLiveData.value = listOf(model.mapToUser(signupRequest))
             }
 
             override fun onFailure(t: Throwable) {
@@ -103,8 +87,9 @@ class LoginViewModel(private val repository: ILoginRepository,
                     exists?.let {
                         if(it)
                             fetchUserData(user.uid)
-                        else
-                            saveUserToFirebase(user.mapToUser())
+                        else {
+                            contentLiveData.value = listOf(user.mapToUser())
+                        }
                     }
                 }
 
@@ -126,7 +111,8 @@ class LoginViewModel(private val repository: ILoginRepository,
            override fun onSuccess(user: User?) {
                user?.let {
                    repository.saveUser(user)
-                   contentLiveData.value = listOf(user)
+                   repository.setLoggedIn(true)
+                   stateLiveData.value = State.SYNC
                    return
                }
 
@@ -145,11 +131,12 @@ class LoginViewModel(private val repository: ILoginRepository,
        })
     }
 
-    fun saveUserToFirebase(user : User) {
+    fun uploadAndSaveUser(user : User) {
         repository.saveUserToFirebase(user).subscribe(object : CompletableObserver {
             override fun onComplete() {
                 repository.saveUser(user)
-                contentLiveData.value = listOf(user)
+                repository.setLoggedIn(true)
+                stateLiveData.value = State.SYNC
             }
 
             override fun onSubscribe(d: Disposable?) {

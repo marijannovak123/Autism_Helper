@@ -14,9 +14,7 @@ class ChildActivity : ViewModelActivity<ChildViewModel>() {
         setContentView(R.layout.activity_child)
     }
 
-    override fun createViewModel(): ChildViewModel {
-        return ChildViewModel(ChildRepository())
-    }
+    override fun createViewModel() =  ChildViewModel(ChildRepository())
 
     override fun handleState(state: Enums.State) {
 

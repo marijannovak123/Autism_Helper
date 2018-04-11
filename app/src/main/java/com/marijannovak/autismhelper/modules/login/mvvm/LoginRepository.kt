@@ -11,6 +11,7 @@ import com.marijannovak.autismhelper.database.AppDatabase
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.models.User
 import com.marijannovak.autismhelper.network.APIService
+import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,12 +26,10 @@ class LoginRepository : ILoginRepository {
     private var authService : FirebaseAuth = FirebaseAuth.getInstance()
     private var currentUser : FirebaseUser? = null
 
-    override fun checkLoggedIn() : Single<User> {
-        return AppDatabase
-                .getUserDao()
-                .getUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+    override fun isLoggedIn() = PrefsHelper.isLoggedIn()
+
+    override fun setLoggedIn(loggedIn: Boolean) {
+        PrefsHelper.setLoggedIn(loggedIn)
     }
 
     override fun register(signupRequest: SignupRequest, listener : GeneralListener<FirebaseUser>) {

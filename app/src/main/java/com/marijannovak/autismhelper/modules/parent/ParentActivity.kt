@@ -14,9 +14,8 @@ class ParentActivity : ViewModelActivity<ParentViewModel>() {
         setContentView(R.layout.activity_parent)
     }
 
-    override fun createViewModel(): ParentViewModel {
-        return ParentViewModel(ParentRepository())
-    }
+    override fun createViewModel() = ParentViewModel(ParentRepository())
+
 
     override fun subscribeToData() {
 

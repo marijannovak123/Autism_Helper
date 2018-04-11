@@ -15,7 +15,7 @@ class Constants {
         //region login/signup
         const val RESULT_CODE_GOOGLE_SIGNIN = 9001
         const val RESULT_CODE_SIGNUP = 9002
-        const val KEY_SIGNUP_REQUEST = "signupRequest"
+        const val KEY_SIGNUP_REQUEST = "signup_request"
         //endregion
 
         //region local db
@@ -40,5 +40,9 @@ class Constants {
         val GENDERS = listOf("Male", "Female")
         //endregion
 
+        //region shared prefs
+        const val PREFS_NAME = "autism_helper_prefs"
+        const val KEY_LOGGED_IN = "logged_in"
+        //endregion
     }
 }

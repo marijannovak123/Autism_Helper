@@ -12,7 +12,6 @@ import io.reactivex.Single
  * Created by Marijan on 23.3.2018..
  */
 interface ILoginRepository {
-    fun checkLoggedIn(): Single<User>
     fun register(signupRequest: SignupRequest, listener: GeneralListener<FirebaseUser>)
     fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>)
     fun saveUserToFirebase(user : User) : Completable
@@ -21,4 +20,6 @@ interface ILoginRepository {
     fun googleSignIn(data: Intent, listener: GeneralListener<FirebaseUser>)
     fun checkIfUserExists(userId: String): Single<Boolean>
     fun forgotPassword(email: String, listener: GeneralListener<Any>)
+    fun isLoggedIn() : Boolean
+    fun setLoggedIn(loggedIn: Boolean)
 }

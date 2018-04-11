@@ -28,7 +28,7 @@
         <EditText
             style="@style/signupEditTextStyle"
             android:id="@+id/etUsername"
-            android:hint="@string/username"
+            android:hint="@string/name"
             android:inputType="text"
             android:drawableStart="@drawable/ic_account_circle"
             android:nextFocusForward="@id/etPassword"/>
@@ -58,26 +58,7 @@
             android:id="@+id/etConfirmPassword"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:drawableStart="@drawable/ic_lock"
-            android:nextFocusForward="@id/etDateOfBirth"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            style="@style/signupEditTextStyle"
-            android:id="@+id/etDateOfBirth"
-            android:hint="@string/date_of_birth"
-            android:inputType="date"
-            android:drawableStart="@drawable/ic_date_range"
-            android:cursorVisible="false"
-            android:editable="false"
-            android:clickable="true"
-            android:focusable="false"
-            tools:ignore="KeyboardInaccessibleWidget" />
+            android:drawableStart="@drawable/ic_lock" />
 
     </android.support.design.widget.TextInputLayout>
 

@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.sync
 
 import com.marijannovak.autismhelper.database.AppDatabase
-import com.marijannovak.autismhelper.models.Answer
 import com.marijannovak.autismhelper.models.Category
 import com.marijannovak.autismhelper.models.Question
 import com.marijannovak.autismhelper.models.QuestionType

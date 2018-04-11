@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:id="@+id/tvMessage"
+        android:text="@string/add_child_profile"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"/>
 
@@ -49,7 +50,14 @@
 
     <Spinner
         style="@style/signupEditTextStyle"
-        android:id="@+id/spSex"/>
+        android:id="@+id/spGender"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbAddAnother"
+        android:layout_marginStart="45dp"
+        android:text="@string/add_another_child"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -83,8 +83,8 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
     override fun handleState(state: State) {
         when(state) {
             State.LOADING -> {
-                pbLoading.show()
-                llContent.visibility = View.GONE
+                showLoading(true)
+                //llContent.visibility = View.GONE
             }
 
             State.HOME -> {
@@ -94,8 +94,8 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
             }
 
             else -> {
-                pbLoading.hide()
-                llContent.visibility = View.VISIBLE
+                showLoading(false)
+                //llContent.visibility = View.VISIBLE
             }
         }
     }

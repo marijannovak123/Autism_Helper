@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.modules.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.config.Constants
@@ -16,8 +15,6 @@ import org.jetbrains.anko.design.snackbar
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
-
-    private var childrenList : List<Child> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +60,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         if(valid)
-            sendRequest(SignupRequest(email, username, password, this.childrenList))
+            sendRequest(SignupRequest(email, username, password))
         else
             snackbar(btnSignUp, R.string.input_errors)
     }
