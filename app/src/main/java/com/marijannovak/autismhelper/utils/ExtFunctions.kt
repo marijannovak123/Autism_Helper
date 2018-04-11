@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.utils
 
 import com.google.firebase.auth.FirebaseUser
-import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.models.User
 

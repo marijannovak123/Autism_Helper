@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State
@@ -27,61 +26,37 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //DialogHelper.show(this, "Test", "yes", "no", object : () -> Unit {
-        //    override fun invoke() {
-        //       toast("yes")
-        //    }
-        //})
-//
-        //viewModel.loadCategories()
-
-        //AppDatabase.getUserDao().getUser().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(object : SingleObserver<User> {
-        //    override fun onSuccess(t: User?) {
-        //        Log.e("tag", "hehe")
-        //    }
-//
-        //    override fun onSubscribe(d: Disposable?) {
-        //    }
-//
-        //    override fun onError(e: Throwable?) {
-        //    }
-        //})
         init()
     }
 
     private fun init() {
-        btnParent.setOnClickListener { btnParent -> startActivity(btnParent) }
-        btnChild.setOnClickListener { btnChild -> startActivity(btnChild) }
+        btnParent.setOnClickListener { enterPasswordDialog() }
+        btnChild.setOnClickListener { startChildActivity() }
     }
 
-    private fun startActivity(view: View) {
-        when(view.id) {
-            R.id.btnChild -> {
-                val intent = Intent(this, ChildActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.btnParent -> {
-                enterPasswordDialog()
-
-
-                val intent = Intent(this, ParentActivity::class.java)
-                startActivity(intent)
-            }
-        }
+    private fun startChildActivity() {
+        val intent = Intent(this, ChildActivity::class.java)
+        startActivity(intent)
     }
 
     private fun enterPasswordDialog() {
-        DialogHelper.showEnterParentPasswordDialog(this, viewModel.hasParentPassword(), object: (String) -> Unit {
+        DialogHelper.showEnterParentPasswordDialog(this, viewModel.getParentPassword(), object : (String) -> Unit {
             override fun invoke(password: String) {
-                if(!viewModel.hasParentPassword) (
+                if (viewModel.getParentPassword() == "") {
+                    viewModel.saveParentPassword(password)
+                }
+
+                if (password == viewModel.getParentPassword()) {
+                    startActivity(Intent(baseContext, ParentActivity::class.java))
+                } else {
+                    showError(Throwable(getString(R.string.error_incorrect_password)))
+                    enterPasswordDialog()
                 }
             }
-
         })
     }
 
     override fun createViewModel() = MainViewModel(MainRepository(), SyncRepository())
-
 
     override fun subscribeToData() {
         viewModel.getContentLD().observe(this, Observer { categories -> setUpUi(categories!!) } )
@@ -98,7 +73,6 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
         when(state) {
             State.LOADING -> {
                 showLoading(true)
-                //llContent.visibility = View.GONE
             }
 
             State.HOME -> {
@@ -109,7 +83,6 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
 
             else -> {
                 showLoading(false)
-                //llContent.visibility = View.VISIBLE
             }
         }
     }

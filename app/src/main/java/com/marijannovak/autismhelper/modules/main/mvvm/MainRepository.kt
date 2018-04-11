@@ -32,5 +32,9 @@ class MainRepository : IMainRepository {
         PrefsHelper.setLoggedIn(false)
     }
 
-    override fun hasParentPassword() = PrefsHelper.getParentPassword() != ""
+    override fun getParentPassword(): String = PrefsHelper.getParentPassword()
+
+    override fun saveParentPassword(password: String) {
+        PrefsHelper.setParentPassword(password)
+    }
 }

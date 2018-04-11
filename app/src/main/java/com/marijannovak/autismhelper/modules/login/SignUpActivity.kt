@@ -7,12 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
-import com.marijannovak.autismhelper.models.Child
 import com.marijannovak.autismhelper.models.SignupRequest
 import com.marijannovak.autismhelper.utils.InputValidator
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.jetbrains.anko.design.snackbar
-import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
 

@@ -14,7 +14,6 @@ import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
 import com.marijannovak.autismhelper.models.Child
 import org.jetbrains.anko.alert
-import org.w3c.dom.Text
 import java.util.*
 
 class DialogHelper {
@@ -61,10 +60,10 @@ class DialogHelper {
         }
 
         @SuppressLint("InflateParams")
-        fun showEnterParentPasswordDialog(context: Context, hasPassword: Boolean, confirmListener: (String) -> Unit) {
+        fun showEnterParentPasswordDialog(context: Context, parentPassword: String, confirmListener: (String) -> Unit) {
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
             val inflater = LayoutInflater.from(context)
-            val alertView = inflater.inflate(R.layout.dialog_forgot_password, null)
+            val alertView = inflater.inflate(R.layout.dialog_enter_password, null)
 
             builder.setView(alertView)
             builder.setCancelable(false)
@@ -72,9 +71,9 @@ class DialogHelper {
 
             val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
             val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
-            val etPassword = alertView.findViewById<EditText>(R.id.etEmail)
+            val etPassword = alertView.findViewById<EditText>(R.id.etParentPassword)
 
-            if(!hasPassword) {
+            if (parentPassword == "") {
                 val message = alertView.findViewById<TextView>(R.id.tvMessage)
                 message.text = context.getText(R.string.choose_parent_password)
             }
