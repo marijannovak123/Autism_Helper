@@ -47,4 +47,7 @@ class MainViewModel(private val repository : IMainRepository, private val syncRe
 
         stateLiveData.value = State.HOME
     }
+
+    fun hasParentPassword() = repository.hasParentPassword()
+
 }

@@ -17,6 +17,7 @@ import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.sync.SyncRepository
+import com.marijannovak.autismhelper.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.design.snackbar
 
@@ -60,10 +61,23 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
                 startActivity(intent)
             }
             R.id.btnParent -> {
+                enterPasswordDialog()
+
+
                 val intent = Intent(this, ParentActivity::class.java)
                 startActivity(intent)
             }
         }
+    }
+
+    private fun enterPasswordDialog() {
+        DialogHelper.showEnterParentPasswordDialog(this, viewModel.hasParentPassword(), object: (String) -> Unit {
+            override fun invoke(password: String) {
+                if(!viewModel.hasParentPassword) (
+                }
+            }
+
+        })
     }
 
     override fun createViewModel() = MainViewModel(MainRepository(), SyncRepository())

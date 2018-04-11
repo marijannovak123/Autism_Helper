@@ -44,5 +44,6 @@
     <string name="enter_parent_password">Enter parent password</string>
     <string name="add_another_child">Add another child</string>
     <string name="name">Name</string>
+    <string name="choose_parent_password">Choose parent password</string>
 
 </resources>

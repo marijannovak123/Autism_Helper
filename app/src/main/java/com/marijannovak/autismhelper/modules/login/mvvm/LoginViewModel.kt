@@ -98,8 +98,13 @@ class LoginViewModel(private val repository: ILoginRepository,
                 }
 
                 override fun onError(e: Throwable?) {
-                    stateLiveData.value = State.ERROR
-                    errorLiveData.value = e
+
+                    if(e is NoSuchElementException) {
+                        contentLiveData.value = listOf(user.mapToUser())
+                    } else {
+                        stateLiveData.value = State.ERROR
+                        errorLiveData.value = e
+                    }
                 }
             }
         )

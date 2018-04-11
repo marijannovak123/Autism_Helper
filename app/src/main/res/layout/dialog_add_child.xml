@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/cbAddAnother"
         android:layout_marginStart="45dp"
+        android:layout_marginBottom="15dp"
         android:text="@string/add_another_child"/>
 
     <LinearLayout

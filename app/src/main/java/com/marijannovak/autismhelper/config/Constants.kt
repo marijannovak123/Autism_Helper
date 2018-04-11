@@ -43,6 +43,7 @@ class Constants {
         //region shared prefs
         const val PREFS_NAME = "autism_helper_prefs"
         const val KEY_LOGGED_IN = "logged_in"
+        const val KEY_PARENT_PASSWORD= "parent_password"
         //endregion
     }
 }
