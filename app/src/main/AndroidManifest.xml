@@ -24,7 +24,8 @@
         <activity android:name=".modules.main.MainActivity"
             android:label="Are you a parent or a child?"/>
         <activity android:name=".modules.parent.ParentActivity"
-            android:label="Parent"/>
+            android:label="Parent"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".modules.child.ChildActivity"
             android:label="Child"/>
         <activity android:name=".modules.login.SignUpActivity"
