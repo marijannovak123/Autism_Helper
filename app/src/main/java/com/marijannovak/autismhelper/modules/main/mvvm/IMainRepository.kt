@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.modules.main.mvvm
 
-import com.marijannovak.autismhelper.models.Category
+import com.marijannovak.autismhelper.data.models.Category
 import io.reactivex.Flowable
 
 /**

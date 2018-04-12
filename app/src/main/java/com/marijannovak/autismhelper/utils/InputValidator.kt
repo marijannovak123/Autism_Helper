@@ -5,7 +5,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_PASSWORD
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_USERNAME
-import com.marijannovak.autismhelper.models.Child
+import com.marijannovak.autismhelper.data.models.Child
 import java.util.*
 import kotlin.collections.HashMap
 

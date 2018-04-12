@@ -5,9 +5,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
-import com.marijannovak.autismhelper.models.SignupRequest
-import com.marijannovak.autismhelper.models.User
-import com.marijannovak.autismhelper.common.repo.IDataRepository
+import com.marijannovak.autismhelper.data.models.SignupRequest
+import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.data.repo.IDataRepository
+import com.marijannovak.autismhelper.utils.ErrorHelper.Companion.unknownError
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
@@ -16,8 +17,8 @@ import io.reactivex.disposables.Disposable
  * Created by Marijan on 23.3.2018..
  */
 class LoginViewModel(private val repository: ILoginRepository,
-                     private val dataRepository : IDataRepository)
-    : BaseViewModel<User>() {
+                     dataRepository : IDataRepository)
+    : BaseViewModel<User>(dataRepository) {
 
     fun checkLoggedIn() {
         if(repository.isLoggedIn()) {
@@ -154,30 +155,5 @@ class LoginViewModel(private val repository: ILoginRepository,
             }
         })
     }
-
-    fun syncData() {
-        dataRepository.syncData().subscribe(object : SingleObserver<Boolean> {
-            override fun onSuccess(syncDone: Boolean?) {
-                if(syncDone!!) {
-                    stateLiveData.value = State.NEXT
-                } else {
-                    stateLiveData.value = State.ERROR
-                    errorLiveData.value = unknownError()
-                }
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                dataRepository.deleteDataTables()
-                stateLiveData.value = State.ERROR
-                errorLiveData.value = e ?: unknownError()
-            }
-        })
-    }
-
-    fun unknownError() = Throwable("Unknown error")
 
 }

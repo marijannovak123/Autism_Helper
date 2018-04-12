@@ -4,7 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import com.marijannovak.autismhelper.config.Constants.Companion.DB_NAME
 import com.marijannovak.autismhelper.config.Constants.Companion.PREFS_NAME
-import com.marijannovak.autismhelper.database.AppDatabase
+import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.tumblr.remember.Remember
 
 /**

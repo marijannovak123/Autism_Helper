@@ -1,8 +1,7 @@
 package com.marijannovak.autismhelper.modules.main.mvvm
 
-import com.marijannovak.autismhelper.database.AppDatabase
-import com.marijannovak.autismhelper.models.Category
-import com.marijannovak.autismhelper.utils.PrefsHelper
+import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.models.Category
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

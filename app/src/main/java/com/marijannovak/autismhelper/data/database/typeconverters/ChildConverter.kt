@@ -1,9 +1,9 @@
-package com.marijannovak.autismhelper.database.typeconverters
+package com.marijannovak.autismhelper.data.database.typeconverters
 
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.marijannovak.autismhelper.models.Child
+import com.marijannovak.autismhelper.data.models.Child
 
 class ChildConverter {
 

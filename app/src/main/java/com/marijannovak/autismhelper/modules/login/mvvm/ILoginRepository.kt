@@ -3,8 +3,8 @@ package com.marijannovak.autismhelper.modules.login.mvvm
 import android.content.Intent
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
-import com.marijannovak.autismhelper.models.SignupRequest
-import com.marijannovak.autismhelper.models.User
+import com.marijannovak.autismhelper.data.models.SignupRequest
+import com.marijannovak.autismhelper.data.models.User
 import io.reactivex.Completable
 import io.reactivex.Single
 

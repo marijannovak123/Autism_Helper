@@ -46,5 +46,6 @@
     <string name="name">Name</string>
     <string name="choose_parent_password">Choose parent password</string>
     <string name="google_sign_in">Sign In     </string>
+    <string name="unknown_error">Unknown Error</string>
 
 </resources>

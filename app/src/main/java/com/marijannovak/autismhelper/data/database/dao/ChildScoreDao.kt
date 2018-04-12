@@ -1,8 +1,8 @@
-package com.marijannovak.autismhelper.database.dao
+package com.marijannovak.autismhelper.data.database.dao
 
 import android.arch.persistence.room.*
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILD_SCORES
-import com.marijannovak.autismhelper.models.ChildScore
+import com.marijannovak.autismhelper.data.models.ChildScore
 import io.reactivex.Flowable
 
 @Dao

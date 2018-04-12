@@ -7,10 +7,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
-import com.marijannovak.autismhelper.database.AppDatabase
-import com.marijannovak.autismhelper.models.SignupRequest
-import com.marijannovak.autismhelper.models.User
-import com.marijannovak.autismhelper.network.APIService
+import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.models.SignupRequest
+import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.data.network.APIService
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Completable
 import io.reactivex.Single

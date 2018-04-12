@@ -1,13 +1,13 @@
-package com.marijannovak.autismhelper.database
+package com.marijannovak.autismhelper.data.database
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import com.marijannovak.autismhelper.App
-import com.marijannovak.autismhelper.database.dao.*
-import com.marijannovak.autismhelper.database.typeconverters.AnswerConverter
-import com.marijannovak.autismhelper.database.typeconverters.ChildConverter
-import com.marijannovak.autismhelper.models.*
+import com.marijannovak.autismhelper.data.database.dao.*
+import com.marijannovak.autismhelper.data.database.typeconverters.AnswerConverter
+import com.marijannovak.autismhelper.data.database.typeconverters.ChildConverter
+import com.marijannovak.autismhelper.data.models.*
 
 /**
  * Created by Marijan on 26.3.2018..

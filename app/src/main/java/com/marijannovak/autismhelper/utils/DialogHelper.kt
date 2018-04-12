@@ -12,7 +12,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
-import com.marijannovak.autismhelper.models.Child
+import com.marijannovak.autismhelper.data.models.Child
 import org.jetbrains.anko.alert
 import java.util.*
 
@@ -21,10 +21,22 @@ class DialogHelper {
     companion object {
 
         fun showPromptDialog(context: Context, message: String, confirmListener: () -> Unit) {
-            context.alert(message){
+            context.alert(message) {
                 positiveButton(R.string.confirm) { confirmListener() }
-                negativeButton(R.string.cancel) {  }
+                negativeButton(R.string.cancel) { }
             }.show()
+        }
+
+        //set date from picker into edittext and date passed to the method
+        @SuppressLint("SetTextI18n")
+        fun showDatePicker(context: Context, date: Calendar, etDate: EditText) {
+            val onDateSet = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                date.set(Calendar.YEAR, year)
+                date.set(Calendar.MONTH, month)
+                date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                etDate.setText("${date[Calendar.DAY_OF_MONTH]}.${date[Calendar.MONTH] + 1}.${date[Calendar.YEAR]}")
+            }
+            DatePicker.newInstance(context, onDateSet, date).show()
         }
 
         @SuppressLint("InflateParams")
@@ -91,10 +103,10 @@ class DialogHelper {
             alertDialog.show()
         }
 
-//todo: test correct data set
+        //todo: test correct data set
         @SuppressLint("InflateParams")
         fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, confirmListener: (Child, Boolean) -> Unit) {
-            val selectedDate : Calendar = Calendar.getInstance()
+            val selectedDate: Calendar = Calendar.getInstance()
 
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
             val inflater = LayoutInflater.from(context)
@@ -112,8 +124,8 @@ class DialogHelper {
             val cbAddAnother = alertView.findViewById<CheckBox>(R.id.cbAddAnother)
 
             spGender.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, GENDERS)
-            etDateOfBirth.setOnClickListener { showDatePicker(context, selectedDate, etDateOfBirth) }
 
+            etDateOfBirth.setOnClickListener { showDatePicker(context, selectedDate, etDateOfBirth) }
 
             btnPositive.setOnClickListener {
                 val name = etName.text.toString().trim()
@@ -124,7 +136,7 @@ class DialogHelper {
 
                 val errors = InputValidator.validateChild(child)
 
-                if(errors.isEmpty()) {
+                if (errors.isEmpty()) {
                     confirmListener(child, cbAddAnother.isChecked)
                     alertDialog.dismiss()
                 } else {
@@ -139,28 +151,16 @@ class DialogHelper {
 
 
         private fun handleChildAddErrors(errors: HashMap<String, String>, etName: EditText, etDateOfBirth: EditText) {
-            if(errors.isEmpty())  {
+            if (errors.isEmpty()) {
                 etName.error = null
                 etDateOfBirth.error = null
             } else {
-                for(e in errors.iterator())
-                    when (e.key){
+                for (e in errors.iterator())
+                    when (e.key) {
                         VALIDATION_NAME -> etName.error = e.value
                         VALIDATION_DATE -> etDateOfBirth.error = e.value
                     }
             }
         }
-
-        @SuppressLint("SetTextI18n")
-        private fun showDatePicker(context: Context, date: Calendar, etDate: EditText) {
-            val onDateSet = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                date.set(Calendar.YEAR, year)
-                date.set(Calendar.MONTH, month)
-                date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                etDate.setText("${date[Calendar.DAY_OF_MONTH]}.${date[Calendar.MONTH]+1}.${date[Calendar.YEAR]}")
-            }
-            DatePicker.newInstance(context, onDateSet, date).show()
-        }
-
     }
 }

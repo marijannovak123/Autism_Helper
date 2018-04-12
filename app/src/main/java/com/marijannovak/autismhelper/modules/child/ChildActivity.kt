@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Enums
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.ChildRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
 
@@ -14,7 +15,7 @@ class ChildActivity : ViewModelActivity<ChildViewModel>() {
         setContentView(R.layout.activity_child)
     }
 
-    override fun createViewModel() =  ChildViewModel(ChildRepository())
+    override fun createViewModel() =  ChildViewModel(ChildRepository(), DataRepository())
 
     override fun handleState(state: Enums.State) {
 

@@ -1,4 +1,4 @@
-package com.marijannovak.autismhelper.models
+package com.marijannovak.autismhelper.data.models
 
 import java.io.Serializable
 

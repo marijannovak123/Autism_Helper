@@ -1,4 +1,4 @@
-package com.marijannovak.autismhelper.network
+package com.marijannovak.autismhelper.data.network
 
 import com.marijannovak.autismhelper.config.Constants.Companion.BASE_URL
 import com.marijannovak.autismhelper.config.Constants.Companion.FIREBASE_API_KEY

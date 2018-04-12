@@ -1,8 +1,8 @@
-package com.marijannovak.autismhelper.database.dao
+package com.marijannovak.autismhelper.data.database.dao
 
 import android.arch.persistence.room.*
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
-import com.marijannovak.autismhelper.models.QuestionType
+import com.marijannovak.autismhelper.data.models.QuestionType
 import io.reactivex.Flowable
 
 /**

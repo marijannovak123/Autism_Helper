@@ -1,11 +1,11 @@
-package com.marijannovak.autismhelper.common.repo
+package com.marijannovak.autismhelper.data.repo
 
 import com.google.firebase.auth.FirebaseAuth
-import com.marijannovak.autismhelper.database.AppDatabase
-import com.marijannovak.autismhelper.models.Category
-import com.marijannovak.autismhelper.models.Question
-import com.marijannovak.autismhelper.models.QuestionType
-import com.marijannovak.autismhelper.network.APIService
+import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.models.Category
+import com.marijannovak.autismhelper.data.models.Question
+import com.marijannovak.autismhelper.data.models.QuestionType
+import com.marijannovak.autismhelper.data.network.APIService
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

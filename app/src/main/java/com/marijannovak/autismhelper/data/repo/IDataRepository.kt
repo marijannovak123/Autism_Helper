@@ -1,4 +1,4 @@
-package com.marijannovak.autismhelper.common.repo
+package com.marijannovak.autismhelper.data.repo
 
 import io.reactivex.Single
 
