@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.modules.parent
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
@@ -50,8 +51,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel>() {
         return true
     }
 
-    override fun createViewModel() = ParentViewModel(ParentRepository(), DataRepository())
-
+    override fun createViewModel() = ViewModelProviders.of(this).get(ParentViewModel::class.java)
 
     override fun subscribeToData() {
 

@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.common.base
 
 import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.common.enums.Enums.State

@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.modules.login
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -50,7 +51,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         tvForgotPassword.setOnClickListener { forgotPasswordDialog() }
     }
 
-    override fun createViewModel() = LoginViewModel(LoginRepository(), DataRepository())
+    override fun createViewModel() = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
     override fun subscribeToData() {
         viewModel.getContentLD().observe(this, Observer { users -> addChildDialog(users!![0]) } )
@@ -59,8 +60,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     private fun customizeGoogleSignInButton() {
-
-
         val tvGoogleSignIn = btnGoogleSignIn.getChildAt(0) as TextView
         tvGoogleSignIn.text = getString(R.string.google_sign_in)
     }

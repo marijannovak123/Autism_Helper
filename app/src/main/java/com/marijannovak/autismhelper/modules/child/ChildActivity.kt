@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.modules.child
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
@@ -15,7 +16,7 @@ class ChildActivity : ViewModelActivity<ChildViewModel>() {
         setContentView(R.layout.activity_child)
     }
 
-    override fun createViewModel() =  ChildViewModel(ChildRepository(), DataRepository())
+    override fun createViewModel() =  ViewModelProviders.of(this).get(ChildViewModel::class.java)
 
     override fun handleState(state: Enums.State) {
 

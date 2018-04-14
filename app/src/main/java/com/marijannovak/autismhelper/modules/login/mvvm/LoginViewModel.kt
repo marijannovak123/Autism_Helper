@@ -7,7 +7,9 @@ import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.data.repo.IDataRepository
+import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.utils.ErrorHelper.Companion.unknownError
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
@@ -19,6 +21,8 @@ import io.reactivex.disposables.Disposable
 class LoginViewModel(private val repository: ILoginRepository,
                      dataRepository : IDataRepository)
     : BaseViewModel<User>(dataRepository) {
+
+    constructor() : this(LoginRepository(), DataRepository())
 
     fun checkLoggedIn() {
         if(repository.isLoggedIn()) {

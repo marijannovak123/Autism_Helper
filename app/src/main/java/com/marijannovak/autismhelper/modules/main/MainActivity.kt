@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.modules.main
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -54,7 +55,7 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
         })
     }
 
-    override fun createViewModel() = MainViewModel(MainRepository(), DataRepository())
+    override fun createViewModel() = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
     override fun subscribeToData() {
         viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })

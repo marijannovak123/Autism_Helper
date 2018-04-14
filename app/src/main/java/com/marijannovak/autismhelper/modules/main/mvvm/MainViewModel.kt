@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.main.mvvm
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.data.models.Category
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.data.repo.IDataRepository
 import io.reactivex.subscribers.DisposableSubscriber
 
@@ -12,6 +13,8 @@ import io.reactivex.subscribers.DisposableSubscriber
 class MainViewModel(private val repository : IMainRepository,
                     dataRepository: IDataRepository)
     : BaseViewModel<Any>(dataRepository) {
+
+    constructor() : this(MainRepository(), DataRepository())
 
     fun loadCategories() {
         stateLiveData.value = State.LOADING
