@@ -2,13 +2,10 @@ package com.marijannovak.autismhelper.common.base
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.repo.IDataRepository
 import com.marijannovak.autismhelper.utils.Resource
-import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 /**
  * Base class for ViewModels

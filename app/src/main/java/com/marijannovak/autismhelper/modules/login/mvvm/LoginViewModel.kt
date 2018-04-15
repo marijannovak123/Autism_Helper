@@ -9,7 +9,6 @@ import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.data.repo.IDataRepository
-import com.marijannovak.autismhelper.utils.ErrorHelper.Companion.unknownError
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
