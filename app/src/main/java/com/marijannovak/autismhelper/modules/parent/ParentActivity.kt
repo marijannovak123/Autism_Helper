@@ -7,14 +7,12 @@ import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.enums.Enums
-import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
-import com.marijannovak.autismhelper.modules.parent.mvvm.ParentRepository
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
+import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_parent.*
 
-class ParentActivity : ViewModelActivity<ParentViewModel>() {
+class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
 
     private var currentFragment: Fragment? = DashboardFragment()
 
@@ -51,19 +49,13 @@ class ParentActivity : ViewModelActivity<ParentViewModel>() {
         return true
     }
 
+    //todo: VIEWMODELPROVIDERS
     override fun createViewModel() = ViewModelProviders.of(this).get(ParentViewModel::class.java)
 
     override fun subscribeToData() {
 
     }
 
-    override fun handleState(state: Enums.State) {
-
-    }
-
-    override fun showError(throwable: Throwable) {
-
-    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
@@ -80,5 +72,9 @@ class ParentActivity : ViewModelActivity<ParentViewModel>() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
         }
+    }
+
+    override fun handleResource(resource: Resource<List<Any>>?) {
+
     }
 }

@@ -4,13 +4,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.enums.Enums.State
+import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
@@ -18,16 +17,15 @@ import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGN
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import com.marijannovak.autismhelper.data.repo.DataRepository
-import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.InputValidator
+import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
 
-class LoginActivity : ViewModelActivity<LoginViewModel>() {
+class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private val childrenList = ArrayList<Child>()
 
@@ -54,9 +52,12 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     override fun createViewModel() = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
     override fun subscribeToData() {
-        viewModel.getContentLD().observe(this, Observer { users -> addChildDialog(users!![0]) } )
-        viewModel.getErrorLD().observe(this, Observer { throwable -> showError(throwable!!) })
-        viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
+        viewModel.resourceLiveData.observe(this, Observer {
+            resource ->
+                resource?.let {
+                    handleResource(it)
+                }
+        })
     }
 
     private fun customizeGoogleSignInButton() {
@@ -71,26 +72,22 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         finish()
     }
 
-    override fun showError(throwable: Throwable) {
-        snackbarMessage(throwable.message.toString())
-    }
-
-    override fun handleState(state : State) {
-       when(state) {
-           State.LOADING -> showLoading(true)
-
-           State.NEXT -> startMainActivity()
-
-           State.SUCCESS -> snackbarMessage(getString(R.string.success))
-
-           State.SYNC -> viewModel.syncData()
-
-           else -> {
-               showLoading(false)
-               llContent.visibility = View.VISIBLE
-           }
-       }
-    }
+    //override fun handleState(state : State) {
+    //   when(state) {
+    //       State.LOADING -> showLoading(true)
+//
+    //       State.NEXT -> startMainActivity()
+//
+    //       State.SUCCESS -> snackbarMessage(getString(R.string.success))
+//
+    //       State.SYNC -> viewModel.syncData()
+//
+    //       else -> {
+    //           showLoading(false)
+    //           llContent.visibility = View.VISIBLE
+    //       }
+    //   }
+    //}
 
     private fun addChildDialog(user: User) {
         DialogHelper.showAddChildDialog(this, user.id, childrenList.size, object: (Child, Boolean) -> Unit {
@@ -167,5 +164,32 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
                 viewModel.forgotPassword(email)
             }
         })
+    }
+
+    override fun handleResource(resource: Resource<List<User>>?) {
+        resource?.let {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    startMainActivity()
+                }
+
+                Status.SYNC -> {
+                    viewModel.syncData()
+                }
+
+                Status.MESSAGE -> {
+                    showLoading(false)
+                    showError(0, it.message)
+                }
+
+                Status.LOADING -> {
+                    showLoading(true)
+                }
+
+                else -> {
+                    showLoading(false)
+                }
+            }
+        }
     }
 }

@@ -2,60 +2,57 @@ package com.marijannovak.autismhelper.modules.login.mvvm
 
 import android.content.Intent
 import com.google.firebase.auth.FirebaseUser
+import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
-import com.marijannovak.autismhelper.common.enums.Enums.State
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.data.repo.IDataRepository
-import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.utils.ErrorHelper.Companion.unknownError
+import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
+
 /**
  * Created by Marijan on 23.3.2018..
  */
 class LoginViewModel(private val repository: ILoginRepository,
-                     dataRepository : IDataRepository)
+                     val dataRepository : IDataRepository)
     : BaseViewModel<User>(dataRepository) {
 
     constructor() : this(LoginRepository(), DataRepository())
 
     fun checkLoggedIn() {
         if(repository.isLoggedIn()) {
-            stateLiveData.value = State.NEXT
-        } else {
-            stateLiveData.value = State.CONTENT
+            resourceLiveData.value = Resource.success(null)
         }
     }
 
     fun register(signupRequest: SignupRequest) {
-        stateLiveData.value = State.LOADING
+        resourceLiveData.value = Resource.loading()
         repository.register(signupRequest, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                contentLiveData.value = listOf(model.mapToUser(signupRequest))
+                resourceLiveData.value = Resource.success(listOf(model.mapToUser(signupRequest)))
             }
 
             override fun onFailure(t: Throwable) {
-                stateLiveData.value = State.ERROR
-                errorLiveData.value = t
+                resourceLiveData.value = Resource.message(t.message!!)
             }
         })
     }
 
     fun login(email: String, password: String) {
-        stateLiveData.value = State.LOADING
+        resourceLiveData.value = Resource.loading()
         repository.login(email, password, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
                 fetchUserData(model.uid)
             }
 
             override fun onFailure(t: Throwable) {
-                stateLiveData.value = State.ERROR
-                errorLiveData.value = t
+                resourceLiveData.value = Resource.message(t.message!!)
             }
         })
     }
@@ -63,25 +60,24 @@ class LoginViewModel(private val repository: ILoginRepository,
     fun forgotPassword(email: String) {
         repository.forgotPassword(email, object: GeneralListener<Any>{
             override fun onSucces(model: Any) {
-                stateLiveData.value = State.SUCCESS
+                resourceLiveData.value = Resource.message(R.string.success)
             }
 
             override fun onFailure(t: Throwable) {
-                errorLiveData.value = t
+                resourceLiveData.value = Resource.message(t.message!!)
             }
         })
     }
 
     fun googleSignIn(data: Intent) {
-        stateLiveData.value = State.LOADING
+        resourceLiveData.value = Resource.loading()
         repository.googleSignIn(data, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
                 checkIfUserAlreadyExists(model)
             }
 
             override fun onFailure(t: Throwable) {
-                stateLiveData.value = State.ERROR
-                errorLiveData.value = t
+                resourceLiveData.value = Resource.message(t.message!!)
             }
         })
     }
@@ -93,7 +89,7 @@ class LoginViewModel(private val repository: ILoginRepository,
                         if(it)
                             fetchUserData(user.uid)
                         else {
-                            contentLiveData.value = listOf(user.mapToUser())
+                            resourceLiveData.value = Resource.success(listOf(user.mapToUser()))
                         }
                     }
                 }
@@ -103,12 +99,10 @@ class LoginViewModel(private val repository: ILoginRepository,
                 }
 
                 override fun onError(e: Throwable?) {
-
                     if(e is NoSuchElementException) {
-                        contentLiveData.value = listOf(user.mapToUser())
+                        resourceLiveData.value = Resource.success(listOf(user.mapToUser()))
                     } else {
-                        stateLiveData.value = State.ERROR
-                        errorLiveData.value = e
+                        resourceLiveData.value = Resource.message(R.string.unknown_error)
                     }
                 }
             }
@@ -122,12 +116,10 @@ class LoginViewModel(private val repository: ILoginRepository,
                user?.let {
                    repository.saveUser(user)
                    repository.setLoggedIn(true)
-                   stateLiveData.value = State.SYNC
+                   resourceLiveData.value = Resource.sync()
                    return
                }
-
-               stateLiveData.value = State.ERROR
-               errorLiveData.value = Throwable("Null response")
+               resourceLiveData.value = Resource.message(R.string.unknown_error)
            }
 
            override fun onSubscribe(d: Disposable?) {
@@ -135,8 +127,11 @@ class LoginViewModel(private val repository: ILoginRepository,
            }
 
            override fun onError(e: Throwable?) {
-               stateLiveData.value = State.ERROR
-               errorLiveData.value = e ?: unknownError()
+               if(e?.message != null) {
+                   resourceLiveData.value = Resource.message(e.message!!)
+               } else {
+                   resourceLiveData.value = Resource.message(R.string.unknown_error)
+               }
            }
        })
     }
@@ -146,7 +141,7 @@ class LoginViewModel(private val repository: ILoginRepository,
             override fun onComplete() {
                 repository.saveUser(user)
                 repository.setLoggedIn(true)
-                stateLiveData.value = State.SYNC
+                resourceLiveData.value = Resource.sync()
             }
 
             override fun onSubscribe(d: Disposable?) {
@@ -154,10 +149,33 @@ class LoginViewModel(private val repository: ILoginRepository,
             }
 
             override fun onError(e: Throwable?) {
-                stateLiveData.value = State.ERROR
-                errorLiveData.value = e ?: unknownError()
+                if(e?.message != null) {
+                    resourceLiveData.value = Resource.message(e.message!!)
+                } else {
+                    resourceLiveData.value = Resource.message(R.string.unknown_error)
+                }
             }
         })
     }
 
+    fun syncData() {
+        dataRepository.syncData().subscribe(object : SingleObserver<Boolean> {
+            override fun onSuccess(syncDone: Boolean?) {
+                if(syncDone!!) {
+                    resourceLiveData.value = Resource.success(null)
+                } else {
+                    resourceLiveData.value = Resource.message(R.string.unknown_error)
+                }
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                dataRepository.deleteDataTables()
+                resourceLiveData.value = Resource.message(R.string.unknown_error)
+            }
+        })
+    }
 }

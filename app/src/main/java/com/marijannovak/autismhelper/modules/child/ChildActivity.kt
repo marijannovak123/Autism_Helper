@@ -4,12 +4,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.enums.Enums
-import com.marijannovak.autismhelper.data.repo.DataRepository
-import com.marijannovak.autismhelper.modules.child.mvvm.ChildRepository
+import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
+import com.marijannovak.autismhelper.utils.Resource
 
-class ChildActivity : ViewModelActivity<ChildViewModel>() {
+class ChildActivity : ViewModelActivity<ChildViewModel, Child>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,15 +17,13 @@ class ChildActivity : ViewModelActivity<ChildViewModel>() {
 
     override fun createViewModel() =  ViewModelProviders.of(this).get(ChildViewModel::class.java)
 
-    override fun handleState(state: Enums.State) {
 
-    }
-
-    override fun showError(throwable: Throwable) {
-
-    }
 
     override fun subscribeToData() {
+
+    }
+
+    override fun handleResource(resource: Resource<List<Child>>?) {
 
     }
 }

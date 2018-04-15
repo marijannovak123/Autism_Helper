@@ -39,7 +39,7 @@ class LoginRepository : ILoginRepository {
                         currentUser = authService.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
-                        val exception = task.exception ?: Exception("Unknown error")
+                        val exception = task.exception ?: Exception("Unknown message")
                         listener.onFailure(Throwable(exception.message))
                     }
                 }
@@ -52,7 +52,7 @@ class LoginRepository : ILoginRepository {
                         currentUser = authService.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
-                        listener.onFailure(task.exception ?: Exception("Unknown error"))
+                        listener.onFailure(task.exception ?: Exception("Unknown message"))
                     }
                 }
     }
@@ -63,7 +63,7 @@ class LoginRepository : ILoginRepository {
                     if (task.isSuccessful) {
                         listener.onSucces(Any())
                     } else {
-                        listener.onFailure(task.exception ?: Exception("Unknown error"))
+                        listener.onFailure(task.exception ?: Exception("Unknown message"))
                     }
                 }
     }

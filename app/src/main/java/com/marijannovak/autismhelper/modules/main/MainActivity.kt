@@ -4,28 +4,33 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.enums.Enums.State
-import com.marijannovak.autismhelper.data.repo.DataRepository
+import com.marijannovak.autismhelper.common.enums.Status
+import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.modules.child.ChildActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
-import com.marijannovak.autismhelper.modules.main.mvvm.MainRepository
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
+import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.design.snackbar
 
-class MainActivity : ViewModelActivity<MainViewModel>() {
+class MainActivity : ViewModelActivity<MainViewModel, Category>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadCategories()
     }
 
     private fun init() {
@@ -39,49 +44,74 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
     }
 
     private fun enterPasswordDialog() {
-        DialogHelper.showEnterParentPasswordDialog(this, viewModel.getParentPassword(), object : (String) -> Unit {
-            override fun invoke(password: String) {
-                if (viewModel.getParentPassword() == "") {
-                    viewModel.saveParentPassword(password)
-                }
-
-                if (password == viewModel.getParentPassword()) {
-                    startActivity(Intent(baseContext, ParentActivity::class.java))
-                } else {
-                    showError(Throwable(getString(R.string.error_incorrect_password)))
-                    enterPasswordDialog()
-                }
+        val listener : (String) -> Unit = { password ->
+            if(viewModel.getParentPassword() == "") {
+                viewModel.saveParentPassword(password)
             }
-        })
+            if (password == viewModel.getParentPassword()) {
+                startActivity(Intent(baseContext, ParentActivity::class.java))
+            } else {
+                showError(R.string.error_incorrect_password, null)
+                enterPasswordDialog()
+            } }
+
+        DialogHelper.showEnterParentPasswordDialog(this, viewModel.getParentPassword(), listener)
     }
 
     override fun createViewModel() = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
     override fun subscribeToData() {
-        viewModel.getStateLD().observe(this, Observer { state -> handleState(state!!) })
+        viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
     }
 
-    override fun handleState(state: State) {
-        when(state) {
-            State.LOADING -> {
-                showLoading(true)
-            }
+    override fun handleResource(resource: Resource<List<Category>>?) {
+        resource?.let {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    it.data?.let {
+                        for(category: Category in it)
+                            Log.e("MainActivity", category.name )
+                    }
+                }
 
-            State.HOME -> {
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+                Status.HOME -> {
+                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                    finish()
+                }
 
-            else -> {
-                showLoading(false)
+                Status.MESSAGE -> {
+                    showLoading(false)
+                    showError(0, it.message)
+                }
+
+                Status.LOADING -> {
+                    showLoading(false)
+                }
+
+                else -> {
+                    showLoading(false)
+                }
             }
         }
     }
 
-    override fun showError(throwable: Throwable) {
-        snackbar(llContent, throwable.message.toString())
-    }
+    //override fun handleState(state: State) {
+    //    when(state) {
+    //        State.LOADING -> {
+    //            showLoading(true)
+    //        }
+//
+    //        State.HOME -> {
+    //            val intent = Intent(this, LoginActivity::class.java)
+    //            startActivity(intent)
+    //            finish()
+    //        }
+//
+    //        else -> {
+    //            showLoading(false)
+    //        }
+    //    }
+    //}
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -96,7 +126,9 @@ class MainActivity : ViewModelActivity<MainViewModel>() {
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 }
