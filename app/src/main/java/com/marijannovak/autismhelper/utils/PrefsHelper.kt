@@ -6,18 +6,15 @@ import com.tumblr.remember.Remember
 
 class PrefsHelper {
 
-    companion object {
+    fun isLoggedIn() = Remember.getBoolean(KEY_LOGGED_IN, false)
 
-        fun isLoggedIn() = Remember.getBoolean(KEY_LOGGED_IN, false)
+    fun setLoggedIn(loggedIn: Boolean) {
+        Remember.putBoolean(KEY_LOGGED_IN, loggedIn)
+    }
 
-        fun setLoggedIn(loggedIn: Boolean) {
-            Remember.putBoolean(KEY_LOGGED_IN, loggedIn)
-        }
+    fun getParentPassword() = Remember.getString(KEY_PARENT_PASSWORD, "")
 
-        fun getParentPassword() = Remember.getString(KEY_PARENT_PASSWORD, "")
-
-        fun setParentPassword(password: String) {
-            Remember.putString(KEY_PARENT_PASSWORD, password)
-        }
+    fun setParentPassword(password: String) {
+        Remember.putString(KEY_PARENT_PASSWORD, password)
     }
 }

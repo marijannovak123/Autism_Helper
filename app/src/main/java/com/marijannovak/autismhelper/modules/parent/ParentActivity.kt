@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.modules.parent
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
@@ -80,9 +79,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
 
         return true
     }
-
-    //todo: VIEWMODELPROVIDERS
-    override fun createViewModel() = ViewModelProviders.of(this).get(ParentViewModel::class.java)
 
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })

@@ -3,9 +3,10 @@ package com.marijannovak.autismhelper.common.base
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.marijannovak.autismhelper.data.database.AppDatabase
-import com.marijannovak.autismhelper.data.repo.IDataRepository
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
 /**
  * Base class for ViewModels
@@ -17,7 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * @param compositeDisposable collect Rx disposables and dispose to prevent memory leaks
  */
-abstract class BaseViewModel<T>(private val dataRepository: IDataRepository) : ViewModel() {
+open class BaseViewModel<T> @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
 
     val resourceLiveData = MutableLiveData<Resource<List<T>>>()
 

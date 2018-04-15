@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.modules.main
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -57,8 +56,6 @@ class MainActivity : ViewModelActivity<MainViewModel, Category>() {
 
         DialogHelper.showEnterParentPasswordDialog(this, viewModel.getParentPassword(), listener)
     }
-
-    override fun createViewModel() = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })

@@ -1,20 +1,35 @@
 package com.marijannovak.autismhelper.common.base
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.common.fragments.LoadingDialog
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.createFactory
+import dagger.android.AndroidInjection
 import org.jetbrains.anko.toast
+import javax.inject.Inject
+
 
 abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() {
 
-    protected lateinit var viewModel : V
+    @Inject
+    lateinit var viewModel : V
+
     protected var pbLoading : LoadingDialog? = null
 
-    protected abstract fun createViewModel() : V
-    protected abstract fun handleResource(resource: Resource<List<M>>?)
-    protected abstract fun subscribeToData()
+    abstract fun handleResource(resource: Resource<List<M>>?)
+    abstract fun subscribeToData()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
+
+        val viewModelFactory = viewModel.createFactory()
+        ViewModelProviders.of(this, viewModelFactory).get(viewModel.javaClass)
+
+        subscribeToData()
+    }
 
     protected fun showError(msgResId: Int, message: String?) {
         if(msgResId <= 0) {
@@ -32,15 +47,6 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
         else {
             pbLoading?.dismiss()
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        //supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        this.viewModel = createViewModel()
-        subscribeToData()
     }
 
 }

@@ -8,21 +8,21 @@ import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.repo.DataRepository
-import com.marijannovak.autismhelper.data.repo.IDataRepository
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
 
 /**
  * Created by Marijan on 23.3.2018..
  */
-class LoginViewModel(private val repository: ILoginRepository,
-                     val dataRepository : IDataRepository)
+class LoginViewModel @Inject constructor (
+        private val repository: LoginRepository,
+        val dataRepository : DataRepository
+)
     : BaseViewModel<User>(dataRepository) {
-
-    constructor() : this(LoginRepository(), DataRepository())
 
     fun checkLoggedIn() {
         if(repository.isLoggedIn()) {
