@@ -88,7 +88,7 @@ class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
                                         object : FragmentManager.FragmentLifecycleCallbacks() {
                                             override fun onFragmentCreated(fm: FragmentManager?, f: Fragment?, savedInstanceState: Bundle?) {
                                                 f?.let {
-                                                    if (it is BaseFragment) {
+                                                    if (BaseFragment::class.java.isAssignableFrom(f.javaClass)) {
                                                         AndroidSupportInjection.inject(f)
                                                     }
                                                 }
