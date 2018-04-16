@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.common.fragments.LoadingDialog
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.createFactory
-import dagger.android.AndroidInjection
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
@@ -22,7 +21,6 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
     abstract fun subscribeToData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         val viewModelFactory = viewModel.createFactory()

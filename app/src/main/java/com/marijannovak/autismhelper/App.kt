@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
+import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.config.Constants.Companion.DB_NAME
 import com.marijannovak.autismhelper.config.Constants.Companion.PREFS_NAME
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.di.DaggerAppComponent
 import com.tumblr.remember.Remember
-import dagger.android.*
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
@@ -78,13 +82,16 @@ class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
                     if(ViewModelActivity::class.java.isAssignableFrom(it.javaClass)) {
                         AndroidInjection.inject(activity)
 
-                    if(it is HasFragmentInjector) {
-                        val fragmentActivity = it as FragmentActivity
-                        fragmentActivity.supportFragmentManager
+                        if (it is FragmentActivity) {
+                            it.supportFragmentManager
                                 .registerFragmentLifecycleCallbacks(
                                         object : FragmentManager.FragmentLifecycleCallbacks() {
                                             override fun onFragmentCreated(fm: FragmentManager?, f: Fragment?, savedInstanceState: Bundle?) {
-                                                AndroidSupportInjection.inject(f!!)
+                                                f?.let {
+                                                    if (it is BaseFragment) {
+                                                        AndroidSupportInjection.inject(f)
+                                                    }
+                                                }
                                             }
                                         }, true)
                     }
