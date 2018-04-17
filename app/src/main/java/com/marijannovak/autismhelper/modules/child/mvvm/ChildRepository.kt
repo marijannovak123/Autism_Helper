@@ -1,4 +1,6 @@
 package com.marijannovak.autismhelper.modules.child.mvvm
 
-class ChildRepository : IChildRepository {
+import javax.inject.Inject
+
+class ChildRepository @Inject constructor() {
 }

@@ -7,36 +7,40 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
-import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import com.marijannovak.autismhelper.data.network.APIService
+import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
+import javax.inject.Inject
 
 /**
  * Created by Marijan on 23.3.2018..
  */
-class LoginRepository : ILoginRepository {
-
-    private var authService : FirebaseAuth = FirebaseAuth.getInstance()
+class LoginRepository @Inject constructor(
+        private val auth: FirebaseAuth,
+        private val sharedPrefs: PrefsHelper,
+        private val userDao: UserDao,
+        private val api: API) {
+    
     private var currentUser : FirebaseUser? = null
 
-    override fun isLoggedIn() = PrefsHelper.isLoggedIn()
+    fun isLoggedIn() = sharedPrefs.isLoggedIn()
 
-    override fun setLoggedIn(loggedIn: Boolean) {
-        PrefsHelper.setLoggedIn(loggedIn)
+    fun setLoggedIn(loggedIn: Boolean) {
+        sharedPrefs.setLoggedIn(loggedIn)
     }
 
-    override fun register(signupRequest: SignupRequest, listener : GeneralListener<FirebaseUser>) {
-        authService.createUserWithEmailAndPassword(signupRequest.email, signupRequest.password)
+    fun register(signupRequest: SignupRequest, listener : GeneralListener<FirebaseUser>) {
+        auth.createUserWithEmailAndPassword(signupRequest.email, signupRequest.password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful){
-                        currentUser = authService.currentUser
+                        currentUser = auth.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
                         val exception = task.exception ?: Exception("Unknown message")
@@ -45,11 +49,11 @@ class LoginRepository : ILoginRepository {
                 }
     }
 
-    override fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>) {
-        authService.signInWithEmailAndPassword(email,password)
+    fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>) {
+        auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful){
-                        currentUser = authService.currentUser
+                        currentUser = auth.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
                         listener.onFailure(task.exception ?: Exception("Unknown message"))
@@ -57,8 +61,8 @@ class LoginRepository : ILoginRepository {
                 }
     }
 
-    override fun forgotPassword(email: String, listener: GeneralListener<Any>) {
-        authService.sendPasswordResetEmail(email)
+    fun forgotPassword(email: String, listener: GeneralListener<Any>) {
+        auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         listener.onSucces(Any())
@@ -68,16 +72,16 @@ class LoginRepository : ILoginRepository {
                 }
     }
 
-    override fun googleSignIn(data: Intent, listener: GeneralListener<FirebaseUser>) {
+    fun googleSignIn(data: Intent, listener: GeneralListener<FirebaseUser>) {
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         try {
             val account = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
-            authService.signInWithCredential(credential)
+            auth.signInWithCredential(credential)
                     .addOnCompleteListener {
                         if(it.isSuccessful){
-                            listener.onSucces(authService.currentUser!!)
+                            listener.onSucces(auth.currentUser!!)
                         } else {
                             listener.onFailure(it.exception ?: Exception("Google Sign In Error"))
                         }
@@ -89,9 +93,8 @@ class LoginRepository : ILoginRepository {
 
     }
 
-    override fun checkIfUserExists(userId: String): Single<Boolean> {
-        return APIService
-                .getApi()
+    fun checkIfUserExists(userId: String): Single<Boolean> {
+        return api
                 .getUser(userId)
                 .flatMap { user: User ->
                     if(user.id.isNotEmpty() && user.username != null
@@ -104,23 +107,21 @@ class LoginRepository : ILoginRepository {
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun saveUserToFirebase(user: User): Completable {
-        return APIService
-                .getApi()
+    fun saveUserToFirebase(user: User): Completable {
+        return api
                 .putUser(user.id, user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun saveUser(user: User) {
+    fun saveUser(user: User) {
         doAsync {
-            AppDatabase.getUserDao().saveUser(user)
+            userDao.saveUser(user)
         }
     }
 
-    override fun fetchUserData(userId : String): Single<User> {
-        return APIService
-                .getApi()
+    fun fetchUserData(userId : String): Single<User> {
+        return api
                 .getUser(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -4,18 +4,16 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.repo.DataRepository
-import com.marijannovak.autismhelper.data.repo.IDataRepository
 import com.marijannovak.autismhelper.utils.Resource
 import io.reactivex.subscribers.DisposableSubscriber
+import javax.inject.Inject
 
 /**
  * Created by Marijan on 23.3.2018..
  */
-class MainViewModel(private val repository : IMainRepository,
-                    dataRepository: IDataRepository)
+class MainViewModel @Inject constructor(private val repository : MainRepository,
+                                        dataRepository: DataRepository)
     : BaseViewModel<Category>(dataRepository) {
-
-    constructor() : this(MainRepository(), DataRepository())
 
     fun loadCategories() {
         resourceLiveData.value = Resource.loading()

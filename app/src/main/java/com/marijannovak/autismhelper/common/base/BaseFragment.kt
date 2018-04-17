@@ -11,6 +11,8 @@ import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 
 open class BaseFragment : Fragment() {
 
+    //todo: viewmodels
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.modules.login
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -49,8 +48,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
         tvForgotPassword.setOnClickListener { forgotPasswordDialog() }
     }
 
-    override fun createViewModel() = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer {
             resource ->
@@ -88,6 +85,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     //       }
     //   }
     //}
+    //todo: FIX THIS
 
     private fun addChildDialog(user: User) {
         DialogHelper.showAddChildDialog(this, user.id, childrenList.size, object: (Child, Boolean) -> Unit {
