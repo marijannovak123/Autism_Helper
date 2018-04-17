@@ -19,10 +19,7 @@ import javax.inject.Inject
  * Created by Marijan on 23.3.2018..
  */
 class LoginViewModel @Inject constructor (
-        private val repository: LoginRepository,
-        val dataRepository : DataRepository
-)
-    : BaseViewModel<User>(dataRepository) {
+        private val repository: LoginRepository) : BaseViewModel<User>() {
 
     fun checkLoggedIn() {
         if(repository.isLoggedIn()) {
@@ -34,7 +31,7 @@ class LoginViewModel @Inject constructor (
         resourceLiveData.value = Resource.loading()
         repository.register(signupRequest, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                resourceLiveData.value = Resource.success(listOf(model.mapToUser(signupRequest)))
+                resourceLiveData.value = Resource.signedUp(listOf(model.mapToUser(signupRequest)))
             }
 
             override fun onFailure(t: Throwable) {
@@ -88,7 +85,7 @@ class LoginViewModel @Inject constructor (
                         if(it)
                             fetchUserData(user.uid)
                         else {
-                            resourceLiveData.value = Resource.success(listOf(user.mapToUser()))
+                            resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                         }
                     }
                 }
@@ -115,7 +112,7 @@ class LoginViewModel @Inject constructor (
                user?.let {
                    repository.saveUser(user)
                    repository.setLoggedIn(true)
-                   resourceLiveData.value = Resource.sync()
+                   syncData()
                    return
                }
                resourceLiveData.value = Resource.message(R.string.unknown_error)
@@ -140,7 +137,7 @@ class LoginViewModel @Inject constructor (
             override fun onComplete() {
                 repository.saveUser(user)
                 repository.setLoggedIn(true)
-                resourceLiveData.value = Resource.sync()
+                syncData()
             }
 
             override fun onSubscribe(d: Disposable?) {

@@ -9,7 +9,7 @@ import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 
-open class BaseFragment : Fragment() {
+open class ViewModelFragment : Fragment() {
 
     //todo: viewmodels
 

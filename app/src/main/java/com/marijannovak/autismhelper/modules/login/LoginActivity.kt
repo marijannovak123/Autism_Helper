@@ -69,36 +69,20 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
         finish()
     }
 
-    //override fun handleState(state : State) {
-    //   when(state) {
-    //       State.LOADING -> showLoading(true)
-//
-    //       State.NEXT -> startMainActivity()
-//
-    //       State.SUCCESS -> snackbarMessage(getString(R.string.success))
-//
-    //       State.SYNC -> viewModel.syncData()
-//
-    //       else -> {
-    //           showLoading(false)
-    //           llContent.visibility = View.VISIBLE
-    //       }
-    //   }
-    //}
-    //todo: FIX THIS
-
-    private fun addChildDialog(user: User) {
-        DialogHelper.showAddChildDialog(this, user.id, childrenList.size, object: (Child, Boolean) -> Unit {
-            override fun invoke(child: Child, another: Boolean) {
-                childrenList += child
-                if(another) {
-                    addChildDialog(user)
-                } else {
-                    val userWithChildren = user.copy(children = childrenList)
-                    viewModel.uploadAndSaveUser(userWithChildren)
+    private fun addChildDialog(user: User?) {
+        user?.let {
+            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, object: (Child, Boolean) -> Unit {
+                override fun invoke(child: Child, another: Boolean) {
+                    childrenList += child
+                    if(another) {
+                        addChildDialog(user)
+                    } else {
+                        val userWithChildren = user.copy(children = childrenList)
+                        viewModel.uploadAndSaveUser(userWithChildren)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     private fun snackbarMessage(message: String?) {
@@ -171,10 +155,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
                     startMainActivity()
                 }
 
-                Status.SYNC -> {
-                    viewModel.syncData()
-                }
-
                 Status.MESSAGE -> {
                     showLoading(false)
                     showError(0, it.message)
@@ -182,6 +162,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
                 Status.LOADING -> {
                     showLoading(true)
+                }
+
+                Status.SIGNEDUP -> {
+                    addChildDialog(it.data!![0])
                 }
 
                 else -> {

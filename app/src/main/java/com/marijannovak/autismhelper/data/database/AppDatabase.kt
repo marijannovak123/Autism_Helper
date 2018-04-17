@@ -24,16 +24,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun questionDao() : QuestionDao
     abstract fun categoriesDao() : CategoryDao
     abstract fun questionTypeDao() : QuestionTypeDao
-
-    companion object {
-        fun getUserDao() = App.getDBInstance().userDao()
-        fun getChildScoreDao() = App.getDBInstance().childScoreDao()
-        fun getQuestionDao() = App.getDBInstance().questionDao()
-        fun getCategoriesDao() = App.getDBInstance().categoriesDao()
-        fun getQuestionTypeDao() = App.getDBInstance().questionTypeDao()
-
-        fun closeDB(){
-            App.closeDB()
-        }
-    }
 }

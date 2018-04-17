@@ -39,8 +39,8 @@ class Resource<out T>(val status: Status, val data: T?, val message: String?) {
             return Resource(Status.HOME, null, null)
         }
 
-        fun <T> sync(): Resource<T> {
-            return Resource(Status.SYNC, null, null)
+        fun <T> signedUp(data: T?): Resource<T> {
+            return Resource(Status.SIGNEDUP, data, null)
         }
     }
 }

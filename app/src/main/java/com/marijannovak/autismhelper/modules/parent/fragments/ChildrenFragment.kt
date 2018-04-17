@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelFragment
 
-
-class DashboardFragment : ViewModelFragment() {
+class ChildrenFragment : ViewModelFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        return inflater.inflate(R.layout.fragment_children, container, false)
     }
+
 }

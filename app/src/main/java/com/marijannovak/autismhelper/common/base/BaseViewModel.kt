@@ -18,7 +18,10 @@ import javax.inject.Inject
  *
  * @param compositeDisposable collect Rx disposables and dispose to prevent memory leaks
  */
-open class BaseViewModel<T> @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
+open class BaseViewModel<T> : ViewModel() {
+
+    @Inject
+    lateinit var dataRepository: DataRepository
 
     val resourceLiveData = MutableLiveData<Resource<List<T>>>()
 
@@ -27,7 +30,6 @@ open class BaseViewModel<T> @Inject constructor(private val dataRepository: Data
     override fun onCleared() {
         compositeDisposable.clear()
         compositeDisposable.dispose()
-        AppDatabase.closeDB()
         super.onCleared()
     }
 

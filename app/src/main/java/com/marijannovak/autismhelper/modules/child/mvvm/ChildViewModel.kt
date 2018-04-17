@@ -5,6 +5,6 @@ import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import javax.inject.Inject
 
-class ChildViewModel @Inject constructor(private val repository: ChildRepository, dataRepository: DataRepository) : BaseViewModel<Child>(dataRepository) {
+class ChildViewModel @Inject constructor(private val repository: ChildRepository) : BaseViewModel<Child>() {
 
 }

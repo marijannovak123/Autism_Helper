@@ -4,8 +4,7 @@ import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import javax.inject.Inject
 
-class ParentViewModel @Inject constructor(private val repository: ParentRepository,
-                                              dataRepository: DataRepository)
-    : BaseViewModel<Any>(dataRepository) {
+class ParentViewModel @Inject constructor(private val repository: ParentRepository)
+    : BaseViewModel<Any>() {
 
 }

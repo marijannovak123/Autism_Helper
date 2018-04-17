@@ -11,9 +11,8 @@ import javax.inject.Inject
 /**
  * Created by Marijan on 23.3.2018..
  */
-class MainViewModel @Inject constructor(private val repository : MainRepository,
-                                        dataRepository: DataRepository)
-    : BaseViewModel<Category>(dataRepository) {
+class MainViewModel @Inject constructor(private val repository : MainRepository)
+    : BaseViewModel<Category>() {
 
     fun loadCategories() {
         resourceLiveData.value = Resource.loading()

@@ -1,16 +1,18 @@
 package com.marijannovak.autismhelper.modules.parent
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.base.ViewModelFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
+import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_parent.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
 
-    private var currentFragment: BaseFragment? = DashboardFragment()
+    private var currentFragment: ViewModelFragment? = DashboardFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +66,11 @@ class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
 
             R.id.settings -> {
                 currentFragment = SettingsFragment()
+                loadCurrentFragment()
+            }
+
+            R.id.children -> {
+                currentFragment = ChildrenFragment()
                 loadCurrentFragment()
             }
 

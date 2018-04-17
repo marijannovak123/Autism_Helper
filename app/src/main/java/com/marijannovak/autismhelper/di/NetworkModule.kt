@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.marijannovak.autismhelper.config.Constants
+import com.marijannovak.autismhelper.config.Constants.Companion.BASE_URL
 import com.marijannovak.autismhelper.data.network.API
 import dagger.Module
 import dagger.Provides
@@ -15,13 +16,6 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
-
-    @Singleton
-    @Provides
-    @Named("base_url")
-    fun provideBaseUrl(): String {
-        return Constants.BASE_URL
-    }
 
     @Singleton
     @Provides
@@ -41,12 +35,11 @@ class NetworkModule {
                 }.build()
     }
 
-
     @Singleton
     @Provides
-    fun provideRetrofit(@Named("base_url") baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

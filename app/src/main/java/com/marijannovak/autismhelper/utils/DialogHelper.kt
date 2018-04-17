@@ -36,7 +36,7 @@ class DialogHelper {
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 etDate.setText("${date[Calendar.DAY_OF_MONTH]}.${date[Calendar.MONTH] + 1}.${date[Calendar.YEAR]}")
             }
-            DatePicker.newInstance(context, onDateSet, date).show()
+            DatePicker.show(context, onDateSet, date)
         }
 
         @SuppressLint("InflateParams")

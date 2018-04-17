@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.base.ViewModelFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.config.Constants.Companion.DB_NAME
 import com.marijannovak.autismhelper.config.Constants.Companion.PREFS_NAME
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.di.DaggerAppComponent
+import com.marijannovak.autismhelper.utils.isViewModelActivity
+import com.marijannovak.autismhelper.utils.isViewModelFragment
 import com.tumblr.remember.Remember
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -79,7 +81,7 @@ class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
                 activity?.let {
-                    if(ViewModelActivity::class.java.isAssignableFrom(it.javaClass)) {
+                    if(it.isViewModelActivity()) {
                         AndroidInjection.inject(activity)
 
                         if (it is FragmentActivity) {
@@ -88,7 +90,7 @@ class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
                                         object : FragmentManager.FragmentLifecycleCallbacks() {
                                             override fun onFragmentCreated(fm: FragmentManager?, f: Fragment?, savedInstanceState: Bundle?) {
                                                 f?.let {
-                                                    if (BaseFragment::class.java.isAssignableFrom(f.javaClass)) {
+                                                    if (it.isViewModelFragment()) {
                                                         AndroidSupportInjection.inject(f)
                                                     }
                                                 }
@@ -102,19 +104,7 @@ class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
     }
 
     companion object {
-        private var databaseInstance : AppDatabase? = null
         private lateinit var context: App
-
-        fun getDBInstance() : AppDatabase {
-            if(databaseInstance == null) {
-                databaseInstance = Room.databaseBuilder(context, AppDatabase::class.java,DB_NAME).build()
-            }
-                return databaseInstance!!
-        }
-
-        fun closeDB() {
-            this.databaseInstance = null
-        }
 
         fun getAppContext() = context
      }
