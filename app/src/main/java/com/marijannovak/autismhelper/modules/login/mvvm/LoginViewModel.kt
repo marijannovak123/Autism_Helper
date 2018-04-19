@@ -7,7 +7,6 @@ import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
@@ -96,7 +95,7 @@ class LoginViewModel @Inject constructor (
 
                 override fun onError(e: Throwable?) {
                     if(e is NoSuchElementException) {
-                        resourceLiveData.value = Resource.success(listOf(user.mapToUser()))
+                        resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                     } else {
                         resourceLiveData.value = Resource.message(R.string.unknown_error)
                     }

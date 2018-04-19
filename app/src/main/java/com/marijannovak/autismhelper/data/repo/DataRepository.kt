@@ -70,6 +70,10 @@ class DataRepository @Inject constructor(
     private fun saveQuestions(questions: List<Question>) {
         doAsync {
             db.questionDao().insertMultiple(questions)
+
+            for(question: Question in questions) {
+                db.answerDao().insertMultiple(question.answers)
+            }
         }
     }
 

@@ -25,6 +25,12 @@ class DbModule {
 
     @Singleton
     @Provides
+    fun providChildDao(db: AppDatabase): ChildDao {
+        return db.childDao()
+    }
+
+    @Singleton
+    @Provides
     fun provideCategoryDao(db: AppDatabase): CategoryDao {
         return db.categoriesDao()
     }
@@ -39,6 +45,12 @@ class DbModule {
     @Provides
     fun provideQuestionDao(db: AppDatabase): QuestionDao {
         return db.questionDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAnswerDao(db: AppDatabase): AnswerDao {
+        return db.answerDao()
     }
 
     @Singleton

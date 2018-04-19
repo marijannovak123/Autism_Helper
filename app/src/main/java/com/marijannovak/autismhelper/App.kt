@@ -2,16 +2,11 @@ package com.marijannovak.autismhelper
 
 import android.app.Activity
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import com.marijannovak.autismhelper.common.base.ViewModelFragment
-import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.config.Constants.Companion.DB_NAME
 import com.marijannovak.autismhelper.config.Constants.Companion.PREFS_NAME
-import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.di.DaggerAppComponent
 import com.marijannovak.autismhelper.utils.isViewModelActivity
 import com.marijannovak.autismhelper.utils.isViewModelFragment

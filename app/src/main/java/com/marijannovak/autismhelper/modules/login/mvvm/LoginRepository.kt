@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
+import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
@@ -26,6 +27,7 @@ class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
         private val sharedPrefs: PrefsHelper,
         private val userDao: UserDao,
+        private val childDao: ChildDao,
         private val api: API) {
     
     private var currentUser : FirebaseUser? = null
@@ -117,6 +119,9 @@ class LoginRepository @Inject constructor(
     fun saveUser(user: User) {
         doAsync {
             userDao.insert(user)
+            user.children?.let {
+                childDao.insertMultiple(it)
+            }
         }
     }
 

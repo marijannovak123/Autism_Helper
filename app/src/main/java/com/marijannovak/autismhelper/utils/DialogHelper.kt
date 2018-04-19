@@ -132,7 +132,7 @@ class DialogHelper {
                 val dateOfBirth = selectedDate.timeInMillis
 
                 val childId = userId + CHILD_ID_SUFFIX + userChildrenNo
-                val child = Child(childId, name, spGender.selectedItem.toString(), userId, dateOfBirth)
+                val child = Child(childId, userId, name, spGender.selectedItem.toString(), dateOfBirth)
 
                 val errors = InputValidator.validateChild(child)
 
