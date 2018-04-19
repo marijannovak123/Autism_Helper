@@ -2,11 +2,7 @@ package com.marijannovak.autismhelper.data.database
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
-import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.data.database.dao.*
-import com.marijannovak.autismhelper.data.database.typeconverters.AnswerConverter
-import com.marijannovak.autismhelper.data.database.typeconverters.ChildConverter
 import com.marijannovak.autismhelper.data.models.*
 
 /**
@@ -16,7 +12,6 @@ import com.marijannovak.autismhelper.data.models.*
 @Database(entities = [(User::class), (Child::class), (ChildScore::class),
                       (Question::class), (Answer::class), (Category::class), (QuestionType::class)],
         version = 2, exportSchema = false)
-//@TypeConverters(AnswerConverter::class, ChildConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao() : UserDao
@@ -24,6 +19,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun questionDao() : QuestionDao
     abstract fun categoriesDao() : CategoryDao
     abstract fun questionTypeDao() : QuestionTypeDao
-    abstract fun childDao(): ChildDao
-    abstract fun answerDao(): AnswerDao
 }
