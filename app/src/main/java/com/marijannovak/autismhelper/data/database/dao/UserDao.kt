@@ -15,7 +15,10 @@ interface UserDao: BaseDao<User> {
 
     @Transaction
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getUser() : Single<UserChildrenJoin>
+    fun getUserChildren() : Single<UserChildrenJoin>
+
+    @Query("SELECT * FROM $TABLE_USER limit 1")
+    fun getUser(): Single<User>
 
     @Query("DELETE FROM $TABLE_USER")
     fun deleteTable()

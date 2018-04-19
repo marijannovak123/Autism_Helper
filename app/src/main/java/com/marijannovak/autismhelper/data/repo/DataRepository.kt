@@ -2,10 +2,6 @@ package com.marijannovak.autismhelper.data.repo
 
 import com.google.firebase.auth.FirebaseAuth
 import com.marijannovak.autismhelper.data.database.AppDatabase
-import com.marijannovak.autismhelper.data.database.dao.CategoryDao
-import com.marijannovak.autismhelper.data.database.dao.QuestionDao
-import com.marijannovak.autismhelper.data.database.dao.QuestionTypeDao
-import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.QuestionType
@@ -73,19 +69,19 @@ class DataRepository @Inject constructor(
 
     private fun saveQuestions(questions: List<Question>) {
         doAsync {
-            db.questionDao().saveMultiple(questions)
+            db.questionDao().insertMultiple(questions)
         }
     }
 
     private fun saveQuestionTypes(questionTypes: List<QuestionType>) {
         doAsync {
-            db.questionTypeDao().saveMultiple(questionTypes)
+            db.questionTypeDao().insertMultiple(questionTypes)
         }
     }
 
     private fun saveCategories(categories: List<Category>) {
         doAsync {
-            db.categoriesDao().saveMultiple(categories)
+            db.categoriesDao().insertMultiple(categories)
         }
     }
 

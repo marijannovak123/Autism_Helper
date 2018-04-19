@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -13,6 +14,7 @@ import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGNUP
+import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
@@ -23,14 +25,28 @@ import com.marijannovak.autismhelper.utils.InputValidator
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.doAsync
+import javax.inject.Inject
 
 class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private val childrenList = ArrayList<Child>()
 
+    @Inject
+    lateinit var db: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        doAsync {
+            //db.userDao().insert(User("marinko", "001", "marinko@gmail.com", ArrayList()) )
+            //db.childDao().insert(Child("hehe", "001", "roko", "M", 1231323) )
+
+            db.userDao().getUserChildren().subscribe{ userChildren -> Log.e(this.javaClass.simpleName, userChildren.toString())}
+            db.userDao().getUser().subscribe{ user -> Log.e(this.javaClass.simpleName, user.toString())}
+
+        }
 
         initListeners()
         customizeGoogleSignInButton()

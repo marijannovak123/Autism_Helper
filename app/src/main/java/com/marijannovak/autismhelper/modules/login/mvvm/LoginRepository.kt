@@ -116,7 +116,7 @@ class LoginRepository @Inject constructor(
 
     fun saveUser(user: User) {
         doAsync {
-            userDao.saveUser(user)
+            userDao.insert(user)
         }
     }
 

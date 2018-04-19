@@ -1,9 +1,6 @@
 package com.marijannovak.autismhelper.data.models
 
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.Relation
+import android.arch.persistence.room.*
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILDREN
@@ -15,17 +12,21 @@ import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 /**
  * Created by Marijan on 23.3.2018..
  */
+
+
 @Entity(tableName = TABLE_USER)
-class User (
+data class User (
     var username: String? = "",
     @PrimaryKey
     var id: String = "",
-    var email: String? = ""
-)
+    var email: String? = "",
+    @Ignore
+    var children: List<Child>?
+) { constructor() : this("", "", "", emptyList<Child>()) }
 
 @Entity(tableName = TABLE_CHILDREN)
-class Child (
-        @PrimaryKey(autoGenerate = true)
+data class Child (
+        @PrimaryKey
         var id: String = "",
         var parentId: String = "",
         var name: String? = "",
@@ -35,7 +36,7 @@ class Child (
 
 
 @Entity(tableName = TABLE_CHILD_SCORES)
-class ChildScore (
+data class ChildScore (
         @PrimaryKey(autoGenerate = true)
         var id: Int = 0,
         var childId: Int = 0,
@@ -44,24 +45,26 @@ class ChildScore (
 )
 
 @Entity(tableName = TABLE_CATEGORIES)
-class Category (
+data class Category (
          @PrimaryKey(autoGenerate = true)
          var id: Int = 0,
          var name: String? = ""
 )
 
 @Entity(tableName = TABLE_QUESTIONS)
-class Question (
+data class Question (
          var text: String? = "",
          @PrimaryKey(autoGenerate = true)
          var id: Int = 0,
          var categoryId: Int? = 0,
          var typeId: Int? = 0,
-         var extraData: String? = ""
-)
+         var extraData: String? = "",
+         @Ignore
+         var answers: List<Answer>
+){ constructor() : this("", 0, 0, 0, "", emptyList()) }
 
 @Entity(tableName = TABLE_ANSWERS)
-class Answer (
+data class Answer (
         @PrimaryKey(autoGenerate = true)
         var id: Int = 0,
         var text: String? = "",
@@ -70,7 +73,7 @@ class Answer (
 )
 
 @Entity(tableName = TABLE_QUESTION_TYPES)
-class QuestionType(
+data class QuestionType(
          @PrimaryKey(autoGenerate = true)
          var id: Int,
          var name: String?

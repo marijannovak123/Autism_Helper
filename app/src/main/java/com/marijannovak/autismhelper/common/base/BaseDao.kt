@@ -7,10 +7,10 @@ import android.arch.persistence.room.OnConflictStrategy
 interface BaseDao<in T> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(model : T)
+    fun insert(model : T)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveMultiple(modelList : List<T>)
+    fun insertMultiple(modelList : List<T>)
 
     @Delete
     fun delete(model: T)
