@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.data.repo
 
 import com.google.firebase.auth.FirebaseAuth
+import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.database.dao.CategoryDao
 import com.marijannovak.autismhelper.data.database.dao.QuestionDao
 import com.marijannovak.autismhelper.data.database.dao.QuestionTypeDao
@@ -9,7 +10,6 @@ import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.QuestionType
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.data.network.APIService
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,15 +23,11 @@ import javax.inject.Inject
 class DataRepository @Inject constructor(
         private val api: API,
         private val auth: FirebaseAuth,
-        private val userDao: UserDao,
-        private val categoriesDao: CategoryDao,
-        private val questionDao: QuestionDao,
-        private val questionTypeDao: QuestionTypeDao,
+        private val db: AppDatabase,
         private val sharedPrefs: PrefsHelper) {
 
     fun syncData(): Single<Boolean> {
-        return APIService
-                .getApi()
+        return api
                 .getCategories()
                 .flatMap {
                     categories: List<Category> ->
@@ -61,7 +57,7 @@ class DataRepository @Inject constructor(
         auth.signOut()
 
         doAsync {
-            userDao.deleteTable()
+            db.userDao().deleteTable()
         }
 
         sharedPrefs.setLoggedIn(false)
@@ -69,27 +65,27 @@ class DataRepository @Inject constructor(
 
     fun deleteDataTables() {
         doAsync {
-            questionDao.deleteTable()
-            categoriesDao.deleteTable()
-            questionTypeDao.deleteTable()
+            db.questionDao().deleteTable()
+            db.categoriesDao().deleteTable()
+            db.questionTypeDao().deleteTable()
         }
     }
 
     private fun saveQuestions(questions: List<Question>) {
         doAsync {
-            questionDao.saveQuestions(questions)
+            db.questionDao().saveMultiple(questions)
         }
     }
 
     private fun saveQuestionTypes(questionTypes: List<QuestionType>) {
         doAsync {
-            questionTypeDao.saveQuestionTypes(questionTypes)
+            db.questionTypeDao().saveMultiple(questionTypes)
         }
     }
 
     private fun saveCategories(categories: List<Category>) {
         doAsync {
-            categoriesDao.saveCategories(categories)
+            db.categoriesDao().saveMultiple(categories)
         }
     }
 
