@@ -10,9 +10,7 @@ import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
 import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 
-open class ViewModelFragment : Fragment() {
-
-    //todo: viewmodels
+open class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

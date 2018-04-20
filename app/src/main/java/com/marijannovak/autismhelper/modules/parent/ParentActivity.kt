@@ -7,7 +7,7 @@ import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.base.ViewModelFragment
+import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_parent.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
 
-    private var currentFragment: ViewModelFragment? = DashboardFragment()
+    private var currentFragment: BaseFragment? = DashboardFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

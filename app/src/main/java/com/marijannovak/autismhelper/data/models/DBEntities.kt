@@ -22,7 +22,9 @@ data class User (
     var email: String? = "",
     @Ignore
     var children: List<Child>?
-) { constructor() : this("", "", "", emptyList<Child>()) }
+) {
+    constructor() : this("", "", "", ArrayList())
+}
 
 @Entity(tableName = TABLE_CHILDREN)
 data class Child (
@@ -61,7 +63,9 @@ data class Question (
          var extraData: String? = "",
          @Ignore
          var answers: List<Answer>
-){ constructor() : this("", 0, 0, 0, "", emptyList()) }
+){
+    constructor() : this("", 0, 0, 0, "", ArrayList())
+}
 
 @Entity(tableName = TABLE_ANSWERS)
 data class Answer (
@@ -81,7 +85,7 @@ data class QuestionType(
 
 class UserChildrenJoin {
     @Embedded
-    var user: User? = null
+    var user: User = User()
     @Relation(parentColumn = "id", entityColumn = "parentId")
     var children: List<Child> = ArrayList()
 
@@ -90,7 +94,7 @@ class UserChildrenJoin {
 
 class QuestionAnswersJoin {
     @Embedded
-    var question: Question? = null
+    var question: Question = Question()
     @Relation(parentColumn = "id", entityColumn = "questionId")
     var answers: List<Answer> = ArrayList()
 }

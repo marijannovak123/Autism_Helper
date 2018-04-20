@@ -14,11 +14,11 @@ import com.marijannovak.autismhelper.data.models.*
         version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun userDao() : UserDao
-    abstract fun childDao() : ChildDao
-    abstract fun childScoreDao() : ChildScoreDao
-    abstract fun questionDao() : QuestionDao
-    abstract fun answerDao() : AnswerDao
-    abstract fun categoriesDao() : CategoryDao
-    abstract fun questionTypeDao() : QuestionTypeDao
+    abstract fun userDao(): UserDao
+    abstract fun childDao(): ChildDao
+    abstract fun childScoreDao(): ChildScoreDao
+    abstract fun questionDao(): QuestionDao
+    abstract fun answerDao(): AnswerDao
+    abstract fun categoriesDao(): CategoryDao
+    abstract fun questionTypeDao(): QuestionTypeDao
 }

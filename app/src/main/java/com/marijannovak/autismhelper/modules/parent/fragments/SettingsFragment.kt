@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.common.base.ViewModelFragment
+import com.marijannovak.autismhelper.common.base.BaseFragment
 
-class SettingsFragment : ViewModelFragment() {
+class SettingsFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

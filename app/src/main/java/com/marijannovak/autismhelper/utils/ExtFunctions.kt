@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.support.v4.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.base.ViewModelFragment
+import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 
@@ -27,6 +27,6 @@ inline fun <reified T: Activity> T.isViewModelActivity() : Boolean {
     return ViewModelActivity::class.java.isAssignableFrom(this.javaClass)
 }
 
-inline fun <reified T: Fragment> T.isViewModelFragment() : Boolean {
-    return ViewModelFragment::class.java.isAssignableFrom(this.javaClass)
+inline fun <reified T: Any> T.logTag(): String {
+    return T::class.java.simpleName
 }
