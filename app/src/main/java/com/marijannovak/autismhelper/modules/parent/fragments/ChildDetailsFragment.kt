@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class ChildDetailsFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         child?.let {
+            (activity as AppCompatActivity).supportActionBar?.title = it.name
             tvChildName.text = it.name
         }
     }
@@ -42,5 +44,7 @@ class ChildDetailsFragment : BaseFragment() {
             }
         }
     }
+
+
 
 }

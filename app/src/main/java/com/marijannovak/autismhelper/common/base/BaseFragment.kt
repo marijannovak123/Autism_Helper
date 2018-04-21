@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.*
 
 open class BaseFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val activity = activity as AppCompatActivity
-        activity.supportActionBar?.title = getTitle()
+        (activity as AppCompatActivity).supportActionBar?.title = getTitle()
     }
 
     private fun getTitle() : String {

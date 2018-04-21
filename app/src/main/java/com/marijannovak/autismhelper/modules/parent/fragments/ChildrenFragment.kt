@@ -35,8 +35,7 @@ class ChildrenFragment : BaseFragment() {
 
     private fun setUpChildrenRv() {
         user?.let {
-            val adapter = ChildrenAdapter(it.children,
-                    { child -> openChildDetailsFragment(child) })
+            val adapter = ChildrenAdapter(it.children, { child -> openChildDetailsFragment(child)})
             rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             rvChildren.itemAnimator = DefaultItemAnimator()
             rvChildren.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
@@ -50,7 +49,6 @@ class ChildrenFragment : BaseFragment() {
     }
 
     companion object {
-
         private const val KEY_USER = "user"
 
         @JvmStatic

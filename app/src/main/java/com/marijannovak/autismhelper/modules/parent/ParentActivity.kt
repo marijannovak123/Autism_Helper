@@ -12,12 +12,10 @@ import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
-import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.*
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.activity_parent.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
@@ -42,15 +40,13 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         navView.setNavigationItemSelectedListener {item -> handleNavViewClick(item)  }
     }
 
-
-
     fun loadFragment(fragment: BaseFragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.llContainer, fragment)
+        transaction.replace(R.id.llContainer, fragment, fragment.javaClass.simpleName)
         transaction.addToBackStack(null)
         transaction.commit()
 
-        closeDrawer()
+        drawerLayout.closeDrawers()
     }
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
@@ -69,7 +65,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.children -> {
-                loadChildrenFragment()
+                loadFragment(ChildrenFragment.newInstance(this.user!!))
             }
 
             R.id.logout -> {
@@ -103,12 +99,13 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     }
 
     override fun onBackPressed() {
-        closeDrawer()
-    }
-
-    private fun closeDrawer() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
+        } else if(supportFragmentManager.backStackEntryCount > 0){
+            val currentFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)
+            if(currentFragment != null && currentFragment.isVisible) {
+                supportFragmentManager.popBackStackImmediate()
+            }
         }
     }
 
@@ -127,10 +124,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                 }
             }
         }
-    }
-
-    fun loadChildrenFragment() {
-        loadFragment(ChildrenFragment.newInstance(this.user!!))
     }
 
 }
