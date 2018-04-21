@@ -12,8 +12,8 @@ import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 
 open class BaseFragment : Fragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = getTitle()

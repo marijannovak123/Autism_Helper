@@ -5,6 +5,7 @@ import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.QuestionType
+import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Single
@@ -93,5 +94,12 @@ class DataRepository @Inject constructor(
 
     fun saveParentPassword(password: String) {
         sharedPrefs.setParentPassword(password)
+    }
+
+    fun loadUserAndChildren(): Single<UserChildrenJoin> {
+        return db.userDao()
+                .getUserChildren()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }

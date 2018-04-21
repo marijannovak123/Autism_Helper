@@ -28,8 +28,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private var childrenList: List<Child> = ArrayList()
 
+    //todo: remove
     @Inject
     lateinit var db: AppDatabase
+    @Inject
+    lateinit var prefs: PrefsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     override fun onResume() {
         super.onResume()
 
+        prefs.setLoggedIn(true)
         testDb()
 
         viewModel.checkLoggedIn()
@@ -109,18 +113,18 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private fun addChildDialog(user: User?) {
         user?.let {
-            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, object: (Child, Boolean) -> Unit {
-                override fun invoke(child: Child, another: Boolean) {
-                    childrenList += child
-                    if(another) {
-                        addChildDialog(user)
-                    } else {
-                        val userWithChildren = user.copy(children = childrenList)
-                        viewModel.uploadAndSaveUser(userWithChildren)
-                    }
-                }
+            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, {
+                child, another ->
+                            childrenList+= child
+                            if(another) {
+                                addChildDialog(user)
+                            } else {
+                                val userWithChildren = user.copy(children = childrenList)
+                                viewModel.insertToFirebase(userWithChildren)
+                            }
             })
         }
+
     }
 
     private fun snackbarMessage(message: String?) {
@@ -179,11 +183,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     }
 
     private fun forgotPasswordDialog() {
-        DialogHelper.showForgotPasswordDialog(this, object: (String) -> Unit {
-            override fun invoke(email: String) {
-                viewModel.forgotPassword(email)
-            }
-        })
+        DialogHelper.showForgotPasswordDialog(this, {email -> viewModel.forgotPassword(email)})
     }
 
     override fun handleResource(resource: Resource<List<User>>?) {

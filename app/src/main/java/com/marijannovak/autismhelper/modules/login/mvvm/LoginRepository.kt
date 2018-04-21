@@ -116,11 +116,13 @@ class LoginRepository @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun saveUser(user: User) {
-        doAsync {
-            userDao.insert(user)
-            user.children?.let {
-                childDao.insertMultiple(it)
+    fun saveUser(user: User): Completable {
+        return Completable.fromAction {
+            doAsync {
+                userDao.insert(user)
+                user.children?.let {
+                    childDao.insertMultiple(it)
+                }
             }
         }
     }

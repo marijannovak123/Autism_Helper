@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
+import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
@@ -19,14 +20,15 @@ import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_parent.*
 
-class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
+class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
-    private var currentFragment: BaseFragment? = DashboardFragment()
+    private var user: UserChildrenJoin? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent)
 
+        viewModel.loadUser()
         setupDrawer()
     }
 
@@ -35,14 +37,16 @@ class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
-        loadCurrentFragment()
+        loadFragment(DashboardFragment())
 
         navView.setNavigationItemSelectedListener {item -> handleNavViewClick(item)  }
     }
 
-    private fun loadCurrentFragment() {
+
+
+    fun loadFragment(fragment: BaseFragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.llContainer, currentFragment)
+        transaction.replace(R.id.llContainer, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
 
@@ -50,27 +54,22 @@ class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
     }
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
-        currentFragment = null
 
         when(item.itemId) {
             R.id.dashboard -> {
-                currentFragment = DashboardFragment()
-                loadCurrentFragment()
+                loadFragment(DashboardFragment())
             }
 
             R.id.profile -> {
-                currentFragment = ProfileFragment()
-                loadCurrentFragment()
+                loadFragment(ProfileFragment())
             }
 
             R.id.settings -> {
-                currentFragment = SettingsFragment()
-                loadCurrentFragment()
+                loadFragment(SettingsFragment())
             }
 
             R.id.children -> {
-                currentFragment = ChildrenFragment()
-                loadCurrentFragment()
+                loadChildrenFragment()
             }
 
             R.id.logout -> {
@@ -113,9 +112,12 @@ class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
         }
     }
 
-    override fun handleResource(resource: Resource<List<Any>>?) {
+    override fun handleResource(resource: Resource<List<UserChildrenJoin>>?) {
         resource?.let {
             when(it.status) {
+                Status.SUCCESS -> {
+                    this.user = it.data!![0]
+                }
                 Status.HOME -> {
                     startActivity(Intent(this@ParentActivity, LoginActivity::class.java))
                     finish()
@@ -126,4 +128,9 @@ class ParentActivity : ViewModelActivity<ParentViewModel, Any>() {
             }
         }
     }
+
+    fun loadChildrenFragment() {
+        loadFragment(ChildrenFragment.newInstance(this.user!!))
+    }
+
 }

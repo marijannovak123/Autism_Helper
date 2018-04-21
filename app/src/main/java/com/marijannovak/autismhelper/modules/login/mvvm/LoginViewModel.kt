@@ -109,9 +109,7 @@ class LoginViewModel @Inject constructor (
        repository.fetchUserData(userId).subscribe(object : SingleObserver<User>{
            override fun onSuccess(user: User?) {
                user?.let {
-                   repository.saveUser(user)
-                   repository.setLoggedIn(true)
-                   syncData()
+                   insertUserToDb(user)
                    return
                }
                resourceLiveData.value = Resource.message(R.string.unknown_error)
@@ -131,12 +129,10 @@ class LoginViewModel @Inject constructor (
        })
     }
 
-    fun uploadAndSaveUser(user : User) {
+    fun insertToFirebase(user: User) {
         repository.saveUserToFirebase(user).subscribe(object : CompletableObserver {
             override fun onComplete() {
-                repository.saveUser(user)
-                repository.setLoggedIn(true)
-                syncData()
+                insertUserToDb(user)
             }
 
             override fun onSubscribe(d: Disposable?) {
@@ -150,6 +146,24 @@ class LoginViewModel @Inject constructor (
                     resourceLiveData.value = Resource.message(R.string.unknown_error)
                 }
             }
+        })
+    }
+
+    private fun insertUserToDb(user: User) {
+        repository.saveUser(user).subscribe(object: CompletableObserver {
+            override fun onComplete() {
+                repository.setLoggedIn(true)
+                syncData()
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                resourceLiveData.value = Resource.message(R.string.error_inserting)
+            }
+
         })
     }
 

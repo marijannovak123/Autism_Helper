@@ -8,6 +8,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILD_SCOR
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTION_TYPES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
+import java.io.Serializable
 
 /**
  * Created by Marijan on 23.3.2018..
@@ -34,8 +35,7 @@ data class Child (
         var name: String? = "",
         var sex: String? = "",
         var dateOfBirth: Long = 0
-)
-
+): Serializable
 
 @Entity(tableName = TABLE_CHILD_SCORES)
 data class ChildScore (
@@ -44,7 +44,7 @@ data class ChildScore (
         var childId: Int = 0,
         var timestamp: Long = 0,
         var score: Long = 0
-)
+) : Serializable
 
 @Entity(tableName = TABLE_CATEGORIES)
 data class Category (
@@ -83,12 +83,11 @@ data class QuestionType(
          var name: String?
 )
 
-class UserChildrenJoin {
+class UserChildrenJoin: Serializable {
     @Embedded
     var user: User = User()
     @Relation(parentColumn = "id", entityColumn = "parentId")
     var children: List<Child> = ArrayList()
-
 }
 
 
