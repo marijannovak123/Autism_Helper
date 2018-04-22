@@ -54,9 +54,16 @@
     <string name="settings">Settings</string>
     <string name="exit">Exit parent mode</string>
 
-    +
     <string name="children">Children</string>
     <string name="error_inserting">Error inserting to database</string>
-
+    <string name="logout_not_success">Logout unsucessful</string>
+    <string name="sync_error">Sync error</string>
+    <string name="firebase_upload_error">Firebase upload error</string>
+    <string name="fetch_user_error">Fetch user data error</string>
+    <string name="google_sign_in_error">Google Sign In error</string>
+    <string name="login_error">Login error</string>
+    <string name="register_error">Register failed</string>
+    <string name="children_data_load_error">Loading children data failed</string>
+    <string name="data_load_error">Data load failed</string>
 
 </resources>

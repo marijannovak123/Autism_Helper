@@ -13,7 +13,7 @@ import com.marijannovak.autismhelper.data.models.User
 fun FirebaseUser.mapToUser(singupRequest: SignupRequest)
         = User(singupRequest.username, this.uid, singupRequest.email, ArrayList())
 
-fun FirebaseUser.mapToUser() = User(this.displayName, this.uid, this.email, ArrayList())
+fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, ArrayList())
 
 fun <T: ViewModel> T.createFactory(): ViewModelProvider.Factory {
     val viewModel = this

@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
+import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.utils.Resource
@@ -9,7 +10,7 @@ import javax.inject.Inject
 
 class ParentViewModel @Inject constructor(private val repository: ParentRepository)
     : BaseViewModel<UserChildrenJoin>() {
-    fun loadUser() {
+    fun loadUserChildren() {
         dataRepository.loadUserAndChildren().subscribe(object: SingleObserver<UserChildrenJoin> {
             override fun onSuccess(userWithChildren: UserChildrenJoin?) {
                 userWithChildren?.let {
@@ -22,9 +23,7 @@ class ParentViewModel @Inject constructor(private val repository: ParentReposito
             }
 
             override fun onError(e: Throwable?) {
-                e.let {
-                    resourceLiveData.value = Resource.message(it?.message!!)
-                }
+                resourceLiveData.value = Resource.message(R.string.children_data_load_error)
             }
 
         })

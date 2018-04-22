@@ -12,6 +12,7 @@ import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
+import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
 /**
@@ -34,7 +35,7 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(t.message!!)
+                resourceLiveData.value = Resource.message(R.string.register_error)
             }
         })
     }
@@ -47,7 +48,7 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(t.message!!)
+                resourceLiveData.value = Resource.message(R.string.login_error)
             }
         })
     }
@@ -59,7 +60,7 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(t.message!!)
+                resourceLiveData.value = Resource.message(R.string.unknown_error)
             }
         })
     }
@@ -72,7 +73,7 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(t.message!!)
+                resourceLiveData.value = Resource.message(R.string.google_sign_in_error)
             }
         })
     }
@@ -112,7 +113,7 @@ class LoginViewModel @Inject constructor (
                    insertUserToDb(user)
                    return
                }
-               resourceLiveData.value = Resource.message(R.string.unknown_error)
+               resourceLiveData.value = Resource.message(R.string.fetch_user_error)
            }
 
            override fun onSubscribe(d: Disposable?) {
@@ -123,7 +124,7 @@ class LoginViewModel @Inject constructor (
                if(e?.message != null) {
                    resourceLiveData.value = Resource.message(e.message!!)
                } else {
-                   resourceLiveData.value = Resource.message(R.string.unknown_error)
+                   resourceLiveData.value = Resource.message(R.string.fetch_user_error)
                }
            }
        })
@@ -143,7 +144,7 @@ class LoginViewModel @Inject constructor (
                 if(e?.message != null) {
                     resourceLiveData.value = Resource.message(e.message!!)
                 } else {
-                    resourceLiveData.value = Resource.message(R.string.unknown_error)
+                    resourceLiveData.value = Resource.message(R.string.firebase_upload_error)
                 }
             }
         })
@@ -173,7 +174,7 @@ class LoginViewModel @Inject constructor (
                 if(syncDone!!) {
                     resourceLiveData.value = Resource.success(null)
                 } else {
-                    resourceLiveData.value = Resource.message(R.string.unknown_error)
+                    resourceLiveData.value = Resource.message(R.string.sync_error)
                 }
             }
 
@@ -182,8 +183,10 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onError(e: Throwable?) {
-                dataRepository.deleteDataTables()
-                resourceLiveData.value = Resource.message(R.string.unknown_error)
+                doAsync {
+                    dataRepository.deleteDataTables()
+                }
+                resourceLiveData.value = Resource.message(R.string.sync_error)
             }
         })
     }

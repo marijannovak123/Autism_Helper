@@ -28,12 +28,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private var childrenList: List<Child> = ArrayList()
 
-    //todo: remove
-    @Inject
-    lateinit var db: AppDatabase
-    @Inject
-    lateinit var prefs: PrefsHelper
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -44,43 +38,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     override fun onResume() {
         super.onResume()
-
-        prefs.setLoggedIn(true)
-        testDb()
-
         viewModel.checkLoggedIn()
-    }
-
-    private fun testDb() {
-        val userResponse = TestDataGenerator.createUserApiResponse()
-        val questionsResponse = TestDataGenerator.createQuestionApiResponse()
-        doAsync {
-            db.userDao().insert(userResponse)
-            db.childDao().insertMultiple(userResponse.children!!)
-            db.questionDao().insertMultiple(questionsResponse)
-
-            for(question: Question in questionsResponse) {
-                db.answerDao().insertMultiple(question.answers)
-            }
-        }
-
-        doAsync {
-            db.userDao().getUserChildren().subscribe{userWithChildren ->
-                Log.e(logTag(), userWithChildren.user.username)
-                for (child: Child in userWithChildren.children) {
-                    Log.e(logTag(), child.name)
-                }
-            }
-
-            db.questionDao().getQuestions().subscribe{ questions ->
-                for(question: QuestionAnswersJoin in questions) {
-                    Log.e(logTag(), question.question.text)
-                    for (answer: Answer in question.answers) {
-                        Log.e(logTag(), answer.text)
-                    }
-                }
-            }
-        }
     }
 
     private fun initListeners() {

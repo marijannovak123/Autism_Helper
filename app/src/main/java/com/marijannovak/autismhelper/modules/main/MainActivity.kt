@@ -3,13 +3,11 @@ package com.marijannovak.autismhelper.modules.main
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
-import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.modules.child.ChildActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
@@ -18,18 +16,13 @@ import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : ViewModelActivity<MainViewModel, Category>() {
+class MainActivity : ViewModelActivity<MainViewModel, Any>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         init()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadCategories()
     }
 
     private fun init() {
@@ -61,16 +54,9 @@ class MainActivity : ViewModelActivity<MainViewModel, Category>() {
         viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
     }
 
-    override fun handleResource(resource: Resource<List<Category>>?) {
+    override fun handleResource(resource: Resource<List<Any>>?) {
         resource?.let {
             when(it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let {
-                        for(category: Category in it)
-                            Log.e("MainActivity", category.name )
-                    }
-                }
-
                 Status.HOME -> {
                     startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                     finish()
@@ -91,24 +77,6 @@ class MainActivity : ViewModelActivity<MainViewModel, Category>() {
             }
         }
     }
-
-    //override fun handleState(state: State) {
-    //    when(state) {
-    //        State.LOADING -> {
-    //            showLoading(true)
-    //        }
-//
-    //        State.HOME -> {
-    //            val intent = Intent(this, LoginActivity::class.java)
-    //            startActivity(intent)
-    //            finish()
-    //        }
-//
-    //        else -> {
-    //            showLoading(false)
-    //        }
-    //    }
-    //}
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater

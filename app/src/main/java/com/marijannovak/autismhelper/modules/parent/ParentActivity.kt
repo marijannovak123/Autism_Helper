@@ -15,18 +15,14 @@ import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.modules.parent.fragments.*
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.activity_parent.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
-
-    private var user: UserChildrenJoin? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent)
 
-        viewModel.loadUser()
         setupDrawer()
     }
 
@@ -65,7 +61,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.children -> {
-                loadFragment(ChildrenFragment.newInstance(this.user!!))
+                loadFragment(ChildrenFragment())
             }
 
             R.id.logout -> {
@@ -104,7 +100,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         } else if(supportFragmentManager.backStackEntryCount > 0){
             val currentFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)
             if(currentFragment != null && currentFragment.isVisible) {
-                supportFragmentManager.popBackStackImmediate()
+                loadFragment(ChildrenFragment())
             }
         }
     }
@@ -112,9 +108,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     override fun handleResource(resource: Resource<List<UserChildrenJoin>>?) {
         resource?.let {
             when(it.status) {
-                Status.SUCCESS -> {
-                    this.user = it.data!![0]
-                }
                 Status.HOME -> {
                     startActivity(Intent(this@ParentActivity, LoginActivity::class.java))
                     finish()

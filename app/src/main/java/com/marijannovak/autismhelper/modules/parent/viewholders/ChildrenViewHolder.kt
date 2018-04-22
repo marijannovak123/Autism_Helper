@@ -11,7 +11,7 @@ class ChildrenViewHolder(itemView: View)
     override fun bind(child: Child, onItemClick: (Child) -> Unit) {
         with(itemView) {
             tvChildName.text = child.name
-            tvChildGender.text = child.sex
+            tvChildGender.text = child.gender
             setOnClickListener { onItemClick(child) }
         }
     }

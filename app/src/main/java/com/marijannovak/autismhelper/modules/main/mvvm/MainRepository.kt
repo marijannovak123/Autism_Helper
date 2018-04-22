@@ -10,13 +10,8 @@ import javax.inject.Inject
 /**
  * Created by Marijan on 23.3.2018..
  */
-class MainRepository @Inject constructor(private val categoriesDao: CategoryDao){
+class MainRepository @Inject constructor(){
 
-    fun loadCategories(): Flowable<List<Category>> {
-        return categoriesDao
-                .getCategories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
+
 
 }

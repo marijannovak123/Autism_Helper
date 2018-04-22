@@ -53,9 +53,4 @@ class DbModule {
         return db.answerDao()
     }
 
-    @Singleton
-    @Provides
-    fun provideQuestionTypeDao(db: AppDatabase): QuestionTypeDao {
-        return db.questionTypeDao()
-    }
 }

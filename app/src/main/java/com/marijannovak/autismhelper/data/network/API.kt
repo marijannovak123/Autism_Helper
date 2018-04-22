@@ -16,9 +16,6 @@ interface API {
     @GET("categories.json")
     fun getCategories() : Single<List<Category>>
 
-    @GET("question-types.json")
-    fun getQuestionTypes() : Single<List<QuestionType>>
-
     @GET("child_scores/{childId}.json")
     fun getChildScores(@Path("childId") childId : Int) : Single<List<ChildScore>>
 

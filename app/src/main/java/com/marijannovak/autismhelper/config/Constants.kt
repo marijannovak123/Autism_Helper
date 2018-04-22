@@ -23,7 +23,6 @@ class Constants {
         const val TABLE_USER = "user"
         const val TABLE_CHILD_SCORES = "child_scores"
         const val TABLE_QUESTIONS = "questions"
-        const val TABLE_QUESTION_TYPES = "question_types"
         const val TABLE_CATEGORIES = "categories"
         const val TABLE_CHILDREN = "children"
         const val TABLE_ANSWERS = "answers"

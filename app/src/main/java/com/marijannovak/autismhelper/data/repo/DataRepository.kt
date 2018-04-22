@@ -4,10 +4,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.Question
-import com.marijannovak.autismhelper.data.models.QuestionType
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -30,45 +30,37 @@ class DataRepository @Inject constructor(
                     categories: List<Category> ->
                         if(categories.isNotEmpty()) {
                             saveCategories(categories)
-                            api.getQuestionTypes()
-                        } else Single.error(Throwable("Category sync failed"))
-                }
-                .flatMap {
-                    questionTypes: List<QuestionType> ->
-                        if(questionTypes.isNotEmpty()) {
-                            saveQuestionTypes(questionTypes)
                             api.getQuestions()
-                        } else Single.error(Throwable("Question type sync failed"))
+                        } else Single.error(Throwable())
                 }
                 .flatMap {questions: List<Question> ->
                         if(questions.isNotEmpty()) {
                             saveQuestions(questions)
                             Single.just(true)
-                        } else Single.error(Throwable("Questions sync failed"))
+                        } else Single.error(Throwable())
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun logOut() {
+    fun logOut(): Completable {
         auth.signOut()
-
-        doAsync {
-            db.userDao().deleteTable()
-        }
-
         sharedPrefs.setLoggedIn(false)
+        sharedPrefs.setParentPassword("")
+        return Completable.fromAction{
+            doAsync {
+                db.userDao().deleteTable()
+                deleteDataTables()
+            }
+        }
     }
 
     fun deleteDataTables() {
-        doAsync {
-            db.questionDao().deleteTable()
-            db.categoriesDao().deleteTable()
-            db.questionTypeDao().deleteTable()
-        }
+        db.questionDao().deleteTable()
+        db.categoriesDao().deleteTable()
     }
 
-    private fun saveQuestions(questions: List<Question>) {
+    private fun saveQuestions(questions: List<Question>)/*: Single<Any>*/ {
         doAsync {
             db.questionDao().insertMultiple(questions)
 
@@ -78,13 +70,7 @@ class DataRepository @Inject constructor(
         }
     }
 
-    private fun saveQuestionTypes(questionTypes: List<QuestionType>) {
-        doAsync {
-            db.questionTypeDao().insertMultiple(questionTypes)
-        }
-    }
-
-    private fun saveCategories(categories: List<Category>) {
+    private fun saveCategories(categories: List<Category>)/*: Single<Any>*/ {
         doAsync {
             db.categoriesDao().insertMultiple(categories)
         }
