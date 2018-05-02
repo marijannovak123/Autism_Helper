@@ -10,11 +10,12 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ChildRepository @Inject constructor(private val categoriesDao: CategoryDao) {
-    fun loadCategories(): Single<List<CategoryQuestionsAnswersJoin>> {
+    fun loadCategories(): Single<List<Category>> {
         return categoriesDao
                 .getCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
 
 }

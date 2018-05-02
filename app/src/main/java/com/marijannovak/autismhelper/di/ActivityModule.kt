@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.di
 
-import com.marijannovak.autismhelper.modules.child.ChildActivity
+import com.marijannovak.autismhelper.modules.child.PickCategoryActivity
+import com.marijannovak.autismhelper.modules.child.QuizActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.login.SignUpActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
@@ -24,6 +25,9 @@ abstract class ActivityModule {
     internal abstract fun provideParentActivity(): ParentActivity
 
     @ContributesAndroidInjector
-    internal abstract fun provideChildActivity(): ChildActivity
+    internal abstract fun providePickCategoryActivity(): PickCategoryActivity
+
+    @ContributesAndroidInjector
+    internal abstract fun provideQuizActivity(): QuizActivity
 
 }

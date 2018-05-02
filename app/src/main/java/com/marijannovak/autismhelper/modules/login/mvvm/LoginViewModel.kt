@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
+import com.marijannovak.autismhelper.data.models.Category
+import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.utils.Resource
@@ -154,7 +156,7 @@ class LoginViewModel @Inject constructor (
         repository.saveUser(user).subscribe(object: CompletableObserver {
             override fun onComplete() {
                 repository.setLoggedIn(true)
-                syncData()
+                syncCategories()
             }
 
             override fun onSubscribe(d: Disposable?) {
@@ -168,13 +170,11 @@ class LoginViewModel @Inject constructor (
         })
     }
 
-    fun syncData() {
-        dataRepository.syncData().subscribe(object : SingleObserver<Boolean> {
-            override fun onSuccess(syncDone: Boolean?) {
-                if(syncDone!!) {
-                    resourceLiveData.value = Resource.success(null)
-                } else {
-                    resourceLiveData.value = Resource.message(R.string.sync_error)
+    fun syncCategories() {
+        dataRepository.syncCategories().subscribe(object : SingleObserver<List<Category>> {
+            override fun onSuccess(categories: List<Category>?) {
+                categories?.let {
+                    saveCategories(it)
                 }
             }
 
@@ -188,6 +188,69 @@ class LoginViewModel @Inject constructor (
                 }
                 resourceLiveData.value = Resource.message(R.string.sync_error)
             }
+        })
+    }
+
+    private fun saveCategories(categories: List<Category>) {
+        dataRepository.saveCategories(categories).subscribe(object: CompletableObserver {
+            override fun onComplete() {
+                syncQuestions()
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                doAsync {
+                    dataRepository.deleteDataTables()
+                }
+                resourceLiveData.value = Resource.message(R.string.sync_error)
+            }
+        })
+    }
+
+    fun syncQuestions() {
+        dataRepository.syncQuestions().subscribe(object: SingleObserver<List<Question>> {
+            override fun onSuccess(questions: List<Question>?) {
+                questions?.let {
+                    saveQuestions(it)
+                }
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                doAsync {
+                    dataRepository.deleteDataTables()
+                }
+                resourceLiveData.value = Resource.message(R.string.sync_error)
+            }
+        })
+
+    }
+
+    fun saveQuestions(questions: List<Question>) {
+        dataRepository.saveQuestions(questions).subscribe(object: CompletableObserver {
+            override fun onComplete() {
+                dataRepository.downloadImages(onComplete = {
+                    resourceLiveData.value = Resource.success(null)
+                })
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                doAsync {
+                    dataRepository.deleteDataTables()
+                }
+                resourceLiveData.value = Resource.message(R.string.sync_error)
+            }
+
         })
     }
 }

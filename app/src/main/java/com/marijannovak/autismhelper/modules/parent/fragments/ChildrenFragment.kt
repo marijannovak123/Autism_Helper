@@ -40,8 +40,7 @@ class ChildrenFragment : BaseFragment() {
                     })
         }
 
-        parentViewModel.loadUserChildren()
-
+        parentViewModel.loadUserWithChildren()
     }
 
     private fun setUpChildrenRv(resource: Resource<List<UserChildrenJoin>>?) {

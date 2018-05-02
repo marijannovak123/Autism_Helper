@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.modules.child.mvvm
 
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
+import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.utils.Resource
@@ -13,13 +14,13 @@ import org.reactivestreams.Subscription
 import javax.inject.Inject
 
 class ChildViewModel @Inject constructor(private val repository: ChildRepository)
-    : BaseViewModel<CategoryQuestionsAnswersJoin>() {
+    : BaseViewModel<Category>() {
 
     fun loadCategories() {
         resourceLiveData.value = Resource.loading()
-        repository.loadCategories().subscribe(object: SingleObserver<List<CategoryQuestionsAnswersJoin>> {
-            override fun onSuccess(categoriesQuestionsAnswers: List<CategoryQuestionsAnswersJoin>?) {
-                resourceLiveData.value = Resource.success(categoriesQuestionsAnswers)
+        repository.loadCategories().subscribe(object: SingleObserver<List<Category>> {
+            override fun onSuccess(categories: List<Category>?) {
+                resourceLiveData.value = Resource.success(categories)
             }
 
             override fun onSubscribe(d: Disposable?) {

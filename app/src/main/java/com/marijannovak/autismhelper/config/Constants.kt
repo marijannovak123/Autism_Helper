@@ -46,5 +46,12 @@ class Constants {
         const val KEY_LOGGED_IN = "logged_in"
         const val KEY_PARENT_PASSWORD= "parent_password"
         //endregion
+
+        //region firebase storage
+        const val FIREBASE_STORAGE_URL = "https://firebasestorage.googleapis.com/v0/b/autism-helper.appspot.com/o/"
+        const val IMG_DIR = "autism_helper"
+        //endregion
+
+        const val KEY_CATEGORY_ID = "category_id"
     }
 }

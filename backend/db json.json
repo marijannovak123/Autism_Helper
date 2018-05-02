@@ -12,7 +12,7 @@
                     {
                         "id": 10120,
                         "name" : "Koko",
-                        "sex" : "M",
+                        "gender" : "M",
                         "parentId": "someId",
                         "dateOfBirth" : 12321312321
                     },
@@ -20,7 +20,7 @@
                     {
                         "id": 32123,
                         "name": "Christine",
-                        "sex": "F",
+                        "gender": "F",
                         "parentId":"someId",
                         "dateOfBirth": 2321324234
                     }
@@ -44,7 +44,6 @@
                 "text" : "2+2?",
                 "id" : 0,
                 "categoryId" : 0,
-                "typeId" : 0,
                 "extraData" : "",
                 "answers": 
                 [
@@ -59,7 +58,6 @@
                 "text" : "2/2?",
                 "id" : 1,
                 "categoryId" : 0,
-                "typeId" : 0,
                 "extraData" : "",
                 "answers" : 
                 [
@@ -74,7 +72,6 @@
                 "text" : "2/2?",
                 "id" : 2,
                 "categoryId" : 1,
-                "typeId" : 0,
                 "extraData" : "#1ccc42",
                 "answers":
                 [ 
@@ -82,6 +79,34 @@
                     {"questionId" : 2, "text" : "Purple", "isCorrect" : false},
                     {"questionId" : 2, "text" : "Green", "isCorrect" : true}, 
                     {"questionId" : 2, "text" : "Red", "isCorrect" : false}
+                ]
+            },
+
+            {
+                "text" : "How is this person feeling?",
+                "id" : 3,
+                "categoryId" : 2,
+                "extraData" : "beautiful-brunette-cute-774909.jpg?alt=media&token=ca08ca22-0be4-4534-87cc-57661ffaadf7",
+                "answers":
+                [ 
+                    {"questionId" : 3, "text" : "Happy", "isCorrect" : true},
+                    {"questionId" : 3, "text" : "Scared", "isCorrect" : false},
+                    {"questionId" : 3, "text" : "Sad", "isCorrect" : false}, 
+                    {"questionId" : 3, "text" : "Sleepy", "isCorrect" : false}
+                ]
+            },
+
+            {
+                "text" : "What emotion is this?",
+                "id" : 4,
+                "categoryId" : 2,
+                "extraData" : "alone-black-and-white-boy-551590.jpg?alt=media&token=f576818c-5e41-4b06-bca8-2aad275a871b",
+                "answers":
+                [ 
+                    {"questionId" : 4, "text" : "Happy", "isCorrect" : false},
+                    {"questionId" : 4, "text" : "Scared", "isCorrect" : false},
+                    {"questionId" : 4, "text" : "Sad", "isCorrect" : true}, 
+                    {"questionId" : 4, "text" : "Sleepy", "isCorrect" : false}
                 ]
             }
 
@@ -91,34 +116,16 @@
         [
             {
                 "id" : 0,
-                "name" : "math"
-            },
-
-            {
-                "id" : 1,
-                "name" : "colors"
-            }
-        ],
-
-        "question-types" : 
-        [
-            {
-                "id" : 0,
                 "name" : "Pick correct answer"
             },
 
             {
                 "id" : 1,
-                "name" : "True/false"
+                "name": "Name color"
             },
 
             {
                 "id" : 2,
-                "name" : "Matching"
-            },
-
-            {
-                "id" : 3,
                 "name" : "Guess emotion"
             }
         ]

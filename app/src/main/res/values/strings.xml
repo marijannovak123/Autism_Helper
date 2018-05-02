@@ -65,5 +65,6 @@
     <string name="register_error">Register failed</string>
     <string name="children_data_load_error">Loading children data failed</string>
     <string name="data_load_error">Data load failed</string>
+    <string name="category_load_fail">Failed loading category data</string>
 
 </resources>

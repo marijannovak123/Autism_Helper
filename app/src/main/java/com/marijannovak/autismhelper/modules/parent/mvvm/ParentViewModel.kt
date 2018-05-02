@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class ParentViewModel @Inject constructor(private val repository: ParentRepository)
     : BaseViewModel<UserChildrenJoin>() {
-    fun loadUserChildren() {
+    fun loadUserWithChildren() {
         dataRepository.loadUserAndChildren().subscribe(object: SingleObserver<UserChildrenJoin> {
             override fun onSuccess(userWithChildren: UserChildrenJoin?) {
                 userWithChildren?.let {

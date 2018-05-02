@@ -15,12 +15,12 @@ import java.io.Serializable
 
 @Entity(tableName = TABLE_USER)
 data class User (
-    @PrimaryKey
-    var id: String,
-    var username: String?,
-    var email: String?,
-    @Ignore
-    var children: List<Child>?
+        @PrimaryKey
+        var id: String,
+        var username: String?,
+        var email: String?,
+        @Ignore
+        var children: List<Child>?
 ) {
     constructor() : this("", "", "", ArrayList())
 }
@@ -50,11 +50,11 @@ data class ChildScore (
 
 @Entity(tableName = TABLE_CATEGORIES)
 data class Category (
-         @PrimaryKey
-         var id: Int,
-         var name: String,
-         @Ignore
-         var questionsWithAnswers: List<QuestionAnswersJoin>
+        @PrimaryKey
+        var id: Int,
+        var name: String,
+        @Ignore
+        var questionsWithAnswers: List<QuestionAnswersJoin>
 ) {
     constructor() : this(0, "", ArrayList())
 }
@@ -63,14 +63,15 @@ data class Category (
 data class Question (
         @PrimaryKey
         var id: Int,
-         var text: String,
-         var categoryId: Int,
-         var typeId: Int,
-         var extraData: String?,
-         @Ignore
-         var answers: List<Answer>
+        var text: String,
+        var categoryId: Int,
+        var typeId: Int,
+        var extraData: String?,
+        var imgPath: String?,
+        @Ignore
+        var answers: List<Answer>
 ){
-    constructor() : this(0, "", 0, 0, "", ArrayList())
+    constructor() : this(0, "", 0, 0, "", null, ArrayList())
 }
 
 @Entity(tableName = TABLE_ANSWERS)

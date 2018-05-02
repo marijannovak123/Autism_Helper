@@ -14,13 +14,12 @@ import io.reactivex.Single
 @Dao
 interface CategoryDao: BaseDao<Category> {
 
-    @Transaction
     @Query("SELECT * FROM $TABLE_CATEGORIES")
-    fun getCategories() : Single<List<CategoryQuestionsAnswersJoin>>
+    fun getCategories() : Single<List<Category>>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_CATEGORIES WHERE id = :id")
-    fun getCategoryById(id : Int) : Single<CategoryQuestionsAnswersJoin>
+    fun getCategoryWithQuestions(id : Int) : Single<CategoryQuestionsAnswersJoin>
 
     @Query("SELECT COUNT(*) FROM $TABLE_CATEGORIES")
     fun getCategoryCount() : Int

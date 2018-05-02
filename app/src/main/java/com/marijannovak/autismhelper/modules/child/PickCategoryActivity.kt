@@ -3,23 +3,26 @@ package com.marijannovak.autismhelper.modules.child
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
-import com.marijannovak.autismhelper.data.models.Answer
-import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
-import com.marijannovak.autismhelper.data.models.QuestionAnswersJoin
+import com.marijannovak.autismhelper.config.Constants.Companion.KEY_CATEGORY_ID
+import com.marijannovak.autismhelper.data.models.Category
+import com.marijannovak.autismhelper.modules.child.adapters.CategoriesAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.logTag
+import kotlinx.android.synthetic.main.activity_pick_category.*
 
-class ChildActivity : ViewModelActivity<ChildViewModel, CategoryQuestionsAnswersJoin>() {
+class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
+
+    private var categoriesAdapter: CategoriesAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_child)
+        setContentView(R.layout.activity_pick_category)
     }
 
     override fun subscribeToData() {
@@ -31,7 +34,7 @@ class ChildActivity : ViewModelActivity<ChildViewModel, CategoryQuestionsAnswers
         viewModel.loadCategories()
     }
 
-    override fun handleResource(resource: Resource<List<CategoryQuestionsAnswersJoin>>?) {
+    override fun handleResource(resource: Resource<List<Category>>?) {
         resource?.let {
             when(it.status) {
                 Status.SUCCESS -> {
@@ -40,7 +43,7 @@ class ChildActivity : ViewModelActivity<ChildViewModel, CategoryQuestionsAnswers
                 }
 
                 Status.HOME -> {
-                    startActivity(Intent(this@ChildActivity, LoginActivity::class.java))
+                    startActivity(Intent(this@PickCategoryActivity, LoginActivity::class.java))
                     finish()
                 }
 
@@ -60,19 +63,22 @@ class ChildActivity : ViewModelActivity<ChildViewModel, CategoryQuestionsAnswers
         }
     }
 
-    private fun setCategoriesData(categoryQuestionAnswersJoins: List<CategoryQuestionsAnswersJoin>?) {
-        categoryQuestionAnswersJoins?.let {
-            Log.e(logTag(), "\n\n-------------------------------------\n\n")
-            for(cqa: CategoryQuestionsAnswersJoin in categoryQuestionAnswersJoins) {
-                Log.e(logTag(), "\nCategory: ${cqa.category}\n")
-                for(questionAnswers: QuestionAnswersJoin in cqa.questionsAnswers) {
-                    Log.e(logTag(), "\tQuestion: ${questionAnswers.question}")
-                    for (answer: Answer in questionAnswers.answers) {
-                        Log.e(logTag(), "\t\tAnswer: $answer")
-                    }
-                }
+    private fun setCategoriesData(categories: List<Category>?) {
+        categories?.let {
+            if (categoriesAdapter == null) {
+                categoriesAdapter = CategoriesAdapter(emptyList(), onItemClick = {
+                    val intent = Intent(this, QuizActivity::class.java)
+                    intent.putExtra(KEY_CATEGORY_ID, it.id)
+                    startActivity(intent)
+                    finish()
+                })
+
+                rvCategories.layoutManager = LinearLayoutManager(this)
+                rvCategories.itemAnimator = DefaultItemAnimator()
+                rvCategories.adapter = categoriesAdapter
             }
-            Log.e(logTag(), "\n\n----------------------------------\n\n")
+
+            categoriesAdapter!!.update(categories)
         }
     }
 }

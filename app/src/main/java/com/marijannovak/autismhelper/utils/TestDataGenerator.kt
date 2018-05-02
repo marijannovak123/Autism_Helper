@@ -17,7 +17,7 @@ class TestDataGenerator {
             val questionId = 123
             val answer1 = Answer(0, "hmm", true, questionId)
             val answer2 = Answer(1, "hmhm", false, questionId)
-            val question = Question(questionId, "Hmm?", 433, 322, "", listOf(answer1, answer2))
+            val question = Question(questionId, "Hmm?", 433, 322, "", null, listOf(answer1, answer2))
             return listOf(question)
         }
 
