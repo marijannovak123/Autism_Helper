@@ -8,7 +8,6 @@ import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
-import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.modules.child.PickCategoryActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
@@ -16,12 +15,8 @@ import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 class MainActivity : ViewModelActivity<MainViewModel, Any>() {
-
-    @Inject
-    lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

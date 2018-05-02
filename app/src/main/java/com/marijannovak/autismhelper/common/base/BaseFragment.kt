@@ -3,10 +3,11 @@ package com.marijannovak.autismhelper.common.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.modules.parent.fragments.*
+import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.DashboardFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 
 open class BaseFragment : Fragment() {
 

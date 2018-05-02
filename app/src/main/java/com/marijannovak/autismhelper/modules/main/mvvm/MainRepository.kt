@@ -1,10 +1,5 @@
 package com.marijannovak.autismhelper.modules.main.mvvm
 
-import com.marijannovak.autismhelper.data.database.dao.CategoryDao
-import com.marijannovak.autismhelper.data.models.Category
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**

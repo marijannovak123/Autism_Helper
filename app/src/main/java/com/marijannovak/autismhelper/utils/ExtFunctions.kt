@@ -3,10 +3,8 @@ package com.marijannovak.autismhelper.utils
 import android.app.Activity
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.support.v4.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 

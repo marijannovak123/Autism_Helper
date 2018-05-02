@@ -5,7 +5,6 @@ import com.marijannovak.autismhelper.common.base.BaseDao
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
-import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**

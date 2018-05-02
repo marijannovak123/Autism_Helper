@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -14,15 +13,16 @@ import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_GOOGLE_SIGNIN
 import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGNUP
-import com.marijannovak.autismhelper.data.database.AppDatabase
-import com.marijannovak.autismhelper.data.models.*
+import com.marijannovak.autismhelper.data.models.Child
+import com.marijannovak.autismhelper.data.models.SignupRequest
+import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.modules.main.MainActivity
-import com.marijannovak.autismhelper.utils.*
+import com.marijannovak.autismhelper.utils.DialogHelper
+import com.marijannovak.autismhelper.utils.InputValidator
+import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.doAsync
-import javax.inject.Inject
 
 class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
