@@ -25,18 +25,22 @@
                         "dateOfBirth": 2321324234
                     }
             
+                ],
+
+                "child_scores" :
+                [   
+                    {
+                        "id": 123,
+                        "childId" : 10120,
+                        "parentId" : "asdsadsa",
+                        "timestamp" : 1235567234,
+                        "duration" : 100,
+                        "mistakes": 12
+                    }
                 ]
             }
         ],
 
-        "child_scores" :
-        [   
-            {
-                "childId" : 10120,
-                "timestamp" : 1235567234,
-                "score" : 100
-            }
-        ],
 
         "questions": 
         [
@@ -61,15 +65,15 @@
                 "extraData" : "",
                 "answers" : 
                 [
-                    {"questionId" : 1, "text" : "1", "isCorrect" : true},
-                    {"questionId" : 1, "text" : "8", "isCorrect" : false}, 
                     {"questionId" : 1, "text" : "2", "isCorrect" : false},
-                    {"questionId" : 1, "text" : "4", "isCorrect" : false}                
+                    {"questionId" : 1, "text" : "1", "isCorrect" : true},
+                    {"questionId" : 1, "text" : "4", "isCorrect" : false},               
+                    {"questionId" : 1, "text" : "8", "isCorrect" : false}
                 ]
             },
 
             {
-                "text" : "2/2?",
+                "text" : "What color is this",
                 "id" : 2,
                 "categoryId" : 1,
                 "extraData" : "#1ccc42",
@@ -86,7 +90,7 @@
                 "text" : "How is this person feeling?",
                 "id" : 3,
                 "categoryId" : 2,
-                "extraData" : "beautiful-brunette-cute-774909.jpg?alt=media&token=ca08ca22-0be4-4534-87cc-57661ffaadf7",
+                "extraData" : "beautiful-brunette-cute-774909.jpg",
                 "answers":
                 [ 
                     {"questionId" : 3, "text" : "Happy", "isCorrect" : true},
@@ -100,7 +104,7 @@
                 "text" : "What emotion is this?",
                 "id" : 4,
                 "categoryId" : 2,
-                "extraData" : "alone-black-and-white-boy-551590.jpg?alt=media&token=f576818c-5e41-4b06-bca8-2aad275a871b",
+                "extraData" : "alone-black-and-white-boy-551590.jpg",
                 "answers":
                 [ 
                     {"questionId" : 4, "text" : "Happy", "isCorrect" : false},
@@ -116,7 +120,7 @@
         [
             {
                 "id" : 0,
-                "name" : "Pick correct answer"
+                "name" : "Math"
             },
 
             {

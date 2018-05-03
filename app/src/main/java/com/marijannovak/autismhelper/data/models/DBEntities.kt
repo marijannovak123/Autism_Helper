@@ -20,9 +20,11 @@ data class User (
         var username: String?,
         var email: String?,
         @Ignore
-        var children: List<Child>?
+        var children: List<Child>?,
+        @Ignore
+        var childScores: List<ChildScore>?
 ) {
-    constructor() : this("", "", "", ArrayList())
+    constructor() : this("", "", "", emptyList(), emptyList())
 }
 
 @Entity(tableName = TABLE_CHILDREN)
@@ -39,13 +41,15 @@ data class Child (
 
 @Entity(tableName = TABLE_CHILD_SCORES)
 data class ChildScore (
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         var id: Int,
-        var childId: Int,
+        var childId: String,
+        var parentId: String,
         var timestamp: Long,
-        var score: Long
+        var duration: Long,
+        var mistakes: Int
 ) : Serializable {
-    constructor() : this(0, 0, 0, 0)
+    constructor() : this(0, "", "",0, 0, 0)
 }
 
 @Entity(tableName = TABLE_CATEGORIES)

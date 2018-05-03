@@ -52,6 +52,7 @@ class Constants {
         const val IMG_DIR = "autism_helper"
         //endregion
 
-        const val KEY_CATEGORY_ID = "category_id"
+        const val EXTRA_CATEGORY_ID = "category_id"
+        const val EXTRA_CHILD = "child"
     }
 }

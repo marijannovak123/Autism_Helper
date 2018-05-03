@@ -42,5 +42,9 @@ class Resource<out T>(val status: Status, val data: T?, val message: String?) {
         fun <T> signedUp(data: T?): Resource<T> {
             return Resource(Status.SIGNEDUP, data, null)
         }
+
+        fun <T> saved(): Resource<T> {
+            return Resource(Status.SAVED, null, null)
+        }
     }
 }

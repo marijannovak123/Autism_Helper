@@ -8,11 +8,13 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
+import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
+import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,6 +30,7 @@ class LoginRepository @Inject constructor(
         private val sharedPrefs: PrefsHelper,
         private val userDao: UserDao,
         private val childDao: ChildDao,
+        private val childScoreDao: ChildScoreDao,
         private val api: API) {
     
     private var currentUser : FirebaseUser? = null
@@ -105,15 +108,13 @@ class LoginRepository @Inject constructor(
                         Single.just(true)
                     else Single.just(false)
                 }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .handleThreading()
     }
 
     fun saveUserToFirebase(user: User): Completable {
         return api
                 .putUser(user.id, user)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .handleThreading()
     }
 
     fun saveUser(user: User): Completable {
@@ -123,6 +124,9 @@ class LoginRepository @Inject constructor(
                 user.children?.let {
                     childDao.insertMultiple(it)
                 }
+                user.childScores?.let {
+                    childScoreDao.insertMultiple(it)
+                }
             }
         }
     }
@@ -130,8 +134,7 @@ class LoginRepository @Inject constructor(
     fun fetchUserData(userId : String): Single<User> {
         return api
                 .getUser(userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .handleThreading()
     }
 
 }

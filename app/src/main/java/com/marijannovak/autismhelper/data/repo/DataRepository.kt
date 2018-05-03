@@ -9,6 +9,7 @@ import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
+import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
@@ -57,9 +58,11 @@ class DataRepository @Inject constructor(
         auth.signOut()
         sharedPrefs.setLoggedIn(false)
         sharedPrefs.setParentPassword("")
-        return Completable.fromAction{
+        return Completable.fromAction {
             doAsync {
                 db.userDao().deleteTable()
+                db.childDao().deleteTable()
+                db.childScoreDao().deleteTable()
                 deleteDataTables()
             }
         }
@@ -73,15 +76,13 @@ class DataRepository @Inject constructor(
     fun syncCategories(): Single<List<Category>> {
         return api
                 .getCategories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .handleThreading()
     }
 
     fun syncQuestions(): Single<List<Question>> {
         return api
                 .getQuestions()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .handleThreading()
     }
 
     fun saveQuestions(questions: List<Question>): Completable {
@@ -100,7 +101,7 @@ class DataRepository @Inject constructor(
                 db.questionDao().insertMultiple(questions)
             }
 
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }.handleThreading()
 
     }
 
@@ -109,7 +110,7 @@ class DataRepository @Inject constructor(
             doAsync {
                 db.categoriesDao().insertMultiple(categories)
             }
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }.handleThreading()
     }
 
     fun getParentPassword(): String = sharedPrefs.getParentPassword()
@@ -121,8 +122,7 @@ class DataRepository @Inject constructor(
     fun loadUserAndChildren(): Single<UserChildrenJoin> {
         return db.userDao()
                 .getUserChildren()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .handleThreading()
     }
 
     fun downloadImages(onComplete: () -> Unit) {
@@ -137,7 +137,7 @@ class DataRepository @Inject constructor(
 
         ref.getFile(file)
                 .addOnSuccessListener {
-                    Log.e(logTag(), "SUCCESS ${file.absolutePath}")
+                    ///Log.e(logTag(), "SUCCESS ${file.absolutePath}")
                     updateQuestionImgPath(question, file.absolutePath).subscribe( object: CompletableObserver {
                         override fun onComplete() {
                             if(pos == questionsWithImgs.size-1) {
@@ -161,13 +161,13 @@ class DataRepository @Inject constructor(
                 }
     }
 
-    fun updateQuestionImgPath(question: Question, path: String): Completable {
+    private fun updateQuestionImgPath(question: Question, path: String): Completable {
         question.imgPath = path
         return Completable.fromAction {
             doAsync {
                 db.questionDao().insert(question)
             }
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }.handleThreading()
     }
 
 }

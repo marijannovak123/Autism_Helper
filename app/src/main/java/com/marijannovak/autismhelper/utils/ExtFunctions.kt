@@ -7,6 +7,12 @@ import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+
 
 fun FirebaseUser.mapToUser(singupRequest: SignupRequest)
         = User(singupRequest.username, this.uid, singupRequest.email, ArrayList())
@@ -27,4 +33,16 @@ inline fun <reified T: Activity> T.isViewModelActivity() : Boolean {
 
 inline fun <reified T: Any> T.logTag(): String {
     return T::class.java.simpleName
+}
+
+fun <T> Single<T>.handleThreading() : Single<T> {
+    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+}
+
+fun Completable.handleThreading() : Completable {
+    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+}
+
+fun <T> Flowable<T>.handleThreading(): Flowable<T> {
+    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }

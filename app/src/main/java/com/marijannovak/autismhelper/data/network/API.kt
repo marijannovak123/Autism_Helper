@@ -25,8 +25,8 @@ interface API {
     @PUT("users/{userId}.json")
     fun putUser(@Path("userId") userId : String, @Body user : User) : Completable
 
-    @PUT("child_scores/{childId).json")
-    fun putChildScore(@Path("childId") childId: Int, @Body childScore: ChildScore)
+    @PUT("users/{userId}/child_scores/{scoreId}.json")
+    fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Completable
 
     @PATCH("users/{userId}/children/{childId}.json")
     fun addChild(@Path("userId") userId: Int, @Path("childId") childId: Int, @Body child: Child)

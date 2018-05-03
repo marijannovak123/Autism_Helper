@@ -8,8 +8,10 @@ import android.support.v7.widget.LinearLayoutManager
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
-import com.marijannovak.autismhelper.config.Constants.Companion.KEY_CATEGORY_ID
+import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CATEGORY_ID
+import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CHILD
 import com.marijannovak.autismhelper.data.models.Category
+import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.modules.child.adapters.CategoriesAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
 import com.marijannovak.autismhelper.modules.login.LoginActivity
@@ -19,10 +21,15 @@ import kotlinx.android.synthetic.main.activity_pick_category.*
 class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
 
     private var categoriesAdapter: CategoriesAdapter? = null
+    private var child: Child? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pick_category)
+
+        if(intent.hasExtra(EXTRA_CHILD)) {
+            child = intent.getSerializableExtra(EXTRA_CHILD) as Child
+        }
     }
 
     override fun subscribeToData() {
@@ -68,7 +75,8 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
             if (categoriesAdapter == null) {
                 categoriesAdapter = CategoriesAdapter(emptyList(), onItemClick = {
                     val intent = Intent(this, QuizActivity::class.java)
-                    intent.putExtra(KEY_CATEGORY_ID, it.id)
+                    intent.putExtra(EXTRA_CATEGORY_ID, it.id)
+                    intent.putExtra(EXTRA_CHILD, child)
                     startActivity(intent)
                     finish()
                 })

@@ -8,6 +8,8 @@ import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
+import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CHILD
+import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.modules.child.PickCategoryActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
@@ -16,7 +18,8 @@ import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : ViewModelActivity<MainViewModel, Any>() {
+
+class MainActivity : ViewModelActivity<MainViewModel, Child>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +30,12 @@ class MainActivity : ViewModelActivity<MainViewModel, Any>() {
 
     private fun init() {
         btnParent.setOnClickListener { enterPasswordDialog() }
-        btnChild.setOnClickListener { startChildActivity() }
+        btnChild.setOnClickListener { viewModel.getChildrenToPick() }
     }
 
-    private fun startChildActivity() {
+    private fun startChildActivity(child: Child) {
         val intent = Intent(this, PickCategoryActivity::class.java)
+        intent.putExtra(EXTRA_CHILD, child)
         startActivity(intent)
     }
 
@@ -54,9 +58,13 @@ class MainActivity : ViewModelActivity<MainViewModel, Any>() {
         viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
     }
 
-    override fun handleResource(resource: Resource<List<Any>>?) {
+    override fun handleResource(resource: Resource<List<Child>>?) {
         resource?.let {
             when(it.status) {
+                Status.SUCCESS -> {
+                    pickChildDialog(it.data)
+                }
+
                 Status.HOME -> {
                     startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                     finish()
@@ -73,6 +81,18 @@ class MainActivity : ViewModelActivity<MainViewModel, Any>() {
 
                 else -> {
                     showLoading(false)
+                }
+            }
+        }
+    }
+
+    private fun pickChildDialog(children: List<Child>?) {
+        children?.let {
+            if(children.isNotEmpty()){
+                if(children.size > 1) {
+                    DialogHelper.showPickChildDialog(this, children, {child -> startChildActivity(child)} )
+                } else {
+                    startChildActivity(children[0])
                 }
             }
         }

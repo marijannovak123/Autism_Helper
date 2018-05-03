@@ -66,5 +66,13 @@
     <string name="children_data_load_error">Loading children data failed</string>
     <string name="data_load_error">Data load failed</string>
     <string name="category_load_fail">Failed loading category data</string>
+    <string name="parent_child">Are you a parent or a child?</string>
+    <string name="pick_category">Pick Category</string>
+    <string name="question">Question</string>
+    <string name="children_load_fail">Failed loading children</string>
+    <string name="pick_child">Pick Child</string>
+    <string name="save_score">Save score?</string>
+    <string name="score_saved">Score saved</string>
+    <string name="save_error">Error saving score</string>
 
 </resources>

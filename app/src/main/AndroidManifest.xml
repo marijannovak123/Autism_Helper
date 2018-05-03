@@ -24,20 +24,19 @@
         </activity>
         <activity
             android:name=".modules.main.MainActivity"
-            android:label="Are you a parent or a child?" />
+            android:label="@string/parent_child" />
         <activity
             android:name=".modules.parent.ParentActivity"
-            android:label="Parent"
+            android:label="@string/parent"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".modules.child.PickCategoryActivity"
-            android:label="Child"
-            android:screenOrientation="sensorLandscape"
+            android:label="@string/pick_category"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".modules.login.SignUpActivity"
-            android:label="Sign Up" />
-        <activity android:name=".modules.child.QuizActivity"></activity>
+            android:label="@string/sign_up" />
+        <activity android:name=".modules.child.QuizActivity"/>
     </application>
 
 </manifest>

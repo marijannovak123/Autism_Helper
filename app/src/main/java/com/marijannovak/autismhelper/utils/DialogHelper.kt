@@ -13,6 +13,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
 import com.marijannovak.autismhelper.data.models.Child
+import com.marijannovak.autismhelper.modules.main.MainActivity
 import org.jetbrains.anko.alert
 import java.util.*
 
@@ -162,5 +163,41 @@ class DialogHelper {
                     }
             }
         }
+
+        fun showPickChildDialog(context: Context, children: List<Child>, onConfirm: (Child) -> Unit) {
+            val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+            val inflater = LayoutInflater.from(context)
+            val alertView = inflater.inflate(R.layout.dialog_pick_child, null)
+
+            builder.setView(alertView)
+            builder.setCancelable(false)
+            val alertDialog = builder.create()
+
+            val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+            val spChildren = alertView.findViewById<Spinner>(R.id.spChildren)
+
+            var childrenNames = emptyList<String>()
+
+            for(child: Child in children) {
+                childrenNames += child.name
+            }
+
+            val childrenAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, childrenNames)
+            spChildren.adapter = childrenAdapter
+
+            btnPositive.setOnClickListener {
+                onConfirm(children[spChildren.selectedItemPosition])
+                alertDialog.dismiss()
+            }
+
+            btnNegative.setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            alertDialog.show()
+        }
+
+
     }
 }
