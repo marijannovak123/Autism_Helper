@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.login
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -34,10 +35,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
         initListeners()
         customizeGoogleSignInButton()
-    }
 
-    override fun onResume() {
-        super.onResume()
         viewModel.checkLoggedIn()
     }
 
@@ -72,7 +70,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private fun addChildDialog(user: User?) {
         user?.let {
-            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, {
+            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, true, {
                 child, another ->
                 childrenList+= child
                 if(another) {
@@ -150,6 +148,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
         resource?.let {
             showLoading(it.status)
             when (it.status) {
+                Status.HOME -> {
+                    llContent.visibility = View.VISIBLE
+                }
+
                 Status.SUCCESS -> {
                     startMainActivity()
                 }

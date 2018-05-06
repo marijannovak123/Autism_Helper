@@ -19,12 +19,13 @@ data class User (
         var id: String,
         var username: String?,
         var email: String?,
+        var parentPassword: String?,
         @Ignore
         var children: List<Child>?,
         @Ignore
         var childScores: List<ChildScore>?
 ) {
-    constructor() : this("", "", "", emptyList(), emptyList())
+    constructor() : this("", "", "","",  emptyList(), emptyList())
 }
 
 @Entity(tableName = TABLE_CHILDREN)

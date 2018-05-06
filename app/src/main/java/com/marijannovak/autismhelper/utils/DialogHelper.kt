@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.config.Constants.Companion.CHILD_ID_SUFFIX
@@ -106,7 +107,7 @@ class DialogHelper {
 
         //todo: test correct data set
         @SuppressLint("InflateParams")
-        fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, confirmListener: (Child, Boolean) -> Unit) {
+        fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, showAnotherCheck: Boolean,  confirmListener: (Child, Boolean) -> Unit) {
             val selectedDate: Calendar = Calendar.getInstance()
 
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
@@ -124,6 +125,7 @@ class DialogHelper {
             val spGender = alertView.findViewById<Spinner>(R.id.spGender)
             val cbAddAnother = alertView.findViewById<CheckBox>(R.id.cbAddAnother)
 
+            cbAddAnother.visibility = if(!showAnotherCheck) View.GONE else View.VISIBLE
             spGender.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, GENDERS)
 
             etDateOfBirth.setOnClickListener { showDatePicker(context, selectedDate, etDateOfBirth) }
@@ -138,7 +140,7 @@ class DialogHelper {
                 val errors = InputValidator.validateChild(child)
 
                 if (errors.isEmpty()) {
-                    confirmListener(child, cbAddAnother.isChecked)
+                    confirmListener(child, cbAddAnother.isChecked && showAnotherCheck)
                     alertDialog.dismiss()
                 } else {
                     handleChildAddErrors(errors, etName, etDateOfBirth)

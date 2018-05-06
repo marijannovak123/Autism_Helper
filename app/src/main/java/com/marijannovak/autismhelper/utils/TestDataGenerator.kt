@@ -10,7 +10,7 @@ class TestDataGenerator {
             val parentId = "002445"
             val child1 = Child("hehe1", parentId, "Roko", "M", 12312313)
             val child2 = child1.copy(gender = "F", name= "Rokica", id = "hehe2")
-            return User("Nikica", parentId, "nikica@gmail.com", listOf(child1, child2), emptyList())
+            return User("Nikica", parentId, "nikica@gmail.com", "", listOf(child1, child2), emptyList())
         }
 
         fun createQuestionApiResponse(): List<Question> {

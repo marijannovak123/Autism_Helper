@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.data.database.AppDatabase
-import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
@@ -13,10 +12,9 @@ import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
+import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import java.io.File
 import javax.inject.Inject
@@ -53,29 +51,10 @@ class DataRepository @Inject constructor(
                         }.toCompletable()
         ).handleThreading()
     }
-    // fun syncData(): Single<Boolean> {
-    //    return api
-    //            .getCategories()
-    //            .flatMap {
-    //                categories: List<Category> ->
-    //                if(categories.isNotEmpty()) {
-    //                    saveCategories(categories)
-    //                    api.getQuestions()
-    //                } else Single.error(Throwable())
-    //            }
-    //            .flatMap {questions: List<Question> ->
-    //                if(questions.isNotEmpty()) {
-    //                    saveQuestions(questions)
-    //                    Single.just(true)
-    //                } else Single.error(Throwable())
-    //            }
-    //            .subscribeOn(Schedulers.io())
-    //            .observeOn(AndroidSchedulers.mainThread())
-    //}
 
     fun logOut(): Completable {
         auth.signOut()
-        sharedPrefs.setLoggedIn(false)
+        //sharedPrefs.setLoggedIn(false)
         sharedPrefs.setParentPassword("")
         return Completable.fromAction {
             doAsync {
@@ -87,60 +66,21 @@ class DataRepository @Inject constructor(
         }
     }
 
-    fun deleteDataTables() {
+    private fun deleteDataTables() {
         db.questionDao().deleteTable()
         db.categoriesDao().deleteTable()
     }
 
-    fun syncCategories(): Single<List<Category>> {
-        return api
-                .getCategories()
-                .handleThreading()
-    }
-
-    fun syncQuestions(): Single<List<Question>> {
-        return api
-                .getQuestions()
-                .handleThreading()
-    }
-
-    fun saveQuestions(questions: List<Question>): Completable {
-        return Completable.fromAction {
-            for(question: Question in questions) {
-                //emotion category
-                if (question.categoryId == 2) {
-                    questionsWithImgs += question
-                }
-                doAsync {
-                    db.answerDao().insertMultiple(question.answers)
-                }
-            }
-
-            doAsync {
-                db.questionDao().insertMultiple(questions)
-            }
-
-        }.handleThreading()
-
-    }
-
-    fun saveCategories(categories: List<Category>): Completable {
-        return Completable.fromAction {
-            doAsync {
-                db.categoriesDao().insertMultiple(categories)
-            }
-        }.handleThreading()
-    }
-
+    //todo: to user model
     fun getParentPassword(): String = sharedPrefs.getParentPassword()
 
     fun saveParentPassword(password: String) {
         sharedPrefs.setParentPassword(password)
     }
 
-    fun loadUserAndChildren(): Single<UserChildrenJoin> {
+    fun loadUserAndChildren(): Flowable<UserChildrenJoin> {
         return db.userDao()
-                .getUserChildren()
+                .getUserWithChildren()
                 .handleThreading()
     }
 
@@ -186,7 +126,7 @@ class DataRepository @Inject constructor(
             doAsync {
                 db.questionDao().insert(question)
             }
-        }.handleThreading()
+        }
     }
 
 }

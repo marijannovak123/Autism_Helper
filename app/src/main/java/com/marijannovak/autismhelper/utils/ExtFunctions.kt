@@ -9,15 +9,16 @@ import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
 fun FirebaseUser.mapToUser(singupRequest: SignupRequest)
-        = User(singupRequest.username, this.uid, singupRequest.email, emptyList(), emptyList())
+        = User(singupRequest.username, this.uid, singupRequest.email, "", emptyList(), emptyList())
 
-fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, emptyList(), emptyList())
+fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyList(), emptyList())
 
 fun <T: ViewModel> T.createFactory(): ViewModelProvider.Factory {
     val viewModel = this
@@ -44,5 +45,9 @@ fun Completable.handleThreading() : Completable {
 }
 
 fun <T> Flowable<T>.handleThreading(): Flowable<T> {
+    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+}
+
+fun <T> Maybe<T>.handleThreading(): Maybe<T> {
     return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }

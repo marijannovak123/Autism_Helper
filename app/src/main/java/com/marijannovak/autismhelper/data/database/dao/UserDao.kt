@@ -7,6 +7,8 @@ import com.marijannovak.autismhelper.common.base.BaseDao
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 /**
@@ -17,10 +19,10 @@ interface UserDao: BaseDao<User> {
 
     @Transaction
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getUserChildren() : Single<UserChildrenJoin>
+    fun getUserWithChildren() : Flowable<UserChildrenJoin>
 
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getUser(): Single<User>
+    fun getUser(): Maybe<User>
 
     @Query("DELETE FROM $TABLE_USER")
     fun deleteTable()

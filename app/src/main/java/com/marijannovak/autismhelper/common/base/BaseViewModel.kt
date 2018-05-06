@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
+import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

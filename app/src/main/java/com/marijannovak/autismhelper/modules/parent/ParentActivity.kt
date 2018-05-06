@@ -46,7 +46,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     }
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
-
         when(item.itemId) {
             R.id.dashboard -> {
                 loadFragment(DashboardFragment())
@@ -88,7 +87,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                     drawerLayout.openDrawer(GravityCompat.START)
                 }
             }
-            return true
         }
 
         return super.onOptionsItemSelected(item)
@@ -110,7 +108,8 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             showLoading(it.status)
             when(it.status) {
                 Status.HOME -> {
-                    startActivity(Intent(this@ParentActivity, LoginActivity::class.java))
+                    val intent = Intent(this@ParentActivity, LoginActivity::class.java)
+                    startActivity(intent)
                     finish()
                 }
                 else -> {

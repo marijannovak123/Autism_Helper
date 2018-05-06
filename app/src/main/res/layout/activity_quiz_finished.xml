@@ -13,4 +13,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvScore"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPlayAgain"
+        style="@style/style_my_button"
+        android:text="@string/play_again"/>
+
 </LinearLayout>

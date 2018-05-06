@@ -67,6 +67,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                     toast(R.string.score_saved)
                     val intent = Intent(this, QuizFinishedActivity::class.java)
                     intent.putExtra(EXTRA_SCORE, it.data!![0] as ChildScore)
+                    intent.putExtra(EXTRA_CHILD, child)
                     startActivity(intent)
                     finish()
                 }
@@ -96,7 +97,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                                 viewModel.saveChildScore(score)
                             }
                         } else {
-                            mistakes.inc()
+                            mistakes += 1
                             toast("False")
                         }
                     }

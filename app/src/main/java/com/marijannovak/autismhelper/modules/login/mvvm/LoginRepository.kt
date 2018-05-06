@@ -16,6 +16,7 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
@@ -25,7 +26,6 @@ import javax.inject.Inject
  */
 class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
-        private val sharedPrefs: PrefsHelper,
         private val userDao: UserDao,
         private val childDao: ChildDao,
         private val childScoreDao: ChildScoreDao,
@@ -33,10 +33,8 @@ class LoginRepository @Inject constructor(
 
     private var currentUser : FirebaseUser? = null
 
-    fun isLoggedIn() = sharedPrefs.isLoggedIn()
-
-    fun setLoggedIn(loggedIn: Boolean) {
-        sharedPrefs.setLoggedIn(loggedIn)
+    fun isLoggedIn(): Maybe<User> {
+        return userDao.getUser().handleThreading()
     }
 
     fun register(signupRequest: SignupRequest, listener : GeneralListener<FirebaseUser>) {

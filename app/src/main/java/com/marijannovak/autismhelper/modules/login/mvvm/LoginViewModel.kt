@@ -12,6 +12,7 @@ import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.mapToUser
 import io.reactivex.CompletableObserver
+import io.reactivex.MaybeObserver
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 import org.jetbrains.anko.doAsync
@@ -24,9 +25,25 @@ class LoginViewModel @Inject constructor (
         private val repository: LoginRepository) : BaseViewModel<User>() {
 
     fun checkLoggedIn() {
-        if(repository.isLoggedIn()) {
-            resourceLiveData.value = Resource.success(null)
-        }
+        repository.isLoggedIn().subscribe(object: MaybeObserver<User> {
+            override fun onSuccess(user: User?) {
+                user?.let {
+                    resourceLiveData.value = Resource.success(listOf(it))
+                }
+            }
+
+            override fun onComplete() {
+                resourceLiveData.value = Resource.home()
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                compositeDisposable.add(d)
+            }
+
+            override fun onError(e: Throwable?) {
+                //NOOP
+            }
+        })
     }
 
     fun register(signupRequest: SignupRequest) {
@@ -111,7 +128,6 @@ class LoginViewModel @Inject constructor (
     private fun fetchAndSaveUserData(userId : String) {
        repository.fetchAndSaveUser(userId).subscribe(object : CompletableObserver {
            override fun onComplete() {
-               repository.setLoggedIn(true)
                syncData()
            }
 
@@ -129,7 +145,6 @@ class LoginViewModel @Inject constructor (
     fun saveUserOnlineAndLocally(user: User) {
         repository.uploadAndSaveUser(user).subscribe(object : CompletableObserver {
             override fun onComplete() {
-                repository.setLoggedIn(true)
                 syncData()
             }
 
