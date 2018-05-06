@@ -50,8 +50,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:weightSum="2"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+
         android:layout_marginTop="30dp">
 
         <Button
@@ -60,13 +59,7 @@
             android:layout_weight="1"
             android:id="@+id/btnLogin"
             android:text="@string/login"
-            android:textColor="@color/white"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp"
-            android:padding="10dp"
-            android:backgroundTint="@color/colorPrimary"/>
+            style="@style/style_my_button" />
 
         <com.google.android.gms.common.SignInButton
             android:layout_width="match_parent"
@@ -74,8 +67,8 @@
             android:layout_height="0dp"
             android:id="@+id/btnGoogleSignIn"
             android:text="@string/btn_sign_in"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp"/>
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"/>
 
     </LinearLayout>
 
@@ -86,15 +79,9 @@
         android:layout_marginTop="40dp"/>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/register"
         android:id="@+id/btnRegister"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/colorPrimary"
-        android:padding="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"/>
+        style="@style/style_my_button" />
 
 </LinearLayout>

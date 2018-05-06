@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -60,6 +61,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     private fun customizeGoogleSignInButton() {
         val tvGoogleSignIn = btnGoogleSignIn.getChildAt(0) as TextView
         tvGoogleSignIn.text = getString(R.string.google_sign_in)
+        tvGoogleSignIn.setPadding(0, 0, 0, 0)
     }
 
     private fun startMainActivity() {
@@ -78,7 +80,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
                                 addChildDialog(user)
                             } else {
                                 val userWithChildren = user.copy(children = childrenList)
-                                viewModel.insertToFirebase(userWithChildren)
+                                viewModel.saveUserOnlineAndLocally(userWithChildren)
                             }
             })
         }

@@ -17,8 +17,6 @@ import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
@@ -32,7 +30,7 @@ class LoginRepository @Inject constructor(
         private val childDao: ChildDao,
         private val childScoreDao: ChildScoreDao,
         private val api: API) {
-    
+
     private var currentUser : FirebaseUser? = null
 
     fun isLoggedIn() = sharedPrefs.isLoggedIn()
@@ -111,29 +109,31 @@ class LoginRepository @Inject constructor(
                 .handleThreading()
     }
 
-    fun saveUserToFirebase(user: User): Completable {
+    fun uploadAndSaveUser(user: User): Completable {
         return api
                 .putUser(user.id, user)
+                .andThen{saveUser(user)}
                 .handleThreading()
     }
 
-    fun saveUser(user: User): Completable {
-        return Completable.fromAction {
-            doAsync {
-                userDao.insert(user)
-                user.children?.let {
-                    childDao.insertMultiple(it)
-                }
-                user.childScores?.let {
-                    childScoreDao.insertMultiple(it)
-                }
-            }
-        }
+    private fun saveUser(user: User): Completable {
+       return Completable.fromAction {
+           userDao.insert(user)
+           user.children?.let {
+               childDao.insertMultiple(it)
+           }
+           user.childScores?.let {
+               childScoreDao.insertMultiple(it)
+           }
+       }
     }
 
-    fun fetchUserData(userId : String): Single<User> {
-        return api
-                .getUser(userId)
+    fun fetchAndSaveUser(userId: String) : Completable {
+        return api.getUser(userId)
+                .flatMapCompletable {
+                    user ->
+                        saveUser(user)
+                }
                 .handleThreading()
     }
 

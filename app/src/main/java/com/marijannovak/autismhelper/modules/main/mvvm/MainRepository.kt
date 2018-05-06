@@ -12,7 +12,8 @@ import javax.inject.Inject
 class MainRepository @Inject constructor(private val childDao: ChildDao){
 
     fun getChildren(): Single<List<Child>> {
-       return childDao.getChildren()
+       return childDao
+               .getChildren()
                 .handleThreading()
     }
 

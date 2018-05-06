@@ -34,6 +34,25 @@ class DataRepository @Inject constructor(
     private var questionsWithImgs: List<Question> = ArrayList()
     private lateinit var onImgsDownloaded: () -> Unit
 
+    fun syncData(): Completable {
+        return Completable.mergeArray(
+                api.getCategories()
+                        .doOnSuccess {
+                            db.categoriesDao().insertMultiple(it)
+                        }.toCompletable(),
+                api.getQuestions()
+                        .doOnSuccess {
+                            for(question: Question in it) {
+                                db.questionDao().insert(question)
+                                db.answerDao().insertMultiple(question.answers)
+
+                                if (question.categoryId == 2) {
+                                    questionsWithImgs += question
+                                }
+                            }
+                        }.toCompletable()
+        ).handleThreading()
+    }
     // fun syncData(): Single<Boolean> {
     //    return api
     //            .getCategories()
@@ -137,7 +156,6 @@ class DataRepository @Inject constructor(
 
         ref.getFile(file)
                 .addOnSuccessListener {
-                    ///Log.e(logTag(), "SUCCESS ${file.absolutePath}")
                     updateQuestionImgPath(question, file.absolutePath).subscribe( object: CompletableObserver {
                         override fun onComplete() {
                             if(pos == questionsWithImgs.size-1) {

@@ -46,7 +46,7 @@ class LoginViewModel @Inject constructor (
         resourceLiveData.value = Resource.loading()
         repository.login(email, password, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                fetchUserData(model.uid)
+                fetchAndSaveUserData(model.uid)
             }
 
             override fun onFailure(t: Throwable) {
@@ -85,7 +85,7 @@ class LoginViewModel @Inject constructor (
                 override fun onSuccess(exists: Boolean?) {
                     exists?.let {
                         if(it)
-                            fetchUserData(user.uid)
+                            fetchAndSaveUserData(user.uid)
                         else {
                             resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                         }
@@ -108,14 +108,11 @@ class LoginViewModel @Inject constructor (
 
     }
 
-    private fun fetchUserData(userId : String) {
-       repository.fetchUserData(userId).subscribe(object : SingleObserver<User>{
-           override fun onSuccess(user: User?) {
-               user?.let {
-                   insertUserToDb(user)
-                   return
-               }
-               resourceLiveData.value = Resource.message(R.string.fetch_user_error)
+    private fun fetchAndSaveUserData(userId : String) {
+       repository.fetchAndSaveUser(userId).subscribe(object : CompletableObserver {
+           override fun onComplete() {
+               repository.setLoggedIn(true)
+               syncData()
            }
 
            override fun onSubscribe(d: Disposable?) {
@@ -123,40 +120,17 @@ class LoginViewModel @Inject constructor (
            }
 
            override fun onError(e: Throwable?) {
-               if(e?.message != null) {
-                   resourceLiveData.value = Resource.message(e.message!!)
-               } else {
-                   resourceLiveData.value = Resource.message(R.string.fetch_user_error)
-               }
+               resourceLiveData.value = Resource.message(R.string.fetch_user_error)
            }
+
        })
     }
 
-    fun insertToFirebase(user: User) {
-        repository.saveUserToFirebase(user).subscribe(object : CompletableObserver {
-            override fun onComplete() {
-                insertUserToDb(user)
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                if(e?.message != null) {
-                    resourceLiveData.value = Resource.message(e.message!!)
-                } else {
-                    resourceLiveData.value = Resource.message(R.string.firebase_upload_error)
-                }
-            }
-        })
-    }
-
-    private fun insertUserToDb(user: User) {
-        repository.saveUser(user).subscribe(object: CompletableObserver {
+    fun saveUserOnlineAndLocally(user: User) {
+        repository.uploadAndSaveUser(user).subscribe(object : CompletableObserver {
             override fun onComplete() {
                 repository.setLoggedIn(true)
-                syncCategories()
+                syncData()
             }
 
             override fun onSubscribe(d: Disposable?) {
@@ -164,37 +138,15 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.error_inserting)
-            }
-
-        })
-    }
-
-    fun syncCategories() {
-        dataRepository.syncCategories().subscribe(object : SingleObserver<List<Category>> {
-            override fun onSuccess(categories: List<Category>?) {
-                categories?.let {
-                    saveCategories(it)
-                }
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                doAsync {
-                    dataRepository.deleteDataTables()
-                }
-                resourceLiveData.value = Resource.message(R.string.sync_error)
+                resourceLiveData.value = Resource.message(R.string.firebase_upload_error)
             }
         })
     }
 
-    private fun saveCategories(categories: List<Category>) {
-        dataRepository.saveCategories(categories).subscribe(object: CompletableObserver {
+    fun syncData() {
+        dataRepository.syncData().subscribe(object: CompletableObserver{
             override fun onComplete() {
-                syncQuestions()
+                dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) }
             }
 
             override fun onSubscribe(d: Disposable?) {
@@ -202,55 +154,8 @@ class LoginViewModel @Inject constructor (
             }
 
             override fun onError(e: Throwable?) {
-                doAsync {
-                    dataRepository.deleteDataTables()
-                }
                 resourceLiveData.value = Resource.message(R.string.sync_error)
             }
-        })
-    }
-
-    fun syncQuestions() {
-        dataRepository.syncQuestions().subscribe(object: SingleObserver<List<Question>> {
-            override fun onSuccess(questions: List<Question>?) {
-                questions?.let {
-                    saveQuestions(it)
-                }
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                doAsync {
-                    dataRepository.deleteDataTables()
-                }
-                resourceLiveData.value = Resource.message(R.string.sync_error)
-            }
-        })
-
-    }
-
-    fun saveQuestions(questions: List<Question>) {
-        dataRepository.saveQuestions(questions).subscribe(object: CompletableObserver {
-            override fun onComplete() {
-                dataRepository.downloadImages(onComplete = {
-                    resourceLiveData.value = Resource.success(null)
-                })
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                doAsync {
-                    dataRepository.deleteDataTables()
-                }
-                resourceLiveData.value = Resource.message(R.string.sync_error)
-            }
-
         })
     }
 }
