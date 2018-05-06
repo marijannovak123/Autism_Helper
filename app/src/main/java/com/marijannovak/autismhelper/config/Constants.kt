@@ -54,5 +54,6 @@ class Constants {
 
         const val EXTRA_CATEGORY_ID = "category_id"
         const val EXTRA_CHILD = "child"
+        const val EXTRA_SCORE = "score"
     }
 }

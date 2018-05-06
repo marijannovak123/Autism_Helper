@@ -16,7 +16,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:titleTextColor="@color/white"
-            android:theme="@style/MyActionBar" />
+            android:theme="@style/MyActionBar"/>
 
 
         <LinearLayout

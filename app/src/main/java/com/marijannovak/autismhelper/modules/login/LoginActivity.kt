@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -52,9 +51,9 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer {
             resource ->
-                resource?.let {
-                    handleResource(it)
-                }
+            resource?.let {
+                handleResource(it)
+            }
         })
     }
 
@@ -75,13 +74,13 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
         user?.let {
             DialogHelper.showAddChildDialog(this, user.id, childrenList.size, {
                 child, another ->
-                            childrenList+= child
-                            if(another) {
-                                addChildDialog(user)
-                            } else {
-                                val userWithChildren = user.copy(children = childrenList)
-                                viewModel.saveUserOnlineAndLocally(userWithChildren)
-                            }
+                childrenList+= child
+                if(another) {
+                    addChildDialog(user)
+                } else {
+                    val userWithChildren = user.copy(children = childrenList)
+                    viewModel.saveUserOnlineAndLocally(userWithChildren)
+                }
             })
         }
 
@@ -116,6 +115,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
         val signInIntent = googleSignInClient.signInIntent
 
         startActivityForResult(signInIntent, RESULT_CODE_GOOGLE_SIGNIN)
+
     }
 
     private fun startSignUpActivity() {
@@ -148,18 +148,14 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     override fun handleResource(resource: Resource<List<User>>?) {
         resource?.let {
+            showLoading(it.status)
             when (it.status) {
                 Status.SUCCESS -> {
                     startMainActivity()
                 }
 
                 Status.MESSAGE -> {
-                    showLoading(false)
                     showError(0, it.message)
-                }
-
-                Status.LOADING -> {
-                    showLoading(true)
                 }
 
                 Status.SIGNEDUP -> {
@@ -167,7 +163,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
                 }
 
                 else -> {
-                    showLoading(false)
+
                 }
             }
         }

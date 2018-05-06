@@ -60,6 +60,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
 
     override fun handleResource(resource: Resource<List<Child>>?) {
         resource?.let {
+            showLoading(it.status)
             when(it.status) {
                 Status.SUCCESS -> {
                     pickChildDialog(it.data)
@@ -71,16 +72,11 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                 }
 
                 Status.MESSAGE -> {
-                    showLoading(false)
                     showError(0, it.message)
                 }
 
-                Status.LOADING -> {
-                    showLoading(false)
-                }
-
                 else -> {
-                    showLoading(false)
+                   //NOOP
                 }
             }
         }

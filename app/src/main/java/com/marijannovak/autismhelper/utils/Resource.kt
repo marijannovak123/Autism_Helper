@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.utils
 
 import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.common.enums.Status
+import com.marijannovak.autismhelper.data.models.ChildScore
 
 class Resource<out T>(val status: Status, val data: T?, val message: String?) {
 
@@ -43,8 +44,8 @@ class Resource<out T>(val status: Status, val data: T?, val message: String?) {
             return Resource(Status.SIGNEDUP, data, null)
         }
 
-        fun <T> saved(): Resource<T> {
-            return Resource(Status.SAVED, null, null)
+        fun <T> saved(saveable: T): Resource<T> {
+            return Resource(Status.SAVED, saveable, null)
         }
     }
 }

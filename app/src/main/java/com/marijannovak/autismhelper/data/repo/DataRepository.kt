@@ -150,6 +150,7 @@ class DataRepository @Inject constructor(
     }
 
     fun downloadImage(pos: Int) {
+        Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
         val question = questionsWithImgs[pos]
         val ref = storage.child(question.extraData!!)
         val file = File.createTempFile("img", ".jpg")

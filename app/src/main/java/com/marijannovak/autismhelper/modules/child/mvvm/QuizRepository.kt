@@ -26,16 +26,13 @@ class QuizRepository @Inject constructor(
                 .handleThreading()
     }
 
-    fun saveScoreToDb(score: ChildScore): Pair<Completable, ChildScore> {
+    fun saveScoreLocallyAndOnline(score: ChildScore): Completable {
         val scoreToSave = score.copy(id = score.hashCode())
-        val completable =  Completable.fromAction {
-            childScoreDao.insert(scoreToSave)
-        }.handleThreading()
-
-        return Pair(completable, scoreToSave)
-    }
-
-    fun saveScoreToFirebase(score: ChildScore): Completable {
-        return api.putScore(score.parentId, score.id, score).handleThreading()
+        return api.putScore(score.parentId, score.id, score)
+                .andThen {
+                    Completable.fromAction {
+                        childScoreDao.insert(scoreToSave)
+                    }
+                }.handleThreading()
     }
 }

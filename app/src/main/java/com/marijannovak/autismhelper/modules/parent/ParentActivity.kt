@@ -107,13 +107,14 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun handleResource(resource: Resource<List<UserChildrenJoin>>?) {
         resource?.let {
+            showLoading(it.status)
             when(it.status) {
                 Status.HOME -> {
                     startActivity(Intent(this@ParentActivity, LoginActivity::class.java))
                     finish()
                 }
                 else -> {
-                    showLoading(false)
+
                 }
             }
         }

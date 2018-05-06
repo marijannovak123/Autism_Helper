@@ -74,5 +74,6 @@
     <string name="save_score">Save score?</string>
     <string name="score_saved">Score saved</string>
     <string name="save_error">Error saving score</string>
+    <string name="no_internet">Internet connection not available. Open network settings?</string>
 
 </resources>

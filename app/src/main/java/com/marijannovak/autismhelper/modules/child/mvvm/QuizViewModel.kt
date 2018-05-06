@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class QuizViewModel @Inject constructor(private val repository: QuizRepository):
-        BaseViewModel<CategoryQuestionsAnswersJoin>() {
+        BaseViewModel<Any>() {
 
     fun loadCategoryData(categoryId: Int) {
         repository.getCategoryData(categoryId).subscribe(object: SingleObserver<CategoryQuestionsAnswersJoin> {
@@ -34,29 +34,9 @@ class QuizViewModel @Inject constructor(private val repository: QuizRepository):
 
     fun saveChildScore(score: ChildScore) {
         resourceLiveData.value = Resource.loading()
-        val pair = repository.saveScoreToDb(score)
-        val completable = pair.first
-        val scoreToSave = pair.second
-        completable.subscribe(object: CompletableObserver {
+        repository.saveScoreLocallyAndOnline(score).subscribe(object: CompletableObserver {
             override fun onComplete() {
-                uploadScoreToFirebase(scoreToSave)
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.save_error)
-            }
-        })
-
-    }
-
-    private fun uploadScoreToFirebase(score: ChildScore) {
-        repository.saveScoreToFirebase(score).subscribe(object: CompletableObserver{
-            override fun onComplete() {
-                resourceLiveData.value = Resource.saved()
+                resourceLiveData.value = Resource.saved(listOf(score))
             }
 
             override fun onSubscribe(d: Disposable?) {

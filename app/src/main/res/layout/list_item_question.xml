@@ -9,6 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvQuestion"
+        android:textAlignment="center"
+        android:textSize="26sp"
+        android:padding="20dp"
         tools:text=" TEST"/>
 
     <ImageView
@@ -16,40 +19,37 @@
         android:layout_height="200dp"
         android:id="@+id/ivExtraImage"
         android:contentDescription="@null"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="30dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            style="@style/style_answer_button"
             android:id="@+id/tvAnswer1"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             tools:text="TEST"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            style="@style/style_answer_button"
             android:id="@+id/tvAnswer2"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             tools:text="TEST"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
             android:id="@+id/tvAnswer3"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            tools:text="TEST"/>
+            tools:text="TEST"
+            style="@style/style_answer_button" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            style="@style/style_answer_button"
             android:id="@+id/tvAnswer4"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"

@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.common.base
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.common.fragments.LoadingDialog
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.createFactory
@@ -37,8 +38,8 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
         }
     }
 
-    protected fun showLoading(visible: Boolean) {
-        if(visible) {
+    protected fun showLoading(status: Status) {
+        if(status == Status.LOADING) {
             pbLoading = pbLoading ?: LoadingDialog()
             pbLoading!!.show(supportFragmentManager, "")
         }
