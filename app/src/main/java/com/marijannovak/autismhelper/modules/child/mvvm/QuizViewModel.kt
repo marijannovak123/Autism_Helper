@@ -14,38 +14,21 @@ class QuizViewModel @Inject constructor(private val repository: QuizRepository):
         BaseViewModel<Any>() {
 
     fun loadCategoryData(categoryId: Int) {
-        repository.getCategoryData(categoryId).subscribe(object: SingleObserver<CategoryQuestionsAnswersJoin> {
-            override fun onSuccess(category: CategoryQuestionsAnswersJoin?) {
-                category?.let {
-                    resourceLiveData.value = Resource.success(listOf(it))
-                }
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.category_load_fail)
-            }
-
-        })
+        compositeDisposable.add(
+                repository.getCategoryData(categoryId).subscribe(
+                        {category -> resourceLiveData.value = Resource.success(listOf(category))},
+                        {error -> resourceLiveData.value = Resource.message(R.string.category_load_fail)}
+                )
+        )
     }
 
     fun saveChildScore(score: ChildScore) {
         resourceLiveData.value = Resource.loading()
-        repository.saveScoreLocallyAndOnline(score).subscribe(object: CompletableObserver {
-            override fun onComplete() {
-                resourceLiveData.value = Resource.saved(listOf(score))
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.save_error)
-            }
-        })
+        compositeDisposable.add(
+                repository.saveScoreLocallyAndOnline(score).subscribe(
+                        { resourceLiveData.value = Resource.saved(listOf(score)) },
+                        { resourceLiveData.value = Resource.message(R.string.save_error) }
+                )
+        )
     }
 }

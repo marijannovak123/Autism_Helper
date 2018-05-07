@@ -5,6 +5,7 @@ import com.marijannovak.autismhelper.common.base.BaseDao
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.data.models.Category
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -14,11 +15,11 @@ import io.reactivex.Single
 interface CategoryDao: BaseDao<Category> {
 
     @Query("SELECT * FROM $TABLE_CATEGORIES")
-    fun getCategories() : Single<List<Category>>
+    fun getCategories() : Flowable<List<Category>>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_CATEGORIES WHERE id = :id")
-    fun getCategoryWithQuestions(id : Int) : Single<CategoryQuestionsAnswersJoin>
+    fun getCategoryWithQuestions(id : Int) : Flowable<CategoryQuestionsAnswersJoin>
 
     @Query("SELECT COUNT(*) FROM $TABLE_CATEGORIES")
     fun getCategoryCount() : Int

@@ -1,6 +1,8 @@
 package com.marijannovak.autismhelper.modules.parent.fragments
 
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -9,11 +11,15 @@ import android.view.ViewGroup
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.data.models.Child
+import com.marijannovak.autismhelper.data.models.ChildScore
+import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
+import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_child_details.*
 
 class ChildDetailsFragment : BaseFragment() {
 
     private var child: Child? = null
+    private lateinit var parentViewModel: ParentViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -25,10 +31,23 @@ class ChildDetailsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        activity?.let {
+            parentViewModel = ViewModelProviders.of(it).get(ParentViewModel::class.java)
+            parentViewModel.childScoreLiveData.observe(this,
+                    Observer {
+                        setUpScoresAdapter(it)
+                    })
+        }
         child?.let {
             (activity as AppCompatActivity).supportActionBar?.title = it.name
             tvChildName.text = it.name
+            parentViewModel.loadChildScores(it.id)
+        }
+    }
+
+    private fun setUpScoresAdapter(it: Resource<List<ChildScore>>?) {
+        it?.let {
+
         }
     }
 
@@ -44,7 +63,4 @@ class ChildDetailsFragment : BaseFragment() {
             }
         }
     }
-
-
-
 }

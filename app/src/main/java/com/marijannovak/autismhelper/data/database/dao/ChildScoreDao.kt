@@ -11,8 +11,8 @@ import io.reactivex.Single
 @Dao
 interface ChildScoreDao: BaseDao<ChildScore> {
 
-    @Query("SELECT * FROM $TABLE_CHILD_SCORES")
-    fun getChildScores() : Flowable<List<ChildScore>>
+    @Query("SELECT * FROM $TABLE_CHILD_SCORES WHERE childId = :childId")
+    fun getChildScores(childId: String) : Flowable<List<ChildScore>>
 
     @Query("SELECT * FROM $TABLE_CHILD_SCORES WHERE id = :id")
     fun getChildScoreById(id : Int) : Flowable<ChildScore>

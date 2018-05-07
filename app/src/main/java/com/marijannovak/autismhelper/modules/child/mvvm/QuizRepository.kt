@@ -7,6 +7,7 @@ import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -20,7 +21,7 @@ class QuizRepository @Inject constructor(
         private val api: API
 ) {
 
-    fun getCategoryData(categoryId: Int): Single<CategoryQuestionsAnswersJoin> {
+    fun getCategoryData(categoryId: Int): Flowable<CategoryQuestionsAnswersJoin> {
         return categoryDao
                 .getCategoryWithQuestions(categoryId)
                 .handleThreading()

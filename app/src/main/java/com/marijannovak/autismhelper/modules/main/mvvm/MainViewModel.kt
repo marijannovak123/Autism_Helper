@@ -4,8 +4,6 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.utils.Resource
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 /**
@@ -15,19 +13,13 @@ class MainViewModel @Inject constructor(private val repository : MainRepository)
     : BaseViewModel<Child>() {
 
     fun getChildrenToPick() {
-        repository.getChildren().subscribe(object: SingleObserver<List<Child>> {
-            override fun onSuccess(children: List<Child>?) {
-                resourceLiveData.value = Resource.success(children)
-            }
+        compositeDisposable.add(
+                repository.getChildren().subscribe(
+                        { children -> resourceLiveData.value = Resource.success(children)},
+                        { resourceLiveData.value = Resource.message(R.string.children_load_fail) }
+                )
+        )
 
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.children_load_fail)
-            }
-        })
     }
 
 }

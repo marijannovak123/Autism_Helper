@@ -13,21 +13,12 @@ class ChildViewModel @Inject constructor(private val repository: ChildRepository
 
     fun loadCategories() {
         resourceLiveData.value = Resource.loading()
-        repository.loadCategories().subscribe(object: SingleObserver<List<Category>> {
-            override fun onSuccess(categories: List<Category>?) {
-                resourceLiveData.value = Resource.success(categories)
-            }
-
-            override fun onSubscribe(d: Disposable?) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.data_load_error)
-            }
-
-        })
-
+        compositeDisposable.add(
+                repository.loadCategories().subscribe(
+                        {categories -> resourceLiveData.value = Resource.success(categories) },
+                        {error -> resourceLiveData.value = Resource.message(R.string.data_load_error) }
+                )
+        )
     }
 
 }

@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.child
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewPager
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -18,10 +19,10 @@ import com.marijannovak.autismhelper.modules.child.mvvm.QuizViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_quiz.*
+import org.jetbrains.anko.support.v4.onPageChangeListener
 import org.jetbrains.anko.toast
 
 class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
-
     private var quizAdapter: QuizPagerAdapter? = null
     private var child: Child? = null
     private var startTime: Long = System.currentTimeMillis()
@@ -33,7 +34,6 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
 
         if(intent.hasExtra(EXTRA_CATEGORY_ID)) {
             val categoryId = intent.getIntExtra(EXTRA_CATEGORY_ID, -1)
-
             if(categoryId != -1) {
                 viewModel.loadCategoryData(categoryId)
             }
@@ -81,6 +81,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
 
     private fun setUpQuestionsPager(questionsWithAnswers: List<QuestionAnswersJoin>) {
         if(quizAdapter == null) {
+            supportActionBar?.title = "${getString(R.string.question)} 1"
             startTime = System.currentTimeMillis()
             quizAdapter = QuizPagerAdapter(this, emptyList(),
                     onItemClick = {
@@ -90,6 +91,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
 
                             if(max - 1 > currentPos ) {
                                 vpQuestions.currentItem = currentPos + 1
+                                supportActionBar?.title = "${getString(R.string.question)} ${vpQuestions.currentItem}"
                             } else {
                                 toast("Quiz finished")
                                 val timestamp = System.currentTimeMillis()

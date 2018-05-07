@@ -58,10 +58,6 @@ class QuizPagerAdapter(
         return view
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return "${context.getString(R.string.question)} ${position + 1}"
-    }
-
     override fun getCount() = questionsWithAnswers.size
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -74,5 +70,4 @@ class QuizPagerAdapter(
     }
 
     fun dataSetSize() = count
-
 }

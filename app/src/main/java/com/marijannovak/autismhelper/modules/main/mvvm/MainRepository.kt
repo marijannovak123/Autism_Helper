@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.main.mvvm
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.utils.handleThreading
+import io.reactivex.Flowable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -11,10 +12,10 @@ import javax.inject.Inject
  */
 class MainRepository @Inject constructor(private val childDao: ChildDao){
 
-    fun getChildren(): Single<List<Child>> {
+    fun getChildren(): Flowable<List<Child>> {
        return childDao
                .getChildren()
-                .handleThreading()
+               .handleThreading()
     }
 
 
