@@ -13,6 +13,8 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.text.DateFormat
+import java.util.*
 
 
 fun FirebaseUser.mapToUser(singupRequest: SignupRequest)
@@ -36,6 +38,9 @@ inline fun <reified T: Any> T.logTag(): String {
     return T::class.java.simpleName
 }
 
+/**
+ * use threads fo RxJava
+ */
 fun <T> Single<T>.handleThreading() : Single<T> {
     return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
@@ -50,4 +55,10 @@ fun <T> Flowable<T>.handleThreading(): Flowable<T> {
 
 fun <T> Maybe<T>.handleThreading(): Maybe<T> {
     return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+}
+
+fun Long.toDateString(): String {
+    val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
+    val date = Date(this)
+    return dateFormat.format(date)
 }

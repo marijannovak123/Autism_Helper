@@ -1,22 +1,18 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
 import android.arch.lifecycle.MutableLiveData
+import com.github.mikephil.charting.data.LineData
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.Child
-import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.utils.Resource
-import io.reactivex.CompletableObserver
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
-import org.reactivestreams.Subscriber
 import javax.inject.Inject
 
 class ParentViewModel @Inject constructor(private val repository: ParentRepository)
     : BaseViewModel<UserChildrenJoin>() {
 
-    var childScoreLiveData = MutableLiveData<Resource<List<ChildScore>>>()
+    var chartLiveData = MutableLiveData<Resource<List<LineData>>>()
 
     fun loadUserWithChildren() {
         compositeDisposable.add(
@@ -39,11 +35,11 @@ class ParentViewModel @Inject constructor(private val repository: ParentReposito
     }
 
     fun loadChildScores(childId: String) {
-        childScoreLiveData.value = Resource.loading()
+        chartLiveData.value = Resource.loading()
         compositeDisposable.add(
-                repository.loadChildScores(childId).subscribe(
-                        { childScoreLiveData.value = Resource.success(it)},
-                        { childScoreLiveData.value = Resource.message(R.string.load_error)}
+                repository.loadChildScoresLineData(childId).subscribe(
+                        { chartLiveData.value = Resource.success(listOf(it))},
+                        { chartLiveData.value = Resource.message(R.string.load_error)}
                 )
         )
     }

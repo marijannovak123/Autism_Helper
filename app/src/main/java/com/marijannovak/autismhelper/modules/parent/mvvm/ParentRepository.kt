@@ -1,5 +1,8 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.models.Child
@@ -24,9 +27,22 @@ class ParentRepository @Inject constructor(
         ).handleThreading()
     }
 
-    fun loadChildScores(childId: String): Flowable<List<ChildScore>> {
+    fun loadChildScoresLineData(childId: String): Flowable<LineData> {
         return childScoreDao
                 .getChildScores(childId)
+                .map {
+                   createLineData(it)
+                }
                 .handleThreading()
     }
+
+    private fun createLineData(scores: List<ChildScore>): LineData {
+        var entries: List<Entry> = emptyList()
+        for(i in 0 until scores.size) {
+            entries += Entry(scores[i].timestamp.toFloat(), scores[i].duration/1000f)
+        }
+        val lineDataSet = LineDataSet(entries, "Seconds")
+        return LineData(lineDataSet)
+    }
 }
+

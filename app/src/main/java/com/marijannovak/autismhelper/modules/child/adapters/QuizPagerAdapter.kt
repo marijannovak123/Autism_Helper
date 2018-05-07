@@ -69,5 +69,9 @@ class QuizPagerAdapter(
         notifyDataSetChanged()
     }
 
+    override fun destroyItem(container: View, position: Int, `object`: Any) {
+        (container as ViewGroup).removeView(`object` as View)
+    }
+
     fun dataSetSize() = count
 }
