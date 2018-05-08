@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
@@ -13,7 +14,6 @@ import com.marijannovak.autismhelper.utils.logTag
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import org.jetbrains.anko.doAsync
 import java.io.File
@@ -54,7 +54,6 @@ class DataRepository @Inject constructor(
 
     fun logOut(): Completable {
         auth.signOut()
-        //sharedPrefs.setLoggedIn(false)
         sharedPrefs.setParentPassword("")
         return Completable.fromAction {
             doAsync {
@@ -71,11 +70,19 @@ class DataRepository @Inject constructor(
         db.categoriesDao().deleteTable()
     }
 
-    //todo: to user model
     fun getParentPassword(): String = sharedPrefs.getParentPassword()
 
-    fun saveParentPassword(password: String) {
+    fun saveParentPassword(password: String): Completable {
         sharedPrefs.setParentPassword(password)
+
+        return db.userDao().getCurrentUser().flatMapCompletable { user ->
+            Completable.mergeArray(
+                    api.updateParentPassword(user.id, ParentPasswordRequest(password)),
+                    Completable.fromAction {
+                        db.userDao().insert(user)
+                    }
+            )
+        }.handleThreading()
     }
 
     fun loadUserAndChildren(): Flowable<UserChildrenJoin> {

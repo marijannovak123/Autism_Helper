@@ -22,7 +22,10 @@ interface UserDao: BaseDao<User> {
     fun getUserWithChildren() : Flowable<UserChildrenJoin>
 
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getUser(): Maybe<User>
+    fun userLoggedIn(): Maybe<User>
+
+    @Query("SELECT * FROM $TABLE_USER limit 1")
+    fun getCurrentUser(): Single<User>
 
     @Query("DELETE FROM $TABLE_USER")
     fun deleteTable()

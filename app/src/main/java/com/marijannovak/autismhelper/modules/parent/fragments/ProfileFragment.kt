@@ -15,4 +15,5 @@ class ProfileFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
+    //TODO: UPDATE CHILDREN DATA, UPDATE PASSWORDS, INFO ETC.
 }

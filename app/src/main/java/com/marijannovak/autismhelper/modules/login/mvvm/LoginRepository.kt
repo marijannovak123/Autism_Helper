@@ -18,7 +18,6 @@ import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
 /**
@@ -29,12 +28,13 @@ class LoginRepository @Inject constructor(
         private val userDao: UserDao,
         private val childDao: ChildDao,
         private val childScoreDao: ChildScoreDao,
-        private val api: API) {
+        private val api: API,
+        private val prefs: PrefsHelper) {
 
     private var currentUser : FirebaseUser? = null
 
     fun isLoggedIn(): Maybe<User> {
-        return userDao.getUser().handleThreading()
+        return userDao.userLoggedIn().handleThreading()
     }
 
     fun register(signupRequest: SignupRequest, listener : GeneralListener<FirebaseUser>) {
@@ -108,10 +108,10 @@ class LoginRepository @Inject constructor(
     }
 
     fun uploadAndSaveUser(user: User): Completable {
-        return api
-                .putUser(user.id, user)
-                .andThen{saveUser(user)}
-                .handleThreading()
+        return Completable.mergeArray(
+                api.putUser(user.id, user),
+                saveUser(user)
+        ).handleThreading()
     }
 
     private fun saveUser(user: User): Completable {
@@ -123,6 +123,7 @@ class LoginRepository @Inject constructor(
            user.childScores?.let {
                childScoreDao.insertMultiple(it)
            }
+           prefs.setParentPassword(user.parentPassword ?: "")
        }
     }
 

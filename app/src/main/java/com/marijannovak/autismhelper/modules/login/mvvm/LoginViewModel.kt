@@ -110,6 +110,7 @@ class LoginViewModel @Inject constructor (
     }
 
     fun saveUserOnlineAndLocally(user: User) {
+        resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.uploadAndSaveUser(user).subscribe(
                         { syncData() },
@@ -122,7 +123,7 @@ class LoginViewModel @Inject constructor (
         compositeDisposable.add(
                 dataRepository.syncData().subscribe(
                         { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) }},
-                        { resourceLiveData.value = Resource.message(R.string.sync_error) }
+                        { it -> resourceLiveData.value = Resource.message(R.string.sync_error) }
                 )
         )
     }

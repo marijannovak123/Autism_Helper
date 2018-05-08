@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
-import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -52,11 +51,18 @@ open class BaseViewModel<T> : ViewModel() {
         })
     }
 
-    //todo: to firebase!
     fun getParentPassword() = dataRepository.getParentPassword()
 
     fun saveParentPassword(password: String) {
-        dataRepository.saveParentPassword(password)
+        dataRepository.saveParentPassword(password).subscribe(
+                { resourceLiveData.value = Resource.next() },
+                { resourceLiveData.value = Resource.message(R.string.save_error) }
+        )
+    }
+
+    //todo: parse all errrors from viewmodels to show at least close estimation of cause
+    fun parseThrowable(t: Throwable?): String {
+        return ""
     }
 
 }

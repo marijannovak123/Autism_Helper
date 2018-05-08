@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.marijannovak.autismhelper.R
 
 class LoadingDialog : DialogFragment() {
-
+    //TODO: ADD WHAT'S HAPPENING
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.TransparentDialog)

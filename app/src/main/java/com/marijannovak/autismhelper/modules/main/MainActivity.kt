@@ -40,18 +40,19 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
     }
 
     private fun enterPasswordDialog() {
-        val listener : (String) -> Unit = { password ->
-            if(viewModel.getParentPassword() == "") {
+        DialogHelper.showEnterParentPasswordDialog(this, viewModel.getParentPassword(), { password ->
+            if (viewModel.getParentPassword() == "") {
                 viewModel.saveParentPassword(password)
-            }
-            if (password == viewModel.getParentPassword()) {
-                startActivity(Intent(baseContext, ParentActivity::class.java))
             } else {
-                showError(R.string.error_incorrect_password, null)
-                enterPasswordDialog()
-            } }
-
-        DialogHelper.showEnterParentPasswordDialog(this, viewModel.getParentPassword(), listener)
+                if (password == viewModel.getParentPassword()) {
+                    startActivity(Intent(this@MainActivity, ParentActivity::class.java))
+                    finish()
+                } else {
+                    showError(R.string.error_incorrect_password, null)
+                    enterPasswordDialog()
+                }
+            }
+        })
     }
 
     override fun subscribeToData() {
@@ -64,6 +65,11 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
             when(it.status) {
                 Status.SUCCESS -> {
                     pickChildDialog(it.data)
+                }
+
+                Status.NEXT -> {
+                    startActivity(Intent(baseContext, ParentActivity::class.java))
+                    finish()
                 }
 
                 Status.HOME -> {

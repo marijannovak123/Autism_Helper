@@ -17,8 +17,7 @@ import java.text.DateFormat
 import java.util.*
 
 
-fun FirebaseUser.mapToUser(singupRequest: SignupRequest)
-        = User(singupRequest.username, this.uid, singupRequest.email, "", emptyList(), emptyList())
+fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", emptyList(), emptyList())
 
 fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyList(), emptyList())
 

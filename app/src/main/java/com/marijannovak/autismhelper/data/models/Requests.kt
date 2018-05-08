@@ -7,3 +7,7 @@ data class SignupRequest(
         var username: String,
         var password: String
 ) : Serializable
+
+data class ParentPasswordRequest(
+        var parentPassword: String
+)
