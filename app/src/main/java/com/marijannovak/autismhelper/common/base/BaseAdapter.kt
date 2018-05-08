@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
 abstract class BaseAdapter<VH: BaseViewHolder<T>, T> (
-        private var dataSet: List<T>,
+        private var dataSet: MutableList<T>,
         private var onItemClick: (T) -> Unit )
     : RecyclerView.Adapter<VH>() {
 
@@ -19,8 +19,18 @@ abstract class BaseAdapter<VH: BaseViewHolder<T>, T> (
     }
 
     fun update(dataSet: List<T>) {
-        this.dataSet = dataSet
-        notifyDataSetChanged()
+        this.dataSet = dataSet.toMutableList()
+        this.notifyDataSetChanged()
+    }
+
+    fun deleteItem(model: T) {
+        this.dataSet.remove(model)
+        this.notifyDataSetChanged()
+    }
+
+    fun addItem(model: T) {
+        this.dataSet.add(model)
+        this.notifyDataSetChanged()
     }
 
     protected abstract fun createHolder(parent: ViewGroup): VH

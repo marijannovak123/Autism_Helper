@@ -56,4 +56,9 @@ class DbModule {
         return db.answerDao()
     }
 
+    @Singleton
+    @Provides
+    fun provideAacDao(db: AppDatabase): AACDao {
+        return db.aacDao()
+    }
 }

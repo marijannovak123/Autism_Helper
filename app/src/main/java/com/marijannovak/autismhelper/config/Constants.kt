@@ -26,6 +26,7 @@ class Constants {
         const val TABLE_CATEGORIES = "categories"
         const val TABLE_CHILDREN = "children"
         const val TABLE_ANSWERS = "answers"
+        const val TABLE_AAC = "aac"
         //endregion
 
         //region validation

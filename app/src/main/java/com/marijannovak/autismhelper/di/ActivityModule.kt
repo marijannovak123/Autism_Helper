@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.di
 
+import com.marijannovak.autismhelper.modules.child.AACActivity
 import com.marijannovak.autismhelper.modules.child.PickCategoryActivity
 import com.marijannovak.autismhelper.modules.child.QuizActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
@@ -29,5 +30,8 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     internal abstract fun provideQuizActivity(): QuizActivity
+
+    @ContributesAndroidInjector
+    internal abstract fun provideAacActivity(): AACActivity
 
 }

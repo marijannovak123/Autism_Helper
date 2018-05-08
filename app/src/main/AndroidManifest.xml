@@ -40,7 +40,8 @@
             android:name=".modules.login.SignUpActivity"
             android:label="@string/sign_up" />
         <activity android:name=".modules.child.QuizActivity" />
-        <activity android:name=".modules.child.QuizFinishedActivity"></activity>
+        <activity android:name=".modules.child.QuizFinishedActivity" />
+        <activity android:name=".modules.child.AACActivity"></activity>
     </application>
 
 </manifest>

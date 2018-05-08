@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ParentViewModel @Inject constructor(private val repository: ParentRepository)
     : BaseViewModel<UserChildrenJoin>() {
 
-    var chartLiveData = MutableLiveData<Resource<List<LineData>>>()
+    var chartLiveData = MutableLiveData<Resource<List<ParentRepository.ChartData>>>()
 
     fun loadUserWithChildren() {
         compositeDisposable.add(

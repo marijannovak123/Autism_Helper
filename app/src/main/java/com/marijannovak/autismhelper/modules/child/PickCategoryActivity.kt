@@ -30,6 +30,11 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
         if(intent.hasExtra(EXTRA_CHILD)) {
             child = intent.getSerializableExtra(EXTRA_CHILD) as Child
         }
+
+        btnAac.setOnClickListener {
+            startActivity(Intent(this, AACActivity::class.java))
+            finish()
+        }
     }
 
     override fun subscribeToData() {

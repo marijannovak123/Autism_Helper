@@ -29,7 +29,6 @@ class DialogHelper {
             }.show()
         }
 
-        //set date from picker into edittext and date passed to the method
         @SuppressLint("SetTextI18n")
         fun showDatePicker(context: Context, date: Calendar, etDate: EditText) {
             val onDateSet = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
@@ -152,7 +151,6 @@ class DialogHelper {
             alertDialog.show()
         }
 
-
         private fun handleChildAddErrors(errors: HashMap<String, String>, etName: EditText, etDateOfBirth: EditText) {
             if (errors.isEmpty()) {
                 etName.error = null
@@ -199,7 +197,5 @@ class DialogHelper {
 
             alertDialog.show()
         }
-
-
     }
 }

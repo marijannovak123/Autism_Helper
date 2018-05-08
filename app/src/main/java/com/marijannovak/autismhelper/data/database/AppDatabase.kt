@@ -10,8 +10,8 @@ import com.marijannovak.autismhelper.data.models.*
  */
 
 @Database(entities = [(User::class), (Child::class), (ChildScore::class),
-                      (Question::class), (Answer::class), (Category::class)],
-        version = 5, exportSchema = false)
+                      (Question::class), (Answer::class), (Category::class), (AacPhrase::class)],
+        version = 7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -20,4 +20,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun questionDao(): QuestionDao
     abstract fun answerDao(): AnswerDao
     abstract fun categoriesDao(): CategoryDao
+    abstract fun aacDao(): AACDao
 }

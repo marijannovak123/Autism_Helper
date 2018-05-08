@@ -2,12 +2,9 @@ package com.marijannovak.autismhelper.modules.child.mvvm
 
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
-import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.ChildScore
+import com.marijannovak.autismhelper.modules.child.mvvm.repo.QuizRepository
 import com.marijannovak.autismhelper.utils.Resource
-import io.reactivex.CompletableObserver
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class QuizViewModel @Inject constructor(private val repository: QuizRepository):

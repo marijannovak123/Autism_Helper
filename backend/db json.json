@@ -133,6 +133,14 @@
                 "id" : 2,
                 "name" : "Guess emotion"
             }
+        ],
+
+        "phrases": 
+        [
+            {
+                "name": "test",
+                "iconPath": "aac_test.jpg"
+            }
         ]
     }
 }

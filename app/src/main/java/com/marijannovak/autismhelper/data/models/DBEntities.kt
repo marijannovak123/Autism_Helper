@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.data.models
 
 import android.arch.persistence.room.*
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_AAC
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILDREN
@@ -88,6 +89,16 @@ data class Answer (
         var questionId: Int
 ) {
     constructor(): this(0, "", false, 0)
+}
+
+@Entity(tableName = TABLE_AAC)
+data class AacPhrase(
+        @PrimaryKey
+        var id: Int,
+        var name: String,
+        var iconPath: String
+) {
+    constructor(): this(0, "", "")
 }
 
 class UserChildrenJoin: Serializable {

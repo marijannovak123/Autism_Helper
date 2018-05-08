@@ -21,7 +21,7 @@ import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_children.*
 
 class ChildrenFragment : BaseFragment() {
-
+//todo: design, add more details
     private lateinit var parentViewModel: ParentViewModel
     private var adapter: ChildrenAdapter? = null
     private var userWithChildren: UserChildrenJoin? = null

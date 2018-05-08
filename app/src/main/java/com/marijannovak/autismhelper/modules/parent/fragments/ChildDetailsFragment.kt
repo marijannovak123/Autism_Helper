@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.mikephil.charting.data.ChartData
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.marijannovak.autismhelper.R
@@ -16,6 +17,7 @@ import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
+import com.marijannovak.autismhelper.modules.parent.mvvm.ParentRepository
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.toDateString
@@ -47,14 +49,17 @@ class ChildDetailsFragment : BaseFragment() {
             (activity as AppCompatActivity).supportActionBar?.title = it.name
             parentViewModel.loadChildScores(it.id)
         }
+
     }
 
-    private fun handleResource(it: Resource<List<LineData>>?) {
+    private fun handleResource(it: Resource<List<ParentRepository.ChartData>>?) {
         it?.let {
             (activity as ParentActivity).showLoading(it.status)
             when(it.status) {
                 Status.SUCCESS -> {
-                    setupChartData(it.data!![0])
+                    it.data?.let {
+                        setupChartData(it[0])
+                    }
                 }
 
                 else -> {
@@ -63,14 +68,29 @@ class ChildDetailsFragment : BaseFragment() {
             }
         }
     }
+//todo: coloring, style..
+    private fun setupChartData(chartData: ParentRepository.ChartData) {
+        if(lcTimeScores.data == null && bcMistakes.data == null) {
+            val dateFormatter = IAxisValueFormatter { value, _ ->
+                chartData.dates[value.toInt()]
+            }
 
-    private fun setupChartData(lineData: LineData) {
-        lcTimeScores.data = lineData
-        val xAxis = lcTimeScores.xAxis
-        xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
-             value.toLong().toDateString()
+            lcTimeScores.xAxis.valueFormatter = dateFormatter
+            lcTimeScores.description.isEnabled = false
+
+
+            bcMistakes.xAxis.valueFormatter = dateFormatter
+            bcMistakes.description.isEnabled = false
+
         }
-        lcTimeScores.invalidate()
+
+        if(chartData.lineData.entryCount > 0 && chartData.barData.entryCount > 0) {
+            lcTimeScores.data = chartData.lineData
+            lcTimeScores.invalidate()
+
+            bcMistakes.data = chartData.barData
+            bcMistakes.invalidate()
+        }
     }
 
     private fun showBiggerChart(childScore: ChildScore) {

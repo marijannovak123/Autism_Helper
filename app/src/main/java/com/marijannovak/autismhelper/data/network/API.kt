@@ -11,16 +11,19 @@ import retrofit2.http.*
 interface API {
 
     @GET("questions.json")
-    fun getQuestions() : Single<List<Question>>
+    fun getQuestions(): Single<List<Question>>
 
     @GET("categories.json")
-    fun getCategories() : Single<List<Category>>
+    fun getCategories(): Single<List<Category>>
+
+    @GET("phrases.json")
+    fun getPhrases(): Single<List<AacPhrase>>
 
     @GET("users/{userId}.json")
-    fun getUser(@Path("userId") userId : String) : Single<User>
+    fun getUser(@Path("userId") userId : String): Single<User>
 
     @PUT("users/{userId}.json")
-    fun putUser(@Path("userId") userId : String, @Body user : User) : Completable
+    fun putUser(@Path("userId") userId : String, @Body user : User): Completable
 
     @PUT("users/{userId}/child_scores/{scoreId}.json")
     fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Completable

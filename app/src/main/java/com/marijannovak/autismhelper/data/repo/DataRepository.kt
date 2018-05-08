@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
@@ -30,7 +31,8 @@ class DataRepository @Inject constructor(
         private val sharedPrefs: PrefsHelper) {
 
     private var questionsWithImgs: List<Question> = ArrayList()
-    private lateinit var onImgsDownloaded: () -> Unit
+    private var phrases: List<AacPhrase> = ArrayList()
+    private lateinit var onDataDownloaded: () -> Unit
 
     fun syncData(): Completable {
         return Completable.mergeArray(
@@ -48,6 +50,11 @@ class DataRepository @Inject constructor(
                                     questionsWithImgs += question
                                 }
                             }
+                        }.toCompletable(),
+                api.getPhrases()
+                        .doOnSuccess {
+                            phrases = it
+                            db.aacDao().insertMultiple(it)
                         }.toCompletable()
         ).handleThreading()
     }
@@ -92,11 +99,11 @@ class DataRepository @Inject constructor(
     }
 
     fun downloadImages(onComplete: () -> Unit) {
-        this.onImgsDownloaded = onComplete
-        downloadImage(0)
+        this.onDataDownloaded = onComplete
+        downloadQuestionImage(0)
     }
 
-    fun downloadImage(pos: Int) {
+    fun downloadQuestionImage(pos: Int) {
         Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
         val question = questionsWithImgs[pos]
         val ref = storage.child(question.extraData!!)
@@ -104,27 +111,56 @@ class DataRepository @Inject constructor(
 
         ref.getFile(file)
                 .addOnSuccessListener {
-                    updateQuestionImgPath(question, file.absolutePath).subscribe( object: CompletableObserver {
-                        override fun onComplete() {
-                            if(pos == questionsWithImgs.size-1) {
-                                onImgsDownloaded()
-                            } else {
-                                downloadImage(pos+1)
+                    updateQuestionImgPath(question, file.absolutePath).subscribe(
+                            {
+                                if(pos == questionsWithImgs.size-1) {
+                                    downloadPhraseImage(0)
+                                    // onDataDownloaded()
+                                } else {
+                                    downloadQuestionImage(pos+1)
+                                }
+                            },
+                            {
+                                Log.e(logTag(), "FAIL ${question.extraData!!}")
                             }
-                        }
-
-                        override fun onSubscribe(d: Disposable?) {
-                            //
-                        }
-
-                        override fun onError(e: Throwable?) {
-                            Log.e(logTag(), "FAIL ${question.extraData!!}")
-                        }
-                    })
-                }
+                    )}
                 .addOnFailureListener {
-                    Log.e(logTag(), "FAIL ${questionsWithImgs[pos].extraData!!}")
+                    Log.e(logTag(), "FAIL ${question.extraData!!}")
+               }
+    }
+
+    private fun downloadPhraseImage(pos: Int) {
+        val phrase = phrases[pos]
+        val ref = storage.child(phrase.iconPath)
+        val file = File.createTempFile("img", ".jpg")
+
+        ref.getFile(file)
+                .addOnSuccessListener {
+                    updatePhraseImgPath(phrase, file.absolutePath).subscribe(
+                            {
+                                if(pos == phrases.size -1) {
+                                    onDataDownloaded()
+                                } else {
+                                    downloadPhraseImage(pos + 1)
+                                }
+                            },
+                            {
+                                Log.e(logTag(), "FAIL ${phrase.iconPath}")
+                            }
+                    )
                 }
+                .addOnFailureListener{
+                    Log.e(logTag(), "FAIL ${phrase.iconPath}")
+                }
+    }
+
+    private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String): Completable {
+        phrase.iconPath = absolutePath
+        return Completable.fromAction {
+            doAsync {
+                db.aacDao().insert(phrase)
+            }
+        }
     }
 
     private fun updateQuestionImgPath(question: Question, path: String): Completable {

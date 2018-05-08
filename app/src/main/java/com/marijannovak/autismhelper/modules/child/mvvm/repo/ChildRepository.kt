@@ -1,4 +1,4 @@
-package com.marijannovak.autismhelper.modules.child.mvvm
+package com.marijannovak.autismhelper.modules.child.mvvm.repo
 
 import com.marijannovak.autismhelper.data.database.dao.CategoryDao
 import com.marijannovak.autismhelper.data.models.Category

@@ -3,12 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="2"
     tools:context=".modules.parent.fragments.ChildDetailsFragment">
 
     <com.github.mikephil.charting.charts.LineChart
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/lcTimeScores"/>
+        android:id="@+id/lcTimeScores"
+        style="@style/style_chart"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/bcMistakes"
+        style="@style/style_chart"/>
 
 </LinearLayout>
