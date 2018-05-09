@@ -46,6 +46,7 @@ class Constants {
         const val PREFS_NAME = "autism_helper_prefs"
         const val KEY_LOGGED_IN = "logged_in"
         const val KEY_PARENT_PASSWORD= "parent_password"
+        const val KEY_DOWNLOADED_IMAGES = "downloaded_images"
         //endregion
 
         //region firebase storage

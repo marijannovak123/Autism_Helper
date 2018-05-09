@@ -13,4 +13,6 @@ interface AACDao: BaseDao<AacPhrase> {
     @Query("SELECT * FROM $TABLE_AAC")
     fun getAllPhrases(): Flowable<List<AacPhrase>>
 
+    @Query("DELETE FROM $TABLE_AAC")
+    fun deleteTable()
 }

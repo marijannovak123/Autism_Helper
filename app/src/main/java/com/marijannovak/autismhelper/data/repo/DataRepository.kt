@@ -33,6 +33,11 @@ class DataRepository @Inject constructor(
     private var questionsWithImgs: List<Question> = ArrayList()
     private var phrases: List<AacPhrase> = ArrayList()
     private lateinit var onDataDownloaded: () -> Unit
+    private var downloadedImgs: List<String>
+
+    init {
+        downloadedImgs = sharedPrefs.getDownloadedImages()
+    }
 
     fun syncData(): Completable {
         return Completable.mergeArray(
@@ -75,6 +80,8 @@ class DataRepository @Inject constructor(
     private fun deleteDataTables() {
         db.questionDao().deleteTable()
         db.categoriesDao().deleteTable()
+        db.aacDao().deleteTable()
+        db.answerDao().deleteTable()
     }
 
     fun getParentPassword(): String = sharedPrefs.getParentPassword()
@@ -104,54 +111,73 @@ class DataRepository @Inject constructor(
     }
 
     fun downloadQuestionImage(pos: Int) {
-        Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
         val question = questionsWithImgs[pos]
-        val ref = storage.child(question.extraData!!)
-        val file = File.createTempFile("img", ".jpg")
-
-        ref.getFile(file)
-                .addOnSuccessListener {
-                    updateQuestionImgPath(question, file.absolutePath).subscribe(
-                            {
-                                if(pos == questionsWithImgs.size-1) {
-                                    downloadPhraseImage(0)
-                                    // onDataDownloaded()
-                                } else {
-                                    downloadQuestionImage(pos+1)
+        if(!downloadedImgs.contains(question.extraData!!)) {
+            Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
+            val ref = storage.child(question.extraData!!)
+            val file = File.createTempFile("img", ".jpg")
+            ref.getFile(file)
+                    .addOnSuccessListener {
+                        downloadedImgs += question.extraData!!
+                        updateQuestionImgPath(question, file.absolutePath).subscribe(
+                                {
+                                    if(pos == questionsWithImgs.size-1) {
+                                        downloadPhraseImage(0)
+                                        // onDataDownloaded()
+                                    } else {
+                                        downloadQuestionImage(pos+1)
+                                    }
+                                },
+                                {
+                                    Log.e(logTag(), "FAIL ${question.extraData!!}")
                                 }
-                            },
-                            {
-                                Log.e(logTag(), "FAIL ${question.extraData!!}")
-                            }
-                    )}
-                .addOnFailureListener {
-                    Log.e(logTag(), "FAIL ${question.extraData!!}")
-               }
+                        )}
+                    .addOnFailureListener {
+                        Log.e(logTag(), "FAIL ${question.extraData!!}")
+                    }
+        } else {
+            if(pos == questionsWithImgs.size-1) {
+                downloadPhraseImage(0)
+            } else {
+                downloadQuestionImage(pos+1)
+            }
+        }
     }
 
     private fun downloadPhraseImage(pos: Int) {
-        val phrase = phrases[pos]
-        val ref = storage.child(phrase.iconPath)
-        val file = File.createTempFile("img", ".jpg")
-
-        ref.getFile(file)
-                .addOnSuccessListener {
-                    updatePhraseImgPath(phrase, file.absolutePath).subscribe(
-                            {
-                                if(pos == phrases.size -1) {
-                                    onDataDownloaded()
-                                } else {
-                                    downloadPhraseImage(pos + 1)
+    val phrase = phrases[pos]
+        if(!downloadedImgs.contains(phrase.iconPath)) {
+            Log.e(logTag(), "Downloading ${phrases[pos].iconPath}")
+            val ref = storage.child(phrase.iconPath)
+            val file = File.createTempFile("img", ".jpg")
+            ref.getFile(file)
+                    .addOnSuccessListener {
+                        downloadedImgs += phrase.iconPath
+                        updatePhraseImgPath(phrase, file.absolutePath).subscribe(
+                                {
+                                    if(pos == phrases.size -1) {
+                                        sharedPrefs.setDownloadedImages(downloadedImgs)
+                                        onDataDownloaded()
+                                    } else {
+                                        downloadPhraseImage(pos + 1)
+                                    }
+                                },
+                                {
+                                    Log.e(logTag(), "FAIL ${phrase.iconPath}")
                                 }
-                            },
-                            {
-                                Log.e(logTag(), "FAIL ${phrase.iconPath}")
-                            }
-                    )
-                }
-                .addOnFailureListener{
-                    Log.e(logTag(), "FAIL ${phrase.iconPath}")
-                }
+                        )
+                    }
+                    .addOnFailureListener{
+                        Log.e(logTag(), "FAIL ${phrase.iconPath}")
+                    }
+        } else {
+            if(pos == phrases.size -1) {
+                onDataDownloaded()
+            } else {
+                downloadPhraseImage(pos + 1)
+            }
+        }
+
     }
 
     private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String): Completable {

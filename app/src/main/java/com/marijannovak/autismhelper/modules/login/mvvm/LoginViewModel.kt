@@ -92,7 +92,7 @@ class LoginViewModel @Inject constructor (
                             if(it is NoSuchElementException) {
                                 resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                             } else {
-                                resourceLiveData.value = Resource.message(R.string.unknown_error)
+                                throwErrorAndLogOut(R.string.unknown_error)
                             }
                         }
                 )
@@ -103,7 +103,7 @@ class LoginViewModel @Inject constructor (
         compositeDisposable.add(
                 repository.fetchAndSaveUser(userId).subscribe(
                         { syncData() },
-                        { resourceLiveData.value = Resource.message(R.string.fetch_user_error)}
+                        { throwErrorAndLogOut(R.string.fetch_user_error)}
                 )
         )
 
@@ -114,7 +114,7 @@ class LoginViewModel @Inject constructor (
         compositeDisposable.add(
                 repository.uploadAndSaveUser(user).subscribe(
                         { syncData() },
-                        { resourceLiveData.value = Resource.message(R.string.firebase_upload_error) }
+                        { throwErrorAndLogOut(R.string.firebase_upload_error) }
                 )
         )
     }
@@ -123,8 +123,13 @@ class LoginViewModel @Inject constructor (
         compositeDisposable.add(
                 dataRepository.syncData().subscribe(
                         { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) }},
-                        { it -> resourceLiveData.value = Resource.message(R.string.sync_error) }
+                        { throwErrorAndLogOut(R.string.sync_error) }
                 )
         )
+    }
+
+    fun throwErrorAndLogOut(msgRes: Int) {
+        resourceLiveData.value = Resource.message(msgRes)
+        logOut()
     }
 }
