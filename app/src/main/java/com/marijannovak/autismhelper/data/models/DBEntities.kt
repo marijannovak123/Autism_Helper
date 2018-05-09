@@ -24,9 +24,9 @@ data class User (
         @Ignore
         var children: List<Child>?,
         @Ignore
-        var childScores: List<ChildScore>?
+        var childScoresResponse: ChildScoresResponse?
 ) {
-    constructor() : this("", "", "","",  emptyList(), emptyList())
+    constructor() : this("", "", "","",  emptyList(), null)
 }
 
 @Entity(tableName = TABLE_CHILDREN)

@@ -67,13 +67,14 @@
         android:weightSum="2">
 
         <Button
-            android:id="@+id/btnPositive"
-            android:text="@string/confirm"
-            style="@style/style_prompt_button"/>
-        <Button
             android:id="@+id/btnNegative"
-            android:text="@string/cancel"
-            style="@style/style_prompt_button"/>
+            style="@style/style_prompt_button"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/btnPositive"
+            style="@style/style_prompt_button"
+            android:text="@string/confirm" />
 
     </LinearLayout>
 

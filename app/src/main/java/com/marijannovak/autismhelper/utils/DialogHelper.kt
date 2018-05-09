@@ -106,7 +106,7 @@ class DialogHelper {
 
         //todo: test correct data set
         @SuppressLint("InflateParams")
-        fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, showAnotherCheck: Boolean,  confirmListener: (Child, Boolean) -> Unit) {
+        fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, showAnotherCheck: Boolean,  confirmListener: (Child, Boolean) -> Unit, cancel: () -> Unit) {
             val selectedDate: Calendar = Calendar.getInstance()
 
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
@@ -119,6 +119,12 @@ class DialogHelper {
 
             val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
             val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+
+            if(userChildrenNo == 0) {
+                btnNegative.visibility = View.INVISIBLE
+                btnNegative.isEnabled = false
+            }
+
             val etName = alertView.findViewById<EditText>(R.id.etChildName)
             val etDateOfBirth = alertView.findViewById<EditText>(R.id.etChildDateOfBirth)
             val spGender = alertView.findViewById<Spinner>(R.id.spGender)
@@ -146,7 +152,10 @@ class DialogHelper {
                 }
             }
 
-            btnNegative.setOnClickListener { alertDialog.dismiss() }
+            btnNegative.setOnClickListener {
+                cancel()
+                alertDialog.dismiss()
+            }
 
             alertDialog.show()
         }

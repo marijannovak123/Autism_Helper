@@ -70,16 +70,22 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     private fun addChildDialog(user: User?) {
         user?.let {
-            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, true, {
-                child, another ->
-                childrenList+= child
-                if(another) {
-                    addChildDialog(user)
-                } else {
-                    val userWithChildren = user.copy(children = childrenList)
-                    viewModel.saveUserOnlineAndLocally(userWithChildren)
-                }
-            })
+            DialogHelper.showAddChildDialog(this, user.id, childrenList.size, true,
+                    {
+                        child, another ->
+                            childrenList+= child
+                            if(another) {
+                                addChildDialog(user)
+                            } else {
+                                val userWithChildren = user.copy(children = childrenList)
+                                viewModel.saveUserOnlineAndLocally(userWithChildren)
+                            }
+                    },
+                    {
+                        val userWithChildren = user.copy(children = childrenList)
+                        viewModel.saveUserOnlineAndLocally(userWithChildren)
+                    }
+            )
         }
 
     }

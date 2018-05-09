@@ -80,10 +80,10 @@ class ChildrenFragment : BaseFragment() {
             when(it.itemId) {
                 R.id.action_add_child -> {
                     userWithChildren?.let {
-                        DialogHelper.showAddChildDialog(activity as ParentActivity, it.user.id, it.children.size, false, {
-                            child, _ ->
-                                parentViewModel.saveChild(child)
-                        })
+                        DialogHelper.showAddChildDialog(activity as ParentActivity, it.user.id, it.children.size, false,
+                                { child, _ -> parentViewModel.saveChild(child)},
+                                { /*NOOP*/ }
+                        )
                     }
 
                 }

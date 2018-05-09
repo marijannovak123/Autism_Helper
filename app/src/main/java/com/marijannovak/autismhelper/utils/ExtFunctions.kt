@@ -20,9 +20,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", emptyList(), emptyList())
+fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", emptyList(), null)
 
-fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyList(), emptyList())
+fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyList(), null)
 
 /**
  * factory for custom viewmodels with parameters in constructor
