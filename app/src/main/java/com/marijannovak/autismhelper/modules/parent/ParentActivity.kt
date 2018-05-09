@@ -31,7 +31,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
-        loadFragment(DashboardFragment())
+        loadFragment(ProfileFragment())
 
         navView.setNavigationItemSelectedListener {item -> handleNavViewClick(item)  }
     }
@@ -47,10 +47,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.dashboard -> {
-                loadFragment(DashboardFragment())
-            }
-
             R.id.profile -> {
                 loadFragment(ProfileFragment())
             }
@@ -61,6 +57,10 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
             R.id.children -> {
                 loadFragment(ChildrenFragment())
+            }
+
+            R.id.sync -> {
+
             }
 
             R.id.logout -> {

@@ -2,25 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/dashboard"
-            android:title="@string/dashboard" />
-        <item
             android:id="@+id/profile"
-            android:title="@string/profile" />
+            android:title="@string/profile"
+            android:icon="@drawable/ic_account_circle"/>
         <item
             android:id="@+id/settings"
-            android:title="@string/settings" />
+            android:title="@string/settings"
+            android:icon="@drawable/ic_build"/>
         <item
             android:id="@+id/children"
-            android:title="@string/children"/>
+            android:title="@string/children"
+            android:icon="@drawable/ic_child_friendly"/>
     </group>
 
     <group>
         <item
+            android:id="@+id/sync"
+            android:title="@string/sync"
+            android:icon="@drawable/ic_autorenew"/>
+        <item
             android:id="@+id/logout"
-            android:title="@string/logout" />
+            android:title="@string/logout"
+            android:icon="@drawable/ic_exit_to_app"/>
         <item
             android:id="@+id/exit"
-            android:title="@string/exit" />
+            android:title="@string/exit"
+            android:icon="@drawable/ic_close"/>
     </group>
 </menu>
