@@ -5,7 +5,7 @@ import android.view.ViewGroup
 
 abstract class BaseAdapter<VH: BaseViewHolder<T>, T> (
         private var dataSet: MutableList<T>,
-        private var onItemClick: (T) -> Unit )
+        private var onItemClick: (T, Int) -> Unit )
     : RecyclerView.Adapter<VH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -15,7 +15,7 @@ abstract class BaseAdapter<VH: BaseViewHolder<T>, T> (
     override fun getItemCount() = dataSet.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(dataSet[position], onItemClick)
+        holder.bind(dataSet[position], position, onItemClick)
     }
 
     fun update(dataSet: List<T>) {

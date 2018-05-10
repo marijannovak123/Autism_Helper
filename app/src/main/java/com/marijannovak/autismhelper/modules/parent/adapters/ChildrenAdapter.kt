@@ -9,7 +9,7 @@ import com.marijannovak.autismhelper.common.base.BaseViewHolder
 import com.marijannovak.autismhelper.data.models.Child
 import kotlinx.android.synthetic.main.list_item_child.view.*
 
-class ChildrenAdapter(childrenList: List<Child>, onItemClick: (Child) -> Unit)
+class ChildrenAdapter(childrenList: List<Child>, onItemClick: (Child, Int) -> Unit)
         : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), onItemClick) {
 
     override fun createHolder(parent: ViewGroup): ChildrenViewHolder {
@@ -21,11 +21,11 @@ class ChildrenAdapter(childrenList: List<Child>, onItemClick: (Child) -> Unit)
     class ChildrenViewHolder(itemView: View)
         : BaseViewHolder<Child>(itemView) {
 
-        override fun bind(child: Child, onItemClick: (Child) -> Unit) {
+        override fun bind(child: Child, position: Int, onItemClick: (Child, Int) -> Unit) {
             with(itemView) {
                 tvChildName.text = child.name
                 tvChildGender.text = child.gender
-                setOnClickListener { onItemClick(child) }
+                setOnClickListener { onItemClick(child, position) }
             }
         }
 

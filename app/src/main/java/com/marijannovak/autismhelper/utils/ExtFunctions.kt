@@ -74,3 +74,15 @@ fun Long.toDateString(): String {
     val date = Date(this)
     return dateFormat.format(date)
 }
+
+/**
+ * AAC list of phrases to sentence
+ */
+fun ArrayList<String>.toSentence(): String {
+    val stringBuilder= StringBuilder()
+    for(string: String in this) {
+        stringBuilder.append(string)
+                .append("\t")
+    }
+    return stringBuilder.toString()
+}

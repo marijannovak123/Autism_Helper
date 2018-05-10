@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.list_item_aac_phrase.view.*
 
 class AACAdapter(
         aacPhrases: List<AacPhrase>,
-        onItemClick: (AacPhrase) -> Unit
+        onItemClick: (AacPhrase, Int) -> Unit
 )
     : BaseAdapter<AACAdapter.AACViewHolder, AacPhrase>(aacPhrases.toMutableList(), onItemClick) {
 
@@ -22,7 +22,7 @@ class AACAdapter(
     }
 
     class AACViewHolder(itemView: View): BaseViewHolder<AacPhrase>(itemView) {
-        override fun bind(model: AacPhrase, onItemClick: (AacPhrase) -> Unit) {
+        override fun bind(model: AacPhrase, position: Int, onItemClick: (AacPhrase, Int) -> Unit) {
             with(itemView) {
                 tvAacName.text = model.name
 
@@ -30,7 +30,7 @@ class AACAdapter(
                         .load(model.iconPath)
                         .into(ivAacImg)
 
-                setOnClickListener { onItemClick(model) }
+                setOnClickListener { onItemClick(model, position) }
             }
         }
 

@@ -15,6 +15,6 @@ class SettingsFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
-    //TODO: ASK FOR PASSWORD OR SOMETHING
+    //TODO: ASK FOR PASSWORD OR SOMETHING, voice for aac
 
 }
