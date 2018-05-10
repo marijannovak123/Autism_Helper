@@ -82,5 +82,19 @@
     <string name="syncing">Syncing data</string>
     <string name="sync">Sync</string>
     <string name="speak">Speak</string>
+    <string name="add_phrase">Add phrase</string>
+    <string name="phrase_name">Phrase name</string>
+    <string name="phrase_icon">Phrase icon</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="phrase_saved">Phrase saved</string>
+    <string name="error_saving_phrase">Saving unsuccessful</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="construct_sentence">Construct a sentence</string>
+    <string name="feature_not_supported">Feature not supported</string>
+    <string name="phrases">Phrases</string>
+    <string name="data_synced">Data synced successfully</string>
+    <string name="saved">Saved</string>
 
 </resources>

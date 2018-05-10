@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".modules.child.AACActivity"
+    android:id="@+id/addPhraseContainer"
     android:weightSum="10">
 
     <android.support.v7.widget.RecyclerView
@@ -21,14 +22,8 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:id="@+id/rvAacSelector"
         android:padding="20dp"/>
-
-    <android.support.v7.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnSpeak"
-        android:text="SPEAK"/>
 
 </LinearLayout>

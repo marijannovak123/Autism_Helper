@@ -79,7 +79,7 @@ fun Long.toDateString(): String {
  * AAC list of phrases to sentence
  */
 fun ArrayList<String>.toSentence(): String {
-    val stringBuilder= StringBuilder()
+    val stringBuilder = StringBuilder()
     for(string: String in this) {
         stringBuilder.append(string)
                 .append("\t")

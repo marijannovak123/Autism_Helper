@@ -60,7 +60,11 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.sync -> {
+                viewModel.syncData()
+            }
 
+            R.id.phrases -> {
+                loadFragment(PhrasesFragment())
             }
 
             R.id.logout -> {
@@ -111,6 +115,10 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                     val intent = Intent(this@ParentActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
+                }
+
+                Status.MESSAGE -> {
+                    showError(0, it.message)
                 }
                 else -> {
 

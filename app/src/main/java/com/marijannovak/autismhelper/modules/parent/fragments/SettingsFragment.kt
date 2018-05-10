@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.modules.parent.ParentActivity
 
 class SettingsFragment : BaseFragment() {
 

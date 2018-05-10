@@ -15,6 +15,7 @@ class Constants {
         //region login/signup
         const val RESULT_CODE_GOOGLE_SIGNIN = 9001
         const val RESULT_CODE_SIGNUP = 9002
+        const val REQUEST_CODE_IMAGE_LOADED = 9003
         const val KEY_SIGNUP_REQUEST = "signup_request"
         //endregion
 
@@ -57,5 +58,7 @@ class Constants {
         const val EXTRA_CATEGORY_ID = "category_id"
         const val EXTRA_CHILD = "child"
         const val EXTRA_SCORE = "score"
+
+        const val DIRECTORY_IMAGES = "autism_helper"
     }
 }

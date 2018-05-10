@@ -5,14 +5,21 @@
             android:id="@+id/profile"
             android:title="@string/profile"
             android:icon="@drawable/ic_account_circle"/>
-        <item
-            android:id="@+id/settings"
-            android:title="@string/settings"
-            android:icon="@drawable/ic_build"/>
+
         <item
             android:id="@+id/children"
             android:title="@string/children"
             android:icon="@drawable/ic_child_friendly"/>
+        <item
+            android:id="@+id/phrases"
+            android:icon="@drawable/ic_library_books"
+            android:title="@string/phrases" />
+
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings"
+            android:icon="@drawable/ic_build"/>
+
     </group>
 
     <group>

@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.support.v4.app.ActivityCompat.startActivityForResult
+import android.support.v7.widget.AppCompatButton
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -13,9 +16,11 @@ import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
+import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.toast
 import java.util.*
 
 class DialogHelper {
@@ -50,8 +55,8 @@ class DialogHelper {
             builder.setCancelable(false)
             val alertDialog = builder.create()
 
-            val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
-            val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+            val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
             val etEmail = alertView.findViewById<EditText>(R.id.etEmail)
 
             btnPositive.setOnClickListener {
@@ -82,8 +87,8 @@ class DialogHelper {
             builder.setCancelable(false)
             val alertDialog = builder.create()
 
-            val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
-            val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+            val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
             val etPassword = alertView.findViewById<EditText>(R.id.etParentPassword)
 
             if (parentPassword == "") {
@@ -117,8 +122,8 @@ class DialogHelper {
             builder.setCancelable(false)
             val alertDialog = builder.create()
 
-            val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
-            val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+            val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
 
             if(userChildrenNo == 0) {
                 btnNegative.visibility = View.INVISIBLE
@@ -182,8 +187,8 @@ class DialogHelper {
             builder.setCancelable(false)
             val alertDialog = builder.create()
 
-            val btnPositive = alertView.findViewById<TextView>(R.id.btnPositive)
-            val btnNegative = alertView.findViewById<TextView>(R.id.btnNegative)
+            val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
             val spChildren = alertView.findViewById<Spinner>(R.id.spChildren)
 
             var childrenNames = emptyList<String>()
@@ -206,5 +211,6 @@ class DialogHelper {
 
             alertDialog.show()
         }
+
     }
 }

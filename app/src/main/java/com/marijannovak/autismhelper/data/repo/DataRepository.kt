@@ -1,21 +1,23 @@
 package com.marijannovak.autismhelper.data.repo
 
+import android.os.Environment
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
+import com.marijannovak.autismhelper.App
+import com.marijannovak.autismhelper.config.Constants.Companion.DIRECTORY_IMAGES
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
+import com.marijannovak.autismhelper.di.AppComponent
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
 import io.reactivex.Completable
-import io.reactivex.CompletableObserver
 import io.reactivex.Flowable
-import io.reactivex.disposables.Disposable
 import org.jetbrains.anko.doAsync
 import java.io.File
 import javax.inject.Inject
@@ -28,15 +30,17 @@ class DataRepository @Inject constructor(
         private val auth: FirebaseAuth,
         private val storage: StorageReference,
         private val db: AppDatabase,
-        private val sharedPrefs: PrefsHelper) {
+        private val sharedPrefs: PrefsHelper,
+        private val context: App) {
 
     private var questionsWithImgs: List<Question> = ArrayList()
     private var phrases: List<AacPhrase> = ArrayList()
     private lateinit var onDataDownloaded: () -> Unit
-    private var downloadedImgs: List<String>
+
+    private var files: Array<String>
 
     init {
-        downloadedImgs = sharedPrefs.getDownloadedImages()
+        files = context.filesDir.list()
     }
 
     fun syncData(): Completable {
@@ -112,13 +116,15 @@ class DataRepository @Inject constructor(
 
     fun downloadQuestionImage(pos: Int) {
         val question = questionsWithImgs[pos]
-        if(!downloadedImgs.contains(question.extraData!!)) {
+        files = context.filesDir.list()
+        if(!files.contains(question.extraData)) {
             Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
             val ref = storage.child(question.extraData!!)
-            val file = File.createTempFile("img", ".jpg")
+            val filename = "${question.extraData}"
+            val file = File(App.getAppContext().filesDir, filename)
+
             ref.getFile(file)
                     .addOnSuccessListener {
-                        downloadedImgs += question.extraData!!
                         updateQuestionImgPath(question, file.absolutePath).subscribe(
                                 {
                                     if(pos == questionsWithImgs.size-1) {
@@ -145,18 +151,19 @@ class DataRepository @Inject constructor(
     }
 
     private fun downloadPhraseImage(pos: Int) {
-    val phrase = phrases[pos]
-        if(!downloadedImgs.contains(phrase.iconPath)) {
+        val phrase = phrases[pos]
+        files = context.filesDir.list()
+        if(!files.contains(phrase.iconPath)) {
             Log.e(logTag(), "Downloading ${phrases[pos].iconPath}")
             val ref = storage.child(phrase.iconPath)
-            val file = File.createTempFile("img", ".jpg")
+            val filename = "${phrase.iconPath}.jpg"
+            val file = File(App.getAppContext().filesDir, filename)
+
             ref.getFile(file)
                     .addOnSuccessListener {
-                        downloadedImgs += phrase.iconPath
                         updatePhraseImgPath(phrase, file.absolutePath).subscribe(
                                 {
                                     if(pos == phrases.size -1) {
-                                        sharedPrefs.setDownloadedImages(downloadedImgs)
                                         onDataDownloaded()
                                     } else {
                                         downloadPhraseImage(pos + 1)

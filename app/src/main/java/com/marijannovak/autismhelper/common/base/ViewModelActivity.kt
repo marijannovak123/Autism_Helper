@@ -41,7 +41,9 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
     fun showLoading(status: Status) {
         if(status == Status.LOADING) {
             pbLoading = pbLoading ?: LoadingDialog()
-            pbLoading!!.show(supportFragmentManager, "")
+            if(!pbLoading!!.isAdded) {
+                pbLoading!!.show(supportFragmentManager, "")
+            }
         }
         else {
             pbLoading?.dismiss()

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -22,6 +24,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
     private lateinit var tts: TextToSpeech
     private var ttsWords: ArrayList<String> = ArrayList()
+    private var ttsSupported = false
     private var aacSelectorAdapter: AACAdapter? = null
     private var aacDisplayAdapter: AACAdapter? = null
 
@@ -31,21 +34,10 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
         tts = TextToSpeech(this, {
             if(it == TextToSpeech.SUCCESS) {
+                ttsSupported = true
                 tts.language = Locale.US
-            } else {
-                btnSpeak.isEnabled = false
-                toast("Feature not supported!")
             }
         })
-
-        btnSpeak.setOnClickListener {
-            if(ttsWords.isNotEmpty()) {
-                tts.speak(ttsWords.toSentence(), TextToSpeech.QUEUE_FLUSH, Bundle(), null)
-            } else {
-                tts.speak("Construct a sentence!", TextToSpeech.QUEUE_FLUSH, Bundle(), null)
-            }
-
-        }
 
         viewModel.loadPhrases()
     }
@@ -69,8 +61,8 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
         if(aacDisplayAdapter == null) {
             aacDisplayAdapter = AACAdapter(emptyList(), {
                 aacPhrase, position ->
-                    aacDisplayAdapter?.deleteItem(aacPhrase)
-                    ttsWords.removeAt(position)
+                aacDisplayAdapter?.deleteItem(aacPhrase)
+                ttsWords.removeAt(position)
             })
             rvAacDisplay.adapter = aacDisplayAdapter
             rvAacDisplay.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -80,8 +72,8 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
             if(aacSelectorAdapter == null) {
                 aacSelectorAdapter = AACAdapter(emptyList(), {
                     phrase, _ ->
-                        aacDisplayAdapter?.addItem(phrase)
-                        ttsWords.add(phrase.name)
+                    aacDisplayAdapter?.addItem(phrase)
+                    ttsWords.add(phrase.name)
                 })
                 rvAacSelector.adapter = aacSelectorAdapter
                 rvAacSelector.layoutManager = GridLayoutManager(this, 3)
@@ -93,6 +85,35 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer{ handleResource(it) })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_aac, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            when(it.itemId) {
+                R.id.action_speak -> {
+                    if(ttsSupported) {
+                        if(ttsWords.isNotEmpty()) {
+                            tts.speak(ttsWords.toSentence(), TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+                        } else {
+                            tts.speak(getString(R.string.construct_sentence), TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+                        }
+                    } else {
+                        toast(R.string.feature_not_supported)
+                    }
+                }
+
+                else -> {
+
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

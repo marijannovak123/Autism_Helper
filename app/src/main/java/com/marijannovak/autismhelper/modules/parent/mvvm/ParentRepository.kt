@@ -2,8 +2,10 @@ package com.marijannovak.autismhelper.modules.parent.mvvm
 
 import android.graphics.Color
 import com.github.mikephil.charting.data.*
+import com.marijannovak.autismhelper.data.database.dao.AACDao
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
+import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.network.API
@@ -16,7 +18,8 @@ import javax.inject.Inject
 class ParentRepository @Inject constructor(
         private val childDao: ChildDao,
         private val api: API,
-        private val childScoreDao: ChildScoreDao
+        private val childScoreDao: ChildScoreDao,
+        private val aacDao: AACDao
 ){
     fun saveChildLocallyAndOnline(child: Child): Completable {
         return Completable.mergeArray(
@@ -52,6 +55,10 @@ class ParentRepository @Inject constructor(
         barDataSet.color = Color.RED
         val barData = BarData(barDataSet)
         return ChartData(lineData, barData, dates)
+    }
+
+    fun loadPhrases(): Flowable<List<AacPhrase>> {
+        return aacDao.getAllPhrases().handleThreading()
     }
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)
