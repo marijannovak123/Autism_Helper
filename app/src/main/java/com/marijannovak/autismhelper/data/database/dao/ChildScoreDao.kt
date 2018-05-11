@@ -9,16 +9,16 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
-interface ChildScoreDao: BaseDao<ChildScore> {
+interface ChildScoreDao : BaseDao<ChildScore> {
 
     @Query("SELECT * FROM $TABLE_CHILD_SCORES WHERE childId = :childId")
-    fun getChildScores(childId: String) : Flowable<List<ChildScore>>
+    fun getChildScores(childId: String): Flowable<List<ChildScore>>
 
     @Query("SELECT * FROM $TABLE_CHILD_SCORES WHERE id = :id")
-    fun getChildScoreById(id : Int) : Flowable<ChildScore>
+    fun getChildScoreById(id: Int): Flowable<ChildScore>
 
     @Query("SELECT COUNT(*) FROM $TABLE_CHILD_SCORES")
-    fun getChildScoreCount() : Single<Int>
+    fun getChildScoreCount(): Single<Int>
 
     @Query("DELETE FROM $TABLE_CHILD_SCORES")
     fun deleteTable()

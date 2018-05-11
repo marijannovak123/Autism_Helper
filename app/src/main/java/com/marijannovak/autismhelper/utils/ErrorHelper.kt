@@ -5,6 +5,6 @@ import com.marijannovak.autismhelper.R
 
 class ErrorHelper {
     companion object {
-        fun unknownError()  = Throwable(App.getAppContext().getString(R.string.unknown_error))
+        fun unknownError() = Throwable(App.getAppContext().getString(R.string.unknown_error))
     }
 }

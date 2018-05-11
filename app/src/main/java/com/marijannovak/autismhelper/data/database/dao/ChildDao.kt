@@ -8,7 +8,7 @@ import com.marijannovak.autismhelper.data.models.Child
 import io.reactivex.Flowable
 
 @Dao
-interface ChildDao: BaseDao<Child> {
+interface ChildDao : BaseDao<Child> {
 
     @Query("SELECT * FROM $TABLE_CHILDREN")
     fun getChildren(): Flowable<List<Child>>

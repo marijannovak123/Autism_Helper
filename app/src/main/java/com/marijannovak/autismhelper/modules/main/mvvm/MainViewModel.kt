@@ -9,13 +9,13 @@ import javax.inject.Inject
 /**
  * Created by Marijan on 23.3.2018..
  */
-class MainViewModel @Inject constructor(private val repository : MainRepository)
+class MainViewModel @Inject constructor(private val repository: MainRepository)
     : BaseViewModel<Child>() {
 
     fun getChildrenToPick() {
         compositeDisposable.add(
                 repository.getChildren().subscribe(
-                        { children -> resourceLiveData.value = Resource.success(children)},
+                        { children -> resourceLiveData.value = Resource.success(children) },
                         { resourceLiveData.value = Resource.message(R.string.children_load_fail) }
                 )
         )

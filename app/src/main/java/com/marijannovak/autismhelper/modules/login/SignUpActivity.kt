@@ -57,7 +57,7 @@ class SignUpActivity : AppCompatActivity() {
             etConfirmPassword.error = null
         }
 
-        if(valid)
+        if (valid)
             sendRequest(SignupRequest(email, username, password))
         else
             snackbar(btnSignUp, R.string.input_errors)

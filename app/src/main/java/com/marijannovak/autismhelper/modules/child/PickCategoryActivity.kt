@@ -27,7 +27,7 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pick_category)
 
-        if(intent.hasExtra(EXTRA_CHILD)) {
+        if (intent.hasExtra(EXTRA_CHILD)) {
             child = intent.getSerializableExtra(EXTRA_CHILD) as Child
         }
 
@@ -38,7 +38,7 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { handleResource(it)})
+        viewModel.resourceLiveData.observe(this, Observer { handleResource(it) })
     }
 
     override fun onResume() {
@@ -49,7 +49,7 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
     override fun handleResource(resource: Resource<List<Category>>?) {
         resource?.let {
             showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     setCategoriesData(it.data)
                 }
@@ -73,14 +73,17 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
     private fun setCategoriesData(categories: List<Category>?) {
         categories?.let {
             if (categoriesAdapter == null) {
-                categoriesAdapter = CategoriesAdapter(emptyList(), onItemClick = {
-                    category, _ ->
-                        val intent = Intent(this, QuizActivity::class.java)
-                        intent.putExtra(EXTRA_CATEGORY_ID, category.id)
-                        intent.putExtra(EXTRA_CHILD, child)
-                        startActivity(intent)
-                        finish()
-                })
+                categoriesAdapter = CategoriesAdapter(emptyList(), {
+                        category, _ ->
+                            val intent = Intent(this, QuizActivity::class.java)
+                            intent.putExtra(EXTRA_CATEGORY_ID, category.id)
+                            intent.putExtra(EXTRA_CHILD, child)
+                            startActivity(intent)
+                            finish()
+                    }, {
+                        category, _ ->
+                            //NOOP
+                    })
 
                 rvCategories.layoutManager = LinearLayoutManager(this)
                 rvCategories.itemAnimator = DefaultItemAnimator()

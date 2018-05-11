@@ -46,7 +46,7 @@ class Constants {
         //region shared prefs
         const val PREFS_NAME = "autism_helper_prefs"
         const val KEY_LOGGED_IN = "logged_in"
-        const val KEY_PARENT_PASSWORD= "parent_password"
+        const val KEY_PARENT_PASSWORD = "parent_password"
         const val KEY_DOWNLOADED_IMAGES = "downloaded_images"
         //endregion
 
@@ -60,5 +60,13 @@ class Constants {
         const val EXTRA_SCORE = "score"
 
         const val DIRECTORY_IMAGES = "autism_helper"
+
+        //region fragments
+        const val FRAGMENT_PROFILE = "profile_fragment"
+        const val FRAGMENT_CHILDREN = "children_fragment"
+        const val FRAGMENT_PHRASES = "phrases_fragment"
+        const val FRAGMENT_SETTINGS = "settings_fragment"
+        const val FRAGMENT_CHILD_DETAILS = "child_details_fragment"
+        //endregion
     }
 }

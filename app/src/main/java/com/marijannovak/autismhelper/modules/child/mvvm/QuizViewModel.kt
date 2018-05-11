@@ -7,14 +7,14 @@ import com.marijannovak.autismhelper.modules.child.mvvm.repo.QuizRepository
 import com.marijannovak.autismhelper.utils.Resource
 import javax.inject.Inject
 
-class QuizViewModel @Inject constructor(private val repository: QuizRepository):
+class QuizViewModel @Inject constructor(private val repository: QuizRepository) :
         BaseViewModel<Any>() {
 
     fun loadCategoryData(categoryId: Int) {
         compositeDisposable.add(
                 repository.getCategoryData(categoryId).subscribe(
-                        {category -> resourceLiveData.value = Resource.success(listOf(category))},
-                        {error -> resourceLiveData.value = Resource.message(R.string.category_load_fail)}
+                        { category -> resourceLiveData.value = Resource.success(listOf(category)) },
+                        { error -> resourceLiveData.value = Resource.message(R.string.category_load_fail) }
                 )
         )
     }

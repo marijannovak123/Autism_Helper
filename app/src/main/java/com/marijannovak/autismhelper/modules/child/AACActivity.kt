@@ -33,7 +33,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
         setContentView(R.layout.activity_aac)
 
         tts = TextToSpeech(this, {
-            if(it == TextToSpeech.SUCCESS) {
+            if (it == TextToSpeech.SUCCESS) {
                 ttsSupported = true
                 tts.language = Locale.US
             }
@@ -45,7 +45,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
     override fun handleResource(resource: Resource<List<AacPhrase>>?) {
         resource?.let {
             showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     setUpAacData(it.data)
                 }
@@ -58,25 +58,31 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
     }
 
     private fun setUpAacData(phrases: List<AacPhrase>?) {
-        if(aacDisplayAdapter == null) {
+        if (aacDisplayAdapter == null) {
             aacDisplayAdapter = AACAdapter(emptyList(), {
                 aacPhrase, position ->
-                aacDisplayAdapter?.deleteItem(aacPhrase)
-                ttsWords.removeAt(position)
+                    aacDisplayAdapter?.deleteItem(aacPhrase)
+                    ttsWords.removeAt(position)
+            }, { aacPhrase, _ ->
+                    //tts.speak(aacPhrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
             })
             rvAacDisplay.adapter = aacDisplayAdapter
             rvAacDisplay.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         }
 
         phrases?.let {
-            if(aacSelectorAdapter == null) {
+            if (aacSelectorAdapter == null) {
                 aacSelectorAdapter = AACAdapter(emptyList(), {
                     phrase, _ ->
-                    aacDisplayAdapter?.addItem(phrase)
-                    ttsWords.add(phrase.name)
+                        aacDisplayAdapter?.addItem(phrase)
+                        ttsWords.add(phrase.name)
+                }, {
+                    phrase, _ ->
+                      tts.speak(phrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+
                 })
                 rvAacSelector.adapter = aacSelectorAdapter
-                rvAacSelector.layoutManager = GridLayoutManager(this, 3)
+                rvAacSelector.layoutManager = GridLayoutManager(this, 4)
             }
 
             aacSelectorAdapter!!.update(it)
@@ -84,7 +90,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer{ handleResource(it) })
+        viewModel.resourceLiveData.observe(this, Observer { handleResource(it) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,10 +100,10 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.action_speak -> {
-                    if(ttsSupported) {
-                        if(ttsWords.isNotEmpty()) {
+                    if (ttsSupported) {
+                        if (ttsWords.isNotEmpty()) {
                             tts.speak(ttsWords.toSentence(), TextToSpeech.QUEUE_FLUSH, Bundle(), null)
                         } else {
                             tts.speak(getString(R.string.construct_sentence), TextToSpeech.QUEUE_FLUSH, Bundle(), null)

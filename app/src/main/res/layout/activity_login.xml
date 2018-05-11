@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llContent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center"
+    android:orientation="vertical"
     android:visibility="invisible"
     tools:visibility="visible">
 
@@ -15,12 +15,12 @@
         android:layout_height="wrap_content">
 
         <EditText
-            style="@style/signupEditTextStyle"
             android:id="@+id/etEmail"
+            style="@style/signupEditTextStyle"
+            android:drawableStart="@drawable/ic_mail"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:drawableStart="@drawable/ic_mail"
-            android:nextFocusForward="@id/etUsername"/>
+            android:nextFocusForward="@id/etUsername" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -31,60 +31,60 @@
         app:passwordToggleTint="#000000">
 
         <EditText
-            style="@style/signupEditTextStyle"
             android:id="@+id/etPassword"
+            style="@style/signupEditTextStyle"
+            android:drawableStart="@drawable/ic_lock"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:drawableStart="@drawable/ic_lock"
-            android:nextFocusForward="@id/etConfirmPassword"/>
+            android:nextFocusForward="@id/etConfirmPassword" />
 
     </android.support.design.widget.TextInputLayout>
 
     <TextView
+        android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forgot_password"
-        android:id="@+id/tvForgotPassword"
         android:layout_gravity="end"
-        android:layout_marginEnd="40dp"/>
+        android:layout_marginEnd="40dp"
+        android:text="@string/forgot_password" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
-        android:weightSum="2"
 
-        android:layout_marginTop="30dp">
+        android:weightSum="2">
 
         <Button
+            android:id="@+id/btnLogin"
+            style="@style/style_my_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/btnLogin"
-            android:text="@string/login"
-            style="@style/style_my_button" />
+            android:text="@string/login" />
 
         <com.google.android.gms.common.SignInButton
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp"
             android:id="@+id/btnGoogleSignIn"
-            android:text="@string/btn_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginStart="50dp"/>
+            android:layout_marginStart="50dp"
+            android:layout_weight="1"
+            android:text="@string/btn_sign_in" />
 
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dont_have_acc"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="40dp"
+        android:text="@string/dont_have_acc" />
 
     <Button
-        android:text="@string/register"
         android:id="@+id/btnRegister"
+        style="@style/style_my_button"
         android:layout_marginTop="5dp"
-        style="@style/style_my_button" />
+        android:text="@string/register" />
 
 </LinearLayout>

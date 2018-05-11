@@ -11,13 +11,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAppContext() : App {
+    fun provideAppContext(): App {
         return App.getAppContext()
     }
 
     @Singleton
     @Provides
-    fun provideSharedPrefs() : PrefsHelper {
-       return PrefsHelper()
+    fun provideSharedPrefs(): PrefsHelper {
+        return PrefsHelper()
     }
 }

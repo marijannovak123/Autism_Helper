@@ -20,7 +20,7 @@ class ParentRepository @Inject constructor(
         private val api: API,
         private val childScoreDao: ChildScoreDao,
         private val aacDao: AACDao
-){
+) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
         return Completable.mergeArray(
                 api.addChild(child.parentId, child.id, child),
@@ -34,7 +34,7 @@ class ParentRepository @Inject constructor(
         return childScoreDao
                 .getChildScores(childId)
                 .map {
-                   createLineData(it)
+                    createLineData(it)
                 }
                 .handleThreading()
     }
@@ -43,9 +43,9 @@ class ParentRepository @Inject constructor(
         var lineEntries: List<Entry> = emptyList()
         var barEntries: List<BarEntry> = emptyList()
         var dates: List<String> = emptyList()
-        for(i in 0 until scores.size) {
-            lineEntries += Entry(i.toFloat(), scores[i].duration/1000f)
-            barEntries += BarEntry(i.toFloat() , scores[i].mistakes.toFloat())
+        for (i in 0 until scores.size) {
+            lineEntries += Entry(i.toFloat(), scores[i].duration / 1000f)
+            barEntries += BarEntry(i.toFloat(), scores[i].mistakes.toFloat())
             dates += scores[i].timestamp.toDateString()
         }
         val lineDataSet = LineDataSet(lineEntries, "Duration in seconds")

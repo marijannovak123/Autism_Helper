@@ -5,21 +5,21 @@
     android:layout_height="match_parent"
     tools:context="com.marijannovak.autismhelper.modules.main.MainActivity">
 
-   <android.support.v4.widget.ContentLoadingProgressBar
+    <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/pbLoading"
         style="?android:attr/progressBarStyleInverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_centerInParent="true"/>
+        tools:visibility="visible" />
 
     <LinearLayout
+        android:id="@+id/llContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/llContent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,37 +27,37 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:background="@drawable/ic_supervisor_account_black_24dp"
                 android:id="@+id/btnParent"
-                style="@style/menu_parent_child_style" />
+                style="@style/menu_parent_child_style"
+                android:background="@drawable/ic_supervisor_account_black_24dp" />
 
             <TextView
-                android:text="@string/parent"
-                style="@style/menu_parent_child_button_text" />
+                style="@style/menu_parent_child_button_text"
+                android:text="@string/parent" />
 
         </LinearLayout>
 
-       <LinearLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:orientation="vertical">
-
-           <ImageButton
-               android:background="@drawable/ic_child_care_black_24dp"
-               android:id="@+id/btnChild"
-               style="@style/menu_parent_child_style"/>
-
-           <TextView
-               android:text="@string/child"
-               style="@style/menu_parent_child_button_text" />
-
-
-       </LinearLayout>
-
-       <!-- <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivTest"/>-->
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnChild"
+                style="@style/menu_parent_child_style"
+                android:background="@drawable/ic_child_care_black_24dp" />
+
+            <TextView
+                style="@style/menu_parent_child_button_text"
+                android:text="@string/child" />
+
+
+        </LinearLayout>
+
+        <!-- <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/ivTest"/>-->
 
 
     </LinearLayout>

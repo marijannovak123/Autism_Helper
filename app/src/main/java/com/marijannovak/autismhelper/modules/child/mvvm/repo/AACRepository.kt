@@ -17,7 +17,7 @@ class AACRepository @Inject constructor(private val aacDao: AACDao) {
     }
 
     fun savePhrase(phrase: AacPhrase): Completable {
-        return Completable.fromAction{
+        return Completable.fromAction {
             doAsync {
                 aacDao.insert(phrase)
             }

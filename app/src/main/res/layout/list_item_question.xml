@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tvQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvQuestion"
+        android:padding="20dp"
         android:textAlignment="center"
         android:textSize="26sp"
-        android:padding="20dp"
-        tools:text=" TEST"/>
+        tools:text=" TEST" />
 
     <ImageView
+        android:id="@+id/ivExtraImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:id="@+id/ivExtraImage"
+        android:layout_gravity="center_horizontal"
         android:contentDescription="@null"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -28,32 +28,32 @@
         android:padding="30dp">
 
         <Button
-            style="@style/style_answer_button"
             android:id="@+id/tvAnswer1"
-            android:layout_alignParentTop="true"
+            style="@style/style_answer_button"
             android:layout_alignParentStart="true"
-            tools:text="TEST"/>
+            android:layout_alignParentTop="true"
+            tools:text="TEST" />
 
         <Button
-            style="@style/style_answer_button"
             android:id="@+id/tvAnswer2"
-            android:layout_alignParentTop="true"
+            style="@style/style_answer_button"
             android:layout_alignParentEnd="true"
-            tools:text="TEST"/>
+            android:layout_alignParentTop="true"
+            tools:text="TEST" />
 
         <Button
             android:id="@+id/tvAnswer3"
+            style="@style/style_answer_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            tools:text="TEST"
-            style="@style/style_answer_button" />
+            tools:text="TEST" />
 
         <Button
-            style="@style/style_answer_button"
             android:id="@+id/tvAnswer4"
+            style="@style/style_answer_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            tools:text="TEST"/>
+            tools:text="TEST" />
 
     </RelativeLayout>
 

@@ -15,7 +15,7 @@ import java.io.Serializable
  */
 
 @Entity(tableName = TABLE_USER)
-data class User (
+data class User(
         @PrimaryKey
         var id: String,
         var username: String?,
@@ -26,23 +26,23 @@ data class User (
         @Ignore
         var childScoresResponse: ChildScoresResponse?
 ) {
-    constructor() : this("", "", "","",  emptyList(), null)
+    constructor() : this("", "", "", "", emptyList(), null)
 }
 
 @Entity(tableName = TABLE_CHILDREN)
-data class Child (
+data class Child(
         @PrimaryKey
         var id: String,
         var parentId: String,
         var name: String,
         var gender: String,
         var dateOfBirth: Long
-): Serializable {
-    constructor(): this("", "", "", "", 0)
+) : Serializable {
+    constructor() : this("", "", "", "", 0)
 }
 
 @Entity(tableName = TABLE_CHILD_SCORES)
-data class ChildScore (
+data class ChildScore(
         @PrimaryKey
         var id: Int,
         var childId: String,
@@ -51,11 +51,11 @@ data class ChildScore (
         var duration: Long,
         var mistakes: Int
 ) : Serializable {
-    constructor() : this(0, "", "",0, 0, 0)
+    constructor() : this(0, "", "", 0, 0, 0)
 }
 
 @Entity(tableName = TABLE_CATEGORIES)
-data class Category (
+data class Category(
         @PrimaryKey
         var id: Int,
         var name: String,
@@ -66,7 +66,7 @@ data class Category (
 }
 
 @Entity(tableName = TABLE_QUESTIONS)
-data class Question (
+data class Question(
         @PrimaryKey
         var id: Int,
         var text: String,
@@ -76,19 +76,19 @@ data class Question (
         var imgPath: String?,
         @Ignore
         var answers: List<Answer>
-){
+) {
     constructor() : this(0, "", 0, 0, "", null, ArrayList())
 }
 
 @Entity(tableName = TABLE_ANSWERS)
-data class Answer (
+data class Answer(
         @PrimaryKey(autoGenerate = true)
         var id: Int,
         var text: String,
         var isCorrect: Boolean,
         var questionId: Int
 ) {
-    constructor(): this(0, "", false, 0)
+    constructor() : this(0, "", false, 0)
 }
 
 @Entity(tableName = TABLE_AAC)
@@ -98,10 +98,10 @@ data class AacPhrase(
         var name: String,
         var iconPath: String
 ) {
-    constructor(): this(0, "", "")
+    constructor() : this(0, "", "")
 }
 
-class UserChildrenJoin: Serializable {
+class UserChildrenJoin : Serializable {
     @Embedded
     var user: User = User()
     @Relation(parentColumn = "id", entityColumn = "parentId")

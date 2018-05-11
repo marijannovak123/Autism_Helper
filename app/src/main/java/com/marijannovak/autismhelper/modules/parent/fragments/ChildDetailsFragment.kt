@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.data.ChartData
-import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
@@ -20,7 +18,6 @@ import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentRepository
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.toDateString
 import kotlinx.android.synthetic.main.fragment_child_details.*
 
 class ChildDetailsFragment : BaseFragment() {
@@ -31,7 +28,7 @@ class ChildDetailsFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         arguments?.let {
-            child =  it.getSerializable(KEY_CHILD) as Child
+            child = it.getSerializable(KEY_CHILD) as Child
         }
         return inflater.inflate(R.layout.fragment_child_details, container, false)
     }
@@ -55,7 +52,7 @@ class ChildDetailsFragment : BaseFragment() {
     private fun handleResource(it: Resource<List<ParentRepository.ChartData>>?) {
         it?.let {
             (activity as ParentActivity).showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let {
                         setupChartData(it[0])
@@ -68,9 +65,10 @@ class ChildDetailsFragment : BaseFragment() {
             }
         }
     }
-//todo: coloring, style..
+
+    //todo: coloring, style..
     private fun setupChartData(chartData: ParentRepository.ChartData) {
-        if(lcTimeScores.data == null && bcMistakes.data == null) {
+        if (lcTimeScores.data == null && bcMistakes.data == null) {
             val dateFormatter = IAxisValueFormatter { value, _ ->
                 chartData.dates[value.toInt()]
             }
@@ -84,7 +82,7 @@ class ChildDetailsFragment : BaseFragment() {
 
         }
 
-        if(chartData.lineData.entryCount > 0 && chartData.barData.entryCount > 0) {
+        if (chartData.lineData.entryCount > 0 && chartData.barData.entryCount > 0) {
             lcTimeScores.data = chartData.lineData
             lcTimeScores.invalidate()
 

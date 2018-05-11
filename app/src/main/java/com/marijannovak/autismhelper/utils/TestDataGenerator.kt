@@ -6,10 +6,10 @@ class TestDataGenerator {
 
     companion object {
 
-        fun createUserApiResponse() : User {
+        fun createUserApiResponse(): User {
             val parentId = "002445"
             val child1 = Child("hehe1", parentId, "Roko", "M", 12312313)
-            val child2 = child1.copy(gender = "F", name= "Rokica", id = "hehe2")
+            val child2 = child1.copy(gender = "F", name = "Rokica", id = "hehe2")
             return User("Nikica", parentId, "nikica@gmail.com", "", listOf(child1, child2), null)
         }
 
@@ -21,7 +21,7 @@ class TestDataGenerator {
             return listOf(question)
         }
 
-        fun createCategoriesApiResponse() : List<Category> {
+        fun createCategoriesApiResponse(): List<Category> {
             return emptyList()
         }
 

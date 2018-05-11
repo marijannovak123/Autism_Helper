@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.modules.child
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewPager
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -16,10 +15,8 @@ import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.QuestionAnswersJoin
 import com.marijannovak.autismhelper.modules.child.adapters.QuizPagerAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.QuizViewModel
-import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_quiz.*
-import org.jetbrains.anko.support.v4.onPageChangeListener
 import org.jetbrains.anko.toast
 
 class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
@@ -32,9 +29,9 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
-        if(intent.hasExtra(EXTRA_CATEGORY_ID)) {
+        if (intent.hasExtra(EXTRA_CATEGORY_ID)) {
             val categoryId = intent.getIntExtra(EXTRA_CATEGORY_ID, -1)
-            if(categoryId != -1) {
+            if (categoryId != -1) {
                 viewModel.loadCategoryData(categoryId)
             }
         } else {
@@ -42,7 +39,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
             finish()
         }
 
-        if(intent.hasExtra(EXTRA_CHILD)) {
+        if (intent.hasExtra(EXTRA_CHILD)) {
             child = intent.getSerializableExtra(EXTRA_CHILD) as Child
         } else {
             showError(R.string.children_load_fail, null)
@@ -53,7 +50,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
     override fun handleResource(categories: Resource<List<Any>>?) {
         categories?.let {
             showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     val questions = (it.data!![0] as CategoryQuestionsAnswersJoin).questionsAnswers
                     setUpQuestionsPager(questions)
@@ -65,9 +62,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
 
                 Status.SAVED -> {
                     toast(R.string.score_saved)
-                    val intent = Intent(this, QuizFinishedActivity::class.java)
-                    intent.putExtra(EXTRA_SCORE, it.data!![0] as ChildScore)
-                    intent.putExtra(EXTRA_CHILD, child)
+                    val intent = Intent(this, PickCategoryActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -80,16 +75,16 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
     }
 
     private fun setUpQuestionsPager(questionsWithAnswers: List<QuestionAnswersJoin>) {
-        if(quizAdapter == null) {
+        if (quizAdapter == null) {
             supportActionBar?.title = "${getString(R.string.question)} 1"
             startTime = System.currentTimeMillis()
             quizAdapter = QuizPagerAdapter(this, emptyList(),
                     onItemClick = {
-                        if(it) {
+                        if (it) {
                             val currentPos = vpQuestions.currentItem
                             val max = quizAdapter!!.dataSetSize()
 
-                            if(max - 1 > currentPos ) {
+                            if (max - 1 > currentPos) {
                                 vpQuestions.currentItem = currentPos + 1
                                 supportActionBar?.title = "${getString(R.string.question)} ${vpQuestions.currentItem}"
                             } else {

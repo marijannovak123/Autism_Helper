@@ -9,10 +9,10 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lcTimeScores"
-        style="@style/style_chart"/>
+        style="@style/style_chart" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/bcMistakes"
-        style="@style/style_chart"/>
+        style="@style/style_chart" />
 
 </LinearLayout>

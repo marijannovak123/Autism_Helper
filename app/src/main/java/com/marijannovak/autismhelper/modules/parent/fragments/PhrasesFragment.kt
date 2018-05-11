@@ -1,6 +1,5 @@
 package com.marijannovak.autismhelper.modules.parent.fragments
 
-
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bumptech.glide.Glide
@@ -41,6 +41,7 @@ class PhrasesFragment : BaseFragment() {
     private var loadedBitmap: Bitmap? = null
     private var loadedBitmapName: String = ""
 
+    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +67,7 @@ class PhrasesFragment : BaseFragment() {
             val name = etPhraseName.text.toString().trim()
             val icon = saveBitmap(loadedBitmapName).absolutePath
 
-            if(name.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
+            if (name.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
                 parentViewModel.savePhrase(AacPhrase(name.hashCode(), name, icon))
             } else {
                 toast(R.string.invalid_input)
@@ -90,7 +91,7 @@ class PhrasesFragment : BaseFragment() {
     private fun handleResource(phrases: Resource<List<AacPhrase>>?) {
         phrases?.let {
             (activity as ParentActivity).showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     setUpPhrasesRv(it.data)
                 }
@@ -109,15 +110,13 @@ class PhrasesFragment : BaseFragment() {
 
     private fun setUpPhrasesRv(phrases: List<AacPhrase>?) {
         phrases?.let {
-            if(phrasesAdapter == null) {
-                phrasesAdapter = AACAdapter(emptyList(), {
-                    phrase, _ ->
-                        editPhrase(phrase)
-                })
+            if (phrasesAdapter == null) {
+                phrasesAdapter = AACAdapter(emptyList(), { phrase, _ -> editPhrase(phrase)})
                 rvPhrases.adapter = phrasesAdapter
-                rvPhrases.layoutManager = LinearLayoutManager(activity)
+                rvPhrases.layoutManager = GridLayoutManager(activity, 5)
                 rvPhrases.itemAnimator = DefaultItemAnimator()
                 rvPhrases.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
+                rvPhrases.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.HORIZONTAL))
             }
 
             phrasesAdapter!!.update(phrases)
@@ -130,16 +129,14 @@ class PhrasesFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == Constants.REQUEST_CODE_IMAGE_LOADED && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQUEST_CODE_IMAGE_LOADED && resultCode == Activity.RESULT_OK) {
             data?.let {
                 try {
                     loadedBitmap?.recycle()
 
                     val stream = context!!.contentResolver.openInputStream(it.data)
-
                     loadedBitmapName = File(getImagePath(it.data)).name
                     loadedBitmap = BitmapFactory.decodeStream(stream)
-
                     stream.close()
 
                     Glide.with(activity!!)
@@ -160,29 +157,31 @@ class PhrasesFragment : BaseFragment() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        this.menu = menu
         inflater?.inflate(R.menu.menu_phrases, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.action_add_phrase -> {
                     showAddPhrase(true)
                 }
 
-                else -> {}
+                else -> {
+                }
             }
 
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showAddPhrase(show: Boolean) {
-        llAddPhrase.visibility = if(show) View.VISIBLE else View.GONE
-        rvPhrases.visibility = if(show) View.GONE else View.VISIBLE
-
-        if(!show) {
+    fun showAddPhrase(show: Boolean) {
+        llAddPhrase.visibility = if (show) View.VISIBLE else View.GONE
+        rvPhrases.visibility = if (show) View.GONE else View.VISIBLE
+        this.menu!!.setGroupVisible(R.id.group_menu_phrases, !show)
+        if (!show) {
             etIcon.text.clear()
             etPhraseName.text.clear()
             ivPhraseIcon.imageResource = 0
@@ -192,7 +191,7 @@ class PhrasesFragment : BaseFragment() {
     }
 
     private fun getImagePath(uri: Uri): String {
-        val cursor = activity?.contentResolver?.query( uri, null, null, null, null );
+        val cursor = activity?.contentResolver?.query(uri, null, null, null, null);
         cursor?.let {
             cursor.moveToFirst()
             val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
@@ -207,9 +206,9 @@ class PhrasesFragment : BaseFragment() {
         val file = File(activity!!.filesDir, filename)
         if (!file.exists() && loadedBitmap != null) {
             try {
-                val bitmap = loadedBitmap
+                val scaledBitmap = scaleBitmap()
                 val outStream = FileOutputStream(file)
-                bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
                 outStream.flush()
                 outStream.close()
             } catch (e: Exception) {
@@ -217,6 +216,38 @@ class PhrasesFragment : BaseFragment() {
             }
         }
         return file
+    }
+
+    private fun scaleBitmap(): Bitmap {
+        var bitmap = loadedBitmap
+        var width = bitmap!!.width
+        var height = bitmap.height
+        val maxSize = 96
+        when {
+            width > height -> {
+                // landscape
+                val ratio = width.toFloat() / maxSize
+                width = maxSize
+                height = (height / ratio).toInt()
+            }
+            height > width -> {
+                // portrait
+                val ratio = height.toFloat() / maxSize
+                height = maxSize
+                width = (width / ratio).toInt()
+            }
+            else -> {
+                // square
+                height = maxSize
+                width = maxSize           }
+        }
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
+        return bitmap
+    }
+
+    fun isAddPhraseShown(): Boolean {
+        return llAddPhrase.visibility == View.VISIBLE
     }
 }
 

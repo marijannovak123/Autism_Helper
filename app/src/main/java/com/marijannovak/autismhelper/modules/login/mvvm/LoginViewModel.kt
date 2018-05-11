@@ -14,13 +14,13 @@ import javax.inject.Inject
 /**
  * Created by Marijan on 23.3.2018..
  */
-class LoginViewModel @Inject constructor (
+class LoginViewModel @Inject constructor(
         private val repository: LoginRepository) : BaseViewModel<User>() {
 
     fun checkLoggedIn() {
         compositeDisposable.add(
                 repository.isLoggedIn().subscribe(
-                        { resourceLiveData.value = Resource.success(listOf(it))},
+                        { resourceLiveData.value = Resource.success(listOf(it)) },
                         { /*NOOP don't show error, just show content*/ },
                         { resourceLiveData.value = Resource.home() }
                 )
@@ -54,7 +54,7 @@ class LoginViewModel @Inject constructor (
     }
 
     fun forgotPassword(email: String) {
-        repository.forgotPassword(email, object: GeneralListener<Any>{
+        repository.forgotPassword(email, object : GeneralListener<Any> {
             override fun onSucces(model: Any) {
                 resourceLiveData.value = Resource.message(R.string.success)
             }
@@ -82,14 +82,14 @@ class LoginViewModel @Inject constructor (
         compositeDisposable.add(
                 repository.checkIfUserExists(user.uid).subscribe(
                         {
-                            if(it) {
+                            if (it) {
                                 fetchAndSaveUserData(user.uid)
                             } else {
                                 resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                             }
                         },
                         {
-                            if(it is NoSuchElementException) {
+                            if (it is NoSuchElementException) {
                                 resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                             } else {
                                 throwErrorAndLogOut(R.string.unknown_error)
@@ -99,11 +99,11 @@ class LoginViewModel @Inject constructor (
         )
     }
 
-    private fun fetchAndSaveUserData(userId : String) {
+    private fun fetchAndSaveUserData(userId: String) {
         compositeDisposable.add(
                 repository.fetchAndSaveUser(userId).subscribe(
                         { syncData() },
-                        { throwErrorAndLogOut(R.string.fetch_user_error)}
+                        { throwErrorAndLogOut(R.string.fetch_user_error) }
                 )
         )
 
@@ -122,7 +122,7 @@ class LoginViewModel @Inject constructor (
     fun syncData() {
         compositeDisposable.add(
                 dataRepository.syncData().subscribe(
-                        { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) }},
+                        { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) } },
                         { throwErrorAndLogOut(R.string.sync_error) }
                 )
         )

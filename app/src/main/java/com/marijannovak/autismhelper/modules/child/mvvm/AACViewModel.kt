@@ -13,8 +13,8 @@ class AACViewModel @Inject constructor(private val repository: AACRepository)
     fun loadPhrases() {
         compositeDisposable.add(
                 repository.getPhrases().subscribe(
-                    { phrases -> resourceLiveData.value = Resource.success(phrases) },
-                    { error -> resourceLiveData.value = Resource.message(R.string.load_error) }
+                        { phrases -> resourceLiveData.value = Resource.success(phrases) },
+                        { error -> resourceLiveData.value = Resource.message(R.string.load_error) }
                 )
         )
     }

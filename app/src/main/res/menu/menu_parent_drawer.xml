@@ -3,13 +3,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/profile"
-            android:title="@string/profile"
-            android:icon="@drawable/ic_account_circle"/>
+            android:icon="@drawable/ic_account_circle"
+            android:title="@string/profile" />
 
         <item
             android:id="@+id/children"
-            android:title="@string/children"
-            android:icon="@drawable/ic_child_friendly"/>
+            android:icon="@drawable/ic_child_friendly"
+            android:title="@string/children" />
         <item
             android:id="@+id/phrases"
             android:icon="@drawable/ic_library_books"
@@ -17,23 +17,23 @@
 
         <item
             android:id="@+id/settings"
-            android:title="@string/settings"
-            android:icon="@drawable/ic_build"/>
+            android:icon="@drawable/ic_build"
+            android:title="@string/settings" />
 
     </group>
 
     <group>
         <item
             android:id="@+id/sync"
-            android:title="@string/sync"
-            android:icon="@drawable/ic_autorenew"/>
+            android:icon="@drawable/ic_autorenew"
+            android:title="@string/sync" />
         <item
             android:id="@+id/logout"
-            android:title="@string/logout"
-            android:icon="@drawable/ic_exit_to_app"/>
+            android:icon="@drawable/ic_exit_to_app"
+            android:title="@string/logout" />
         <item
             android:id="@+id/exit"
-            android:title="@string/exit"
-            android:icon="@drawable/ic_close"/>
+            android:icon="@drawable/ic_close"
+            android:title="@string/exit" />
     </group>
 </menu>

@@ -1,5 +1,5 @@
 package com.marijannovak.autismhelper.data.models
 
-data class ChildScoresResponse (
+data class ChildScoresResponse(
         var childScores: List<ChildScore>
 )

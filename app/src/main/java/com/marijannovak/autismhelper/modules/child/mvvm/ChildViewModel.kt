@@ -14,8 +14,8 @@ class ChildViewModel @Inject constructor(private val repository: ChildRepository
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.loadCategories().subscribe(
-                        {categories -> resourceLiveData.value = Resource.success(categories) },
-                        {error -> resourceLiveData.value = Resource.message(R.string.data_load_error) }
+                        { categories -> resourceLiveData.value = Resource.success(categories) },
+                        { error -> resourceLiveData.value = Resource.message(R.string.data_load_error) }
                 )
         )
     }

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp">
+    android:layout_margin="20dp"
+    android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/ivCategoryImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ivCategoryImage"
         android:contentDescription="@null" />
 
     <TextView
+        android:id="@+id/tvCategoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvCategoryName"
-        android:textSize="30sp"/>
+        android:textSize="30sp" />
 
 </LinearLayout>

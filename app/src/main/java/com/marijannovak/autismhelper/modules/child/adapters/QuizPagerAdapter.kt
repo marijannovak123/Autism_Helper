@@ -15,8 +15,7 @@ class QuizPagerAdapter(
         private val context: Context,
         private var questionsWithAnswers: List<QuestionAnswersJoin>,
         private val onItemClick: (Boolean) -> Unit
-)
-    : PagerAdapter() {
+) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(context).inflate(R.layout.list_item_question, container, false)
@@ -24,14 +23,14 @@ class QuizPagerAdapter(
         val question = questionsWithAnswers[position].question
         val answers = questionsWithAnswers[position].answers
 
-        with(view){
+        with(view) {
             tvQuestion.text = question.text
             tvAnswer1.text = answers[0].text
             tvAnswer2.text = answers[1].text
             tvAnswer3.text = answers[2].text
             tvAnswer4.text = answers[3].text
 
-            when(question.categoryId) {
+            when (question.categoryId) {
                 1 -> {
                     ivExtraImage.setBackgroundColor(Color.parseColor(question.extraData))
                     ivExtraImage.visibility = View.VISIBLE

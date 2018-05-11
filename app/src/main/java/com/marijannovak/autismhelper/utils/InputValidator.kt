@@ -12,21 +12,21 @@ import kotlin.collections.HashMap
 class InputValidator {
 
     companion object {
-        fun validate(input: String, type: String) : Boolean {
+        fun validate(input: String, type: String): Boolean {
             var valid = true
 
             if (input.isEmpty()) return false
 
-            when(type) {
+            when (type) {
                 VALIDATION_USERNAME -> {
-                    if(input.length < 5) valid = false
+                    if (input.length < 5) valid = false
                 }
                 VALIDATION_EMAIL -> {
-                    if(!android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches())
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches())
                         valid = false
                 }
                 VALIDATION_PASSWORD -> {
-                    if(input.length < 8) valid = false
+                    if (input.length < 8) valid = false
                 }
             }
 
@@ -39,18 +39,18 @@ class InputValidator {
             val dobCalender = Calendar.getInstance()
             dobCalender.time = Date(child.dateOfBirth)
 
-            if(child.name.isEmpty()) {
+            if (child.name.isEmpty()) {
                 errorMap[VALIDATION_NAME] = "Insert name!"
                 return errorMap
             }
 
-            if(child.name.length < 2)
+            if (child.name.length < 2)
                 errorMap[VALIDATION_NAME] = "Name too short!"
 
-            if(child.dateOfBirth <= 0)
+            if (child.dateOfBirth <= 0)
                 errorMap[VALIDATION_DATE] = "Insert date!"
 
-            if(!validateDate(dobCalender))
+            if (!validateDate(dobCalender))
                 errorMap[VALIDATION_DATE] = "Date incorrect!"
 
             return errorMap

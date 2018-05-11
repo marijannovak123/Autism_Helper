@@ -9,6 +9,10 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
+import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_CHILDREN
+import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PHRASES
+import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PROFILE
+import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_SETTINGS
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
@@ -19,11 +23,23 @@ import kotlinx.android.synthetic.main.activity_parent.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
+    private lateinit var fragments: Map<String, BaseFragment>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent)
 
+        instantiateFragments()
         setupDrawer()
+    }
+
+    private fun instantiateFragments() {
+        fragments = mapOf(
+                Pair(FRAGMENT_CHILDREN, ChildrenFragment()),
+                Pair(FRAGMENT_PHRASES, PhrasesFragment()),
+                Pair(FRAGMENT_PROFILE, ProfileFragment()),
+                Pair(FRAGMENT_SETTINGS, SettingsFragment())
+        )
     }
 
     private fun setupDrawer() {
@@ -31,9 +47,9 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
-        loadFragment(ProfileFragment())
+        loadFragment(fragments[FRAGMENT_PROFILE]!!)
 
-        navView.setNavigationItemSelectedListener {item -> handleNavViewClick(item)  }
+        navView.setNavigationItemSelectedListener { item -> handleNavViewClick(item) }
     }
 
     fun loadFragment(fragment: BaseFragment) {
@@ -46,25 +62,25 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     }
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.profile -> {
-                loadFragment(ProfileFragment())
+                loadFragment(fragments[FRAGMENT_PROFILE]!!)
             }
 
             R.id.settings -> {
-                loadFragment(SettingsFragment())
+                loadFragment(fragments[FRAGMENT_SETTINGS]!!)
             }
 
             R.id.children -> {
-                loadFragment(ChildrenFragment())
+                loadFragment(fragments[FRAGMENT_CHILDREN]!!)
+            }
+
+            R.id.phrases -> {
+                loadFragment(fragments[FRAGMENT_PHRASES]!!)
             }
 
             R.id.sync -> {
                 viewModel.syncData()
-            }
-
-            R.id.phrases -> {
-                loadFragment(PhrasesFragment())
             }
 
             R.id.logout -> {
@@ -86,7 +102,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
-            when(item.itemId) {
+            when (item.itemId) {
                 android.R.id.home -> {
                     drawerLayout.openDrawer(GravityCompat.START)
                 }
@@ -97,12 +113,17 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     }
 
     override fun onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
-        } else if(supportFragmentManager.backStackEntryCount > 0){
+        } else if (supportFragmentManager.backStackEntryCount > 0) {
             val currentFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)
-            if(currentFragment != null && currentFragment.isVisible) {
+            if (currentFragment != null && currentFragment.isVisible) {
                 loadFragment(ChildrenFragment())
+            } else if (fragments[FRAGMENT_PHRASES]!!.isVisible) {
+                val phrasesFragment = fragments[FRAGMENT_PHRASES]!! as PhrasesFragment
+                if (phrasesFragment.isAddPhraseShown()) {
+                    phrasesFragment.showAddPhrase(false)
+                }
             }
         }
     }
@@ -110,7 +131,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     override fun handleResource(resource: Resource<List<UserChildrenJoin>>?) {
         resource?.let {
             showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.HOME -> {
                     val intent = Intent(this@ParentActivity, LoginActivity::class.java)
                     startActivity(intent)

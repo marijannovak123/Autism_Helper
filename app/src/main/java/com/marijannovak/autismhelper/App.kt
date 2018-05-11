@@ -36,7 +36,7 @@ class App : Application(), HasActivityInjector {
                 .build()
                 .inject(this)
 
-        registerActivityLifecycleCallbacks(object: ActivityLifecycleCallbacks {
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityPaused(activity: Activity?) {
                 //NOOP
             }
@@ -67,7 +67,8 @@ class App : Application(), HasActivityInjector {
                         AndroidInjection.inject(activity)
                     }
                 }
-            }})
+            }
+        })
 
     }
 
@@ -75,5 +76,5 @@ class App : Application(), HasActivityInjector {
         private lateinit var context: App
 
         fun getAppContext() = context
-     }
+    }
 }

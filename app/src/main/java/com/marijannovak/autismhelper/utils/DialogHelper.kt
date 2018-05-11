@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.Intent
-import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v7.widget.AppCompatButton
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +14,8 @@ import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
-import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Child
-import com.marijannovak.autismhelper.modules.main.MainActivity
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.toast
 import java.util.*
 
 class DialogHelper {
@@ -111,7 +106,7 @@ class DialogHelper {
 
         //todo: test correct data set
         @SuppressLint("InflateParams")
-        fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, showAnotherCheck: Boolean,  confirmListener: (Child, Boolean) -> Unit, cancel: () -> Unit) {
+        fun showAddChildDialog(context: Context, userId: String, userChildrenNo: Int, showAnotherCheck: Boolean, confirmListener: (Child, Boolean) -> Unit, cancel: () -> Unit) {
             val selectedDate: Calendar = Calendar.getInstance()
 
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
@@ -125,7 +120,7 @@ class DialogHelper {
             val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
             val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
 
-            if(userChildrenNo == 0) {
+            if (userChildrenNo == 0) {
                 btnNegative.visibility = View.INVISIBLE
                 btnNegative.isEnabled = false
             }
@@ -135,7 +130,7 @@ class DialogHelper {
             val spGender = alertView.findViewById<Spinner>(R.id.spGender)
             val cbAddAnother = alertView.findViewById<CheckBox>(R.id.cbAddAnother)
 
-            cbAddAnother.visibility = if(!showAnotherCheck) View.GONE else View.VISIBLE
+            cbAddAnother.visibility = if (!showAnotherCheck) View.GONE else View.VISIBLE
             spGender.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, GENDERS)
 
             etDateOfBirth.setOnClickListener { showDatePicker(context, selectedDate, etDateOfBirth) }
@@ -193,7 +188,7 @@ class DialogHelper {
 
             var childrenNames = emptyList<String>()
 
-            for(child: Child in children) {
+            for (child: Child in children) {
                 childrenNames += child.name
             }
 

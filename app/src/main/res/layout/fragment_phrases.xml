@@ -3,33 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".modules.parent.fragments.PhrasesFragment">
 
-   <android.support.v7.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:id="@+id/rvPhrases"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPhrases"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <LinearLayout
+        android:id="@+id/llAddPhrase"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/llAddPhrase"
-        android:orientation="vertical"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="30dp"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:padding="30dp">
+        tools:visibility="visible">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <!-- todo: animations-->
             <EditText
-                style="@style/signupEditTextStyle"
                 android:id="@+id/etPhraseName"
+                style="@style/signupEditTextStyle"
+                android:drawableStart="@drawable/ic_account_circle"
                 android:hint="@string/phrase_name"
                 android:inputType="text"
-                android:drawableStart="@drawable/ic_account_circle"
                 android:nextFocusForward="@id/etChildDateOfBirth" />
 
         </android.support.design.widget.TextInputLayout>
@@ -39,31 +40,31 @@
             android:layout_height="wrap_content">
 
             <EditText
-                style="@style/signupEditTextStyle"
                 android:id="@+id/etIcon"
+                style="@style/signupEditTextStyle"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:drawableStart="@drawable/ic_image"
+                android:editable="false"
+                android:focusable="false"
                 android:hint="@string/phrase_icon"
                 android:inputType="text"
-                android:drawableStart="@drawable/ic_image"
-                android:cursorVisible="false"
-                android:editable="false"
-                android:clickable="true"
-                android:focusable="false"
                 tools:ignore="KeyboardInaccessibleWidget" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
-            android:text="@string/add_phrase"
-            style="@style/style_answer_button"
             android:id="@+id/btnAddPhrase"
+            style="@style/style_answer_button"
+            android:layout_margin="20dp"
             android:padding="10dp"
-            android:layout_margin="20dp"/>
+            android:text="@string/add_phrase" />
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
             android:id="@+id/ivPhraseIcon"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
             android:layout_margin="20dp"
-            android:src="@null"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/img_bg" />
     </LinearLayout>
 </FrameLayout>

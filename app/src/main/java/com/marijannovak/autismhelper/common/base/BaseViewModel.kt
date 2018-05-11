@@ -36,7 +36,7 @@ open class BaseViewModel<T> : ViewModel() {
     }
 
     fun logOut() {
-        dataRepository.logOut().subscribe(object: CompletableObserver {
+        dataRepository.logOut().subscribe(object : CompletableObserver {
             override fun onComplete() {
                 resourceLiveData.value = Resource.home()
             }

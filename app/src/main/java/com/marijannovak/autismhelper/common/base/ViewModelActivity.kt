@@ -14,9 +14,9 @@ import javax.inject.Inject
 abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() {
 
     @Inject
-    lateinit var viewModel : V
+    lateinit var viewModel: V
 
-    protected var pbLoading : LoadingDialog? = null
+    protected var pbLoading: LoadingDialog? = null
 
     abstract fun handleResource(resource: Resource<List<M>>?)
     abstract fun subscribeToData()
@@ -31,7 +31,7 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
     }
 
     protected fun showError(msgResId: Int, message: String?) {
-        if(msgResId <= 0) {
+        if (msgResId <= 0) {
             toast(message!!)
         } else {
             toast(msgResId)
@@ -39,13 +39,12 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
     }
 
     fun showLoading(status: Status) {
-        if(status == Status.LOADING) {
+        if (status == Status.LOADING) {
             pbLoading = pbLoading ?: LoadingDialog()
-            if(!pbLoading!!.isAdded) {
+            if (!pbLoading!!.isAdded) {
                 pbLoading!!.show(supportFragmentManager, "")
             }
-        }
-        else {
+        } else {
             pbLoading?.dismiss()
         }
     }

@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.utils
 import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.enums.Status
-import com.marijannovak.autismhelper.data.models.ChildScore
 
 class Resource<out T>(val status: Status, val data: T?, val message: String?) {
 

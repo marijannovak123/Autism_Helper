@@ -15,11 +15,11 @@ import io.reactivex.Single
  * Created by Marijan on 26.3.2018..
  */
 @Dao
-interface UserDao: BaseDao<User> {
+interface UserDao : BaseDao<User> {
 
     @Transaction
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getUserWithChildren() : Flowable<UserChildrenJoin>
+    fun getUserWithChildren(): Flowable<UserChildrenJoin>
 
     @Query("SELECT * FROM $TABLE_USER limit 1")
     fun userLoggedIn(): Maybe<User>

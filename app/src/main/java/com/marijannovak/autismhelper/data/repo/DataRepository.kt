@@ -1,18 +1,15 @@
 package com.marijannovak.autismhelper.data.repo
 
-import android.os.Environment
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.App
-import com.marijannovak.autismhelper.config.Constants.Companion.DIRECTORY_IMAGES
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.di.AppComponent
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
@@ -51,7 +48,7 @@ class DataRepository @Inject constructor(
                         }.toCompletable(),
                 api.getQuestions()
                         .doOnSuccess {
-                            for(question: Question in it) {
+                            for (question: Question in it) {
                                 db.questionDao().insert(question)
                                 db.answerDao().insertMultiple(question.answers)
 
@@ -117,7 +114,7 @@ class DataRepository @Inject constructor(
     fun downloadQuestionImage(pos: Int) {
         val question = questionsWithImgs[pos]
         files = context.filesDir.list()
-        if(!files.contains(question.extraData)) {
+        if (!files.contains(question.extraData)) {
             Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
             val ref = storage.child(question.extraData!!)
             val filename = "${question.extraData}"
@@ -127,25 +124,26 @@ class DataRepository @Inject constructor(
                     .addOnSuccessListener {
                         updateQuestionImgPath(question, file.absolutePath).subscribe(
                                 {
-                                    if(pos == questionsWithImgs.size-1) {
+                                    if (pos == questionsWithImgs.size - 1) {
                                         downloadPhraseImage(0)
                                         // onDataDownloaded()
                                     } else {
-                                        downloadQuestionImage(pos+1)
+                                        downloadQuestionImage(pos + 1)
                                     }
                                 },
                                 {
                                     Log.e(logTag(), "FAIL ${question.extraData!!}")
                                 }
-                        )}
+                        )
+                    }
                     .addOnFailureListener {
                         Log.e(logTag(), "FAIL ${question.extraData!!}")
                     }
         } else {
-            if(pos == questionsWithImgs.size-1) {
+            if (pos == questionsWithImgs.size - 1) {
                 downloadPhraseImage(0)
             } else {
-                downloadQuestionImage(pos+1)
+                downloadQuestionImage(pos + 1)
             }
         }
     }
@@ -153,7 +151,7 @@ class DataRepository @Inject constructor(
     private fun downloadPhraseImage(pos: Int) {
         val phrase = phrases[pos]
         files = context.filesDir.list()
-        if(!files.contains(phrase.iconPath)) {
+        if (!files.contains(phrase.iconPath)) {
             Log.e(logTag(), "Downloading ${phrases[pos].iconPath}")
             val ref = storage.child(phrase.iconPath)
             val filename = "${phrase.iconPath}.jpg"
@@ -163,7 +161,7 @@ class DataRepository @Inject constructor(
                     .addOnSuccessListener {
                         updatePhraseImgPath(phrase, file.absolutePath).subscribe(
                                 {
-                                    if(pos == phrases.size -1) {
+                                    if (pos == phrases.size - 1) {
                                         onDataDownloaded()
                                     } else {
                                         downloadPhraseImage(pos + 1)
@@ -174,11 +172,11 @@ class DataRepository @Inject constructor(
                                 }
                         )
                     }
-                    .addOnFailureListener{
+                    .addOnFailureListener {
                         Log.e(logTag(), "FAIL ${phrase.iconPath}")
                     }
         } else {
-            if(pos == phrases.size -1) {
+            if (pos == phrases.size - 1) {
                 onDataDownloaded()
             } else {
                 downloadPhraseImage(pos + 1)

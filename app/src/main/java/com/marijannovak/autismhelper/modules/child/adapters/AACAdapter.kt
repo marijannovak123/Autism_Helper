@@ -13,15 +13,14 @@ import kotlinx.android.synthetic.main.list_item_aac_phrase.view.*
 class AACAdapter(
         aacPhrases: List<AacPhrase>,
         onItemClick: (AacPhrase, Int) -> Unit
-)
-    : BaseAdapter<AACAdapter.AACViewHolder, AacPhrase>(aacPhrases.toMutableList(), onItemClick) {
+) : BaseAdapter<AACAdapter.AACViewHolder, AacPhrase>(aacPhrases.toMutableList(), onItemClick) {
 
     override fun createHolder(parent: ViewGroup): AACViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_aac_phrase, parent, false)
         return AACViewHolder(view)
     }
 
-    class AACViewHolder(itemView: View): BaseViewHolder<AacPhrase>(itemView) {
+    class AACViewHolder(itemView: View) : BaseViewHolder<AacPhrase>(itemView) {
         override fun bind(model: AacPhrase, position: Int, onItemClick: (AacPhrase, Int) -> Unit) {
             with(itemView) {
                 tvAacName.text = model.name

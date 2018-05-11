@@ -8,7 +8,7 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import io.reactivex.Flowable
 
 @Dao
-interface AACDao: BaseDao<AacPhrase> {
+interface AACDao : BaseDao<AacPhrase> {
 
     @Query("SELECT * FROM $TABLE_AAC")
     fun getAllPhrases(): Flowable<List<AacPhrase>>

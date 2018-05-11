@@ -47,8 +47,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer {
-            resource ->
+        viewModel.resourceLiveData.observe(this, Observer { resource ->
             resource?.let {
                 handleResource(it)
             }
@@ -64,22 +63,21 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     private fun startMainActivity() {
         intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        overridePendingTransition(0,0)
+        overridePendingTransition(0, 0)
         finish()
     }
 
     private fun addChildDialog(user: User?) {
         user?.let {
             DialogHelper.showAddChildDialog(this, user.id, childrenList.size, true,
-                    {
-                        child, another ->
-                            childrenList+= child
-                            if(another) {
-                                addChildDialog(user)
-                            } else {
-                                val userWithChildren = user.copy(children = childrenList)
-                                viewModel.saveUserOnlineAndLocally(userWithChildren)
-                            }
+                    { child, another ->
+                        childrenList += child
+                        if (another) {
+                            addChildDialog(user)
+                        } else {
+                            val userWithChildren = user.copy(children = childrenList)
+                            viewModel.saveUserOnlineAndLocally(userWithChildren)
+                        }
                     },
                     {
                         val userWithChildren = user.copy(children = childrenList)
@@ -140,14 +138,14 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
             etEmail.error = null
         }
 
-        if(valid)
+        if (valid)
             viewModel.login(email, password)
         else
             snackbarMessage(getString(R.string.input_errors))
     }
 
     private fun forgotPasswordDialog() {
-        DialogHelper.showForgotPasswordDialog(this, {email -> viewModel.forgotPassword(email)})
+        DialogHelper.showForgotPasswordDialog(this, { email -> viewModel.forgotPassword(email) })
     }
 
     override fun handleResource(resource: Resource<List<User>>?) {

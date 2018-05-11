@@ -3,9 +3,10 @@ package com.marijannovak.autismhelper.common.base
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
-abstract class BaseAdapter<VH: BaseViewHolder<T>, T> (
+abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         private var dataSet: MutableList<T>,
-        private var onItemClick: (T, Int) -> Unit )
+        private var onItemClick: (T, Int) -> Unit,
+        private var onLongItemClick: (T, Int) -> Unit)
     : RecyclerView.Adapter<VH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -15,7 +16,7 @@ abstract class BaseAdapter<VH: BaseViewHolder<T>, T> (
     override fun getItemCount() = dataSet.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(dataSet[position], position, onItemClick)
+        holder.bind(dataSet[position], position, onItemClick, onLongItemClick)
     }
 
     fun update(dataSet: List<T>) {

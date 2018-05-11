@@ -96,5 +96,6 @@
     <string name="phrases">Phrases</string>
     <string name="data_synced">Data synced successfully</string>
     <string name="saved">Saved</string>
+    <string name="delete_phrase">Delete phrase?</string>
 
 </resources>

@@ -21,7 +21,7 @@ import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_children.*
 
 class ChildrenFragment : BaseFragment() {
-//todo: design, add more details
+    //todo: design, add more details
     private lateinit var parentViewModel: ParentViewModel
     private var adapter: ChildrenAdapter? = null
     private var userWithChildren: UserChildrenJoin? = null
@@ -50,10 +50,10 @@ class ChildrenFragment : BaseFragment() {
 
     private fun setUpChildrenRv(resource: Resource<List<UserChildrenJoin>>?) {
         resource?.let {
-            if(it.status == Status.SUCCESS && it.data != null) {
+            if (it.status == Status.SUCCESS && it.data != null) {
                 userWithChildren = it.data[0]
-                if(adapter == null) {
-                    adapter = ChildrenAdapter(emptyList(), { child, _ -> openChildDetailsFragment(child)})
+                if (adapter == null) {
+                    adapter = ChildrenAdapter(emptyList(), { child, _ -> openChildDetailsFragment(child) })
                     rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     rvChildren.itemAnimator = DefaultItemAnimator()
                     rvChildren.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
@@ -77,11 +77,11 @@ class ChildrenFragment : BaseFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.action_add_child -> {
                     userWithChildren?.let {
                         DialogHelper.showAddChildDialog(activity as ParentActivity, it.user.id, it.children.size, false,
-                                { child, _ -> parentViewModel.saveChild(child)},
+                                { child, _ -> parentViewModel.saveChild(child) },
                                 { /*NOOP*/ }
                         )
                     }

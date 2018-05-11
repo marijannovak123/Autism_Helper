@@ -13,18 +13,18 @@ import io.reactivex.Flowable
  * Created by Marijan on 26.3.2018..
  */
 @Dao
-interface QuestionDao: BaseDao<Question> {
+interface QuestionDao : BaseDao<Question> {
 
     @Transaction
     @Query("SELECT * FROM $TABLE_QUESTIONS")
-    fun getQuestions() : Flowable<List<QuestionAnswersJoin>>
+    fun getQuestions(): Flowable<List<QuestionAnswersJoin>>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_QUESTIONS WHERE id = :id")
-    fun getQuestionById(id : Int) : Flowable<QuestionAnswersJoin>
+    fun getQuestionById(id: Int): Flowable<QuestionAnswersJoin>
 
     @Query("SELECT COUNT(*) FROM $TABLE_QUESTIONS")
-    fun getQuestionCount() : Int
+    fun getQuestionCount(): Int
 
     @Query("DELETE FROM $TABLE_QUESTIONS")
     fun deleteTable()

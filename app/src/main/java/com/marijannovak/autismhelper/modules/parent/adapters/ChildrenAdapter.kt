@@ -10,11 +10,11 @@ import com.marijannovak.autismhelper.data.models.Child
 import kotlinx.android.synthetic.main.list_item_child.view.*
 
 class ChildrenAdapter(childrenList: List<Child>, onItemClick: (Child, Int) -> Unit)
-        : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), onItemClick) {
+    : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), onItemClick) {
 
     override fun createHolder(parent: ViewGroup): ChildrenViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_child, parent, false)
-        view.setOnClickListener {  }
+        view.setOnClickListener { }
         return ChildrenViewHolder(view)
     }
 

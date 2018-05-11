@@ -21,14 +21,14 @@ class PrefsHelper {
     }
 
     fun setDownloadedImages(imageUrls: List<String>) {
-        val type = object : TypeToken<List<String>>(){}.type
+        val type = object : TypeToken<List<String>>() {}.type
         val urlsString = Gson().toJson(imageUrls, type)
         Remember.putString(KEY_DOWNLOADED_IMAGES, urlsString)
     }
 
     fun getDownloadedImages(): List<String> {
-        val type = object : TypeToken<List<String>>(){}.type
+        val type = object : TypeToken<List<String>>() {}.type
         val urlsString = Remember.getString(KEY_DOWNLOADED_IMAGES, "")
-        return if(urlsString.isEmpty()) emptyList() else Gson().fromJson(urlsString, type)
+        return if (urlsString.isEmpty()) emptyList() else Gson().fromJson(urlsString, type)
     }
 }

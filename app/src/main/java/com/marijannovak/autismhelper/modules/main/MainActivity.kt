@@ -62,7 +62,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
     override fun handleResource(resource: Resource<List<Child>>?) {
         resource?.let {
             showLoading(it.status)
-            when(it.status) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     pickChildDialog(it.data)
                 }
@@ -82,7 +82,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                 }
 
                 else -> {
-                   //NOOP
+                    //NOOP
                 }
             }
         }
@@ -90,9 +90,9 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
 
     private fun pickChildDialog(children: List<Child>?) {
         children?.let {
-            if(children.isNotEmpty()){
-                if(children.size > 1) {
-                    DialogHelper.showPickChildDialog(this, children, {child -> startChildActivity(child)} )
+            if (children.isNotEmpty()) {
+                if (children.size > 1) {
+                    DialogHelper.showPickChildDialog(this, children, { child -> startChildActivity(child) })
                 } else {
                     startChildActivity(children[0])
                 }
@@ -107,7 +107,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when(item?.itemId) {
+        return when (item?.itemId) {
             R.id.action_logout -> {
                 viewModel.logOut()
                 true

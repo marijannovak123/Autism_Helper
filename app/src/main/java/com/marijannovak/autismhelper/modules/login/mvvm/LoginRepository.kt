@@ -31,16 +31,16 @@ class LoginRepository @Inject constructor(
         private val api: API,
         private val prefs: PrefsHelper) {
 
-    private var currentUser : FirebaseUser? = null
+    private var currentUser: FirebaseUser? = null
 
     fun isLoggedIn(): Maybe<User> {
         return userDao.userLoggedIn().handleThreading()
     }
 
-    fun register(signupRequest: SignupRequest, listener : GeneralListener<FirebaseUser>) {
+    fun register(signupRequest: SignupRequest, listener: GeneralListener<FirebaseUser>) {
         auth.createUserWithEmailAndPassword(signupRequest.email, signupRequest.password)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful) {
                         currentUser = auth.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
@@ -51,9 +51,9 @@ class LoginRepository @Inject constructor(
     }
 
     fun login(email: String, password: String, listener: GeneralListener<FirebaseUser>) {
-        auth.signInWithEmailAndPassword(email,password)
+        auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful) {
                         currentUser = auth.currentUser
                         listener.onSucces(currentUser!!)
                     } else {
@@ -81,7 +81,7 @@ class LoginRepository @Inject constructor(
 
             auth.signInWithCredential(credential)
                     .addOnCompleteListener {
-                        if(it.isSuccessful){
+                        if (it.isSuccessful) {
                             listener.onSucces(auth.currentUser!!)
                         } else {
                             listener.onFailure(it.exception ?: Exception("Google Sign In Error"))
@@ -98,7 +98,7 @@ class LoginRepository @Inject constructor(
         return api
                 .getUser(userId)
                 .flatMap { user: User ->
-                    if(user.id.isNotEmpty() && user.username != null
+                    if (user.id.isNotEmpty() && user.username != null
                             && user.username!!.isNotEmpty() && user.email != null
                             && user.email!!.isNotEmpty())
                         Single.just(true)
@@ -115,23 +115,22 @@ class LoginRepository @Inject constructor(
     }
 
     private fun saveUser(user: User): Completable {
-       return Completable.fromAction {
-           userDao.insert(user)
-           user.children?.let {
-               childDao.insertMultiple(it)
-           }
-           user.childScoresResponse?.let {
-               childScoreDao.insertMultiple(it.childScores)
-           }
-           prefs.setParentPassword(user.parentPassword ?: "")
-       }
+        return Completable.fromAction {
+            userDao.insert(user)
+            user.children?.let {
+                childDao.insertMultiple(it)
+            }
+            user.childScoresResponse?.let {
+                childScoreDao.insertMultiple(it.childScores)
+            }
+            prefs.setParentPassword(user.parentPassword ?: "")
+        }
     }
 
-    fun fetchAndSaveUser(userId: String) : Completable {
+    fun fetchAndSaveUser(userId: String): Completable {
         return api.getUser(userId)
-                .flatMapCompletable {
-                    user ->
-                        saveUser(user)
+                .flatMapCompletable { user ->
+                    saveUser(user)
                 }
                 .handleThreading()
     }

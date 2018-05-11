@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/dialog_bg"
     android:orientation="vertical"
     android:padding="20dp">
 
     <TextView
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:id="@+id/tvMessage"
-        android:text="@string/add_child_profile"
+        android:layout_marginBottom="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"/>
+        android:text="@string/add_child_profile"
+        android:textSize="20sp" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            style="@style/signupEditTextStyle"
             android:id="@+id/etChildName"
+            style="@style/signupEditTextStyle"
+            android:drawableStart="@drawable/ic_account_circle"
             android:hint="@string/child_name"
             android:inputType="text"
-            android:drawableStart="@drawable/ic_account_circle"
             android:nextFocusForward="@id/etChildDateOfBirth" />
 
     </android.support.design.widget.TextInputLayout>
@@ -35,30 +35,30 @@
         android:layout_height="wrap_content">
 
         <EditText
-            style="@style/signupEditTextStyle"
             android:id="@+id/etChildDateOfBirth"
+            style="@style/signupEditTextStyle"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:drawableStart="@drawable/ic_date_range"
+            android:editable="false"
+            android:focusable="false"
             android:hint="@string/date_of_birth"
             android:inputType="date"
-            android:drawableStart="@drawable/ic_date_range"
-            android:cursorVisible="false"
-            android:editable="false"
-            android:clickable="true"
-            android:focusable="false"
             tools:ignore="KeyboardInaccessibleWidget" />
 
     </android.support.design.widget.TextInputLayout>
 
     <Spinner
-        style="@style/signupEditTextStyle"
-        android:id="@+id/spGender"/>
+        android:id="@+id/spGender"
+        style="@style/signupEditTextStyle" />
 
     <CheckBox
+        android:id="@+id/cbAddAnother"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cbAddAnother"
-        android:layout_marginStart="45dp"
         android:layout_marginBottom="15dp"
-        android:text="@string/add_another_child"/>
+        android:layout_marginStart="45dp"
+        android:text="@string/add_another_child" />
 
     <LinearLayout
         android:layout_width="match_parent"
