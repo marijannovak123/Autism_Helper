@@ -10,9 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
@@ -24,9 +22,11 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
+import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_phrases.*
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.toast
 import java.io.File
 import java.io.FileNotFoundException
@@ -111,12 +111,17 @@ class PhrasesFragment : BaseFragment() {
     private fun setUpPhrasesRv(phrases: List<AacPhrase>?) {
         phrases?.let {
             if (phrasesAdapter == null) {
-                phrasesAdapter = AACAdapter(emptyList(), { phrase, _ -> editPhrase(phrase)})
+                phrasesAdapter = AACAdapter(emptyList(), {
+                    phrase, _ -> editPhrase(phrase)
+                }, {
+                    phrase, _ ->
+                        DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_phrase), {
+                            parentViewModel.deletePhrase(phrase)
+                        })
+                })
                 rvPhrases.adapter = phrasesAdapter
-                rvPhrases.layoutManager = GridLayoutManager(activity, 5)
+                rvPhrases.layoutManager = GridLayoutManager(activity, 4)
                 rvPhrases.itemAnimator = DefaultItemAnimator()
-                rvPhrases.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
-                rvPhrases.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.HORIZONTAL))
             }
 
             phrasesAdapter!!.update(phrases)

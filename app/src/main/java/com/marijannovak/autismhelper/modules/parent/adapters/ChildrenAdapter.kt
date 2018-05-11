@@ -9,8 +9,11 @@ import com.marijannovak.autismhelper.common.base.BaseViewHolder
 import com.marijannovak.autismhelper.data.models.Child
 import kotlinx.android.synthetic.main.list_item_child.view.*
 
-class ChildrenAdapter(childrenList: List<Child>, onItemClick: (Child, Int) -> Unit)
-    : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), onItemClick) {
+class ChildrenAdapter(
+        childrenList: List<Child>,
+        onItemClick: (Child, Int) -> Unit,
+        onLongItemClick: (Child, Int) -> Unit)
+    : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), onItemClick, onLongItemClick) {
 
     override fun createHolder(parent: ViewGroup): ChildrenViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_child, parent, false)
@@ -21,7 +24,7 @@ class ChildrenAdapter(childrenList: List<Child>, onItemClick: (Child, Int) -> Un
     class ChildrenViewHolder(itemView: View)
         : BaseViewHolder<Child>(itemView) {
 
-        override fun bind(child: Child, position: Int, onItemClick: (Child, Int) -> Unit) {
+        override fun bind(child: Child, position: Int, onItemClick: (Child, Int) -> Unit, onLongItemClick: (Child, Int) -> Unit) {
             with(itemView) {
                 tvChildName.text = child.name
                 tvChildGender.text = child.gender

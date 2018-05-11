@@ -53,7 +53,13 @@ class ChildrenFragment : BaseFragment() {
             if (it.status == Status.SUCCESS && it.data != null) {
                 userWithChildren = it.data[0]
                 if (adapter == null) {
-                    adapter = ChildrenAdapter(emptyList(), { child, _ -> openChildDetailsFragment(child) })
+                    adapter = ChildrenAdapter(emptyList(), {
+                        child, _ ->
+                            openChildDetailsFragment(child)
+                    }, {
+                        child, _ ->
+                            //Noop
+                    })
                     rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     rvChildren.itemAnimator = DefaultItemAnimator()
                     rvChildren.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))

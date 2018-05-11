@@ -76,4 +76,12 @@ class ParentViewModel @Inject constructor(
                 { resourceLiveData.value = Resource.message(R.string.sync_error) }
         )
     }
+
+    fun deletePhrase(phrase: AacPhrase) {
+        resourceLiveData.value = Resource.loading()
+        aacRepository.deletePhrase(phrase).subscribe(
+                { resourceLiveData.value = Resource.message(R.string.saved) },
+                { resourceLiveData.value = Resource.message(R.string.save_error) }
+        )
+    }
 }

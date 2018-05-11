@@ -23,4 +23,12 @@ class AACRepository @Inject constructor(private val aacDao: AACDao) {
             }
         }
     }
+
+    fun deletePhrase(phrase: AacPhrase): Completable {
+        return Completable.fromAction {
+            doAsync {
+                aacDao.delete(phrase)
+            }
+        }
+    }
 }
