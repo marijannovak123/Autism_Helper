@@ -2,14 +2,13 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
@@ -20,9 +19,8 @@ import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_children.*
 
-class ChildrenFragment : BaseFragment() {
+class ChildrenFragment : InjectableFragment<ParentViewModel>() {
     //todo: design, add more details
-    private lateinit var parentViewModel: ParentViewModel
     private var adapter: ChildrenAdapter? = null
     private var userWithChildren: UserChildrenJoin? = null
 
@@ -38,36 +36,34 @@ class ChildrenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
-            parentViewModel = ViewModelProviders.of(it).get(ParentViewModel::class.java)
-            parentViewModel.resourceLiveData.observe(this,
+            viewModel.childrenLiveData.observe(this,
                     Observer {
                         setUpChildrenRv(it)
                     })
         }
 
-        parentViewModel.loadUserWithChildren()
     }
 
-    private fun setUpChildrenRv(resource: Resource<List<UserChildrenJoin>>?) {
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadChildren()
+    }
+
+    private fun setUpChildrenRv(resource: Resource<List<Child>>?) {
         resource?.let {
             if (it.status == Status.SUCCESS && it.data != null) {
-                userWithChildren = it.data[0]
-                if (adapter == null) {
-                    adapter = ChildrenAdapter(emptyList(), {
-                        child, _ ->
-                            openChildDetailsFragment(child)
-                    }, {
-                        child, _ ->
-                            //Noop
+                if (adapter == null || rvChildren.adapter == null) {
+                    adapter = ChildrenAdapter(emptyList(), { child, _ ->
+                        openChildDetailsFragment(child)
+                    }, { child, _ ->
+                        //Noop
                     })
                     rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     rvChildren.itemAnimator = DefaultItemAnimator()
                     rvChildren.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
                     rvChildren.adapter = adapter
                 }
-
-                val children = it.data[0].children
-                adapter!!.update(children)
+                adapter!!.update(it.data)
             }
         }
     }
@@ -87,7 +83,7 @@ class ChildrenFragment : BaseFragment() {
                 R.id.action_add_child -> {
                     userWithChildren?.let {
                         DialogHelper.showAddChildDialog(activity as ParentActivity, it.user.id, it.children.size, false,
-                                { child, _ -> parentViewModel.saveChild(child) },
+                                { child, _ -> viewModel.saveChild(child) },
                                 { /*NOOP*/ }
                         )
                     }

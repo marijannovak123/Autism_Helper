@@ -45,21 +45,15 @@ class Constants {
 
         //region shared prefs
         const val PREFS_NAME = "autism_helper_prefs"
-        const val KEY_LOGGED_IN = "logged_in"
         const val KEY_PARENT_PASSWORD = "parent_password"
         const val KEY_DOWNLOADED_IMAGES = "downloaded_images"
         //endregion
 
-        //region firebase storage
-        const val FIREBASE_STORAGE_URL = "https://firebasestorage.googleapis.com/v0/b/autism-helper.appspot.com/o/"
-        const val IMG_DIR = "autism_helper"
-        //endregion
-
+        //region extras
         const val EXTRA_CATEGORY_ID = "category_id"
         const val EXTRA_CHILD = "child"
         const val EXTRA_SCORE = "score"
-
-        const val DIRECTORY_IMAGES = "autism_helper"
+        //endregion
 
         //region fragments
         const val FRAGMENT_PROFILE = "profile_fragment"
@@ -67,6 +61,10 @@ class Constants {
         const val FRAGMENT_PHRASES = "phrases_fragment"
         const val FRAGMENT_SETTINGS = "settings_fragment"
         const val FRAGMENT_CHILD_DETAILS = "child_details_fragment"
+        //endregion
+
+        //region other
+        const val PASSWORD_PLACEHOLDER = "abcdefg1234"
         //endregion
     }
 }

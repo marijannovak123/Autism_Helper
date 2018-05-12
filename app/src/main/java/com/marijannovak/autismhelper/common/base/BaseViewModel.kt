@@ -60,7 +60,7 @@ open class BaseViewModel<T> : ViewModel() {
         )
     }
 
-    //todo: parse all errrors from viewmodels to show at least close estimation of cause
+    //todo: parse all errors from viewmodels to show at least close estimation of cause
     fun parseThrowable(t: Throwable?): String {
         return ""
     }

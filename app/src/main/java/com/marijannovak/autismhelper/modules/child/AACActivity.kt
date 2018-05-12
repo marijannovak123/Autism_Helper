@@ -59,12 +59,11 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
     private fun setUpAacData(phrases: List<AacPhrase>?) {
         if (aacDisplayAdapter == null) {
-            aacDisplayAdapter = AACAdapter(emptyList(), {
-                aacPhrase, position ->
-                    aacDisplayAdapter?.deleteItem(aacPhrase)
-                    ttsWords.removeAt(position)
+            aacDisplayAdapter = AACAdapter(emptyList(), { aacPhrase, position ->
+                aacDisplayAdapter?.deleteItem(aacPhrase)
+                ttsWords.removeAt(position)
             }, { aacPhrase, _ ->
-                    //tts.speak(aacPhrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+                //tts.speak(aacPhrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
             })
             rvAacDisplay.adapter = aacDisplayAdapter
             rvAacDisplay.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -72,13 +71,11 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
         phrases?.let {
             if (aacSelectorAdapter == null) {
-                aacSelectorAdapter = AACAdapter(emptyList(), {
-                    phrase, _ ->
-                        aacDisplayAdapter?.addItem(phrase)
-                        ttsWords.add(phrase.name)
-                }, {
-                    phrase, _ ->
-                      tts.speak(phrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+                aacSelectorAdapter = AACAdapter(emptyList(), { phrase, _ ->
+                    aacDisplayAdapter?.addItem(phrase)
+                    ttsWords.add(phrase.name)
+                }, { phrase, _ ->
+                    tts.speak(phrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
 
                 })
                 rvAacSelector.adapter = aacSelectorAdapter

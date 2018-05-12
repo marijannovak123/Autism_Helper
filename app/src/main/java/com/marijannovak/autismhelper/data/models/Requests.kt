@@ -11,3 +11,8 @@ data class SignupRequest(
 data class ParentPasswordRequest(
         var parentPassword: String
 )
+
+data class UserUpdateRequest(
+     var username: String,
+     var parentPassword: String
+)

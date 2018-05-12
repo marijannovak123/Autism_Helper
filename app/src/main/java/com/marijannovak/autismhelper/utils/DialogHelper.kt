@@ -186,11 +186,7 @@ class DialogHelper {
             val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
             val spChildren = alertView.findViewById<Spinner>(R.id.spChildren)
 
-            var childrenNames = emptyList<String>()
-
-            for (child: Child in children) {
-                childrenNames += child.name
-            }
+            val childrenNames = children.map { child -> child.name }
 
             val childrenAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, childrenNames)
             spChildren.adapter = childrenAdapter

@@ -7,6 +7,8 @@ import com.marijannovak.autismhelper.common.base.BaseDao
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
+import com.marijannovak.autismhelper.data.models.UserUpdateRequest
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -29,4 +31,7 @@ interface UserDao : BaseDao<User> {
 
     @Query("DELETE FROM $TABLE_USER")
     fun deleteTable()
+
+    @Query("UPDATE $TABLE_USER SET username = :userName, parentPassword = :parentPassword WHERE 1")
+    fun update(userName: String, parentPassword: String)
 }

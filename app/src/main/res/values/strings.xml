@@ -70,7 +70,7 @@
     <string name="pick_category">Pick Category</string>
     <string name="question">Question</string>
     <string name="children_load_fail">Failed loading children</string>
-    <string name="pick_child">Pick Child</string>
+    <string name="pick_child">Which one are you?</string>
     <string name="save_score">Save score?</string>
     <string name="score_saved">Score saved</string>
     <string name="save_error">Error saving score</string>
@@ -97,5 +97,7 @@
     <string name="data_synced">Data synced successfully</string>
     <string name="saved">Saved</string>
     <string name="delete_phrase">Delete phrase?</string>
+    <string name="parent_password">Parent password</string>
+    <string name="update">Update</string>
 
 </resources>

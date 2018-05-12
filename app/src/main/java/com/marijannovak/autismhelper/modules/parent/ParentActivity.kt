@@ -31,13 +31,15 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
         instantiateFragments()
         setupDrawer()
+
+        viewModel.loadUserWithChildren()
     }
 
     private fun instantiateFragments() {
-        fragments = mapOf(
+        fragments = mutableMapOf(
                 Pair(FRAGMENT_CHILDREN, ChildrenFragment()),
-                Pair(FRAGMENT_PHRASES, PhrasesFragment()),
                 Pair(FRAGMENT_PROFILE, ProfileFragment()),
+                Pair(FRAGMENT_PHRASES, PhrasesFragment()),
                 Pair(FRAGMENT_SETTINGS, SettingsFragment())
         )
     }
@@ -48,7 +50,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
         loadFragment(fragments[FRAGMENT_PROFILE]!!)
-
+        navView.menu.findItem(R.id.profile).isChecked = true
         navView.setNavigationItemSelectedListener { item -> handleNavViewClick(item) }
     }
 
@@ -80,7 +82,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.sync -> {
-                viewModel.syncData()
+                viewModel.syncData(false)
             }
 
             R.id.logout -> {

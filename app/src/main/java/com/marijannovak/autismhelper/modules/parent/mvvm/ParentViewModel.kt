@@ -6,6 +6,7 @@ import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
+import com.marijannovak.autismhelper.data.models.UserUpdateRequest
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.utils.Resource
 import javax.inject.Inject
@@ -17,12 +18,22 @@ class ParentViewModel @Inject constructor(
 
     var chartLiveData = MutableLiveData<Resource<List<ParentRepository.ChartData>>>()
     var phraseLiveData = MutableLiveData<Resource<List<AacPhrase>>>()
+    var childrenLiveData = MutableLiveData<Resource<List<Child>>>()
 
     fun loadUserWithChildren() {
         compositeDisposable.add(
                 dataRepository.loadUserAndChildren().subscribe(
                         { resourceLiveData.value = Resource.success(listOf(it)) },
                         { resourceLiveData.value = Resource.message(R.string.load_error) }
+                )
+        )
+    }
+
+    fun loadChildren() {
+        compositeDisposable.add(
+                repository.loadChildren().subscribe(
+                        { childrenLiveData.value = Resource.success(it) },
+                        { childrenLiveData.value = Resource.message(R.string.load_error) }
                 )
         )
     }
@@ -39,7 +50,6 @@ class ParentViewModel @Inject constructor(
     }
 
     fun loadChildScores(childId: String) {
-        chartLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.loadChildScoresLineData(childId).subscribe(
                         { chartLiveData.value = Resource.success(listOf(it)) },
@@ -69,9 +79,9 @@ class ParentViewModel @Inject constructor(
         )
     }
 
-    fun syncData() {
+    fun syncData(firstSync: Boolean) {
         resourceLiveData.value = Resource.loading()
-        dataRepository.syncData().subscribe(
+        dataRepository.syncData(firstSync).subscribe(
                 { resourceLiveData.value = Resource.message(R.string.data_synced) },
                 { resourceLiveData.value = Resource.message(R.string.sync_error) }
         )
@@ -84,4 +94,14 @@ class ParentViewModel @Inject constructor(
                 { resourceLiveData.value = Resource.message(R.string.save_error) }
         )
     }
+
+    fun updateUserData(userId: String, userUpdateRequest: UserUpdateRequest) {
+        resourceLiveData.value = Resource.loading()
+        repository.updateUser(userId, userUpdateRequest).subscribe({
+            resourceLiveData.value = Resource.message(R.string.saved)
+        }, {
+            resourceLiveData.value = Resource.message(R.string.save_error)
+        })
+    }
+
 }

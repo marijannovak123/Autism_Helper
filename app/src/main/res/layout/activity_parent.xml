@@ -16,7 +16,7 @@
             android:layout_alignParentTop="true"
             android:background="?attr/colorPrimary"
             android:theme="@style/MyActionBar"
-            app:titleTextColor="@color/white"/>
+            app:titleTextColor="@color/white" />
 
         <LinearLayout
             android:id="@+id/llContainer"

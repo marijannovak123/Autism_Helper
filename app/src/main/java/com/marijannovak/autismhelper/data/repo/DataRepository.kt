@@ -40,7 +40,7 @@ class DataRepository @Inject constructor(
         files = context.filesDir.list()
     }
 
-    fun syncData(): Completable {
+    fun syncData(firstSync: Boolean): Completable {
         return Completable.mergeArray(
                 api.getCategories()
                         .doOnSuccess {
@@ -48,10 +48,13 @@ class DataRepository @Inject constructor(
                         }.toCompletable(),
                 api.getQuestions()
                         .doOnSuccess {
+                            if(firstSync) {
+                                db.questionDao().insertMultiple(it)
+                            } else {
+                                db.questionDao().updateMultiple(it)
+                            }
                             for (question: Question in it) {
-                                db.questionDao().insert(question)
                                 db.answerDao().insertMultiple(question.answers)
-
                                 if (question.categoryId == 2) {
                                     questionsWithImgs += question
                                 }
@@ -60,7 +63,11 @@ class DataRepository @Inject constructor(
                 api.getPhrases()
                         .doOnSuccess {
                             phrases = it
-                            db.aacDao().insertMultiple(it)
+                            if(firstSync) {
+                                db.aacDao().insertMultiple(it)
+                            } else {
+                                db.aacDao().updateMultiple(it)
+                            }
                         }.toCompletable()
         ).handleThreading()
     }
@@ -90,12 +97,14 @@ class DataRepository @Inject constructor(
     fun saveParentPassword(password: String): Completable {
         sharedPrefs.setParentPassword(password)
 
-        return db.userDao().getCurrentUser().flatMapCompletable { user ->
-            Completable.mergeArray(
-                    api.updateParentPassword(user.id, ParentPasswordRequest(password)),
-                    Completable.fromAction {
-                        db.userDao().insert(user)
-                    }
+        return db.userDao().getCurrentUser()
+                .flatMapCompletable {
+                    user ->
+                        Completable.mergeArray(
+                        api.updateParentPassword(user.id, ParentPasswordRequest(password)),
+                        Completable.fromAction {
+                            db.userDao().insert(user)
+                        }
             )
         }.handleThreading()
     }

@@ -73,17 +73,15 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
     private fun setCategoriesData(categories: List<Category>?) {
         categories?.let {
             if (categoriesAdapter == null) {
-                categoriesAdapter = CategoriesAdapter(emptyList(), {
-                        category, _ ->
-                            val intent = Intent(this, QuizActivity::class.java)
-                            intent.putExtra(EXTRA_CATEGORY_ID, category.id)
-                            intent.putExtra(EXTRA_CHILD, child)
-                            startActivity(intent)
-                            finish()
-                    }, {
-                        category, _ ->
-                            //NOOP
-                    })
+                categoriesAdapter = CategoriesAdapter(emptyList(), { category, _ ->
+                    val intent = Intent(this, QuizActivity::class.java)
+                    intent.putExtra(EXTRA_CATEGORY_ID, category.id)
+                    intent.putExtra(EXTRA_CHILD, child)
+                    startActivity(intent)
+                    finish()
+                }, { category, _ ->
+                    //NOOP
+                })
 
                 rvCategories.layoutManager = LinearLayoutManager(this)
                 rvCategories.itemAnimator = DefaultItemAnimator()

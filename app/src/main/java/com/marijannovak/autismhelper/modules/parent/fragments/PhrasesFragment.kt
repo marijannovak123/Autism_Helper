@@ -2,7 +2,6 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,7 +13,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.REQUEST_CODE_IMAGE_LOADED
@@ -26,7 +25,6 @@ import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_phrases.*
 import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.toast
 import java.io.File
 import java.io.FileNotFoundException
@@ -34,9 +32,12 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class PhrasesFragment : BaseFragment() {
+class PhrasesFragment : InjectableFragment<ParentViewModel>() {
 
-    private lateinit var parentViewModel: ParentViewModel
+    //@Inject
+    //lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    //private lateinit var parentViewModel: ParentViewModel
     private var phrasesAdapter: AACAdapter? = null
     private var loadedBitmap: Bitmap? = null
     private var loadedBitmapName: String = ""
@@ -68,7 +69,7 @@ class PhrasesFragment : BaseFragment() {
             val icon = saveBitmap(loadedBitmapName).absolutePath
 
             if (name.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
-                parentViewModel.savePhrase(AacPhrase(name.hashCode(), name, icon))
+                viewModel.savePhrase(AacPhrase(name.hashCode(), name, icon))
             } else {
                 toast(R.string.invalid_input)
             }
@@ -78,13 +79,13 @@ class PhrasesFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            parentViewModel = ViewModelProviders.of(it).get(ParentViewModel::class.java)
-            parentViewModel.phraseLiveData.observe(this,
+            // parentViewModel = ViewModelProviders.of(it, viewModelFactory).get(ParentViewModel::class.java)
+            viewModel.phraseLiveData.observe(this,
                     Observer {
                         handleResource(it)
                     })
         }
-        parentViewModel.loadPhrases()
+        viewModel.loadPhrases()
 
     }
 
@@ -110,14 +111,13 @@ class PhrasesFragment : BaseFragment() {
 
     private fun setUpPhrasesRv(phrases: List<AacPhrase>?) {
         phrases?.let {
-            if (phrasesAdapter == null) {
-                phrasesAdapter = AACAdapter(emptyList(), {
-                    phrase, _ -> editPhrase(phrase)
-                }, {
-                    phrase, _ ->
-                        DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_phrase), {
-                            parentViewModel.deletePhrase(phrase)
-                        })
+            if (phrasesAdapter == null || rvPhrases.adapter == null) {
+                phrasesAdapter = AACAdapter(emptyList(), { phrase, _ ->
+                    editPhrase(phrase)
+                }, { phrase, _ ->
+                    DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_phrase), {
+                        viewModel.deletePhrase(phrase)
+                    })
                 })
                 rvPhrases.adapter = phrasesAdapter
                 rvPhrases.layoutManager = GridLayoutManager(activity, 4)
@@ -244,7 +244,8 @@ class PhrasesFragment : BaseFragment() {
             else -> {
                 // square
                 height = maxSize
-                width = maxSize           }
+                width = maxSize
+            }
         }
 
         bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)

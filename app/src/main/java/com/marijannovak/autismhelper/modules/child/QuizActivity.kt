@@ -8,7 +8,6 @@ import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CATEGORY_ID
 import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CHILD
-import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_SCORE
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore

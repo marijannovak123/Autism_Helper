@@ -2,7 +2,6 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -10,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
@@ -20,10 +19,9 @@ import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_child_details.*
 
-class ChildDetailsFragment : BaseFragment() {
+class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
 
     private var child: Child? = null
-    private lateinit var parentViewModel: ParentViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -36,15 +34,14 @@ class ChildDetailsFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            parentViewModel = ViewModelProviders.of(it).get(ParentViewModel::class.java)
-            parentViewModel.chartLiveData.observe(this,
+            viewModel.chartLiveData.observe(this,
                     Observer {
                         handleResource(it)
                     })
         }
         child?.let {
             (activity as AppCompatActivity).supportActionBar?.title = it.name
-            parentViewModel.loadChildScores(it.id)
+            viewModel.loadChildScores(it.id)
         }
 
     }
