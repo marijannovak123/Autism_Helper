@@ -10,6 +10,10 @@ import com.marijannovak.autismhelper.data.models.UserUpdateRequest
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.utils.Resource
 import javax.inject.Inject
+import android.R.attr.data
+import com.google.firebase.storage.UploadTask
+
+
 
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,

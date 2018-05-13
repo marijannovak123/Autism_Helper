@@ -99,5 +99,6 @@
     <string name="delete_phrase">Delete phrase?</string>
     <string name="parent_password">Parent password</string>
     <string name="update">Update</string>
+    <string name="profile_pic">Profile picture</string>
 
 </resources>

@@ -34,4 +34,7 @@ interface UserDao : BaseDao<User> {
 
     @Query("UPDATE $TABLE_USER SET username = :userName, parentPassword = :parentPassword WHERE 1")
     fun update(userName: String, parentPassword: String)
+
+    //@Query("UPDATE $TABLE_USER SET profileImgPath = :path WHERE 1")
+    //fun updateUserProfileImg(path: String)
 }

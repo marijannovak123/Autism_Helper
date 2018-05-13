@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
@@ -20,6 +22,7 @@ import com.marijannovak.autismhelper.modules.parent.fragments.*
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_parent.*
+import kotlinx.android.synthetic.main.nav_header.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
@@ -30,8 +33,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         setContentView(R.layout.activity_parent)
 
         instantiateFragments()
-        setupDrawer()
-
         viewModel.loadUserWithChildren()
     }
 
@@ -44,7 +45,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         )
     }
 
-    private fun setupDrawer() {
+    private fun setupDrawer(userWithChildren: UserChildrenJoin) {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
@@ -52,6 +53,10 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         loadFragment(fragments[FRAGMENT_PROFILE]!!)
         navView.menu.findItem(R.id.profile).isChecked = true
         navView.setNavigationItemSelectedListener { item -> handleNavViewClick(item) }
+
+        with(userWithChildren.user) {
+            tvProfileName.text = username
+        }
     }
 
     fun loadFragment(fragment: BaseFragment) {
@@ -134,6 +139,10 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         resource?.let {
             showLoading(it.status)
             when (it.status) {
+                Status.SUCCESS -> {
+                    setupDrawer(it.data!![0])
+                }
+
                 Status.HOME -> {
                     val intent = Intent(this@ParentActivity, LoginActivity::class.java)
                     startActivity(intent)

@@ -9,13 +9,13 @@ import android.view.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.enums.Status
-import com.marijannovak.autismhelper.config.Constants.Companion.PASSWORD_PLACEHOLDER
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.models.UserUpdateRequest
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
+
 
 class ProfileFragment : InjectableFragment<ParentViewModel>() {
 
@@ -67,7 +67,6 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
         etUsername.addTextChangedListener(textWatcher)
         etEmail.addTextChangedListener(textWatcher)
         etParentPassword.addTextChangedListener(textWatcher)
-        etPassword.addTextChangedListener(textWatcher)
     }
 
     override fun onResume() {
@@ -82,7 +81,6 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
                 etUsername.setText(username)
                 etEmail.setText(email)
                 etParentPassword.setText(parentPassword)
-                etPassword.setText(PASSWORD_PLACEHOLDER)
             }
         }
 
@@ -110,5 +108,5 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
         }
         return super.onOptionsItemSelected(item)
     }
-    //TODO: UPDATE CHILDREN DATA, UPDATE PASSWORDS, INFO ETC.
+
 }

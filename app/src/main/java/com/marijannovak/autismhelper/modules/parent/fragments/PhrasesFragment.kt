@@ -22,6 +22,7 @@ import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
+import com.marijannovak.autismhelper.utils.ImageHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_phrases.*
 import org.jetbrains.anko.imageResource
@@ -34,10 +35,6 @@ import java.io.IOException
 
 class PhrasesFragment : InjectableFragment<ParentViewModel>() {
 
-    //@Inject
-    //lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    //private lateinit var parentViewModel: ParentViewModel
     private var phrasesAdapter: AACAdapter? = null
     private var loadedBitmap: Bitmap? = null
     private var loadedBitmapName: String = ""
@@ -66,7 +63,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
 
         btnAddPhrase.setOnClickListener {
             val name = etPhraseName.text.toString().trim()
-            val icon = saveBitmap(loadedBitmapName).absolutePath
+            val icon = ImageHelper.saveBitmap(activity, loadedBitmap, loadedBitmapName).absolutePath
 
             if (name.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
                 viewModel.savePhrase(AacPhrase(name.hashCode(), name, icon))
@@ -79,7 +76,6 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            // parentViewModel = ViewModelProviders.of(it, viewModelFactory).get(ParentViewModel::class.java)
             viewModel.phraseLiveData.observe(this,
                     Observer {
                         handleResource(it)
@@ -140,7 +136,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                     loadedBitmap?.recycle()
 
                     val stream = context!!.contentResolver.openInputStream(it.data)
-                    loadedBitmapName = File(getImagePath(it.data)).name
+                    loadedBitmapName = File(ImageHelper.getImagePath(activity, it.data)).name
                     loadedBitmap = BitmapFactory.decodeStream(stream)
                     stream.close()
 
@@ -195,62 +191,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
         }
     }
 
-    private fun getImagePath(uri: Uri): String {
-        val cursor = activity?.contentResolver?.query(uri, null, null, null, null);
-        cursor?.let {
-            cursor.moveToFirst()
-            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            val result = cursor.getString(idx)
-            cursor.close()
-            return result
-        }
-        return uri.path
-    }
 
-    private fun saveBitmap(filename: String): File {
-        val file = File(activity!!.filesDir, filename)
-        if (!file.exists() && loadedBitmap != null) {
-            try {
-                val scaledBitmap = scaleBitmap()
-                val outStream = FileOutputStream(file)
-                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
-                outStream.flush()
-                outStream.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        return file
-    }
-
-    private fun scaleBitmap(): Bitmap {
-        var bitmap = loadedBitmap
-        var width = bitmap!!.width
-        var height = bitmap.height
-        val maxSize = 96
-        when {
-            width > height -> {
-                // landscape
-                val ratio = width.toFloat() / maxSize
-                width = maxSize
-                height = (height / ratio).toInt()
-            }
-            height > width -> {
-                // portrait
-                val ratio = height.toFloat() / maxSize
-                height = maxSize
-                width = (width / ratio).toInt()
-            }
-            else -> {
-                // square
-                height = maxSize
-                width = maxSize
-            }
-        }
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
-        return bitmap
-    }
 
     fun isAddPhraseShown(): Boolean {
         return llAddPhrase.visibility == View.VISIBLE
