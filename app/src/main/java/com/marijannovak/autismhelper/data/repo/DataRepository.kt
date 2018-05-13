@@ -198,10 +198,11 @@ class DataRepository @Inject constructor(
     }
 
     private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String): Completable {
-        phrase.iconPath = absolutePath
+        val phraseToSave = phrase
+        phraseToSave.iconPath = absolutePath
         return Completable.fromAction {
             doAsync {
-                db.aacDao().insert(phrase)
+                db.aacDao().insert(phraseToSave)
             }
         }
     }

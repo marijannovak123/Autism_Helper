@@ -11,7 +11,7 @@
         android:id="@+id/ivAacImg"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:contentDescription="@null" />
 
     <TextView

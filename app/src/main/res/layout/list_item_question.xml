@@ -22,39 +22,33 @@
         android:contentDescription="@null"
         android:visibility="gone" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="30dp">
 
         <Button
             android:id="@+id/tvAnswer1"
             style="@style/style_answer_button"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
+
             tools:text="TEST" />
 
         <Button
             android:id="@+id/tvAnswer2"
             style="@style/style_answer_button"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
             tools:text="TEST" />
 
         <Button
             android:id="@+id/tvAnswer3"
             style="@style/style_answer_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
             tools:text="TEST" />
 
         <Button
             android:id="@+id/tvAnswer4"
             style="@style/style_answer_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             tools:text="TEST" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

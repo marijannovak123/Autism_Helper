@@ -102,7 +102,7 @@ data class Answer(
 
 @Entity(tableName = TABLE_AAC)
 data class AacPhrase(
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         var id: Int,
         var name: String,
         var iconPath: String
@@ -111,7 +111,7 @@ data class AacPhrase(
 
     override fun equals(other: Any?): Boolean {
         if(other is AacPhrase) {
-            if(this.name == other.name) {
+            if(this.id == other.id && this.name == other.name) {
                 return true
             }
         }
