@@ -22,14 +22,20 @@ interface API {
     @GET("users/{userId}.json")
     fun getUser(@Path("userId") userId: String): Single<User>
 
+    @GET("users/{userId}/children.json")
+    fun getChildren(@Path("userId") userId: String): Single<List<Child>>
+
+    @GET("users/{userId}/child_scores.json")
+    fun getChildScores(@Path("userId") userId: String): Single<List<ChildScore>>
+
     @PUT("users/{userId}.json")
     fun putUser(@Path("userId") userId: String, @Body user: User): Completable
 
-    @PUT("users/{userId}/child_scores/{scoreId}.json")
-    fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Completable
+    @PUT("users/{userId}/child_scores/{scoreIndex}.json")
+    fun putScore(@Path("userId") userId: String, @Path("scoreIndex") scoreIndex: Int, @Body score: ChildScore): Completable
 
-    @PUT("users/{userId}/children/{childId}.json")
-    fun addChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
+    @PUT("users/{userId}/children/{childIndex}.json")
+    fun addChild(@Path("userId") userId: String, @Path("childIndex") childIndex: Int, @Body child: Child): Completable
 
     @PATCH("users/{userId}.json")
     fun updateParentPassword(@Path("userId") userId: String, @Body password: ParentPasswordRequest): Completable

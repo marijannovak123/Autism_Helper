@@ -8,6 +8,7 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class QuizRepository @Inject constructor(
@@ -25,7 +26,12 @@ class QuizRepository @Inject constructor(
     fun saveScoreLocallyAndOnline(score: ChildScore): Completable {
         val scoreToSave = score.copy(id = Math.abs(score.hashCode()))
         return Completable.mergeArray(
-                api.putScore(scoreToSave.parentId, scoreToSave.id, scoreToSave),
+                api.getChildScores(score.parentId)
+                        .onErrorResumeNext {
+                            Single.just(emptyList())
+                }.flatMapCompletable {
+                            api.putScore(scoreToSave.parentId, it.size, scoreToSave)
+                        },
                 Completable.fromAction {
                     childScoreDao.insert(scoreToSave)
                 }

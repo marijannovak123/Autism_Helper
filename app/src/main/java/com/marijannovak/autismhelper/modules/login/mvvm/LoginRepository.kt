@@ -125,8 +125,8 @@ class LoginRepository @Inject constructor(
             user.children?.let {
                 childDao.insertMultiple(it)
             }
-            user.childScoresResponse?.let {
-                childScoreDao.insertMultiple(it.childScores)
+            user.childScores?.let {
+                childScoreDao.insertMultiple(it)
             }
             prefs.setParentPassword(user.parentPassword ?: "")
         }

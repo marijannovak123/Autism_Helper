@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_children.*
 class ChildrenFragment : InjectableFragment<ParentViewModel>() {
     //todo: design, add more details
     private var adapter: ChildrenAdapter? = null
-    private var userWithChildren: UserChildrenJoin? = null
+    private var children: List<Child>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,7 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
     private fun setUpChildrenRv(resource: Resource<List<Child>>?) {
         resource?.let {
             if (it.status == Status.SUCCESS && it.data != null) {
+                this.children = it.data
                 if (adapter == null || rvChildren.adapter == null) {
                     adapter = ChildrenAdapter(emptyList(), { child, _ ->
                         openChildDetailsFragment(child)
@@ -81,16 +82,17 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
         item?.let {
             when (it.itemId) {
                 R.id.action_add_child -> {
-                    userWithChildren?.let {
-                        DialogHelper.showAddChildDialog(activity as ParentActivity, it.user.id, it.children.size, false,
+                    children?.let {
+                        DialogHelper.showAddChildDialog(activity as ParentActivity, it[0].parentId, it.size, false,
                                 { child, _ -> viewModel.saveChild(child) },
                                 { /*NOOP*/ }
                         )
                     }
 
                 }
+
+                else -> {}
             }
-            true
         }
         return super.onOptionsItemSelected(item)
     }

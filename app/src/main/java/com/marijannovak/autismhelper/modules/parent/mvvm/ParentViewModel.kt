@@ -13,8 +13,6 @@ import javax.inject.Inject
 import android.R.attr.data
 import com.google.firebase.storage.UploadTask
 
-
-
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
         private val aacRepository: AACRepository)
@@ -47,7 +45,7 @@ class ParentViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.saveChildLocallyAndOnline(child).subscribe(
                         { resourceLiveData.value = Resource.message(R.string.child_saved) },
-                        { resourceLiveData.value = Resource.message(R.string.error_inserting) }
+                        { it -> resourceLiveData.value = Resource.message(R.string.error_inserting) }
                 )
 
         )

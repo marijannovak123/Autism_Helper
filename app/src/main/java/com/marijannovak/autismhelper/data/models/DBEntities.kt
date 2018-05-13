@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.data.models
 
 import android.arch.persistence.room.*
+import com.google.gson.annotations.SerializedName
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_AAC
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
@@ -24,7 +25,8 @@ data class User(
         @Ignore
         var children: List<Child>?,
         @Ignore
-        var childScoresResponse: ChildScoresResponse?
+        @SerializedName("child_scores")
+        var childScores: List<ChildScore>?
 ) {
     constructor() : this("", "", "", "", emptyList(), null)
 }

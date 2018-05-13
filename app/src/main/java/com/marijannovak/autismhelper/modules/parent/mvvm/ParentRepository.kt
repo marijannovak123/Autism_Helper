@@ -16,6 +16,7 @@ import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.toDateString
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class ParentRepository @Inject constructor(
@@ -27,12 +28,15 @@ class ParentRepository @Inject constructor(
         private val prefsHelper: PrefsHelper
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
-        return Completable.mergeArray(
-                api.addChild(child.parentId, child.id, child),
-                Completable.fromAction {
-                    childDao.insert(child)
-                }
-        ).handleThreading()
+        return api.getChildren(child.parentId)
+                        .onErrorResumeNext { Single.just(emptyList()) }
+                        .flatMapCompletable {
+                            api.addChild(child.parentId, it.size, child)
+                }.andThen{
+                            Completable.fromAction {
+                                childDao.insert(child)
+                            }
+                        }.handleThreading()
     }
 
     fun loadChildren(): Flowable<List<Child>> {

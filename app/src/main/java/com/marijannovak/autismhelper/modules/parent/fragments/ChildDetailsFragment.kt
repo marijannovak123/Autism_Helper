@@ -56,6 +56,10 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
                     }
                 }
 
+                Status.MESSAGE -> {
+                    (activity as ParentActivity).showError(0, it.message!!)
+                }
+
                 else -> {
 
                 }
