@@ -11,6 +11,7 @@ import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.UserUpdateRequest
 import com.marijannovak.autismhelper.data.network.API
+import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.toDateString
 import io.reactivex.Completable
@@ -22,7 +23,8 @@ class ParentRepository @Inject constructor(
         private val api: API,
         private val childScoreDao: ChildScoreDao,
         private val aacDao: AACDao,
-        private val userDao: UserDao
+        private val userDao: UserDao,
+        private val prefsHelper: PrefsHelper
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
         return Completable.mergeArray(
@@ -68,13 +70,10 @@ class ParentRepository @Inject constructor(
 
     fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest): Completable {
         return api
-                .updateParent(userId, userUpdateRequest)
-                .andThen {
-                    Completable.fromAction {
-                        userDao.update(userUpdateRequest.username, userUpdateRequest.parentPassword)
-                    }
-                }
-                .handleThreading()
+                .updateParent(userId, userUpdateRequest).doOnComplete {
+                    prefsHelper.setParentPassword(userUpdateRequest.parentPassword)
+                    userDao.update(userUpdateRequest.username, userUpdateRequest.parentPassword)
+                }.handleThreading()
     }
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)

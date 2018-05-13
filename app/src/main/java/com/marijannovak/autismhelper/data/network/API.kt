@@ -34,6 +34,6 @@ interface API {
     @PATCH("users/{userId}.json")
     fun updateParentPassword(@Path("userId") userId: String, @Body password: ParentPasswordRequest): Completable
 
-    @PATCH("users/{userId}")
+    @PATCH("users/{userId}.json")
     fun updateParent(@Path("userId") userId: String, @Body user: UserUpdateRequest): Completable
 }

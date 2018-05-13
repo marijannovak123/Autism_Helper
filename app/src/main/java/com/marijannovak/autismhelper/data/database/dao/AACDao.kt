@@ -17,8 +17,8 @@ interface AACDao : BaseDao<AacPhrase> {
     @Query("DELETE FROM $TABLE_AAC")
     fun deleteTable()
 
-    @Query("UPDATE $TABLE_AAC SET name = :name WHERE id = :id")
-    fun update(id: Int, name: String)
+    @Query("UPDATE $TABLE_AAC SET name = :name, iconPath = :iconPath WHERE id = :id")
+    fun update(id: Int, name: String, iconPath: String)
 
     @Query("SELECT * FROM $TABLE_AAC")
     fun queryAll(): List<AacPhrase>
@@ -26,12 +26,14 @@ interface AACDao : BaseDao<AacPhrase> {
     @Transaction
     fun updateMultiple(phrases: List<AacPhrase>){
         val savedPhrases = queryAll()
+        var i = 0
         for(phrase: AacPhrase in phrases) {
-            if(savedPhrases.contains(phrase)) {
-                update(phrase.id, phrase.name)
+            if(i < savedPhrases.size && savedPhrases.contains(phrase)) {
+                update(phrase.id, phrase.name, savedPhrases[i].iconPath)
             } else {
                 insert(phrase)
             }
+            i = i.inc()
         }
     }
 }

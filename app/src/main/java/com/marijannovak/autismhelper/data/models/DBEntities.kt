@@ -78,6 +78,15 @@ data class Question(
         var answers: List<Answer>
 ) {
     constructor() : this(0, "", 0, 0, "", null, ArrayList())
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Question) {
+            if(this.id == other.id && this.text == other.text && this.categoryId == other.categoryId) {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 @Entity(tableName = TABLE_ANSWERS)
@@ -93,12 +102,21 @@ data class Answer(
 
 @Entity(tableName = TABLE_AAC)
 data class AacPhrase(
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         var id: Int,
         var name: String,
         var iconPath: String
 ) {
     constructor() : this(0, "", "")
+
+    override fun equals(other: Any?): Boolean {
+        if(other is AacPhrase) {
+            if(this.name == other.name) {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 class UserChildrenJoin : Serializable {

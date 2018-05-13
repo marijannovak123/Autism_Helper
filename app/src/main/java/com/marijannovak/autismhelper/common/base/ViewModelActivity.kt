@@ -30,7 +30,7 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
         subscribeToData()
     }
 
-    protected fun showError(msgResId: Int, message: String?) {
+    fun showError(msgResId: Int, message: String?) {
         if (msgResId <= 0) {
             toast(message!!)
         } else {
@@ -46,6 +46,7 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
             }
         } else {
             pbLoading?.dismiss()
+            pbLoading = null
         }
     }
 

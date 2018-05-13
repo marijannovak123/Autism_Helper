@@ -8,14 +8,19 @@ import android.text.TextWatcher
 import android.view.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
+import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants.Companion.PASSWORD_PLACEHOLDER
+import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
+import com.marijannovak.autismhelper.data.models.UserUpdateRequest
+import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : InjectableFragment<ParentViewModel>() {
 
     private var menu: Menu? = null
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +35,19 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            viewModel.resourceLiveData.observe(this, Observer { userChildrenJoins -> setUpUi(userChildrenJoins!!.data!![0]) })
+            viewModel.resourceLiveData.observe(this,
+                    Observer {
+                        it?.let {
+                            (activity as ParentActivity).showLoading(it.status)
+                            if(it.data != null) {
+                                setUpUi(it.data[0])
+                            }
+                            if(it.status == Status.MESSAGE) {
+                                (activity as ParentActivity).showError(0, it.message)
+                            }
+                        }
+
+                    })
         }
 
         val textWatcher = object: TextWatcher {
@@ -60,14 +77,13 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
 
     private fun setUpUi(profile: UserChildrenJoin?) {
         profile?.let {
+            user = it.user
             with(it.user) {
                 etUsername.setText(username)
                 etEmail.setText(email)
                 etParentPassword.setText(parentPassword)
                 etPassword.setText(PASSWORD_PLACEHOLDER)
-
             }
-            etUsername.setText(it.user.username)
         }
 
     }
@@ -83,12 +99,16 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
         item?.let {
             when(it.itemId) {
                 R.id.action_update_profile -> {
-                    viewModel.updateUserData()
+                    this.user?.let {
+                        viewModel.updateUserData(it.id, UserUpdateRequest(etUsername.text.toString().trim(), etParentPassword.text.toString().trim()))
+                    }
+
                 }
+
+                else -> {}
             }
         }
         return super.onOptionsItemSelected(item)
     }
     //TODO: UPDATE CHILDREN DATA, UPDATE PASSWORDS, INFO ETC.
-
 }

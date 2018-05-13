@@ -123,12 +123,11 @@ class DataRepository @Inject constructor(
     fun downloadQuestionImage(pos: Int) {
         val question = questionsWithImgs[pos]
         files = context.filesDir.list()
+        val filename = "${question.extraData}"
+        val file = File(App.getAppContext().filesDir, filename)
         if (!files.contains(question.extraData)) {
             Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
             val ref = storage.child(question.extraData!!)
-            val filename = "${question.extraData}"
-            val file = File(App.getAppContext().filesDir, filename)
-
             ref.getFile(file)
                     .addOnSuccessListener {
                         updateQuestionImgPath(question, file.absolutePath).subscribe(
@@ -149,23 +148,25 @@ class DataRepository @Inject constructor(
                         Log.e(logTag(), "FAIL ${question.extraData!!}")
                     }
         } else {
-            if (pos == questionsWithImgs.size - 1) {
-                downloadPhraseImage(0)
-            } else {
-                downloadQuestionImage(pos + 1)
+            updateQuestionImgPath(question, file.absolutePath).subscribe {
+                if (pos == questionsWithImgs.size - 1) {
+                    downloadPhraseImage(0)
+                } else {
+                    downloadQuestionImage(pos + 1)
+                }
             }
         }
+
     }
 
     private fun downloadPhraseImage(pos: Int) {
         val phrase = phrases[pos]
         files = context.filesDir.list()
+        val filename = "${phrase.iconPath}.jpg"
+        val file = File(App.getAppContext().filesDir, filename)
         if (!files.contains(phrase.iconPath)) {
             Log.e(logTag(), "Downloading ${phrases[pos].iconPath}")
             val ref = storage.child(phrase.iconPath)
-            val filename = "${phrase.iconPath}.jpg"
-            val file = File(App.getAppContext().filesDir, filename)
-
             ref.getFile(file)
                     .addOnSuccessListener {
                         updatePhraseImgPath(phrase, file.absolutePath).subscribe(
@@ -185,10 +186,12 @@ class DataRepository @Inject constructor(
                         Log.e(logTag(), "FAIL ${phrase.iconPath}")
                     }
         } else {
-            if (pos == phrases.size - 1) {
-                onDataDownloaded()
-            } else {
-                downloadPhraseImage(pos + 1)
+            updatePhraseImgPath(phrase, file.absolutePath).subscribe{
+                if (pos == phrases.size - 1) {
+                    onDataDownloaded()
+                } else {
+                    downloadPhraseImage(pos + 1)
+                }
             }
         }
 

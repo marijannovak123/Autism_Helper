@@ -32,8 +32,8 @@ interface QuestionDao : BaseDao<Question> {
     @Query("DELETE FROM $TABLE_QUESTIONS")
     fun deleteTable()
 
-    @Query("UPDATE $TABLE_QUESTIONS  SET text = :text, categoryId = :categoryId, extraData = :extraData WHERE id = :id")
-    fun update(id: Int, text: String, categoryId: Int, extraData: String)
+    @Query("UPDATE $TABLE_QUESTIONS  SET text = :text, categoryId = :categoryId, extraData = :extraData, imgPath = :imgPath WHERE id = :id")
+    fun update(id: Int, text: String, categoryId: Int, extraData: String, imgPath: String)
 
     @Query("SELECT * FROM $TABLE_QUESTIONS")
     fun queryAll(): List<Question>
@@ -41,12 +41,14 @@ interface QuestionDao : BaseDao<Question> {
     @Transaction
     fun updateMultiple(questions: List<Question>){
         val savedQuestions = queryAll()
+        var i = 0
         for(question: Question in questions) {
-            if(savedQuestions.contains(question)) {
-                update(question.id, question.text, question.categoryId, question.extraData?: "")
+            if(i < savedQuestions.size && savedQuestions.contains(question)) {
+                update(question.id, question.text, question.categoryId, question.extraData?: "", savedQuestions[i].imgPath ?: "")
             } else {
                 insert(question)
             }
+            i = i.inc()
         }
     }
 }
