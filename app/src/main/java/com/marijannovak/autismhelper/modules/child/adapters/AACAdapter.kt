@@ -16,7 +16,7 @@ class AACAdapter(
         onLongItemClick: (AacPhrase, Int) -> Unit
 ) : BaseAdapter<AACAdapter.AACViewHolder, AacPhrase>(aacPhrases.toMutableList(), onItemClick, onLongItemClick) {
 
-    override fun createHolder(parent: ViewGroup): AACViewHolder {
+    override fun createHolder(parent: ViewGroup, viewType: Int): AACViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_aac_phrase, parent, false)
         return AACViewHolder(view)
     }

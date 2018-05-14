@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
@@ -121,6 +119,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+
             drawerLayout.closeDrawers()
         } else if (supportFragmentManager.backStackEntryCount > 0) {
             val currentFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)

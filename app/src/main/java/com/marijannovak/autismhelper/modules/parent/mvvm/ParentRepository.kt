@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.modules.parent.mvvm
 
 import android.graphics.Color
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.marijannovak.autismhelper.data.database.dao.AACDao
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
@@ -14,6 +15,7 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.toDateString
+import com.marijannovak.autismhelper.utils.toDayMonthString
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -29,10 +31,11 @@ class ParentRepository @Inject constructor(
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
         return api.getChildren(child.parentId)
-                        .onErrorResumeNext { Single.just(emptyList()) }
-                        .flatMapCompletable {
+                        .onErrorResumeNext {
+                            Single.just(emptyList())
+                        }.flatMapCompletable {
                             api.addChild(child.parentId, it.size, child)
-                }.andThen{
+                        }.andThen{
                             Completable.fromAction {
                                 childDao.insert(child)
                             }
@@ -57,13 +60,14 @@ class ParentRepository @Inject constructor(
         for (i in 0 until scores.size) {
             lineEntries += Entry(i.toFloat(), scores[i].duration / 1000f)
             barEntries += BarEntry(i.toFloat(), scores[i].mistakes.toFloat())
-            dates += scores[i].timestamp.toDateString()
+            dates += scores[i].timestamp.toDayMonthString()
         }
         val lineDataSet = LineDataSet(lineEntries, "Duration in seconds")
-        lineDataSet.color = Color.GREEN
+        lineDataSet.color = Color.CYAN
+        lineDataSet.lineWidth = 5f
         val lineData = LineData(lineDataSet)
         val barDataSet = BarDataSet(barEntries, "Mistakes")
-        barDataSet.color = Color.RED
+        barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
         val barData = BarData(barDataSet)
         return ChartData(lineData, barData, dates)
     }

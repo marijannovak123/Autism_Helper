@@ -4,13 +4,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
 abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
-        private var dataSet: MutableList<T>,
-        private var onItemClick: (T, Int) -> Unit,
-        private var onLongItemClick: (T, Int) -> Unit)
+        protected var dataSet: MutableList<T>,
+        protected var onItemClick: (T, Int) -> Unit,
+        protected var onLongItemClick: (T, Int) -> Unit)
     : RecyclerView.Adapter<VH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return createHolder(parent)
+        return createHolder(parent, viewType)
     }
 
     override fun getItemCount() = dataSet.size
@@ -34,5 +34,5 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         this.notifyDataSetChanged()
     }
 
-    protected abstract fun createHolder(parent: ViewGroup): VH
+    protected abstract fun createHolder(parent: ViewGroup, viewType: Int): VH
 }

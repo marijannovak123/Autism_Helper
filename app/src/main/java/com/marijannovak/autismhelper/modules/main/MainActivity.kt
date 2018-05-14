@@ -29,8 +29,8 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
     }
 
     private fun init() {
-        btnParent.setOnClickListener { enterPasswordDialog() }
-        btnChild.setOnClickListener { viewModel.getChildrenToPick() }
+        cvParents.setOnClickListener { enterPasswordDialog() }
+        cvChildren.setOnClickListener { viewModel.getChildrenToPick() }
     }
 
     private fun startChildActivity(child: Child) {

@@ -3,6 +3,9 @@ package com.marijannovak.autismhelper.modules.child
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -14,6 +17,7 @@ import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.QuestionAnswersJoin
 import com.marijannovak.autismhelper.modules.child.adapters.QuizPagerAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.QuizViewModel
+import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_quiz.*
 import org.jetbrains.anko.toast
@@ -60,7 +64,6 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                 }
 
                 Status.SAVED -> {
-                    toast(R.string.score_saved)
                     val intent = Intent(this, PickCategoryActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -87,10 +90,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                                 vpQuestions.currentItem = currentPos + 1
                                 supportActionBar?.title = "${getString(R.string.question)} ${vpQuestions.currentItem}"
                             } else {
-                                toast("Quiz finished")
-                                val timestamp = System.currentTimeMillis()
-                                val score = ChildScore(0, child!!.id, child!!.parentId, timestamp, timestamp - startTime, mistakes)
-                                viewModel.saveChildScore(score)
+                                saveScore()
                             }
                         } else {
                             mistakes += 1
@@ -103,6 +103,36 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
         }
 
         quizAdapter!!.updateDataSet(questionsWithAnswers)
+    }
+
+    override fun onBackPressed() {
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_quiz, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            when(it.itemId) {
+                R.id.action_exit_quiz -> {
+                    DialogHelper.showPromptDialog(this, getString(R.string.close_quiz), {
+                        saveScore()
+                    })
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveScore() {
+        toast("Quiz finished")
+        val timestamp = System.currentTimeMillis()
+        val score = ChildScore(0, child!!.id, child!!.parentId, timestamp, timestamp - startTime, mistakes)
+        viewModel.saveChildScore(score)
     }
 
     override fun subscribeToData() {

@@ -61,7 +61,6 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
                     })
                     rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     rvChildren.itemAnimator = DefaultItemAnimator()
-                    rvChildren.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
                     rvChildren.adapter = adapter
                 }
                 adapter!!.update(it.data)

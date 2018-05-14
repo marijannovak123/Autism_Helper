@@ -76,11 +76,19 @@ fun <T> Maybe<T>.handleThreading(): Maybe<T> {
  * timestamp to date string
  */
 @SuppressLint("SimpleDateFormat")
-fun Long.toDateString(): String {
+fun Long.toDayMonthString(): String {
     val dateFormat = SimpleDateFormat("dd/MM")
     val date = Date(this)
     return dateFormat.format(date)
 }
+
+@SuppressLint("SimpleDateFormat")
+fun Long.toDateString(): String {
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val date = Date(this)
+    return dateFormat.format(date)
+}
+
 
 /**
  * AAC list of phrases to sentence

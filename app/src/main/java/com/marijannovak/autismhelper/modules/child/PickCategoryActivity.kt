@@ -30,11 +30,6 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
         if (intent.hasExtra(EXTRA_CHILD)) {
             child = intent.getSerializableExtra(EXTRA_CHILD) as Child
         }
-
-        btnAac.setOnClickListener {
-            startActivity(Intent(this, AACActivity::class.java))
-            finish()
-        }
     }
 
     override fun subscribeToData() {
@@ -73,12 +68,16 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
     private fun setCategoriesData(categories: List<Category>?) {
         categories?.let {
             if (categoriesAdapter == null) {
-                categoriesAdapter = CategoriesAdapter(emptyList(), { category, _ ->
-                    val intent = Intent(this, QuizActivity::class.java)
-                    intent.putExtra(EXTRA_CATEGORY_ID, category.id)
-                    intent.putExtra(EXTRA_CHILD, child)
-                    startActivity(intent)
-                    finish()
+                categoriesAdapter = CategoriesAdapter(it, { category, pos ->
+                    if(pos == -1) {
+                        startActivity(Intent(this, AACActivity::class.java))
+                    } else {
+                        val intent = Intent(this, QuizActivity::class.java)
+                        intent.putExtra(EXTRA_CATEGORY_ID, category.id)
+                        intent.putExtra(EXTRA_CHILD, child)
+                        startActivity(intent)
+                    }
+
                 }, { category, _ ->
                     //NOOP
                 })
@@ -88,7 +87,7 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
                 rvCategories.adapter = categoriesAdapter
             }
 
-            categoriesAdapter!!.update(categories)
+            categoriesAdapter!!.update(it)
         }
     }
 }

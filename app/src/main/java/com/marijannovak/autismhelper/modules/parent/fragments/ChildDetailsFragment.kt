@@ -1,6 +1,5 @@
 package com.marijannovak.autismhelper.modules.parent.fragments
 
-
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -77,7 +76,6 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
             lcTimeScores.xAxis.valueFormatter = dateFormatter
             lcTimeScores.description.isEnabled = false
 
-
             bcMistakes.xAxis.valueFormatter = dateFormatter
             bcMistakes.description.isEnabled = false
 
@@ -85,10 +83,11 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
 
         if (chartData.lineData.entryCount > 0 && chartData.barData.entryCount > 0) {
             lcTimeScores.data = chartData.lineData
-            lcTimeScores.invalidate()
+            lcTimeScores.animateXY(0, 300)
 
             bcMistakes.data = chartData.barData
-            bcMistakes.invalidate()
+            bcMistakes.animateXY(0, 300)
+
         }
     }
 

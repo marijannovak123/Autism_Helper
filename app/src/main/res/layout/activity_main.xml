@@ -14,51 +14,76 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
+
     <LinearLayout
         android:id="@+id/llContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:elevation="1dp"
+                android:id="@+id/cvParents">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:weightSum="2"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/ic_mom"
+                        android:contentDescription="@null"/>
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/ic_dad"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:elevation="1dp"
+            android:id="@+id/cvChildren">
 
-            <ImageButton
-                android:id="@+id/btnParent"
-                style="@style/menu_parent_child_style"
-                android:background="@drawable/ic_supervisor_account_black_24dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="10dp">
 
-            <TextView
-                style="@style/menu_parent_child_button_text"
-                android:text="@string/parent" />
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/ic_boy"
+                    android:contentDescription="@null" />
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/ic_girl"
+                    android:contentDescription="@null" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/btnChild"
-                style="@style/menu_parent_child_style"
-                android:background="@drawable/ic_child_care_black_24dp" />
-
-            <TextView
-                style="@style/menu_parent_child_button_text"
-                android:text="@string/child" />
-
-
-        </LinearLayout>
-
-        <!-- <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:id="@+id/ivTest"/>-->
-
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 </RelativeLayout>
