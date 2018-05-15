@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_pick_category.*
 class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
 
     private var categoriesAdapter: CategoriesAdapter? = null
+    //to viewmodel
     private var child: Child? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,11 +72,13 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
                 categoriesAdapter = CategoriesAdapter(it, { category, pos ->
                     if(pos == -1) {
                         startActivity(Intent(this, AACActivity::class.java))
+                        finish()
                     } else {
                         val intent = Intent(this, QuizActivity::class.java)
                         intent.putExtra(EXTRA_CATEGORY_ID, category.id)
                         intent.putExtra(EXTRA_CHILD, child)
                         startActivity(intent)
+                        finish()
                     }
 
                 }, { category, _ ->

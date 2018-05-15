@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.parent.mvvm
 import android.graphics.Color
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.data.database.dao.AACDao
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
@@ -46,14 +47,14 @@ class ParentRepository @Inject constructor(
         return childDao.getChildren().handleThreading()
     }
 
-    fun loadChildScoresLineData(childId: String): Flowable<ChartData> {
+    fun loadChildScoresLineData(child: Child): Flowable<ChartData> {
         return childScoreDao
-                .getChildScores(childId)
-                .map {createLineData(it)}
+                .getChildScores(child.id)
+                .map {createLineData(it, child)}
                 .handleThreading()
     }
 
-    private fun createLineData(scores: List<ChildScore>): ChartData {
+    private fun createLineData(scores: List<ChildScore>, child: Child): ChartData {
         var lineEntries: List<Entry> = emptyList()
         var barEntries: List<BarEntry> = emptyList()
         var dates: List<String> = emptyList()
@@ -63,11 +64,11 @@ class ParentRepository @Inject constructor(
             dates += scores[i].timestamp.toDayMonthString()
         }
         val lineDataSet = LineDataSet(lineEntries, "Duration in seconds")
-        lineDataSet.color = Color.CYAN
+        lineDataSet.color = if(child.gender == GENDERS[0]) Color.CYAN else Color.parseColor("#FF69B4")
         lineDataSet.lineWidth = 5f
         val lineData = LineData(lineDataSet)
         val barDataSet = BarDataSet(barEntries, "Mistakes")
-        barDataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+        barDataSet.colors = if(child.gender == GENDERS[0]) ColorTemplate.MATERIAL_COLORS.toList() else ColorTemplate.JOYFUL_COLORS.toList()
         val barData = BarData(barDataSet)
         return ChartData(lineData, barData, dates)
     }

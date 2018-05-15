@@ -102,5 +102,7 @@
     <string name="profile_pic">Profile picture</string>
     <string name="aac">AAC</string>
     <string name="close_quiz">Do you really want to close the quiz?</string>
+    <string name="quiz_finished">Quiz finished</string>
+    <string name="fail">False</string>
 
 </resources>

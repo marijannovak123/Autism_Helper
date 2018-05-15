@@ -40,7 +40,7 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
         }
         child?.let {
             (activity as AppCompatActivity).supportActionBar?.title = it.name
-            viewModel.loadChildScores(it.id)
+            viewModel.loadChildScores(child)
         }
 
     }

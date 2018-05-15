@@ -65,6 +65,8 @@ class Constants {
 
         //region other
         const val PASSWORD_PLACEHOLDER = "abcdefg1234"
+        const val FALSE = "False"
+        const val CORRECT = "Correct"
         //endregion
     }
 }

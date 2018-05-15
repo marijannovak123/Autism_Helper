@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.modules.child
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,8 +10,10 @@ import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
+import com.marijannovak.autismhelper.config.Constants.Companion.CORRECT
 import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CATEGORY_ID
 import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CHILD
+import com.marijannovak.autismhelper.config.Constants.Companion.FALSE
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
@@ -23,14 +26,30 @@ import kotlinx.android.synthetic.main.activity_quiz.*
 import org.jetbrains.anko.toast
 
 class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
+
     private var quizAdapter: QuizPagerAdapter? = null
+    //todo: to viewmodel
     private var child: Child? = null
-    private var startTime: Long = System.currentTimeMillis()
+    private var startTime: Long
     private var mistakes = 0
+    private val soundPool: SoundPool
+    private var soundPoolLoaded = false
+    private var sounds: Map<String, Int>? = null
+
+    init {
+        startTime = System.currentTimeMillis()
+        soundPool = SoundPool.Builder().setMaxStreams(1).build()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
+
+        soundPool.setOnLoadCompleteListener { _, _, _  -> soundPoolLoaded = true }
+        sounds = mapOf(
+                Pair(CORRECT, soundPool.load(this, R.raw.sound_correct, 1)),
+                Pair(FALSE, soundPool.load(this, R.raw.sound_fail, 2))
+        )
 
         if (intent.hasExtra(EXTRA_CATEGORY_ID)) {
             val categoryId = intent.getIntExtra(EXTRA_CATEGORY_ID, -1)
@@ -83,6 +102,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
             quizAdapter = QuizPagerAdapter(this, emptyList(),
                     onItemClick = {
                         if (it) {
+                            playSound(true)
                             val currentPos = vpQuestions.currentItem
                             val max = quizAdapter!!.dataSetSize()
 
@@ -93,8 +113,9 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                                 saveScore()
                             }
                         } else {
+                            playSound(false)
                             mistakes += 1
-                            toast("False")
+                            toast(R.string.fail)
                         }
                     }
             )
@@ -103,6 +124,13 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
         }
 
         quizAdapter!!.updateDataSet(questionsWithAnswers)
+    }
+
+    private fun playSound(isCorrect: Boolean) {
+        sounds?.let {
+            val toPlay = if(isCorrect) it[CORRECT] else it[FALSE]
+            soundPool.play(toPlay!!, 1f, 1f, 1, 0, 1f)
+        }
     }
 
     override fun onBackPressed() {
@@ -129,7 +157,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
     }
 
     private fun saveScore() {
-        toast("Quiz finished")
+        toast(R.string.quiz_finished)
         val timestamp = System.currentTimeMillis()
         val score = ChildScore(0, child!!.id, child!!.parentId, timestamp, timestamp - startTime, mistakes)
         viewModel.saveChildScore(score)

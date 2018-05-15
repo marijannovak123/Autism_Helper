@@ -51,9 +51,9 @@ class ParentViewModel @Inject constructor(
         )
     }
 
-    fun loadChildScores(childId: String) {
+    fun loadChildScores(child: Child) {
         compositeDisposable.add(
-                repository.loadChildScoresLineData(childId).subscribe(
+                repository.loadChildScoresLineData(child).subscribe(
                         { chartLiveData.value = Resource.success(listOf(it)) },
                         { chartLiveData.value = Resource.message(R.string.load_error) }
                 )
