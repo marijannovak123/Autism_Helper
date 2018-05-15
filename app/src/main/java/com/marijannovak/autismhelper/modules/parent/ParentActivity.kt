@@ -4,8 +4,10 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.marijannovak.autismhelper.R
@@ -15,7 +17,6 @@ import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_CHILDREN
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PHRASES
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PROFILE
-import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_SETTINGS
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
@@ -24,6 +25,7 @@ import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_parent.*
 import kotlinx.android.synthetic.main.nav_header.*
+import kotlinx.android.synthetic.main.nav_header.view.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
@@ -38,15 +40,13 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
         instantiateFragments()
         setupDrawer()
-        viewModel.loadUsername()
     }
 
     private fun instantiateFragments() {
         fragments = mutableMapOf(
                 Pair(FRAGMENT_CHILDREN, ChildrenFragment()),
                 Pair(FRAGMENT_PROFILE, ProfileFragment()),
-                Pair(FRAGMENT_PHRASES, PhrasesFragment()),
-                Pair(FRAGMENT_SETTINGS, SettingsFragment())
+                Pair(FRAGMENT_PHRASES, PhrasesFragment())
         )
     }
 
@@ -56,12 +56,19 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
         loadFragment(fragments[FRAGMENT_CHILDREN]!!)
-        navView.menu.findItem(R.id.profile).isChecked = true
+        navView.menu.findItem(R.id.children).isChecked = true
         navView.setNavigationItemSelectedListener { item -> handleNavViewClick(item) }
-
         drawerLayout.addDrawerListener(object: DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
-               //NOOP
+                navView.tvProfileName?.let {
+                    if(it.text.isEmpty()) {
+                        if(viewModel.userName.isEmpty()) {
+                            viewModel.loadUsername()
+                        } else {
+                            it.text = viewModel.userName
+                        }
+                    }
+                }
             }
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -75,17 +82,18 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             override fun onDrawerOpened(drawerView: View) {
-                //NOOP
             }
         })
     }
 
-    fun loadFragment(fragment: BaseFragment) {
+    fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.llContainer, fragment, fragment.javaClass.simpleName)
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
         fragmentLoad = when(item.itemId) {
@@ -99,7 +107,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.settings -> {
-                drawerAction = { loadFragment(fragments[FRAGMENT_SETTINGS]!!) }
+                drawerAction = { loadFragment(SettingsFragment()) }
             }
 
             R.id.children -> {
@@ -130,7 +138,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
-        viewModel.userNameLiveData.observe(this, Observer { username -> tvProfileName.text = username })
+        viewModel.userNameLiveData.observe(this, Observer { username -> navView.tvProfileName?.text = username })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

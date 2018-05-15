@@ -1,11 +1,13 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.logTag
 import javax.inject.Inject
 
 class ParentViewModel @Inject constructor(
@@ -13,6 +15,7 @@ class ParentViewModel @Inject constructor(
         private val aacRepository: AACRepository)
     : BaseViewModel<UserChildrenJoin>() {
 
+    var userName = ""
     val userNameLiveData = MutableLiveData<String>()
     val chartLiveData = MutableLiveData<ParentRepository.ChartData>()
     val phraseLiveData = MutableLiveData<List<AacPhrase>>()
@@ -23,10 +26,14 @@ class ParentViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.loadUserName().subscribe(
                         {
+                            userName = it
                             userNameLiveData.value = it
                             resourceLiveData.value = Resource.success(null)
                         },
-                        { resourceLiveData.value = Resource.message(R.string.load_error) }
+                        {
+                            Log.e(logTag(), it.message)
+                            resourceLiveData.value = Resource.message(R.string.load_error)
+                        }
                 )
         )
     }
@@ -49,7 +56,7 @@ class ParentViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.saveChildLocallyAndOnline(child).subscribe(
                         { resourceLiveData.value = Resource.message(R.string.child_saved) },
-                        { resourceLiveData.value = Resource.message(R.string.error_inserting) }
+                        { it -> resourceLiveData.value = Resource.message(R.string.error_inserting) }
                 )
         )
     }

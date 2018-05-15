@@ -23,10 +23,6 @@ open class BaseFragment : Fragment() {
                 getString(R.string.profile)
             }
 
-            is SettingsFragment -> {
-                getString(R.string.settings)
-            }
-
             is ChildrenFragment -> {
                 getString(R.string.children)
             }
