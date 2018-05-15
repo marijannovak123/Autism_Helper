@@ -5,10 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.data.database.AppDatabase
-import com.marijannovak.autismhelper.data.models.AacPhrase
-import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
-import com.marijannovak.autismhelper.data.models.Question
-import com.marijannovak.autismhelper.data.models.UserChildrenJoin
+import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
@@ -107,12 +104,6 @@ class DataRepository @Inject constructor(
                         }
             )
         }.handleThreading()
-    }
-
-    fun loadUserAndChildren(): Flowable<UserChildrenJoin> {
-        return db.userDao()
-                .getUserWithChildren()
-                .handleThreading()
     }
 
     fun downloadImages(onComplete: () -> Unit) {

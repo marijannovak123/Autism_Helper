@@ -3,8 +3,11 @@ package com.marijannovak.autismhelper.modules.parent
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
 import android.view.MenuItem
+import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
@@ -25,13 +28,17 @@ import kotlinx.android.synthetic.main.nav_header.*
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     private lateinit var fragments: Map<String, BaseFragment>
+    private lateinit var drawerAction: () -> Unit
+    private var handler = Handler()
+    private var fragmentLoad = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent)
 
         instantiateFragments()
-        viewModel.loadUserWithChildren()
+        setupDrawer()
+        viewModel.loadUsername()
     }
 
     private fun instantiateFragments() {
@@ -43,18 +50,34 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         )
     }
 
-    private fun setupDrawer(userWithChildren: UserChildrenJoin) {
+    private fun setupDrawer() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
 
-        loadFragment(fragments[FRAGMENT_PROFILE]!!)
+        loadFragment(fragments[FRAGMENT_CHILDREN]!!)
         navView.menu.findItem(R.id.profile).isChecked = true
         navView.setNavigationItemSelectedListener { item -> handleNavViewClick(item) }
 
-        with(userWithChildren.user) {
-            tvProfileName.text = username
-        }
+        drawerLayout.addDrawerListener(object: DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {
+               //NOOP
+            }
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+               //NOOP
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                if(fragmentLoad) {
+                    handler.postDelayed(drawerAction, 50)
+                }
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                //NOOP
+            }
+        })
     }
 
     fun loadFragment(fragment: BaseFragment) {
@@ -62,26 +85,29 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         transaction.replace(R.id.llContainer, fragment, fragment.javaClass.simpleName)
         transaction.addToBackStack(null)
         transaction.commit()
-
-        drawerLayout.closeDrawers()
     }
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
+        fragmentLoad = when(item.itemId) {
+            R.id.profile, R.id.settings, R.id.phrases, R.id.children -> true
+            else -> false
+        }
+
         when (item.itemId) {
             R.id.profile -> {
-                loadFragment(fragments[FRAGMENT_PROFILE]!!)
+                drawerAction = { loadFragment(fragments[FRAGMENT_PROFILE]!!) }
             }
 
             R.id.settings -> {
-                loadFragment(fragments[FRAGMENT_SETTINGS]!!)
+                drawerAction = { loadFragment(fragments[FRAGMENT_SETTINGS]!!) }
             }
 
             R.id.children -> {
-                loadFragment(fragments[FRAGMENT_CHILDREN]!!)
+                drawerAction = { loadFragment(fragments[FRAGMENT_CHILDREN]!!) }
             }
 
             R.id.phrases -> {
-                loadFragment(fragments[FRAGMENT_PHRASES]!!)
+                drawerAction = { loadFragment(fragments[FRAGMENT_PHRASES]!!) }
             }
 
             R.id.sync -> {
@@ -98,11 +124,13 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
         }
 
+        drawerLayout.closeDrawers()
         return true
     }
 
     override fun subscribeToData() {
         viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
+        viewModel.userNameLiveData.observe(this, Observer { username -> tvProfileName.text = username })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -119,7 +147,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-
             drawerLayout.closeDrawers()
         } else if (supportFragmentManager.backStackEntryCount > 0) {
             val currentFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)
@@ -138,10 +165,6 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         resource?.let {
             showLoading(it.status)
             when (it.status) {
-                Status.SUCCESS -> {
-                    setupDrawer(it.data!![0])
-                }
-
                 Status.HOME -> {
                     val intent = Intent(this@ParentActivity, LoginActivity::class.java)
                     startActivity(intent)

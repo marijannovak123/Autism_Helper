@@ -7,84 +7,90 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:visibility="invisible"
-    tools:visibility="visible">
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/etEmail"
-            style="@style/signupEditTextStyle"
-            android:drawableStart="@drawable/ic_mail"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:nextFocusForward="@id/etUsername" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true"
-        app:passwordToggleTint="#000000">
-
-        <EditText
-            android:id="@+id/etPassword"
-            style="@style/signupEditTextStyle"
-            android:drawableStart="@drawable/ic_lock"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:nextFocusForward="@id/etConfirmPassword" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="40dp"
-        android:text="@string/forgot_password" />
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:padding="20dp"
+    android:background="@color/colorBg">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
+        style="@style/style_input_bubble">
 
-        android:weightSum="2">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etEmail"
+                style="@style/signupEditTextStyle"
+                android:drawableStart="@drawable/ic_mail"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:nextFocusForward="@id/etUsername" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#000000">
+
+            <EditText
+                android:id="@+id/etPassword"
+                style="@style/signupEditTextStyle"
+                android:drawableStart="@drawable/ic_lock"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:nextFocusForward="@id/etConfirmPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="40dp"
+            android:text="@string/forgot_password" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical"
+
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnLogin"
+                style="@style/style_my_button"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/login" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/btnGoogleSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_weight="1"
+                android:text="@string/btn_sign_in" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/dont_have_acc" />
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnRegister"
             style="@style/style_my_button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/login" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/btnGoogleSignIn"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_weight="1"
-            android:text="@string/btn_sign_in" />
-
+            android:layout_marginTop="5dp"
+            android:text="@string/register" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/dont_have_acc" />
-
-    <Button
-        android:id="@+id/btnRegister"
-        style="@style/style_my_button"
-        android:layout_marginTop="5dp"
-        android:text="@string/register" />
 
 </LinearLayout>

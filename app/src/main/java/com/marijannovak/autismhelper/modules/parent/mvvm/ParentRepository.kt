@@ -8,10 +8,7 @@ import com.marijannovak.autismhelper.data.database.dao.AACDao
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
-import com.marijannovak.autismhelper.data.models.AacPhrase
-import com.marijannovak.autismhelper.data.models.Child
-import com.marijannovak.autismhelper.data.models.ChildScore
-import com.marijannovak.autismhelper.data.models.UserUpdateRequest
+import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
@@ -37,9 +34,7 @@ class ParentRepository @Inject constructor(
                         }.flatMapCompletable {
                             api.addChild(child.parentId, it.size, child)
                         }.andThen{
-                            Completable.fromAction {
-                                childDao.insert(child)
-                            }
+                            childDao.insert(child)
                         }.handleThreading()
     }
 
@@ -84,6 +79,18 @@ class ParentRepository @Inject constructor(
                     userDao.update(userUpdateRequest.username, userUpdateRequest.parentPassword)
                 }.handleThreading()
     }
+
+    fun loadUser(): Flowable<User> {
+        return userDao.getCurrentUser().handleThreading()
+    }
+
+    fun loadUserName(): Flowable<String?> {
+        return userDao
+                .getCurrentUser()
+                .map { user -> user.username ?: "Parent" }
+                .handleThreading()
+    }
+
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)
 }

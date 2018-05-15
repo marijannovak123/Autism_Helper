@@ -34,25 +34,23 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
         return inflater.inflate(R.layout.fragment_children, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         activity?.let {
             viewModel.childrenLiveData.observe(this,
                     Observer {
+                        children = it
                         setUpChildrenRv(it)
                     })
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.loadChildren()
+
     }
 
-    private fun setUpChildrenRv(resource: Resource<List<Child>>?) {
-        resource?.let {
-            if (it.status == Status.SUCCESS && it.data != null) {
-                this.children = it.data
+    private fun setUpChildrenRv(children: List<Child>?) {
+        children?.let {
                 if (adapter == null || rvChildren.adapter == null) {
                     adapter = ChildrenAdapter(emptyList(), { child, _ ->
                         openChildDetailsFragment(child)
@@ -63,9 +61,8 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
                     rvChildren.itemAnimator = DefaultItemAnimator()
                     rvChildren.adapter = adapter
                 }
-                adapter!!.update(it.data)
+                adapter!!.update(it)
             }
-        }
     }
 
     private fun openChildDetailsFragment(child: Child) {

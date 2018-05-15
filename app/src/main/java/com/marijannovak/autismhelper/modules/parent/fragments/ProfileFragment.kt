@@ -8,11 +8,9 @@ import android.text.TextWatcher
 import android.view.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
-import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.data.models.UserUpdateRequest
-import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 
@@ -35,19 +33,7 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            viewModel.resourceLiveData.observe(this,
-                    Observer {
-                        it?.let {
-                            (activity as ParentActivity).showLoading(it.status)
-                            if(it.data != null) {
-                                setUpUi(it.data[0])
-                            }
-                            if(it.status == Status.MESSAGE) {
-                                (activity as ParentActivity).showError(0, it.message)
-                            }
-                        }
-
-                    })
+            viewModel.userLiveData.observe(this, Observer { setUpUi(it) })
         }
 
         val textWatcher = object: TextWatcher {
@@ -71,13 +57,12 @@ class ProfileFragment : InjectableFragment<ParentViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadUserWithChildren()
+        viewModel.loadUser()
     }
 
-    private fun setUpUi(profile: UserChildrenJoin?) {
+    private fun setUpUi(profile: User?) {
         profile?.let {
-            user = it.user
-            with(it.user) {
+            with(it) {
                 etUsername.setText(username)
                 etEmail.setText(email)
                 etParentPassword.setText(parentPassword)

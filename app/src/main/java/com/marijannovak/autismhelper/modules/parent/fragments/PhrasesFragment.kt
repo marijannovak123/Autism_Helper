@@ -78,31 +78,11 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
         activity?.let {
             viewModel.phraseLiveData.observe(this,
                     Observer {
-                        handleResource(it)
+                        setUpPhrasesRv(it)
                     })
         }
         viewModel.loadPhrases()
 
-    }
-
-    private fun handleResource(phrases: Resource<List<AacPhrase>>?) {
-        phrases?.let {
-            (activity as ParentActivity).showLoading(it.status)
-            when (it.status) {
-                Status.SUCCESS -> {
-                    setUpPhrasesRv(it.data)
-                }
-
-                Status.SAVED -> {
-                    showAddPhrase(false)
-                    toast("${getString(R.string.saved)} ${it.data!![0].name}")
-                }
-
-                else -> {
-
-                }
-            }
-        }
     }
 
     private fun setUpPhrasesRv(phrases: List<AacPhrase>?) {
@@ -120,7 +100,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                 rvPhrases.itemAnimator = DefaultItemAnimator()
             }
 
-            phrasesAdapter!!.update(phrases)
+            phrasesAdapter!!.update(it)
         }
     }
 

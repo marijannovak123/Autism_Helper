@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/profile"
-            android:icon="@drawable/ic_account_circle"
-            android:title="@string/profile" />
-
-        <item
             android:id="@+id/children"
             android:icon="@drawable/ic_child_friendly"
             android:title="@string/children" />
@@ -14,6 +9,11 @@
             android:id="@+id/phrases"
             android:icon="@drawable/ic_library_books"
             android:title="@string/phrases" />
+
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_account_circle"
+            android:title="@string/profile" />
 
         <item
             android:id="@+id/settings"

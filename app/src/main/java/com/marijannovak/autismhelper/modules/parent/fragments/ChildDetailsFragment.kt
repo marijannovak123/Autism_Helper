@@ -35,59 +35,43 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
         activity?.let {
             viewModel.chartLiveData.observe(this,
                     Observer {
-                        handleResource(it)
+                        setupChartData(it)
                     })
-        }
-        child?.let {
-            (activity as AppCompatActivity).supportActionBar?.title = it.name
-            viewModel.loadChildScores(child)
-        }
 
+            child?.let {
+                (activity as AppCompatActivity).supportActionBar?.title = it.name
+                viewModel.loadChildScores(it)
+            }
+        }
     }
 
-    private fun handleResource(it: Resource<List<ParentRepository.ChartData>>?) {
-        it?.let {
-            (activity as ParentActivity).showLoading(it.status)
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let {
-                        setupChartData(it[0])
+    private fun setupChartData(chartData: ParentRepository.ChartData?) {
+        chartData?.let {
+            if (lcTimeScores.data == null && bcMistakes.data == null) {
+                val dateFormatter = IAxisValueFormatter { value, _ ->
+                    if(value.toInt() < it.dates.size) {
+                        it.dates[value.toInt()]
+                    } else {
+                        value.toString()
                     }
                 }
 
-                Status.MESSAGE -> {
-                    (activity as ParentActivity).showError(0, it.message!!)
-                }
+                lcTimeScores.xAxis.valueFormatter = dateFormatter
+                lcTimeScores.description.isEnabled = false
 
-                else -> {
+                bcMistakes.xAxis.valueFormatter = dateFormatter
+                bcMistakes.description.isEnabled = false
 
-                }
-            }
-        }
-    }
-
-    //todo: coloring, style..
-    private fun setupChartData(chartData: ParentRepository.ChartData) {
-        if (lcTimeScores.data == null && bcMistakes.data == null) {
-            val dateFormatter = IAxisValueFormatter { value, _ ->
-                chartData.dates[value.toInt()]
             }
 
-            lcTimeScores.xAxis.valueFormatter = dateFormatter
-            lcTimeScores.description.isEnabled = false
+            if (it.lineData.entryCount > 0 && it.barData.entryCount > 0) {
+                lcTimeScores.data = it.lineData
+                lcTimeScores.animateXY(0, 300)
 
-            bcMistakes.xAxis.valueFormatter = dateFormatter
-            bcMistakes.description.isEnabled = false
+                bcMistakes.data = it.barData
+                bcMistakes.animateXY(0, 300)
 
-        }
-
-        if (chartData.lineData.entryCount > 0 && chartData.barData.entryCount > 0) {
-            lcTimeScores.data = chartData.lineData
-            lcTimeScores.animateXY(0, 300)
-
-            bcMistakes.data = chartData.barData
-            bcMistakes.animateXY(0, 300)
-
+            }
         }
     }
 

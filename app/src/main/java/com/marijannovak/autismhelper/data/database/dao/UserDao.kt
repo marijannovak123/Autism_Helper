@@ -27,7 +27,7 @@ interface UserDao : BaseDao<User> {
     fun userLoggedIn(): Maybe<User>
 
     @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getCurrentUser(): Single<User>
+    fun getCurrentUser(): Flowable<User>
 
     @Query("DELETE FROM $TABLE_USER")
     fun deleteTable()

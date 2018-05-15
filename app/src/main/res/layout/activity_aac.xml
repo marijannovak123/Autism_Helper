@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".modules.child.AACActivity">
+    tools:context=".modules.child.AACActivity"
+    android:background="@color/colorBg">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvAacDisplay"
