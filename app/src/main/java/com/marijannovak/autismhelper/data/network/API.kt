@@ -37,9 +37,15 @@ interface API {
     @PUT("users/{userId}/children/{childIndex}.json")
     fun addChild(@Path("userId") userId: String, @Path("childIndex") childIndex: Int, @Body child: Child): Completable
 
+    @DELETE("users/{userId}/children/{childIndex}.json")
+    fun deleteChild(@Path("userId") userId: String, @Path("childIndex") childIndex: Int): Completable
+
     @PATCH("users/{userId}.json")
     fun updateParentPassword(@Path("userId") userId: String, @Body password: ParentPasswordRequest): Completable
 
     @PATCH("users/{userId}.json")
     fun updateParent(@Path("userId") userId: String, @Body user: UserUpdateRequest): Completable
+
+    @PATCH("users/{userId}/children/{childIndex}.json")
+    fun updateChild(@Path("userId") userId: String, @Path("childIndex") childIndex: Int, @Body child: Child): Completable
 }

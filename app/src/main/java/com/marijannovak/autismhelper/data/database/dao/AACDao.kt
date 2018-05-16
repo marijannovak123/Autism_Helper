@@ -27,11 +27,11 @@ interface AACDao : BaseDao<AacPhrase> {
     fun updateMultiple(phrases: List<AacPhrase>){
         val savedPhrases = queryAll()
         var i = 0
-        for(phrase: AacPhrase in phrases) {
-            if(i < savedPhrases.size && savedPhrases.contains(phrase)) {
-                update(phrase.id, phrase.name, savedPhrases[i].iconPath)
+        phrases.forEach {
+            if(i < savedPhrases.size && savedPhrases.contains(it)) {
+                update(it.id, it.name, savedPhrases[i].iconPath)
             } else {
-                insert(phrase)
+                insert(it)
             }
             i = i.inc()
         }

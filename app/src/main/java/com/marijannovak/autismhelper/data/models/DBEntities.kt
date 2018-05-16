@@ -35,12 +35,13 @@ data class User(
 data class Child(
         @PrimaryKey
         var id: String,
+        var index: Int,
         var parentId: String,
         var name: String,
         var gender: String,
         var dateOfBirth: Long
 ) : Serializable {
-    constructor() : this("", "", "", "", 0)
+    constructor() : this("", 1000, "", "", "", 0)
 }
 
 @Entity(tableName = TABLE_CHILD_SCORES)
@@ -52,7 +53,11 @@ data class ChildScore(
         var timestamp: Long,
         var duration: Long,
         var mistakes: Int
-) : Serializable {
+) : Serializable, Comparator<ChildScore> {
+    override fun compare(o1: ChildScore, o2: ChildScore): Int {
+        return (o1.timestamp - o2.timestamp).toInt()
+    }
+
     constructor() : this(0, "", "", 0, 0, 0)
 }
 

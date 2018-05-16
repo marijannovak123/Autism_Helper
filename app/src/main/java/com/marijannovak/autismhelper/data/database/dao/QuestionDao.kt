@@ -42,11 +42,11 @@ interface QuestionDao : BaseDao<Question> {
     fun updateMultiple(questions: List<Question>){
         val savedQuestions = queryAll()
         var i = 0
-        for(question: Question in questions) {
-            if(i < savedQuestions.size && savedQuestions.contains(question)) {
-                update(question.id, question.text, question.categoryId, question.extraData?: "", savedQuestions[i].imgPath ?: "")
+        questions.forEach {
+            if(i < savedQuestions.size && savedQuestions.contains(it)) {
+                update(it.id, it.text, it.categoryId, it.extraData?: "", savedQuestions[i].imgPath ?: "")
             } else {
-                insert(question)
+                insert(it)
             }
             i = i.inc()
         }

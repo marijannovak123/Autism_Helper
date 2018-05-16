@@ -35,7 +35,7 @@ class DialogHelper {
                 date.set(Calendar.YEAR, year)
                 date.set(Calendar.MONTH, month)
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                etDate.setText("${date[Calendar.DAY_OF_MONTH]}.${date[Calendar.MONTH] + 1}.${date[Calendar.YEAR]}")
+                etDate.setText(date.timeInMillis.toDateString())
             }
             DatePicker.show(context, onDateSet, date)
         }
@@ -139,8 +139,8 @@ class DialogHelper {
                 val name = etName.text.toString().trim()
                 val dateOfBirth = selectedDate.timeInMillis
 
-                val childId = userId + CHILD_ID_SUFFIX + userChildrenNo
-                val child = Child(childId, userId, name, spGender.selectedItem.toString(), dateOfBirth)
+                val childId = userId + CHILD_ID_SUFFIX + name.hashCode()
+                val child = Child(childId, userChildrenNo, userId, name, spGender.selectedItem.toString(), dateOfBirth)
 
                 val errors = InputValidator.validateChild(child)
 
@@ -194,6 +194,57 @@ class DialogHelper {
             btnPositive.setOnClickListener {
                 onConfirm(children[spChildren.selectedItemPosition])
                 alertDialog.dismiss()
+            }
+
+            btnNegative.setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            alertDialog.show()
+        }
+
+        fun showEditChildDialog(context: Context, child: Child, message: String, onEdit: (Child) -> Unit) {
+            val selectedDate: Calendar = Calendar.getInstance()
+
+            val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+            val inflater = LayoutInflater.from(context)
+            val alertView = inflater.inflate(R.layout.dialog_add_child, null)
+
+            builder.setView(alertView)
+            builder.setCancelable(false)
+            val alertDialog = builder.create()
+
+            val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
+            val tvMessage = alertView.findViewById<TextView>(R.id.tvMessage)
+            val etName = alertView.findViewById<EditText>(R.id.etChildName)
+            val etDateOfBirth = alertView.findViewById<EditText>(R.id.etChildDateOfBirth)
+            val spGender = alertView.findViewById<Spinner>(R.id.spGender)
+            val cbAddAnother = alertView.findViewById<CheckBox>(R.id.cbAddAnother)
+
+            tvMessage.text = message
+            spGender.setSelection(if(child.gender == GENDERS[0]) 0 else 1)
+            etName.setText(child.name)
+            etDateOfBirth.setText(child.dateOfBirth.toDateString())
+            cbAddAnother.visibility = View.GONE //reusing add child, hide this
+            spGender.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, GENDERS)
+
+            etDateOfBirth.setOnClickListener { showDatePicker(context, selectedDate, etDateOfBirth) }
+
+            btnPositive.setOnClickListener {
+                val name = etName.text.toString().trim()
+                val dateOfBirth = selectedDate.timeInMillis
+
+                val updatedChild = child.copy(name = name, gender = spGender.selectedItem.toString(), dateOfBirth = dateOfBirth)
+
+                val errors = InputValidator.validateChild(updatedChild)
+
+                if (errors.isEmpty()) {
+                    onEdit(updatedChild)
+                    alertDialog.dismiss()
+                } else {
+                    handleChildAddErrors(errors, etName, etDateOfBirth)
+                }
             }
 
             btnNegative.setOnClickListener {

@@ -38,7 +38,7 @@ class InputValidator {
 
             val dobCalender = Calendar.getInstance()
             dobCalender.time = Date(child.dateOfBirth)
-
+            //todo: errors to string res
             if (child.name.isEmpty()) {
                 errorMap[VALIDATION_NAME] = "Insert name!"
                 return errorMap

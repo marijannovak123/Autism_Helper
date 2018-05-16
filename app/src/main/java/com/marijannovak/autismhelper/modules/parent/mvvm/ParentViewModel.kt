@@ -9,7 +9,7 @@ import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
 import javax.inject.Inject
-
+//TODO: REORGANIZE REPOSITORIES BY MODELS THEY ARE DATA SOURCE FOR
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
         private val aacRepository: AACRepository)
@@ -19,7 +19,7 @@ class ParentViewModel @Inject constructor(
     val userNameLiveData = MutableLiveData<String>()
     val chartLiveData = MutableLiveData<ParentRepository.ChartData>()
     val phraseLiveData = MutableLiveData<List<AacPhrase>>()
-    val childrenLiveData = MutableLiveData<List<Child>>()
+    val userWithChildrenLiveData = MutableLiveData<UserChildrenJoin>()
     val userLiveData = MutableLiveData<User>()
 
     fun loadUsername() {
@@ -38,12 +38,12 @@ class ParentViewModel @Inject constructor(
         )
     }
 
-    fun loadChildren() {
+    fun loadUserWithChildren() {
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
-                repository.loadChildren().subscribe(
+                repository.loadUserWithChildren().subscribe(
                         {
-                            childrenLiveData.value = it
+                            userWithChildrenLiveData.value = it
                             resourceLiveData.value = Resource.success(null)
                         },
                         { resourceLiveData.value = Resource.message(R.string.load_error) }
@@ -97,8 +97,17 @@ class ParentViewModel @Inject constructor(
         )
     }
 
+    fun syncUserAndData() {
+            resourceLiveData.value = Resource.loading()
+            repository.syncUserData().subscribe({
+               syncData(false)
+            }, {
+                resourceLiveData.value = Resource.message(R.string.sync_error)
+            })
+
+    }
+
     fun syncData(firstSync: Boolean) {
-        resourceLiveData.value = Resource.loading()
         dataRepository.syncData(firstSync).subscribe(
                 {
                     dataRepository.downloadImages {
@@ -112,7 +121,7 @@ class ParentViewModel @Inject constructor(
     fun deletePhrase(phrase: AacPhrase) {
         resourceLiveData.value = Resource.loading()
         aacRepository.deletePhrase(phrase).subscribe(
-                { resourceLiveData.value = Resource.message(R.string.saved) },
+                { /*no need for message, the phrase is gone instantly if deleted*/ },
                 { resourceLiveData.value = Resource.message(R.string.save_error) }
         )
     }
@@ -131,10 +140,35 @@ class ParentViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.loadUser().subscribe(
                         {
-                            userLiveData.value = it
+                            val user = it
+                            user.parentPassword?.let {
+                                if(it.isEmpty()) user.parentPassword = repository.getParentPassword()
+                            }
+                            userLiveData.value = user
                             resourceLiveData.value = Resource.success(null)
                         },
                         { resourceLiveData.value = Resource.message(R.string.fetch_user_error) }
+                )
+        )
+    }
+
+    fun deleteChild(child: Child) {
+        resourceLiveData.value = Resource.loading()
+        compositeDisposable.add(
+                repository.deleteChild(child).subscribe({
+                    resourceLiveData.value = Resource.message(R.string.child_deleted)
+                }, {
+                    resourceLiveData.value = Resource.message(R.string.error)
+                })
+        )
+    }
+
+    fun updateChild(child: Child) {
+        resourceLiveData.value = Resource.loading()
+        compositeDisposable.add(
+                repository.updateChild(child).subscribe(
+                        {resourceLiveData.value = Resource.message(R.string.child_updated)},
+                        {resourceLiveData.value = Resource.message(R.string.error)}
                 )
         )
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/group_fragments"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/children"
             android:icon="@drawable/ic_child_friendly"
@@ -22,7 +23,7 @@
 
     </group>
 
-    <group>
+    <group android:id="@+id/group_options">
         <item
             android:id="@+id/sync"
             android:icon="@drawable/ic_autorenew"

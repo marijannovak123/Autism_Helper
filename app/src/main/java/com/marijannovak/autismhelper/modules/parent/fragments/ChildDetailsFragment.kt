@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentRepository
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.fragment_child_details.*
 
 class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
@@ -39,7 +41,7 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
                     })
 
             child?.let {
-                (activity as AppCompatActivity).supportActionBar?.title = it.name
+                (activity as AppCompatActivity).supportActionBar?.title = it.name + getString(R.string.its_scores)
                 viewModel.loadChildScores(it)
             }
         }
@@ -49,11 +51,7 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
         chartData?.let {
             if (lcTimeScores.data == null && bcMistakes.data == null) {
                 val dateFormatter = IAxisValueFormatter { value, _ ->
-                    if(value.toInt() < it.dates.size) {
-                        it.dates[value.toInt()]
-                    } else {
-                        value.toString()
-                    }
+                    it.dates[value.toInt()]
                 }
 
                 lcTimeScores.xAxis.valueFormatter = dateFormatter
@@ -61,7 +59,6 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
 
                 bcMistakes.xAxis.valueFormatter = dateFormatter
                 bcMistakes.description.isEnabled = false
-
             }
 
             if (it.lineData.entryCount > 0 && it.barData.entryCount > 0) {
@@ -70,7 +67,6 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
 
                 bcMistakes.data = it.barData
                 bcMistakes.animateXY(0, 300)
-
             }
         }
     }

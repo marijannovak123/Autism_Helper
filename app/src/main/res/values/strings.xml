@@ -104,5 +104,12 @@
     <string name="close_quiz">Do you really want to close the quiz?</string>
     <string name="quiz_finished">Quiz finished</string>
     <string name="fail">False</string>
+    <string name="deleted">Deleted</string>
+    <string name="its_scores">\'s scores</string>
+    <string name="delete_child">Delete child?</string>
+    <string name="child_deleted">Child deleted</string>
+    <string name="child_updated">Child updated</string>
+    <string name="update_child">Update child data</string>
+    <string name="error_saving">Saving error</string>
 
 </resources>

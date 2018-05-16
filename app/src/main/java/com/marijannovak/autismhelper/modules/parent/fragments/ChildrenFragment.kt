@@ -4,25 +4,22 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
-import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.adapters.ChildrenAdapter
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
-import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.fragment_children.*
 
 class ChildrenFragment : InjectableFragment<ParentViewModel>() {
     //todo: design, add more details
     private var adapter: ChildrenAdapter? = null
-    private var children: List<Child>? = null
+    private var userWithChildren: UserChildrenJoin? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +35,16 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            viewModel.childrenLiveData.observe(this,
+            viewModel.userWithChildrenLiveData.observe(this,
                     Observer {
-                        children = it
-                        setUpChildrenRv(it)
+                        userWithChildren = it
+                        it?.let {
+                            setUpChildrenRv(it.children)
+                        }
                     })
         }
 
-        viewModel.loadChildren()
+        viewModel.loadUserWithChildren()
 
     }
 
@@ -55,7 +54,14 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
                     adapter = ChildrenAdapter(emptyList(), { child, _ ->
                         openChildDetailsFragment(child)
                     }, { child, _ ->
-                        //Noop
+                            DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_child), {
+                                viewModel.deleteChild(child)
+                            } )
+                    }, {
+                        child, _ ->
+                            DialogHelper.showEditChildDialog(activity as ParentActivity, child, getString(R.string.update_child), {
+                                viewModel.updateChild(it)
+                            })
                     })
                     rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     rvChildren.itemAnimator = DefaultItemAnimator()
@@ -78,13 +84,14 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
         item?.let {
             when (it.itemId) {
                 R.id.action_add_child -> {
-                    children?.let {
-                        DialogHelper.showAddChildDialog(activity as ParentActivity, it[0].parentId, it.size, false,
+                    userWithChildren?.let {
+                        val childrenNo = if(it.children.isEmpty()) 0 else it.children.size
+                        DialogHelper.showAddChildDialog(activity as ParentActivity, it.user.id, childrenNo, false,
                                 { child, _ -> viewModel.saveChild(child) },
                                 { /*NOOP*/ }
                         )
-                    }
 
+                    }
                 }
 
                 else -> {}

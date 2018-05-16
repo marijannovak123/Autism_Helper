@@ -84,6 +84,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
 
                 Status.SAVED -> {
                     val intent = Intent(this, PickCategoryActivity::class.java)
+                    intent.putExtra(EXTRA_CHILD, child)
                     startActivity(intent)
                     finish()
                 }

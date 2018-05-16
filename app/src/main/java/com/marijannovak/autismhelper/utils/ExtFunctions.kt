@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
+import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import io.reactivex.Completable
@@ -89,15 +90,15 @@ fun Long.toDateString(): String {
     return dateFormat.format(date)
 }
 
-
 /**
  * AAC list of phrases to sentence
  */
 fun ArrayList<String>.toSentence(): String {
     val stringBuilder = StringBuilder()
-    for (string: String in this) {
-        stringBuilder.append(string)
+    this.forEach {
+        stringBuilder.append(it)
                 .append("\t")
     }
+
     return stringBuilder.toString()
 }

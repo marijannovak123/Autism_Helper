@@ -7,7 +7,6 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.marijannovak.autismhelper.R
@@ -24,7 +23,6 @@ import com.marijannovak.autismhelper.modules.parent.fragments.*
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_parent.*
-import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 
 class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
@@ -119,7 +117,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.sync -> {
-                viewModel.syncData(false)
+                viewModel.syncUserAndData()
             }
 
             R.id.logout -> {
@@ -157,8 +155,11 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
         } else if (supportFragmentManager.backStackEntryCount > 0) {
-            val currentFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)
-            if (currentFragment != null && currentFragment.isVisible) {
+            val childDetailsFragment = supportFragmentManager.findFragmentByTag(ChildDetailsFragment::class.java.simpleName)
+            if (childDetailsFragment != null && childDetailsFragment.isVisible) {
+                //to avoid crashes opening the details fragment with another child data, viewmodel first emmits the old data and then the app crashes
+                //in formatter -> if bigger data set, out of bounds exception
+                viewModel.chartLiveData.value = null
                 loadFragment(ChildrenFragment())
             } else if (fragments[FRAGMENT_PHRASES]!!.isVisible) {
                 val phrasesFragment = fragments[FRAGMENT_PHRASES]!! as PhrasesFragment

@@ -10,13 +10,11 @@ import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.utils.PrefsHelper
-import com.marijannovak.autismhelper.utils.handleThreading
-import com.marijannovak.autismhelper.utils.toDateString
-import com.marijannovak.autismhelper.utils.toDayMonthString
+import com.marijannovak.autismhelper.utils.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.toSingle
 import javax.inject.Inject
 
 class ParentRepository @Inject constructor(
@@ -38,8 +36,8 @@ class ParentRepository @Inject constructor(
                         }.handleThreading()
     }
 
-    fun loadChildren(): Flowable<List<Child>> {
-        return childDao.getChildren().handleThreading()
+    fun loadUserWithChildren(): Flowable<UserChildrenJoin> {
+        return userDao.getUserWithChildren().handleThreading()
     }
 
     fun loadChildScoresLineData(child: Child): Flowable<ChartData> {
@@ -50,13 +48,14 @@ class ParentRepository @Inject constructor(
     }
 
     private fun createLineData(scores: List<ChildScore>, child: Child): ChartData {
+        val sorted = scores.sortedWith(Comparator { o1, o2 -> (o1.timestamp-o2.timestamp).toInt()})
         var lineEntries: List<Entry> = emptyList()
         var barEntries: List<BarEntry> = emptyList()
         var dates: List<String> = emptyList()
         for (i in 0 until scores.size) {
-            lineEntries += Entry(i.toFloat(), scores[i].duration / 1000f)
-            barEntries += BarEntry(i.toFloat(), scores[i].mistakes.toFloat())
-            dates += scores[i].timestamp.toDayMonthString()
+            lineEntries += Entry(i.toFloat(), sorted[i].duration / 1000f)
+            barEntries += BarEntry(i.toFloat(), sorted[i].mistakes.toFloat())
+            dates += sorted[i].timestamp.toDayMonthString()
         }
         val lineDataSet = LineDataSet(lineEntries, "Duration in seconds")
         lineDataSet.color = if(child.gender == GENDERS[0]) Color.CYAN else Color.parseColor("#FF69B4")
@@ -80,17 +79,56 @@ class ParentRepository @Inject constructor(
                 }.handleThreading()
     }
 
-    fun loadUser(): Flowable<User> {
+    fun loadUser(): Single<User> {
         return userDao.getCurrentUser().handleThreading()
     }
 
-    fun loadUserName(): Flowable<String?> {
+    fun loadUserName(): Single<String?> {
         return userDao
                 .getCurrentUser()
                 .map { user -> user.username ?: "Parent" }
                 .handleThreading()
     }
 
+    fun getParentPassword() : String {
+        return prefsHelper.getParentPassword()
+    }
+
+    fun deleteChild(child: Child): Completable {
+        return api.deleteChild(child.parentId, child.index)
+                .andThen {
+                    childDao.delete(child)
+                }.handleThreading()
+    }
+
+    fun updateChild(child: Child): Completable {
+        return api.updateChild(child.parentId, child.index, child)
+                .andThen {
+                    childDao.update(child)
+                }.handleThreading()
+    }
+
+    fun syncUserData(): Completable {
+        return userDao.getCurrentUser()
+                .flatMap {
+                    api.getUser(it.id)
+                }.flatMapCompletable {
+                    updateUser(it)
+                }.handleThreading()
+    }
+
+    private fun updateUser(user: User): Completable {
+        return Completable.fromAction {
+            userDao.insert(user)
+            user.children?.let {
+                childDao.updateMultiple(it)
+            }
+            user.childScores?.let {
+                childScoreDao.insertMultiple(it)
+            }
+            prefsHelper.setParentPassword(user.parentPassword ?: "")
+        }
+    }
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)
 }

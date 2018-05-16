@@ -54,9 +54,10 @@ open class BaseViewModel<T> : ViewModel() {
     fun getParentPassword() = dataRepository.getParentPassword()
 
     fun saveParentPassword(password: String) {
+        resourceLiveData.value = Resource.loading()
         dataRepository.saveParentPassword(password).subscribe(
                 { resourceLiveData.value = Resource.next() },
-                { resourceLiveData.value = Resource.message(R.string.save_error) }
+                { resourceLiveData.value = Resource.message(R.string.error_saving) }
         )
     }
 

@@ -68,7 +68,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                 }
 
                 Status.NEXT -> {
-                    startActivity(Intent(baseContext, ParentActivity::class.java))
+                    startActivity(Intent(this@MainActivity, ParentActivity::class.java))
                     finish()
                 }
 

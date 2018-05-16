@@ -18,10 +18,11 @@ class LoginViewModel @Inject constructor(
         private val repository: LoginRepository) : BaseViewModel<User>() {
 
     fun checkLoggedIn() {
+        resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.isLoggedIn().subscribe(
                         { resourceLiveData.value = Resource.success(listOf(it)) },
-                        { /*NOOP don't show error, just show content*/ },
+                        { resourceLiveData.value = Resource.message(R.string.data_load_error)},
                         { resourceLiveData.value = Resource.home() }
                 )
         )

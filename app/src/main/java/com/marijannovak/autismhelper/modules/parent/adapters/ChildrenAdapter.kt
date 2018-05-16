@@ -1,8 +1,10 @@
 package com.marijannovak.autismhelper.modules.parent.adapters
 
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseAdapter
@@ -14,18 +16,21 @@ import kotlinx.android.synthetic.main.list_item_child.view.*
 
 class ChildrenAdapter(
         childrenList: List<Child>,
-        onItemClick: (Child, Int) -> Unit,
-        onLongItemClick: (Child, Int) -> Unit)
-    : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), onItemClick, onLongItemClick) {
+        openScoresListener: (Child, Int) -> Unit,
+        deleteListener: (Child, Int) -> Unit,
+        private val editListener: (Child, Int) -> Unit)
+    : BaseAdapter<ChildrenAdapter.ChildrenViewHolder, Child>(childrenList.toMutableList(), openScoresListener, deleteListener) {
 
     override fun createHolder(parent: ViewGroup, viewType: Int): ChildrenViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_child, parent, false)
         view.setOnClickListener { }
-        return ChildrenViewHolder(view)
+        return ChildrenViewHolder(view, dataSet.size, editListener)
     }
 
-    class ChildrenViewHolder(itemView: View)
+    inner class ChildrenViewHolder(itemView: View, itemCount: Int, editListener: (Child, Int) -> Unit)
         : BaseViewHolder<Child>(itemView) {
+
+        private val expandStates = Array(itemCount, { false })
 
         override fun bind(child: Child, position: Int, onItemClick: (Child, Int) -> Unit, onLongItemClick: (Child, Int) -> Unit) {
             with(itemView) {
@@ -36,8 +41,36 @@ class ChildrenAdapter(
                         .load(if(child.gender == GENDERS[0])R.drawable.ic_male else R.drawable.ic_female)
                         .into(ivChildGender)
 
-                setOnClickListener { onItemClick(child, position) }
+                val expandClickListener = {
+                    if(rlExpanded.visibility == View.VISIBLE) {
+                        rotationAnimation(180f, 0f).start()
+                        rlExpanded.visibility = View.GONE
+                        expandStates[position] = true
+                    } else {
+                        rotationAnimation(0f, 180f).start()
+                        rlExpanded.visibility = View.VISIBLE
+                        expandStates[position] = false
+                    }
+                }
+
+                ivArrow.setOnClickListener { expandClickListener() }
+                setOnClickListener {
+                    if(rlExpanded.visibility == View.GONE){
+                        expandClickListener()
+                    }
+                }
+                ivScores.setOnClickListener { onItemClick(child, position) }
+                ivDeleteChild.setOnClickListener { onLongItemClick(child, position) }
+                ivEditChild.setOnClickListener { editListener(child, position) }
             }
+        }
+
+        private fun rotationAnimation(from: Float, to: Float): ObjectAnimator {
+            return  ObjectAnimator.ofFloat(itemView.ivArrow, "rotation", from, to)
+                    .apply {
+                        duration = 300
+                        interpolator = LinearInterpolator()
+                    }
         }
 
     }

@@ -159,22 +159,22 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
     }
 
     fun showAddPhrase(show: Boolean) {
-        llAddPhrase.visibility = if (show) View.VISIBLE else View.GONE
-        rvPhrases.visibility = if (show) View.GONE else View.VISIBLE
+        llAddPhrase.animate().alpha(if(show) 1f else 0f).duration = 200
+        rvPhrases.animate().alpha(if(show) 0f else 1f).duration = 200
+        //llAddPhrase.visibility = if (show) View.VISIBLE else View.GONE
+        //rvPhrases.visibility = if (show) View.GONE else View.VISIBLE
         this.menu!!.setGroupVisible(R.id.group_menu_phrases, !show)
         if (!show) {
             etIcon.text.clear()
             etPhraseName.text.clear()
-            ivPhraseIcon.imageResource = 0
+            ivPhraseIcon.imageResource = R.drawable.img_placeholder
             loadedBitmapName = ""
             loadedBitmap = null
         }
     }
 
-
-
     fun isAddPhraseShown(): Boolean {
-        return llAddPhrase.visibility == View.VISIBLE
+        return llAddPhrase.alpha == 1f
     }
 }
 
