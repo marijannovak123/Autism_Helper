@@ -161,8 +161,8 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
     fun showAddPhrase(show: Boolean) {
         llAddPhrase.animate().alpha(if(show) 1f else 0f).duration = 200
         rvPhrases.animate().alpha(if(show) 0f else 1f).duration = 200
-        //llAddPhrase.visibility = if (show) View.VISIBLE else View.GONE
-        //rvPhrases.visibility = if (show) View.GONE else View.VISIBLE
+        llAddPhrase.visibility = if (show) View.VISIBLE else View.GONE
+        rvPhrases.visibility = if (show) View.GONE else View.VISIBLE
         this.menu!!.setGroupVisible(R.id.group_menu_phrases, !show)
         if (!show) {
             etIcon.text.clear()
