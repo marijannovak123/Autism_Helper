@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
@@ -14,6 +15,7 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.toSentence
 import kotlinx.android.synthetic.main.activity_aac.*
 import org.jetbrains.anko.toast
@@ -36,6 +38,8 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
             if (it == TextToSpeech.SUCCESS) {
                 ttsSupported = true
                 tts.language = Locale.US
+                tts.setSpeechRate(viewModel.getTtsSpeed())
+                tts.setPitch(viewModel.getTtsPitch())
             }
         })
 
@@ -44,7 +48,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
     override fun handleResource(resource: Resource<List<AacPhrase>>?) {
         resource?.let {
-            showLoading(it.status)
+            showLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
                     setUpAacData(it.data)
@@ -62,27 +66,40 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
             aacDisplayAdapter = AACAdapter(emptyList(), { aacPhrase, position ->
                 aacDisplayAdapter?.deleteItem(aacPhrase)
                 ttsWords.removeAt(position)
-            }, { aacPhrase, _ ->
-                //tts.speak(aacPhrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
-            })
+            }, { _, _ -> /*noop*/})
             rvAacDisplay.adapter = aacDisplayAdapter
-            rvAacDisplay.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            rvAacDisplay.layoutManager = GridLayoutManager(this, 5)
         }
 
         phrases?.let {
             if (aacSelectorAdapter == null) {
                 aacSelectorAdapter = AACAdapter(emptyList(), { phrase, _ ->
-                    aacDisplayAdapter?.addItem(phrase)
-                    ttsWords.add(phrase.name)
+                    if(aacDisplayAdapter!!.datasetCount() < 10) {
+                        aacDisplayAdapter?.addItem(phrase)
+                        ttsWords.add(phrase.name)
+                    } else {
+                        showMessage(R.string.max_phrases, null)
+                    }
                 }, { phrase, _ ->
-                    tts.speak(phrase.name, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
-
+                    speak(phrase.name)
                 })
                 rvAacSelector.adapter = aacSelectorAdapter
-                rvAacSelector.layoutManager = GridLayoutManager(this, 4)
+                rvAacSelector.layoutManager = GridLayoutManager(this, 5)
             }
 
             aacSelectorAdapter!!.update(it)
+        }
+    }
+
+    private fun speak(toSpeak: String) {
+        if (ttsSupported) {
+            if(viewModel.isSoundOn()) {
+                tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+            } else {
+                showMessage(R.string.audio_disabled, null)
+            }
+        } else {
+            showMessage(R.string.feature_not_supported, null)
         }
     }
 
@@ -99,16 +116,12 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
         item?.let {
             when (it.itemId) {
                 R.id.action_speak -> {
-                    if (ttsSupported) {
                         if (ttsWords.isNotEmpty()) {
-                            tts.speak(ttsWords.toSentence(), TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+                            speak(ttsWords.toSentence())
                         } else {
-                            tts.speak(getString(R.string.construct_sentence), TextToSpeech.QUEUE_FLUSH, Bundle(), null)
+                            speak(getString(R.string.construct_sentence))
                         }
-                    } else {
-                        toast(R.string.feature_not_supported)
                     }
-                }
 
                 else -> {
 

@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -44,7 +43,10 @@
             android:name=".modules.login.SignUpActivity"
             android:label="@string/sign_up" />
         <activity android:name=".modules.child.QuizActivity" />
-        <activity android:name=".modules.child.AACActivity"></activity>
+        <activity android:name=".modules.child.AACActivity" />
+        <activity
+            android:name=".modules.LoginActivity2"
+            android:label="@string/title_activity_login2"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,6 @@ package com.marijannovak.autismhelper.config
  */
 class Constants {
     companion object {
-
         //region firebase rest api
         const val BASE_URL = "https://autism-helper.firebaseio.com/api/"
         const val FIREBASE_AUTH = "auth"
@@ -46,7 +45,9 @@ class Constants {
         //region shared prefs
         const val PREFS_NAME = "autism_helper_prefs"
         const val KEY_PARENT_PASSWORD = "parent_password"
-        const val KEY_DOWNLOADED_IMAGES = "downloaded_images"
+        const val KEY_SOUND_ON = "sound_on"
+        const val KEY_TTS_PITCH = "tts_pitch"
+        const val KEY_TTS_SPEED = "tts_speed"
         //endregion
 
         //region extras

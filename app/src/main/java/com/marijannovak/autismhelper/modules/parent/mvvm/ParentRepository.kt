@@ -108,27 +108,7 @@ class ParentRepository @Inject constructor(
                 }.handleThreading()
     }
 
-    fun syncUserData(): Completable {
-        return userDao.getCurrentUser()
-                .flatMap {
-                    api.getUser(it.id)
-                }.flatMapCompletable {
-                    updateUser(it)
-                }.handleThreading()
-    }
 
-    private fun updateUser(user: User): Completable {
-        return Completable.fromAction {
-            userDao.insert(user)
-            user.children?.let {
-                childDao.updateMultiple(it)
-            }
-            user.childScores?.let {
-                childScoreDao.insertMultiple(it)
-            }
-            prefsHelper.setParentPassword(user.parentPassword ?: "")
-        }
-    }
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)
 }

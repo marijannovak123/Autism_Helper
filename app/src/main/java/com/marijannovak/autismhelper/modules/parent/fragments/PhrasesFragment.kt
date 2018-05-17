@@ -96,7 +96,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                     })
                 })
                 rvPhrases.adapter = phrasesAdapter
-                rvPhrases.layoutManager = GridLayoutManager(activity, 4)
+                rvPhrases.layoutManager = GridLayoutManager(activity, 6)
                 rvPhrases.itemAnimator = DefaultItemAnimator()
             }
 

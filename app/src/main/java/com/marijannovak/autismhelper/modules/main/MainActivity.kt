@@ -48,7 +48,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                     startActivity(Intent(this@MainActivity, ParentActivity::class.java))
                     finish()
                 } else {
-                    showError(R.string.error_incorrect_password, null)
+                    showMessage(R.string.error_incorrect_password, null)
                     enterPasswordDialog()
                 }
             }
@@ -61,10 +61,16 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
 
     override fun handleResource(resource: Resource<List<Child>>?) {
         resource?.let {
-            showLoading(it.status)
+            showLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
-                    pickChildDialog(it.data)
+                    it.data?.let {
+                        if(it.isEmpty()) {
+                            showMessage(R.string.no_children_short, null)
+                        } else {
+                            pickChildDialog(it)
+                        }
+                    }
                 }
 
                 Status.NEXT -> {
@@ -78,7 +84,7 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                 }
 
                 Status.MESSAGE -> {
-                    showError(0, it.message)
+                    showMessage(0, it.message)
                 }
 
                 else -> {

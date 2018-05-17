@@ -35,4 +35,6 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
     }
 
     protected abstract fun createHolder(parent: ViewGroup, viewType: Int): VH
+
+    fun datasetCount() = dataSet.size
 }

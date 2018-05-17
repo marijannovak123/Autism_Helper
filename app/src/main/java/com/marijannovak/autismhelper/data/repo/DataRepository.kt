@@ -7,11 +7,11 @@ import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
+import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import org.jetbrains.anko.doAsync
 import java.io.File
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class DataRepository @Inject constructor(
         private val auth: FirebaseAuth,
         private val storage: StorageReference,
         private val db: AppDatabase,
-        private val sharedPrefs: PrefsHelper,
+        private val prefsHelper: PrefsHelper,
         private val context: App) {
 
     private var questionsWithImgs: List<Question> = ArrayList()
@@ -71,7 +71,7 @@ class DataRepository @Inject constructor(
 
     fun logOut(): Completable {
         auth.signOut()
-        sharedPrefs.setParentPassword("")
+        prefsHelper.setParentPassword("")
         return Completable.fromAction {
             doAsync {
                 db.userDao().deleteTable()
@@ -89,10 +89,10 @@ class DataRepository @Inject constructor(
         db.answerDao().deleteTable()
     }
 
-    fun getParentPassword(): String = sharedPrefs.getParentPassword()
+    fun getParentPassword(): String = prefsHelper.getParentPassword()
 
     fun saveParentPassword(password: String): Completable {
-        sharedPrefs.setParentPassword(password)
+        prefsHelper.setParentPassword(password)
 
         return db.userDao().getCurrentUser()
                 .flatMapCompletable {
@@ -205,6 +205,46 @@ class DataRepository @Inject constructor(
                 db.questionDao().insert(question)
             }
         }
+    }
+
+    fun syncUserData(): Completable {
+        return db.userDao().getCurrentUser()
+                .flatMap {
+                    api.getUser(it.id)
+                }.flatMapCompletable {
+                    updateUser(it)
+                }.handleThreading()
+    }
+
+    private fun updateUser(user: User): Completable {
+        return Completable.fromAction {
+            db.userDao().insert(user)
+            user.children?.let {
+                db.childDao().updateMultiple(it)
+            }
+            user.childScores?.let {
+                db.childScoreDao().insertMultiple(it)
+            }
+            prefsHelper.setParentPassword(user.parentPassword ?: "")
+        }
+    }
+
+    fun isSoundOn(): Boolean {
+        return prefsHelper.isSoundOn()
+    }
+
+    fun getTtsSpeed(): Float {
+        return prefsHelper.getTtsSpeed()
+    }
+
+    fun getTtsPitch(): Float {
+        return prefsHelper.getTtsPitch()
+    }
+
+    fun saveSettings(settings: SettingsFragment.Settings) {
+        prefsHelper.setSoundsOn(settings.soundOn)
+        prefsHelper.setTtsPitch(settings.ttsPitch)
+        prefsHelper.setTtsSpeed(settings.ttsSpeed)
     }
 
 }

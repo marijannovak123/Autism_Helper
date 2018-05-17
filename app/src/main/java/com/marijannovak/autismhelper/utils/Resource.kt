@@ -21,19 +21,15 @@ class Resource<out T>(val status: Status, val data: T?, val message: String?) {
         }
 
         fun <T> message(msgRes: Int, throwableMessage: String): Resource<T> {
-            return Resource(Status.MESSAGE, null, App.getAppContext().resources.getString(msgRes) + ": " + throwableMessage)
+            return Resource(Status.MESSAGE, null, App.getAppContext().resources.getString(msgRes) + " " + throwableMessage)
         }
 
         fun <T> loading(): Resource<T> {
             return Resource(Status.LOADING, null, null)
         }
 
-        fun <T> syncing(): Resource<T> {
-            return Resource(Status.SYNCING, null, App.getAppContext().resources.getString(R.string.syncing))
-        }
-
-        fun <T> progressUpdate(msgRes: Int): Resource<T> {
-            return Resource(Status.PROGRESS_UPDATE, null, App.getAppContext().resources.getString(msgRes))
+        fun <T> loading(msgRes: Int): Resource<T> {
+            return Resource(Status.LOADING, null, App.getAppContext().getString(msgRes))
         }
 
         fun <T> next(): Resource<T>? {

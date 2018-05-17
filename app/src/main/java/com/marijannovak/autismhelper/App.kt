@@ -22,7 +22,7 @@ import javax.inject.Inject
 /**
  * Created by Marijan on 26.3.2018..
  */
-class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
+class App: Application(), HasActivityInjector, HasSupportFragmentInjector {
 
     @Inject
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>

@@ -150,7 +150,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     override fun handleResource(resource: Resource<List<User>>?) {
         resource?.let {
-            showLoading(it.status)
+            showLoading(it.status, it.message)
             when (it.status) {
                 Status.HOME -> {
                     llContent.visibility = View.VISIBLE
@@ -161,7 +161,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
                 }
 
                 Status.MESSAGE -> {
-                    showError(0, it.message)
+                    showMessage(0, it.message)
                 }
 
                 Status.SIGNEDUP -> {

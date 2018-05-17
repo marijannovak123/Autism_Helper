@@ -51,6 +51,8 @@ open class BaseViewModel<T> : ViewModel() {
         })
     }
 
+    fun isSoundOn() = dataRepository.isSoundOn()
+
     fun getParentPassword() = dataRepository.getParentPassword()
 
     fun saveParentPassword(password: String) {
@@ -61,9 +63,7 @@ open class BaseViewModel<T> : ViewModel() {
         )
     }
 
-    //todo: parse all errors from viewmodels to show at least close estimation of cause
-    fun parseThrowable(t: Throwable?): String {
-        return ""
-    }
+    fun getTtsSpeed() = dataRepository.getTtsSpeed()
 
+    fun getTtsPitch() = dataRepository.getTtsPitch()
 }

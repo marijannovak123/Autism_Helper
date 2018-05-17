@@ -21,10 +21,20 @@ class LoginViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.isLoggedIn().subscribe(
-                        { resourceLiveData.value = Resource.success(listOf(it)) },
+                        {//sync user data on every first start
+                            syncUserData(listOf(it))
+                        },
                         { resourceLiveData.value = Resource.message(R.string.data_load_error, it.message ?: "")},
                         { resourceLiveData.value = Resource.home() }
                 )
+        )
+    }
+
+    private fun syncUserData(user: List<User>) {
+        dataRepository.syncUserData().subscribe(
+                //go further regardless sync was successful
+                { resourceLiveData.value = Resource.success(user)},
+                { resourceLiveData.value = Resource.success(user)}
         )
     }
 
@@ -121,6 +131,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun syncData() {
+        resourceLiveData.value = Resource.loading(R.string.downloading_resources)
         compositeDisposable.add(
                 dataRepository.syncData(true).subscribe(
                         { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) } },

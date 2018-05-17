@@ -2,13 +2,14 @@ package com.marijannovak.autismhelper.modules.child.mvvm.repo
 
 import com.marijannovak.autismhelper.data.database.dao.AACDao
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
-class AACRepository @Inject constructor(private val aacDao: AACDao) {
+class AACRepository @Inject constructor(private val aacDao: AACDao, private val prefsHelper: PrefsHelper) {
 
     fun getPhrases(): Flowable<List<AacPhrase>> {
         return aacDao
@@ -31,4 +32,5 @@ class AACRepository @Inject constructor(private val aacDao: AACDao) {
             }
         }
     }
+
 }

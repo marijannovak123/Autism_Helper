@@ -172,7 +172,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun handleResource(resource: Resource<List<UserChildrenJoin>>?) {
         resource?.let {
-            showLoading(it.status)
+            showLoading(it.status, it.message)
             when (it.status) {
                 Status.HOME -> {
                     val intent = Intent(this@ParentActivity, LoginActivity::class.java)
@@ -181,7 +181,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                 }
 
                 Status.MESSAGE -> {
-                    showError(0, it.message)
+                    showMessage(0, it.message)
                 }
                 else -> {
 

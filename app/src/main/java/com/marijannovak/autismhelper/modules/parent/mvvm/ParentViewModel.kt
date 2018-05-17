@@ -6,13 +6,16 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
+import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
+import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
 import javax.inject.Inject
 //TODO: REORGANIZE REPOSITORIES BY MODELS THEY ARE DATA SOURCE FOR
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
-        private val aacRepository: AACRepository)
+        private val aacRepository: AACRepository,
+        private val prefsHelper: PrefsHelper)
     : BaseViewModel<UserChildrenJoin>() {
 
     var userName = ""
@@ -99,7 +102,7 @@ class ParentViewModel @Inject constructor(
 
     fun syncUserAndData() {
             resourceLiveData.value = Resource.loading()
-            repository.syncUserData().subscribe({
+            dataRepository.syncUserData().subscribe({
                syncData(false)
             }, {
                 resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "")
@@ -171,6 +174,10 @@ class ParentViewModel @Inject constructor(
                         {resourceLiveData.value = Resource.message(R.string.error, it.message ?: "")}
                 )
         )
+    }
+
+    fun saveSettings(settings: SettingsFragment.Settings) {
+        dataRepository.saveSettings(settings)
     }
 
 }

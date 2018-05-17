@@ -28,8 +28,8 @@
     <style name="signupEditTextStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginStart">10dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
     </style>
@@ -105,6 +105,13 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">20dp</item>
         <item name="android:background">@drawable/dialog_bg</item>
+    </style>
+
+    <style name="style_settings_item_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_alignParentStart">true</item>
     </style>
 
 </resources>

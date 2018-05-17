@@ -1,9 +1,6 @@
 package com.marijannovak.autismhelper.di
 
-import com.marijannovak.autismhelper.modules.parent.fragments.ChildDetailsFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.PhrasesFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -21,4 +18,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     internal abstract fun provideProfileFragment(): ProfileFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun provideSettingsFragment(): SettingsFragment
 }

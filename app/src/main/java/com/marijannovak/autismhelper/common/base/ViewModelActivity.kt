@@ -35,7 +35,7 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
         subscribeToData()
     }
 
-    fun showError(msgResId: Int, message: String?) {
+    fun showMessage(msgResId: Int, message: String?) {
         val view = this.window.decorView.findViewById<View>(android.R.id.content)
         if (msgResId <= 0) {
             snackbar(view, message!!)
@@ -44,14 +44,19 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
         }
     }
 
-    fun showLoading(status: Status) {
-        pbLoading?.dismiss()
+    fun showLoading(status: Status, message: String?) {
         if (status == Status.LOADING) {
-            pbLoading = pbLoading ?: LoadingDialog()
-            if (!pbLoading!!.isAdded) {
-                pbLoading!!.show(supportFragmentManager, "")
+            if(pbLoading == null) {
+                pbLoading = LoadingDialog()
+                if (!pbLoading!!.isAdded) {
+                    pbLoading!!.showWithMessage(supportFragmentManager, message)
+                }
+            } else {
+                pbLoading!!.updateMessage(message)
             }
+
         } else {
+            pbLoading?.dismiss()
             pbLoading = null
         }
     }

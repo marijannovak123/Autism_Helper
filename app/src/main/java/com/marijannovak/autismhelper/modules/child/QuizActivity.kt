@@ -5,7 +5,6 @@ import android.content.Intent
 import android.media.SoundPool
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
@@ -57,21 +56,21 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                 viewModel.loadCategoryData(categoryId)
             }
         } else {
-            showError(R.string.category_load_fail, null)
+            showMessage(R.string.category_load_fail, null)
             finish()
         }
 
         if (intent.hasExtra(EXTRA_CHILD)) {
             child = intent.getSerializableExtra(EXTRA_CHILD) as Child
         } else {
-            showError(R.string.children_load_fail, null)
+            showMessage(R.string.children_load_fail, null)
             finish()
         }
     }
 
     override fun handleResource(categories: Resource<List<Any>>?) {
         categories?.let {
-            showLoading(it.status)
+            showLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
                     val questions = (it.data!![0] as CategoryQuestionsAnswersJoin).questionsAnswers
@@ -79,7 +78,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
                 }
 
                 Status.MESSAGE -> {
-                    showError(0, it.message)
+                    showMessage(0, it.message)
                 }
 
                 Status.SAVED -> {
@@ -128,9 +127,11 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
     }
 
     private fun playSound(isCorrect: Boolean) {
-        sounds?.let {
-            val toPlay = if(isCorrect) it[CORRECT] else it[FALSE]
-            soundPool.play(toPlay!!, 1f, 1f, 1, 0, 1f)
+        if(viewModel.isSoundOn()) {
+            sounds?.let {
+                val toPlay = if(isCorrect) it[CORRECT] else it[FALSE]
+                soundPool.play(toPlay!!, 1f, 1f, 1, 0, 1f)
+            }
         }
     }
 

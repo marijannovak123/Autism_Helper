@@ -112,5 +112,20 @@
     <string name="error_saving">Saving error</string>
 
     <string name="no_children">No children added to the profile.\n Add one by pressing the + icon on the upper right side.</string>
+    <string name="no_children_short">No children added to the profile.</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="audio_disabled">Sounds disabled</string>
+    <string name="max_phrases">Too many phrases</string>
+    <string name="save_settings">Save settings</string>
+    <string name="settings_saved">Settings saved</string>
+    <string name="enable_sound">Enable sound</string>
+    <string name="set_pitch">Set AAC voice pitch</string>
+    <string name="set_speed">Set AAC voice speed</string>
+    <string name="this_is_my_voice">Test</string>
+    <string name="downloading_resources">Downloading resources</string>
+
 
 </resources>
