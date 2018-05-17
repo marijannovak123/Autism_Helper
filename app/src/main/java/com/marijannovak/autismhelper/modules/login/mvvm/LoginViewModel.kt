@@ -22,7 +22,7 @@ class LoginViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.isLoggedIn().subscribe(
                         { resourceLiveData.value = Resource.success(listOf(it)) },
-                        { resourceLiveData.value = Resource.message(R.string.data_load_error)},
+                        { resourceLiveData.value = Resource.message(R.string.data_load_error, it.message ?: "")},
                         { resourceLiveData.value = Resource.home() }
                 )
         )
@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.register_error)
+                resourceLiveData.value = Resource.message(R.string.register_error, t.message!!)
             }
         })
     }
@@ -49,7 +49,7 @@ class LoginViewModel @Inject constructor(
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.login_error)
+                resourceLiveData.value = Resource.message(R.string.login_error, t.message!!)
             }
         })
     }
@@ -57,11 +57,11 @@ class LoginViewModel @Inject constructor(
     fun forgotPassword(email: String) {
         repository.forgotPassword(email, object : GeneralListener<Any> {
             override fun onSucces(model: Any) {
-                resourceLiveData.value = Resource.message(R.string.success)
+                resourceLiveData.value = Resource.message(R.string.success, "")
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.unknown_error)
+                resourceLiveData.value = Resource.message(R.string.error, t.message ?: "")
             }
         })
     }
@@ -74,7 +74,7 @@ class LoginViewModel @Inject constructor(
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.google_sign_in_error)
+                resourceLiveData.value = Resource.message(R.string.google_sign_in_error, t.message ?: "")
             }
         })
     }
@@ -93,7 +93,7 @@ class LoginViewModel @Inject constructor(
                             if (it is NoSuchElementException) {
                                 resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
                             } else {
-                                throwErrorAndLogOut(R.string.unknown_error)
+                                throwErrorAndLogOut(R.string.error, it.message ?: "")
                             }
                         }
                 )
@@ -104,7 +104,7 @@ class LoginViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.fetchAndSaveUser(userId).subscribe(
                         { syncData() },
-                        { error -> throwErrorAndLogOut(R.string.fetch_user_error) }
+                        { error -> throwErrorAndLogOut(R.string.fetch_user_error, error.message ?: "") }
                 )
         )
 
@@ -115,7 +115,7 @@ class LoginViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.uploadAndSaveUser(user).subscribe(
                         { syncData() },
-                        { throwErrorAndLogOut(R.string.firebase_upload_error) }
+                        { throwErrorAndLogOut(R.string.firebase_upload_error, it.message ?: "") }
                 )
         )
     }
@@ -124,13 +124,13 @@ class LoginViewModel @Inject constructor(
         compositeDisposable.add(
                 dataRepository.syncData(true).subscribe(
                         { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) } },
-                        { throwErrorAndLogOut(R.string.sync_error) }
+                        { throwErrorAndLogOut(R.string.sync_error, it.message ?: "") }
                 )
         )
     }
 
-    fun throwErrorAndLogOut(msgRes: Int) {
-        resourceLiveData.value = Resource.message(msgRes)
+    fun throwErrorAndLogOut(msgRes: Int, throwableMessage: String) {
+        resourceLiveData.value = Resource.message(msgRes, throwableMessage)
         logOut()
     }
 }

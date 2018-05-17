@@ -14,7 +14,7 @@ class QuizViewModel @Inject constructor(private val repository: QuizRepository) 
         compositeDisposable.add(
                 repository.getCategoryData(categoryId).subscribe(
                         { category -> resourceLiveData.value = Resource.success(listOf(category)) },
-                        { error -> resourceLiveData.value = Resource.message(R.string.category_load_fail) }
+                        { error -> resourceLiveData.value = Resource.message(R.string.category_load_fail, error.message ?: "") }
                 )
         )
     }
@@ -24,7 +24,7 @@ class QuizViewModel @Inject constructor(private val repository: QuizRepository) 
         compositeDisposable.add(
                 repository.saveScoreLocallyAndOnline(score).subscribe(
                         { resourceLiveData.value = Resource.saved(listOf(score)) },
-                        { resourceLiveData.value = Resource.message(R.string.save_error) }
+                        { resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "") }
                 )
         )
     }

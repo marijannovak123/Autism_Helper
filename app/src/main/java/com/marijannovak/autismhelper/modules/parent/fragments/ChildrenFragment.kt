@@ -68,7 +68,10 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
                     rvChildren.adapter = adapter
                 }
                 adapter!!.update(it)
-            }
+
+            rvChildren.visibility = if(it.isEmpty()) View.GONE else View.VISIBLE
+            tvNoChildren.visibility = if(it.isNotEmpty()) View.GONE else View.VISIBLE
+        }
     }
 
     private fun openChildDetailsFragment(child: Child) {

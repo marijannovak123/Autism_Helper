@@ -16,7 +16,7 @@ class MainViewModel @Inject constructor(private val repository: MainRepository)
         compositeDisposable.add(
                 repository.getChildren().subscribe(
                         { children -> resourceLiveData.value = Resource.success(children) },
-                        { resourceLiveData.value = Resource.message(R.string.children_load_fail) }
+                        { resourceLiveData.value = Resource.message(R.string.children_load_fail, it.message ?: "") }
                 )
         )
 

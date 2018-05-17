@@ -32,7 +32,7 @@ class ParentViewModel @Inject constructor(
                         },
                         {
                             Log.e(logTag(), it.message)
-                            resourceLiveData.value = Resource.message(R.string.load_error)
+                            resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "")
                         }
                 )
         )
@@ -46,7 +46,7 @@ class ParentViewModel @Inject constructor(
                             userWithChildrenLiveData.value = it
                             resourceLiveData.value = Resource.success(null)
                         },
-                        { resourceLiveData.value = Resource.message(R.string.load_error) }
+                        { resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "") }
                 )
         )
     }
@@ -55,8 +55,8 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.saveChildLocallyAndOnline(child).subscribe(
-                        { resourceLiveData.value = Resource.message(R.string.child_saved) },
-                        { it -> resourceLiveData.value = Resource.message(R.string.error_inserting) }
+                        { resourceLiveData.value = Resource.message(R.string.child_saved, "") },
+                        { it -> resourceLiveData.value = Resource.message(R.string.error_inserting, it.message ?: "") }
                 )
         )
     }
@@ -68,7 +68,7 @@ class ParentViewModel @Inject constructor(
                             chartLiveData.value = it
                             resourceLiveData.value = Resource.success(null)
                         },
-                        { resourceLiveData.value = Resource.message(R.string.load_error) }
+                        { resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "") }
                 )
         )
     }
@@ -81,7 +81,7 @@ class ParentViewModel @Inject constructor(
                             phraseLiveData.value = it
                             resourceLiveData.value = Resource.success(null)
                         },
-                        { resourceLiveData.value = Resource.message(R.string.load_error) }
+                        { resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "") }
                 )
         )
     }
@@ -91,8 +91,8 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 aacRepository.savePhrase(phrase).subscribe(
-                        { resourceLiveData.value = Resource.message(R.string.phrase_saved) },
-                        { resourceLiveData.value = Resource.message(R.string.error_saving_phrase) }
+                        { resourceLiveData.value = Resource.message(R.string.phrase_saved, "") },
+                        { resourceLiveData.value = Resource.message(R.string.error_saving_phrase, it.message ?: "") }
                 )
         )
     }
@@ -102,7 +102,7 @@ class ParentViewModel @Inject constructor(
             repository.syncUserData().subscribe({
                syncData(false)
             }, {
-                resourceLiveData.value = Resource.message(R.string.sync_error)
+                resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "")
             })
 
     }
@@ -111,10 +111,10 @@ class ParentViewModel @Inject constructor(
         dataRepository.syncData(firstSync).subscribe(
                 {
                     dataRepository.downloadImages {
-                        resourceLiveData.value = Resource.message(R.string.data_synced)
+                        resourceLiveData.value = Resource.message(R.string.data_synced, "")
                     }
                 },
-                { resourceLiveData.value = Resource.message(R.string.sync_error) }
+                { resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "") }
         )
     }
 
@@ -122,16 +122,16 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         aacRepository.deletePhrase(phrase).subscribe(
                 { /*no need for message, the phrase is gone instantly if deleted*/ },
-                { resourceLiveData.value = Resource.message(R.string.save_error) }
+                { resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "") }
         )
     }
 
     fun updateUserData(userId: String, userUpdateRequest: UserUpdateRequest) {
         resourceLiveData.value = Resource.loading()
         repository.updateUser(userId, userUpdateRequest).subscribe({
-            resourceLiveData.value = Resource.message(R.string.saved)
+            resourceLiveData.value = Resource.message(R.string.saved, "")
         }, {
-            resourceLiveData.value = Resource.message(R.string.save_error)
+            resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "")
         })
     }
 
@@ -147,7 +147,7 @@ class ParentViewModel @Inject constructor(
                             userLiveData.value = user
                             resourceLiveData.value = Resource.success(null)
                         },
-                        { resourceLiveData.value = Resource.message(R.string.fetch_user_error) }
+                        { resourceLiveData.value = Resource.message(R.string.fetch_user_error, it.message ?: "") }
                 )
         )
     }
@@ -156,9 +156,9 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.deleteChild(child).subscribe({
-                    resourceLiveData.value = Resource.message(R.string.child_deleted)
+                    resourceLiveData.value = Resource.message(R.string.child_deleted, "")
                 }, {
-                    resourceLiveData.value = Resource.message(R.string.error)
+                    resourceLiveData.value = Resource.message(R.string.error, it.message ?: "")
                 })
         )
     }
@@ -167,8 +167,8 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.updateChild(child).subscribe(
-                        {resourceLiveData.value = Resource.message(R.string.child_updated)},
-                        {resourceLiveData.value = Resource.message(R.string.error)}
+                        {resourceLiveData.value = Resource.message(R.string.child_updated, "")},
+                        {resourceLiveData.value = Resource.message(R.string.error, it.message ?: "")}
                 )
         )
     }

@@ -4,11 +4,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.common.fragments.LoadingDialog
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.createFactory
 import com.marijannovak.autismhelper.utils.logTag
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
@@ -34,10 +36,11 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
     }
 
     fun showError(msgResId: Int, message: String?) {
+        val view = this.window.decorView.findViewById<View>(android.R.id.content)
         if (msgResId <= 0) {
-            toast(message!!)
+            snackbar(view, message!!)
         } else {
-            toast(msgResId)
+           snackbar(view, msgResId)
         }
     }
 

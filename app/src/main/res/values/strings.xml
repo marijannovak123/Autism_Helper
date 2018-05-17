@@ -89,8 +89,7 @@
     <string name="phrase_saved">Phrase saved</string>
     <string name="error_saving_phrase">Saving unsuccessful</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="construct_sentence">Construct a sentence</string>
     <string name="feature_not_supported">Feature not supported</string>
     <string name="phrases">Phrases</string>
@@ -111,5 +110,7 @@
     <string name="child_updated">Child updated</string>
     <string name="update_child">Update child data</string>
     <string name="error_saving">Saving error</string>
+
+    <string name="no_children">No children added to the profile.\n Add one by pressing the + icon on the upper right side.</string>
 
 </resources>

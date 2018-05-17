@@ -46,7 +46,7 @@ open class BaseViewModel<T> : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-                resourceLiveData.value = Resource.message(R.string.logout_not_success)
+                resourceLiveData.value = Resource.message(R.string.logout_not_success, e!!.message ?: "")
             }
         })
     }
@@ -57,7 +57,7 @@ open class BaseViewModel<T> : ViewModel() {
         resourceLiveData.value = Resource.loading()
         dataRepository.saveParentPassword(password).subscribe(
                 { resourceLiveData.value = Resource.next() },
-                { resourceLiveData.value = Resource.message(R.string.error_saving) }
+                { resourceLiveData.value = Resource.message(R.string.error_saving, it.message ?: "" ) }
         )
     }
 
