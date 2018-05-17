@@ -22,7 +22,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttp(context: App): OkHttpClient {
+    fun provideOkHttp(): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -67,6 +67,8 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideStorage(): StorageReference {
-        return FirebaseStorage.getInstance().reference
+        val storage = FirebaseStorage.getInstance()
+        storage.maxDownloadRetryTimeMillis = 2000
+        return storage.reference
     }
 }

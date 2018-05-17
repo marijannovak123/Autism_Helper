@@ -113,9 +113,11 @@ class ParentViewModel @Inject constructor(
     fun syncData(firstSync: Boolean) {
         dataRepository.syncData(firstSync).subscribe(
                 {
-                    dataRepository.downloadImages {
+                    dataRepository.downloadImages ({
                         resourceLiveData.value = Resource.message(R.string.data_synced, "")
-                    }
+                    }, {
+                        resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "")
+                    })
                 },
                 { resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "") }
         )

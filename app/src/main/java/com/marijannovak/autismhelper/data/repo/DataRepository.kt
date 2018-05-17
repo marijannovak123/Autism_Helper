@@ -30,6 +30,7 @@ class DataRepository @Inject constructor(
     private var questionsWithImgs: List<Question> = ArrayList()
     private var phrases: List<AacPhrase> = ArrayList()
     private lateinit var onDataDownloaded: () -> Unit
+    private lateinit var onError: (Throwable) -> Unit
 
     private var files: Array<String>
 
@@ -106,8 +107,9 @@ class DataRepository @Inject constructor(
         }.handleThreading()
     }
 
-    fun downloadImages(onComplete: () -> Unit) {
+    fun downloadImages(onComplete: () -> Unit, onError: (t: Throwable) -> Unit) {
         this.onDataDownloaded = onComplete
+        this.onError = onError
         downloadQuestionImage(0)
     }
 
@@ -126,16 +128,19 @@ class DataRepository @Inject constructor(
                                     if (pos == questionsWithImgs.size - 1) {
                                         downloadPhraseImage(0)
                                         // onDataDownloaded()
+
                                     } else {
                                         downloadQuestionImage(pos + 1)
                                     }
                                 },
                                 {
+                                    onError(it)
                                     Log.e(logTag(), "FAIL ${question.extraData!!}")
                                 }
                         )
                     }
                     .addOnFailureListener {
+                        onError(it)
                         Log.e(logTag(), "FAIL ${question.extraData!!}")
                     }
         } else {
@@ -169,11 +174,13 @@ class DataRepository @Inject constructor(
                                     }
                                 },
                                 {
+                                    onError(it)
                                     Log.e(logTag(), "FAIL ${phrase.iconPath}")
                                 }
                         )
                     }
                     .addOnFailureListener {
+                        onError(it)
                         Log.e(logTag(), "FAIL ${phrase.iconPath}")
                     }
         } else {

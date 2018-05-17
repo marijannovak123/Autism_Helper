@@ -134,7 +134,14 @@ class LoginViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading(R.string.downloading_resources)
         compositeDisposable.add(
                 dataRepository.syncData(true).subscribe(
-                        { dataRepository.downloadImages { resourceLiveData.value = Resource.success(null) } },
+                        {
+                            dataRepository.downloadImages({
+                                    resourceLiveData.value = Resource.success(null) },
+                                    {
+                                        throwErrorAndLogOut(R.string.sync_error, it.message ?: "")
+                                    })
+
+                         },
                         { throwErrorAndLogOut(R.string.sync_error, it.message ?: "") }
                 )
         )
