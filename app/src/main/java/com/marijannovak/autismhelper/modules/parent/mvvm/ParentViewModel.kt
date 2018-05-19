@@ -58,7 +58,7 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.saveChildLocallyAndOnline(child).subscribe(
-                        { resourceLiveData.value = Resource.message(R.string.child_saved, "") },
+                        { resourceLiveData.value = Resource.saved() },
                         { it -> resourceLiveData.value = Resource.message(R.string.error_inserting, it.message ?: "") }
                 )
         )
@@ -94,7 +94,7 @@ class ParentViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 aacRepository.savePhrase(phrase).subscribe(
-                        { resourceLiveData.value = Resource.message(R.string.phrase_saved, "") },
+                        { resourceLiveData.value = Resource.saved() },
                         { resourceLiveData.value = Resource.message(R.string.error_saving_phrase, it.message ?: "") }
                 )
         )
@@ -180,6 +180,7 @@ class ParentViewModel @Inject constructor(
 
     fun saveSettings(settings: SettingsFragment.Settings) {
         dataRepository.saveSettings(settings)
+        resourceLiveData.value = Resource.saved()
     }
 
 }

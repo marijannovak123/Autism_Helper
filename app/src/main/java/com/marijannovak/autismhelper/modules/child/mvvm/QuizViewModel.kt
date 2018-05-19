@@ -23,7 +23,7 @@ class QuizViewModel @Inject constructor(private val repository: QuizRepository) 
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.saveScoreLocallyAndOnline(score).subscribe(
-                        { resourceLiveData.value = Resource.saved(listOf(score)) },
+                        { resourceLiveData.value = Resource.saved() },
                         { resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "") }
                 )
         )

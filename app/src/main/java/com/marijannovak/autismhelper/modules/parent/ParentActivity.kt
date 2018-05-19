@@ -31,6 +31,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     private lateinit var drawerAction: () -> Unit
     private var handler = Handler()
     private var fragmentLoad = false
+    private var currentFragment = ChildrenFragment::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +85,8 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         })
     }
 
-    fun loadFragment(fragment: Fragment) {
+    fun <T : BaseFragment> loadFragment(fragment: T) {
+        currentFragment = fragment.javaClass.simpleName
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.llContainer, fragment, fragment.javaClass.simpleName)
         transaction.addToBackStack(null)
@@ -183,6 +185,16 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                 Status.MESSAGE -> {
                     showMessage(0, it.message)
                 }
+
+                Status.SAVED -> {
+                   showMessage(R.string.saved, null)
+                    if(currentFragment == PhrasesFragment::class.java.simpleName) {
+                        (fragments[FRAGMENT_PHRASES] as PhrasesFragment).showAddPhrase(false)
+                    } else {
+                        loadFragment(fragments[FRAGMENT_CHILDREN]!!)
+                    }
+                }
+
                 else -> {
 
                 }
