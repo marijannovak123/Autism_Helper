@@ -37,6 +37,7 @@ class ImageHelper {
             return file
         }
 
+
        fun scaleBitmap(loadedBitmap: Bitmap?): Bitmap {
             var bitmap = loadedBitmap
             var width = bitmap!!.width

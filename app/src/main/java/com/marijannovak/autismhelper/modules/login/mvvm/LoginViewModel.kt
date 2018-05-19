@@ -80,7 +80,8 @@ class LoginViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         repository.googleSignIn(data, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                checkIfUserAlreadyExists(model)
+                resourceLiveData.value = Resource.success(null)
+                //checkIfUserAlreadyExists(model)
             }
 
             override fun onFailure(t: Throwable) {

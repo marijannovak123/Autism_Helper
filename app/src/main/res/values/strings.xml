@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Autism Helper</string>
+    <string name="app_name">AH Phrase uploader</string>
 
     <string name="register">Register</string>
     <string name="login">Login</string>

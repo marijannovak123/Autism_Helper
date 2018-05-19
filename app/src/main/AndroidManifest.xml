@@ -44,5 +44,7 @@
             android:label="@string/sign_up" />
         <activity android:name=".modules.child.QuizActivity" />
         <activity android:name=".modules.child.AACActivity" />
+        <activity android:name="com.marijannovak.PhraseUploadActivity"></activity>
     </application>
+
 </manifest>

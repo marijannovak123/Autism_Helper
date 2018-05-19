@@ -1,0 +1,56 @@
+<LinearLayout android:id="@+id/llAddPhrase"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="30dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etPhraseName"
+            style="@style/signupEditTextStyle"
+            android:drawableStart="@drawable/ic_account_circle"
+            android:hint="@string/phrase_name"
+            android:inputType="text"
+            android:nextFocusForward="@id/etChildDateOfBirth" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etIcon"
+            style="@style/signupEditTextStyle"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:drawableStart="@drawable/ic_image"
+            android:editable="false"
+            android:focusable="false"
+            android:hint="@string/phrase_icon"
+            android:inputType="text"
+            tools:ignore="KeyboardInaccessibleWidget" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnAddPhrase"
+        style="@style/style_answer_button"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:text="@string/add_phrase" />
+
+    <ImageView
+        android:id="@+id/ivPhraseIcon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="250dp"
+        android:layout_margin="20dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_placeholder" />
+</LinearLayout>

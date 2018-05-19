@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.marijannovak.PhraseUploadActivity
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -61,7 +62,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     }
 
     private fun startMainActivity() {
-        intent = Intent(this, MainActivity::class.java)
+        intent = Intent(this, PhraseUploadActivity::class.java)
         startActivity(intent)
         overridePendingTransition(0, 0)
         finish()

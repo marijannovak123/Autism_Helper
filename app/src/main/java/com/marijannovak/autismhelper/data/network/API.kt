@@ -48,4 +48,7 @@ interface API {
 
     @PATCH("users/{userId}/children/{childIndex}.json")
     fun updateChild(@Path("userId") userId: String, @Path("childIndex") childIndex: Int, @Body child: Child): Completable
+
+    @PUT("phrases/{phraseIndex}.json")
+    fun uploadPhrase(@Path("phraseIndex") phraseIndex: Int, @Body phrase: AacPhrase): Completable
 }
