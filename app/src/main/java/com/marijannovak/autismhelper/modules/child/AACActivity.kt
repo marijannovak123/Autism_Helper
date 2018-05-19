@@ -76,7 +76,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
                 aacSelectorAdapter = AACAdapter(emptyList(), { phrase, _ ->
                     if(aacDisplayAdapter!!.datasetCount() < 10) {
                         aacDisplayAdapter?.addItem(phrase)
-                        ttsWords.add(phrase.name)
+                        ttsWords.add(phrase.text)
                     } else {
                         showMessage(R.string.max_phrases, null)
                     }

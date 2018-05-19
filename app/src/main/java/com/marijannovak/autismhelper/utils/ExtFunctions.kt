@@ -122,10 +122,13 @@ fun <K, V> Map<K, V>.mapToList(): List<V> {
     return list
 }
 
-fun <V> List<V>.toMap(): Map<String,V> {
-    val map = HashMap<String,V>()
+/**
+ * turn list to map to upload
+ */
+fun List<Child>.toMap(): Map<String,Child> {
+    val map = HashMap<String,com.marijannovak.autismhelper.data.models.Child>()
     this.forEach {
-        map += Pair(UUID.randomUUID().toString(), it)
+        map += Pair(it.id, it)
     }
     return map
 }
