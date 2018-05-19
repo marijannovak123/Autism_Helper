@@ -1,4 +1,4 @@
-package com.marijannovak
+package com.marijannovak.autismhelper
 
 import android.app.Activity
 import android.content.Intent
@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import com.google.firebase.storage.StorageReference
-import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
+import com.marijannovak.autismhelper.common.fragments.LoadingDialog
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
@@ -16,21 +16,21 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.ImageHelper
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.replaceSpacesWithUnderscores
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_phrase_upload.*
 import org.jetbrains.anko.toast
-import java.io.FileOutputStream
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import javax.inject.Inject
-import android.R.attr.bitmap
-import java.io.ByteArrayOutputStream
 
 
 class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
+    private var loadingDialog = LoadingDialog()
 
     @Inject
     lateinit var api: API
@@ -40,11 +40,10 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
     var bitmap: Bitmap? = null
     var scaledBitmap: Bitmap? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phrase_upload)
+
 
         etIcon.setOnClickListener {
             val intent = Intent()
@@ -57,7 +56,8 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
             val name = etPhraseName.text.toString().trim()
 
             if (name.isNotEmpty() && scaledBitmap != null ) {
-                uploadPhrase(AacPhrase(name.hashCode(), name, "$name.jpg"))
+                loadingDialog.show(supportFragmentManager, "")
+                uploadPhrase(AacPhrase(name.hashCode(), name.replaceSpacesWithUnderscores(), name, "${name.replaceSpacesWithUnderscores()}.jpg"))
 
             } else {
                 toast(R.string.invalid_input)
@@ -65,7 +65,6 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
         }
 
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -113,6 +112,7 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
                 .subscribe(object: CompletableObserver {
                     override fun onComplete() {
                         toast("Success")
+                        pbLoading?.dismiss()
                     }
 
                     override fun onSubscribe(d: Disposable?) {
@@ -121,6 +121,8 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
 
                     override fun onError(e: Throwable?) {
                         toast(e!!.message ?: "Error")
+                        pbLoading?.dismiss()
+
                     }
 
                 })

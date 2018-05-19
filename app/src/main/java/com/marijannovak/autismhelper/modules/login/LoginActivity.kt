@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.marijannovak.PhraseUploadActivity
+import com.marijannovak.autismhelper.PhraseUploadActivity
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -19,7 +19,6 @@ import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
-import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.InputValidator
 import com.marijannovak.autismhelper.utils.Resource
