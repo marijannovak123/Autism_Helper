@@ -1,0 +1,774 @@
+/********************************************************************
+* ConnectABILITY: Visuals Engine Enhancements                       *
+*                                                                   *
+* version: 1.0                                                      *
+* date:    Jan 20, 2011                                             *
+********************************************************************/
+
+// Ensure no conflict with other jQuery plugins
+var $ve = jQuery.noConflict();
+
+// Main
+$ve( function() {
+
+	/********************************************************************
+	* VARIABLE DECLARATIONS -- START
+	********************************************************************/
+	
+	// Number of thumbnails to display per row
+	var THUMBS_PER_ROW = 5;
+	
+	// Pagination settings
+	var IMAGES_PER_PAGE = 20;
+	
+	// Preview image offset (used for text links on-hover event)
+	var IMAGE_PREVIEW_X = 70;
+	var IMAGE_PREVIEW_Y = 50;
+	
+	// 'Add Image' form URL
+	var addFormURL = $ve( '#add-template' ).attr( 'value' );
+	var addURL = addFormURL + '?box=1';	// intialize with dummy box value to bypass error check
+	var addBox = 1;
+	
+	// Get default box image
+	var defaultBoxImage = $ve( '#ve-default-image' ).attr( 'value' );
+	
+	// 'ConnectABILITY' theme root URL
+	var themeURL = $ve( '#theme-url' ).attr( 'value' );
+	
+	// Form script URL
+	var formAction = $ve( '#ve-section' ).attr( 'action' );
+	
+	// Form controls enabled/disabled flag
+	var formControlsEnabled = false;
+	
+	// Image type display switch
+	var DEFAULT_IMAGE_TYPE = 'thumbs';	// 'thumbs' or 'text'
+	var imageDisplayType;
+	
+	// VE Folder objects array
+	var veFolders = new Array();
+	
+	// AutoComplete array for image search
+	var autoCompleteArray = new Array();
+	
+	// Initialize tabs
+	var veTabHeading = '';
+	var veTabContent = '';
+	
+	// Image upload cancel flag
+	var uploadCancelled = false;
+	
+	/********************************************************************
+	* VARIABLE DECLARATIONS -- END
+	********************************************************************/
+	
+	/********************************************************************
+	* ADDITIONAL FUNCTIONS -- START
+	********************************************************************/
+	
+	// Capitalize string
+	String.prototype.capitalize = function() {
+		return this.replace( /(^|\s)([a-z])/g , function( m, p1, p2 ) { return p1 + p2.toUpperCase(); } );
+	};
+	
+	// Return new array with duplicate values removed
+	Array.prototype.unique = function() {
+		var a = [ ];
+		var l = this.length;
+		for( var i = 0; i < l; i++ ) {
+			for( var j = i + 1; j < l; j++ ) {
+				// If this[ i ] is found later in the array
+				if ( this[ i ] === this[ j ] )
+					j = ++i;
+			}
+			a.push( this[ i ] );
+		}
+		return a;
+	};
+	
+	// Extract box number from string
+	function getBoxNum( containerStr, stripParts )
+	{
+		for ( var i = 0; i < stripParts.length; i++ ) {
+			containerStr = containerStr.replace( stripParts[ i ], '' );
+		}
+		
+		return containerStr;
+	}
+	
+	/********************************************************************
+	* ADDITIONAL FUNCTIONS -- END
+	********************************************************************/
+	
+	/********************************************************************
+	* IMAGE CLASS -- START
+	********************************************************************/
+	
+	function VE_Image( imageName, imageURL )
+	{
+		this.ve_name  = imageName;
+		this.ve_label = imageName.capitalize().replace( '_', ' ' );
+		this.ve_url   = imageURL;
+	}
+	
+	/********************************************************************
+	* IMAGE CLASS -- END
+	********************************************************************/
+	
+	/********************************************************************
+	* FOLDER CLASS -- START
+	********************************************************************/
+	
+	function VE_Folder( folderName )
+	{
+		this.ve_name    = folderName;
+		this.ve_label   = folderName.capitalize().replace('_', ' ');
+		this.ve_images  = new Array();
+		this.tab_images = new Array();
+		this.tab_page   = 1;
+	}
+	
+	VE_Folder.prototype.addImage = function( newImage )
+	{
+		this.ve_images.push( newImage );
+		this.tab_images.push( newImage );
+	}
+	
+	VE_Folder.prototype.doSearch = function()
+	{
+		// Reset page number
+		this.tab_page = 1;
+		
+		// Format keywords
+		var keywords = $ve( '#ve-keywords' ).attr( 'value' ).toLowerCase();
+		
+		// If blank, show all images
+		if ( keywords == '' ) {
+			this.tab_images = this.ve_images;
+			
+		// Perform search
+		} else {
+			this.tab_images = new Array();
+			for ( var i = 0; i < this.ve_images.length; i++ ) {
+				if ( this.ve_images[ i ].ve_label.toLowerCase().search( keywords ) != -1 ) {
+					this.tab_images.push( this.ve_images[ i ] );
+				}
+			}
+		}
+		
+		// Refresh tab content
+		this.populateTab();
+	}
+	
+	VE_Folder.prototype.populateTab = function()
+	{
+		// Build a list of images
+		var listHTML = '';
+		
+		// Determine display range
+		var startPos = ( this.tab_page - 1 ) * IMAGES_PER_PAGE;
+		var endPos   = Math.min( startPos + IMAGES_PER_PAGE - 1, this.tab_images.length - 1 );
+		
+		for ( var i = startPos; i <= endPos; i++ )
+		{
+			// Thumbnails
+			if ( imageDisplayType == 'thumbs' ) {
+				var firstInlineClass = i % THUMBS_PER_ROW ? '' : ' class="first-inline"';
+				listHTML += '<li' + firstInlineClass + '><a href="' + this.tab_images[ i ].ve_url + '" id="' + 
+				            this.tab_images[ i ].ve_url + '" title="' + this.tab_images[ i ].ve_label + '"><img src="' + 
+							themeURL + '/' + this.tab_images[ i ].ve_url + '" alt="' + this.tab_images[ i ].ve_label + '" /></a></li>';
+			// Text links
+			} else {
+				listHTML += '<li><a href="' + this.tab_images[ i ].ve_url + '" id="' + this.tab_images[ i ].ve_url + 
+							'" class="ve-text-link" title="' + this.tab_images[ i ].ve_label + '">' + 
+							this.tab_images[ i ].ve_label + '</a></li>';
+			}
+		}
+		
+		// Complete text/thumbnails lists
+		startPos++;
+		if ( listHTML != '' ) {
+			imageDisplayType == 'thumbs' ? listHTML = '<ol start="' + startPos + '" class="ve-thumbs">' + listHTML + '</ol>' :
+										   listHTML = '<ol start="' + startPos + '">' + listHTML + '</ol>';
+		} else {
+			listHTML = 'No images found...';
+		}
+		
+		// Add image list and pagination to tab content
+		$ve( '#ve-tab-' + this.ve_name ).html( listHTML + this.tabPagination() );
+		
+		// Enable image selection
+		setImageSelectEvents();
+		
+		// Enable image preview on text links
+		if ( imageDisplayType == 'text' ) {
+			$ve( '.ve-text-link' ).hover( function( e ) {
+				$ve( '#ve-image-preview' ).remove();
+				$ve( 'body' ).append( '<p id="ve-image-preview"><img src="' + themeURL + '/' + $ve( this ).attr( 'id' ) + '" alt="Image Preview" width="84" height="84" /></p>' );								 
+				$ve( '#ve-image-preview' )
+					( 'top', ( e.pageY - IMAGE_PREVIEW_X ) + 'px' )
+					.css( 'left', ( e.pageX + IMAGE_PREVIEW_Y ) + 'px' );						
+			},
+			function() {
+				$ve( '#ve-image-preview' ).remove();
+			} );	
+			$ve( '.ve-text-link' ).mousemove( function( e ) {
+				$ve( '#ve-image-preview' )
+					.css( 'top', ( e.pageY - IMAGE_PREVIEW_X ) + 'px' )
+					.css( 'left', ( e.pageX + IMAGE_PREVIEW_Y ) + 'px' );
+			} );
+		}
+		
+		// Assign click event to page links
+		var tabObj = this;
+		$ve( '#ve-tab-' + this.ve_name + ' .ve-pagination a').click( function( $e ) {
+			$e.preventDefault();
+			
+			// Need to extract page number due to IE7 bug
+			var hrefArray = $ve( this ).attr( 'href' ).split( '/' );
+			tabObj.tab_page = parseInt( hrefArray[ hrefArray.length - 1 ] );
+			
+			tabObj.populateTab();
+		} );
+		
+		// Display image totals for tab
+		$ve( '#ve-tabs>ul li a[href=#ve-tab-' + this.ve_name + ']' ).text( this.ve_label + ' (' + this.tab_images.length + ')' );
+	}
+	
+	VE_Folder.prototype.tabPagination = function()
+	{
+		// Defaults
+		var adjacents = 1;
+		
+		// Calculated vars
+		var prev = this.tab_page - 1;									// previous page is this.tab_page - 1
+		var next = this.tab_page + 1;									// next page is this.tab_page + 1
+		var lastPage = Math.ceil( this.tab_images.length / IMAGES_PER_PAGE );
+		var lpm1 = lastPage - 1;
+		var i;
+		
+		/* 
+			Now we apply our rules and draw the pagination object. 
+			We're actually saving the code to a variable in case we want to draw it more than once.
+		*/
+		var pagination = '';
+		if( lastPage > 1 )
+		{	
+			pagination += '<div class="ve-pagination">';
+	
+			// previous button
+			if  ( this.tab_page > 1 ) 
+				pagination += '<a href="' + prev + '">« prev</a>';
+			else
+				pagination += '<span class="ve-disabled">« prev</span>';	
+			
+			// pages	
+			if ( lastPage < 7 + ( adjacents * 2 ) )	// not enough pages to bother breaking it up
+			{	
+				for ( i = 1; i <= lastPage; i++ )
+				{
+					if ( i == this.tab_page )
+						pagination += '<span class="ve-current">' + i + '</span>';
+					else
+						pagination += '<a href="' + i + '">' + i + '</a>';					
+				}
+			}
+			else if ( lastPage >= 7 + ( adjacents * 2 ) )	// enough pages to hide some
+			{
+				// close to beginning; only hide later pages
+				if ( this.tab_page < 1 + ( adjacents * 3 ) )		
+				{
+					for ( i = 1; i < 4 + ( adjacents * 2 ); i++ )
+					{
+						if ( i == this.tab_page )
+							pagination += '<span class="ve-current">' + i + '</span>';
+						else
+							pagination += '<a href="' + i + '">' + i + '</a>';					
+					}
+					pagination += '<span class="ve-elipses">...</span>';
+					pagination += '<a href="' + lpm1 + '">' + lpm1 + '</a>';
+					pagination += '<a href="' + lastPage + '">' + lastPage + '</a>';		
+				}
+				// in middle; hide some front and some back
+				else if ( lastPage - ( adjacents * 2 ) > this.tab_page && this.tab_page > ( adjacents * 2 ) )
+				{
+					pagination += '<a href="' + '1">1</a>';
+					pagination += '<a href="' + '2">2</a>';
+					pagination += '<span class="ve-elipses">...</span>';
+					for ( i = this.tab_page - adjacents; i <= this.tab_page + adjacents; i++ )
+					{
+						if ( i == this.tab_page )
+							pagination += '<span class="ve-current">' + i + '</span>';
+						else
+							pagination += '<a href="' + i + '">' + i + '</a>';					
+					}
+					pagination += '<span class="ve-elipses">...</span>';
+					pagination += '<a href="' + lpm1 + '">' + lpm1 + '</a>';
+					pagination += '<a href="' + lastPage + '">' + lastPage + '</a>';		
+				}
+				// close to end; only hide early pages
+				else
+				{
+					pagination += '<a href="' + '1">1</a>';
+					pagination += '<a href="' + '2">2</a>';
+					pagination += '<span class="ve-elipses">...</span>';
+					for ( i = lastPage - ( 1 + ( adjacents * 3 ) ); i <= lastPage; i++ )
+					{
+						if ( i == this.tab_page )
+							pagination += '<span class="ve-current">' + i + '</span>';
+						else
+							pagination += '<a href="' + i + '">' + i + '</a>';					
+					}
+				}
+			}
+			
+			// next button
+			if ( this.tab_page < i - 1 ) 
+				pagination += '<a href="' + next + '">next »</a>';
+			else
+				pagination += '<span class="ve-disabled">next »</span>';
+			pagination += '</div>';
+		}
+		
+		return pagination;
+	}
+	
+	/********************************************************************
+	* FOLDER CLASS -- END
+	********************************************************************/
+	
+	/********************************************************************
+	* BUILD 'ADD IMAGE' POPUP DIALOG -- START
+	********************************************************************/
+	
+	// Dialog config object
+	var dialogOpts = {
+		title: 'Select an image',
+		modal: true,
+		resizable: false,
+		width: 545,
+		height: 587,
+		show: 'fade',
+		hide: 'fade',
+		open: function( event, ui ) { $ve('#ve-keywords').focus(); },
+		close: function( event, ui )
+		{
+			$ve( '#ve-image-preview' ).remove();
+			clearUploadForm();
+			$ve('#ve-keywords').val( '' );
+			$ve( '#ve-search' ).click();
+		}
+ 	};
+	
+	// Dialog base code
+	$ve( '<div id="ve-dialog"><form action="" method="post" enctype="multipart/form-data"><input type="hidden" name="ve-ajax" value="1" /><fieldset><input type="text" name="ve-keywords" id="ve-keywords" placeholder="Find" maxlength="50" /><input type="submit" name="search" id="ve-search" value="go" /></fieldset><p id="ve-list-type">Display: <a href="#" title="View images as a list of text links" id="ve-list-text">List</a> / <a href="#" title="View image thumbnails" id="ve-list-thumbs">Thumbnails</a></p></form></div>' ).appendTo( '#ve-container' );
+	
+	// Capture "Enter" button to prevent page refresh
+	$ve( '#ve-keywords' ).keydown( function( $e ) {
+		if ( $e.keyCode == 13 ) {
+			$e.preventDefault();
+			$ve( '#ve-search' ).click();
+			return false;
+		}
+	} );
+	
+	// Real-time search keywords cleanup
+	$ve( '#ve-keywords' ).keyup( function( $e ) {
+		$ve( this ).attr( 'value', $ve( this ).attr( 'value' ).replace( /([\s\xA0][\s\xA0]+)/g, ' ') );	// replace multiple spaces with one space
+		$ve( this ).attr( 'value', $ve( this ).attr( 'value' ).replace( /(^[\s\xA0]+)/g, '' ) );	// remove leading whitespace
+	} );
+	
+	// Highlight/select keywords box contents
+	$ve( '#ve-keywords' ).focus( function() { this.select(); } );
+	
+	// Search click event
+	$ve( '#ve-search' ).click( function( $e ) {
+		$e.preventDefault();
+		if ( formControlsEnabled ) {
+			for ( var i = 0; i < veFolders.length; i++ ) {
+				veFolders[ i ].doSearch();
+			}
+			
+			// Highlight keywords after search
+			if ( $ve( '#ve-keywords' ).attr( 'value' ) != '' ) {
+				$ve( '#ve-keywords' ).select();
+			}
+			
+			// If current tab does not contain any search results, switch to first tab containing results
+			var selectedTabIndex = $ve( '#ve-tabs' ).tabs( 'option', 'selected' );
+			if ( selectedTabIndex >= veFolders.length || veFolders[ selectedTabIndex ].tab_images.length == 0 ) {
+				for ( var i = 0; i < veFolders.length; i++ ) {
+					if ( veFolders[ i ].tab_images.length > 0 ) {
+						$ve( '#ve-tabs' ).tabs( 'option', 'selected', i );
+						selectedTabIndex = i;
+						break;
+					}
+				}
+				
+				// Did not find any matches, 
+				// switch to first tab if 'Upload an Image' tab is currently selected
+				if ( selectedTabIndex >= veFolders.length ) {
+					$ve( '#ve-tabs' ).tabs( 'option', 'selected', 0 );
+				}
+			}
+			
+		}
+	} );
+	
+	// Set image display type (get from cookie, if available)
+	imageDisplayType = $ve.cookie( 've-image-display-type' );
+	if ( imageDisplayType == null || imageDisplayType == '' || 
+		 ( imageDisplayType != 'thumbs' && imageDisplayType != 'text' ) )
+	{
+		imageDisplayType = DEFAULT_IMAGE_TYPE;
+	}
+	$ve( '#ve-list-' + imageDisplayType ).addClass( 'selected' );
+	
+	// Image selection links
+	$ve( '#ve-dialog a[id^=ve-list-]' ).click( function( $e ) {
+		$e.preventDefault();
+
+		var newDisplayType = $ve( this ).attr( 'id' ).replace( 've-list-', '' );
+		
+		if ( newDisplayType != imageDisplayType ) {
+			
+			// Highlight selected list type
+			$ve( '#ve-list-' + imageDisplayType ).removeClass( 'selected' );
+			$ve( this ).addClass( 'selected' );
+			
+			imageDisplayType = newDisplayType;
+			
+			// Refresh tab content
+			for ( var f = 0; f < veFolders.length; f++ ) {
+				veFolders[ f ].populateTab();
+			}
+		
+			// Set image display type cookie (expires in 30 days)
+			$ve.cookie( 've-image-display-type', imageDisplayType, { path: '/', expires: 30 } );
+		}
+	} );
+	
+	/********************************************************************
+	* BUILD 'ADD IMAGE' POPUP DIALOG -- END
+	********************************************************************/
+	
+	/********************************************************************
+	* BUILD 'ADD IMAGE' TABS -- START
+	********************************************************************/
+	
+	// Create VE Folder objects
+	var publicFolders = $ve( '#ve-folders' ).attr( 'value' ).split( '|' );
+	for ( var f = 0; f < publicFolders.length; f++ ) {
+		
+		veFolders[ f ] = new VE_Folder( publicFolders[ f ] );
+		
+		// Create a tab for each folder
+		veTabHeading += '<li><a href="#ve-tab-' + publicFolders[ f ] + '">' + veFolders[ f ].ve_label + ' (*)</a></li>';
+		veTabContent += '<div id="ve-tab-' + publicFolders[ f ] + '" class="loading"></div>';
+	}
+	
+	// Add Upload tab
+	veTabHeading += '<li><a href="#ve-tab-upload">Upload</a></li>';
+	veTabContent += '<div id="ve-tab-upload"><h3>Choose your image</h3>' + 
+					'<p>For best results, use a square image.</p>' + 
+					'<input type="file" name="ve-file" id="ve-file" accept="image/gif,image/jpeg,image/png,image/pjpeg,image/x-png" />' + 
+					'<p>Image types supported: jpg, gif, png.<p><p id="ve-upload-msg">&nbsp;</p><p><input type="submit" name="ve-upload" id="ve-upload" value="Upload Image" class="ve-btn" /></p></div>';
+	
+	// Complete tabs
+	$ve( '<div id="ve-tabs"><ul>' + veTabHeading + '</ul>' + veTabContent + '</div>' ).appendTo( '#ve-dialog form' );
+	
+	// Display tabs
+	var $tabs = $ve( '#ve-tabs' ).tabs( {
+		create: function( event, ui ) {
+			
+			// Load image lists from Add Image form
+			$ve.get( addURL, function( data ) {
+				
+				// Get AJAX response text
+				var data = $ve( data );
+				
+				// Find Add Image form within response data
+				var addForm = data.find( '#ve-section' );
+				
+				// Create a list of images for each folder
+				for ( var k = 0; k < veFolders.length; k++ ) {
+					
+					var folder = addForm.find( '#ve-image-' + veFolders[ k ].ve_name );
+					
+					folder.children().each( function() {
+						
+						// Get image title/URL
+						var imgTitle = $ve( this ).text();
+						var imgURL   = $ve( this ).attr( 'value' );
+
+						// Add image to folder object
+						var newImage = new VE_Image( imgTitle, imgURL );
+						veFolders[ k ].addImage( newImage );
+						
+						// Add image to AutoComplete array
+						autoCompleteArray.push( newImage.ve_label );
+					} );
+					
+					// Remove 'Loading' graphic
+					$ve( '#ve-tab-' + veFolders[ k ].ve_name ).removeClass( 'loading' );
+					
+					// Populate tab content
+					veFolders[ k ].populateTab();
+				}
+				
+				// Enable AutoComplete for search
+				autoCompleteArray = autoCompleteArray.unique();
+				$ve( '#ve-keywords' ).autocomplete( {
+					source: autoCompleteArray,
+					minLength: 2
+				} );
+				$ve( '#ve-keywords' ).bind( 'autocompleteclose', function( event, ui ) {
+					$ve( '#ve-search' ).click();
+				});
+				
+				// Enable search
+				formControlsEnabled = true;
+			} );
+		}
+	} );
+	
+	/********************************************************************
+	* BUILD 'ADD IMAGE' TABS -- END
+	********************************************************************/
+	
+	
+	/********************************************************************
+	* SET UP IMAGE UPLOAD FORM -- END
+	********************************************************************/
+	$ve( '#ve-dialog form' ).ajaxForm( { 
+		beforeSubmit: function( arr, $form, options ) {
+			          	formControlsEnabled = false;
+						$ve( '#ve-upload-msg' ).removeClass( 've-error' );
+						$ve( '#ve-upload-msg' ).html( 'Uploading... <a href="#" id="ve-upload-cancel">Cancel</a> ' );
+						$ve( '#ve-upload-msg' ).css( 'background-position', 'right center' );
+						
+						$ve( '#ve-upload-cancel' ).click( function ( $e ) {
+							$e.preventDefault();
+							clearUploadForm();
+						});
+						
+						closeKeepAlive();
+		              },
+		success:      function( responseText, statusText, xhr, $form ) {
+			
+					  	
+						 
+						 // Success
+						 if ( !uploadCancelled ) {
+							 if ( responseText.search( 'Error' ) == -1) {
+								 
+								// Preload image first and then cross-fade into the box
+								$ve( '#ve-temp-image' )
+													   .attr( 'src', responseText )
+													   .load( function() {
+															// Reset file selection box
+															$ve( '#ve-dialog form' ).resetForm();
+															$ve( '#ve-upload-msg' ).html( '&nbsp;' );
+															$ve( '#ve-upload-msg' ).css( 'background-position', '-999px -999px' );
+															
+															// Close dialog
+															$ve( '#ve-dialog' ).dialog( 'close' );
+															 
+															// Cross-fade new image into the box
+															$ve( '#box' + addBox + 'image' ).fadeOut( 'slow', function() {
+																 $ve( this ).attr( 'src', $ve( '#ve-temp-image' ).attr( 'src' ) );
+																 $ve( this ).fadeIn( 'slow' );
+															} );
+													   } );
+													   
+								 
+							 // Error
+							 } else {
+								$ve( '#ve-upload-msg' ).addClass( 've-error' );
+								$ve( '#ve-upload-msg' ).text( responseText );
+								$ve( '#ve-upload-msg' ).css( 'background-position', '-999px -999px' );
+							 }
+						 }
+			
+		                 formControlsEnabled = true;
+		              } 
+	} );
+	
+	// Hide error message when file is re-selected
+	$ve( '#ve-file' ).change( function() {
+		$ve( '#ve-upload-msg' ).html( '&nbsp;' );
+		$ve( '#ve-upload-msg' ).css( 'background-position', '-999px -999px' );
+	});
+	
+	// Assign on-click event to "Upload Image" button
+	$ve( '#ve-upload' ).click( function( $e ) {
+		if ( !$ve( '#ve-file' ).val() ) {
+			$e.preventDefault();
+			$ve( '#ve-upload-msg' ).addClass( 've-error' );
+			$ve( '#ve-upload-msg' ).text( 'Error: No file selected...' );
+		} else {
+			uploadCancelled = false;
+		}
+	});
+	
+	// Cancel any uploads and clear upload form fields
+	function clearUploadForm() {
+		if ( $ve( '#ve-upload-cancel' ).length ) {
+			if( navigator.appName == 'Microsoft Internet Explorer' ) {
+				window.document.execCommand( 'Stop' );
+			} else {
+				window.stop();
+			}
+		}
+		
+		// Reset background image to prevent animation stop
+		var refreshImage = $ve( '#ve-upload-msg' ).css( 'background-image' ).replace( '.gif', '.gif' + '?' + Math.floor( Math.random() * 1000001 ) );
+		$ve( '#ve-upload-msg' ).css( 'background-image', '' );
+		setTimeout( function() { $ve( '#ve-upload-msg' ).css( 'background-image', refreshImage ); }, 100 );
+
+		$ve( '#ve-upload-msg' ).removeClass( 've-error' );
+		$ve( '#ve-upload-msg' ).html( '&nbsp;' );
+		$ve( '#ve-upload-msg' ).css( 'background-position', '-999px -999px' );
+		$ve( '#ve-dialog form' ).resetForm();
+		
+		uploadCancelled = true;
+	}
+	
+	/* A pretty little hack to make uploads not hang in Safari. Just call this
+	* immediately before the upload is submitted. This does an Ajax call to
+	* the server, which returns an empty document with the "Connection: close"
+	* header, telling Safari to close the active connection. A hack, but
+	* effective. */
+	function closeKeepAlive() {
+		if ( /AppleWebKit|MSIE/.test( navigator.userAgent ) ) {
+			$ve.ajax( {
+				url: '/ping/close',
+				async: false
+			} );
+		}
+	}
+	
+	/********************************************************************
+	* SET UP IMAGE UPLOAD FORM -- END
+	********************************************************************/
+	
+	
+	/********************************************************************
+	* ASSIGN IMAGE TEXT LINK/THUMBNAIL CLICK EVENT -- START
+	********************************************************************/
+	
+	function setImageSelectEvents()
+	{
+		$ve( '#ve-tabs ol li a' ).click( function( $e ) {
+				
+			// Close dialog
+			$ve( '#ve-dialog' ).dialog( 'close' );
+			
+			$e.preventDefault();
+			
+			var imageFolder = $ve( this ).parents( 'div[id^=ve-tab-]' ).attr( 'id' ).replace( 've-tab-', '' );
+			var imageURL = $ve( this ).attr( 'id' );
+	
+			// Hide preview image
+			$ve( '#ve-image-preview' ).remove();
+	
+			$ve.ajax( {
+			   type:    'POST',
+			   url:     addURL,
+			   data:    've-ajax=1&ve-add-' + imageFolder + '=Add&ve-image-' + imageFolder + '=' + imageURL,
+			   success: function( data ) {
+				 
+				 // Cross-fade new image into the box
+				 var imgSelector = 'img[alt=Box ' + addBox + ' image]';
+				 $ve( imgSelector ).fadeOut( 'slow', function() { $ve( this ).attr( 'src', data ); $ve( this ).fadeIn( 'slow' ); } );
+			   },
+			   error: function( msg ) {
+				 alert( 'Error: ' + msg ); 
+			   }
+			} );
+		} );
+	}
+		
+	/********************************************************************
+	* ASSIGN IMAGE TEXT LINK/THUMBNAIL CLICK EVENT -- END
+	********************************************************************/
+	
+	
+	/********************************************************************
+	* INITIALIZE IMAGE BOXES AND LABELS ON PAGE LOAD -- START
+	********************************************************************/
+	
+	// Create temporary image container to handle preloading of user images
+	$ve( 'body' ).append( '<img src="' + themeURL + '/' + defaultBoxImage + '" id="ve-temp-image" alt="" />' );
+	
+	// Load images and labels from cookies
+	var n = 1;
+	while ( $ve( '#box' + n + 'image' ).length ) {
+		
+		// Assign images from cookies to boxes
+		var cookieImage = $ve.cookie( 've-user[box' + n + ']' );
+		if ( cookieImage == null || cookieImage == '' ) { cookieImage = defaultBoxImage; }
+		$ve( '#box' + n + 'image' ).attr( 'src', themeURL + '/' + cookieImage );
+		
+		// Assign labels from cookies to boxes
+		var cookieLabel = $ve.cookie( 've-user[box' + n + 'label]' );
+		if ( cookieLabel == null ) { cookieLabel = ''; }
+		$ve( '#box' + n + 'label' ).attr( 'value', unescape( cookieLabel.replace( /\+/g, ' ') ) );
+		
+		// Assign onBlur event to labels (save on lost focus)
+		$ve( '#box' + n + 'label' ).blur( function() {
+			var boxNum = getBoxNum( $ve( this ).attr( 'id' ), [ 'box', 'label' ] );
+			var expireDate = new Date();
+			expireDate.setTime( $ve.cookie( 've-user[expires]' ) * 1000 );
+			document.cookie =
+  've-user[box' + boxNum + 'label]='+ escape( $ve( this ).attr( 'value' ) ) +'; expires=' + expireDate.toUTCString() +'; path=/';
+		} );
+		
+		n++;
+	}
+	
+	// Assign 'Add' button action
+	$ve( '#ve-main input[value=Add]' ).click( function( $e ) {
+		
+		$e.preventDefault();
+		
+		// Determine Add Image URL and current box number
+		addBox = getBoxNum( $ve( this ).attr( 'name' ), [ 'box', 'add' ] );
+		addURL = addFormURL + '?box=' + addBox;
+		
+		// Open popup dialog
+		$ve( '#ve-dialog' ).dialog( dialogOpts );
+		
+		// Set dialog upload form action
+		$ve(' #ve-dialog form' ).attr( 'action', addURL );
+	} );
+	
+	// Assign 'Clear' button action
+	$ve( '#ve-main input[value=Clear]' ).click( function( $e ) {
+		
+		$e.preventDefault();
+
+		var boxNum = getBoxNum( $ve( this ).attr( 'name' ), [ 'box', 'clear' ] );
+		
+		if ( $ve( '#box' + boxNum + 'image' ).attr( 'src' ) != themeURL + '/' + defaultBoxImage ) {
+			$ve.ajax( {
+				type:  'POST',
+				url:   formAction,
+				data:  $ve( this ).attr( 'name' ) + '=Clear',
+				error: function( msg ) { alert( 'Error: ' + msg ); }
+			} );
+			
+			// Cross-fade default image into the box
+			$ve( '#box' + boxNum + 'image' ).fadeOut( 'slow', function() {
+				$ve( this ).attr( 'src', themeURL + '/' + defaultBoxImage );
+				$ve( this ).fadeIn( 'slow' );
+			} );
+		}
+	} );
+	
+	/********************************************************************
+	* INITIALIZE IMAGE BOXES AND LABELS ON PAGE LOAD -- END
+	********************************************************************/
+	
+} );

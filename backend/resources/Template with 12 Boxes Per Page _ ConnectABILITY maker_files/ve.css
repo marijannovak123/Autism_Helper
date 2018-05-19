@@ -1,0 +1,492 @@
+/********************************************************************
+* ConnectABILITY: Visuals Engine Style Sheet                        *
+*                                                                   *
+* version: 1.0                                                      *
+* author:  ConnectABILITY Development Team                          *
+* date:    June 29, 2011                                            *
+********************************************************************/
+
+/* @block Visuals Engine
+-------------------------------------------------------------------*/
+
+/* Headings */
+.visuals-engine h2 {
+	font-size: 3.8em;
+	margin-bottom: 16px;
+}
+
+.visuals-engine h3 {
+	font-size: 1.9em;
+	margin-bottom: 10px;
+}
+#ve-aside h3 { margin-bottom: 20px; }
+
+.visuals-engine h4, 
+form#ve-section #ve-aside fieldset.ve-submit legend {
+	font-size: 1.55em;
+	line-height: 1.2em;
+}
+
+.visuals-engine h5 {
+	font-size: 1.3em;
+}
+
+.visuals-engine h6 {
+	font-size: 1em;
+}
+
+.visuals-engine p { margin-bottom: 10px; }
+
+.visuals-engine #main {
+	width: 940px;
+	float: none;
+	display: block;
+	overflow: hidden;
+	margin: 0 20px;
+}
+
+/* Header */
+#ve-header {
+	width: 900px;
+	background: #000;
+	overflow: hidden;
+	padding: 5px 20px;
+	text-transform: uppercase;
+}
+
+#ve-header, #ve-header a, 
+#ve-header a:link, #ve-header a:hover, 
+#ve-header a:visited, #ve-header a:active {
+	color: #9fd4ff;
+}
+
+#ve-header a:hover {
+	color: #ffe651;
+	background: none;
+}
+
+#ve-header a, #ve-header a:link {
+	text-decoration: none;
+}
+
+#ve-header h1 {
+	float: left;
+	width: 50%;
+	display: inline;
+	font-size: 1em;
+	letter-spacing: .25em;
+	margin-bottom: 0;
+	padding-top: 4px;
+}
+
+#ve-header p {
+	float: right;
+	width: 50%;
+	display: inline;
+	text-align: right;
+	margin: 0;
+	font-size: .9em;
+}
+
+/* Content section */
+#ve-section {
+	font-size: .85em;
+	border: #7faeff 2px solid;
+	border-top-width: 0px;
+	background: #e3fbff url(images/ve-bg.jpg);
+	background: -webkit-gradient(linear, left top, right bottom, from(rgba(255, 255, 255, .5)), to(rgba(42, 174, 254, .4))), url(images/ve-bg.jpg); /* for webkit browsers */
+    background: -moz-linear-gradient(left -45deg, rgba(255, 255, 255, .1), rgba(42, 174, 254, .5)), url(images/ve-bg.jpg); /* Firefox 3.6+ */
+	padding: 20px;
+	overflow: hidden;
+}
+
+#ve-section a { color: #000; }
+#ve-section a:hover { color: #df0000; }
+
+/* Main content section */
+#ve-main {
+	width: 590px;
+	float: left;
+	display: inline;
+}
+
+#ve-main.ve-print {
+	width: auto;
+	float: none;
+	display: block;
+}
+
+#ve-main ol {
+	padding: 0;
+	margin: 0;
+	text-indent: 0;
+}
+
+#ve-main ol li {
+	display: inline;
+	list-style-type: none;
+	float: left;
+	margin: 0 0 25px 25px;
+	width: 178px;
+}
+
+#ve-main ol li a {
+	border: #000 2px solid;
+	padding: 0;
+	line-height: 0;
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, .4);
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, .4);
+	display: block;
+	margin-bottom: 5px;
+}
+
+#ve-main ol li.first-inline {
+	margin-left: 0;
+	clear: left;
+}
+
+#ve-main ol li a:hover {
+	background: none;
+	border-color: #df0000;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, .4);
+	-webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, .4);
+	position: relative;
+	top: 1px;
+	left: 1px;
+}
+
+#ve-main ol li a:active {
+	border-color: #ffe651;
+}
+	
+#ve-main ol li img { margin: 0; }
+
+/* Sidebar */
+#ve-aside {
+	width: 260px;
+	float: right;
+	display: inline;
+	padding: 0 20px;
+}
+
+#ve-aside p.last-insection {
+	margin-bottom: 40px;
+}
+
+#ve-aside ul li {
+	margin-bottom: 3px;
+}
+
+/* Footer */
+#ve-footer {
+	background: #eaf9ff;
+	padding: 15px 20px 10px;
+	font-size: .8em;
+}
+
+#ve-footer, #ve-footer a, #ve-footer a:link,
+#ve-footer a:visited, #ve-footer a:hover,
+#ve-footer a:active { color: #65baf7; }
+
+#ve-footer a:hover { color: #df0000; }
+
+/* Template form */
+form#ve-section { }
+
+form#ve-section #ve-main {
+	width: 510px;
+	height: 720px;
+	background: #fff;
+	border: #000 2px solid;
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
+	padding: 20px;
+}
+
+form#ve-section #ve-main p {
+	margin-bottom: 0;
+}
+
+form#ve-section #ve-main ol {
+	width: 480px;
+	margin: 0 auto;
+}
+
+form#ve-section #ve-main ol li {
+	width: auto;
+	margin: 0 0 20px 20px;
+	position: relative;
+}
+form#ve-section #ve-main ol li.first-inline {
+	margin-left: 0;
+}
+
+form#ve-section #ve-main ol li img {
+	margin-bottom: 0;
+	background: #ccc;
+}
+
+form#ve-section #ve-main ol li img,
+form#ve-section input, 
+form#ve-section select,
+form#ve-section file {
+	border: #000 1px solid;
+}
+
+form#ve-section #ve-main ol li input {
+	display: block;
+	width: 472px;
+	margin: 0;
+	padding: 3px;
+	font-size: .9em;
+	line-height: 1.5em;
+}
+
+form#ve-section #ve-main {
+	position: relative;
+}
+
+form#ve-section #ve-aside {
+	width: 280px;
+}
+
+form#ve-section #ve-aside fieldset.ve-submit {
+	padding: 0;
+}
+
+form#ve-section #ve-aside fieldset.ve-submit legend {
+	margin: 0 0 5px;
+}
+
+form#ve-section input[type="text"] {
+	background: #c8f0ff;
+}
+form#ve-section input[type="text"]:focus {
+	background: #fff;
+}
+
+form#ve-section #ve-main ol li .image-controls input, 
+form#ve-section #ve-aside fieldset.ve-submit input,
+form#ve-section input.ve-btn {
+	cursor: pointer;
+	color: #fff;
+	background: #000;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	font-size: .9em;
+	line-height: 1.5em;
+	padding: 2px;
+}
+
+form#ve-section #ve-main ol li .image-controls input:hover, 
+form#ve-section #ve-aside fieldset.ve-submit input:hover, 
+form#ve-section input.ve-btn:hover {
+	color: #ffe651;
+}
+
+form#ve-section #ve-main ol li .image-controls input:active {
+	background-color: #aaa;
+	color: #000;
+}
+
+form#ve-section #ve-main ol li .image-controls input {
+	width: 80px;
+	margin-top: 10px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+form#ve-section #ve-aside fieldset.ve-submit input, 
+form#ve-section input.ve-btn {
+	width: 80px;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+	margin-right: 8px;
+}
+
+form#ve-section #ve-aside fieldset.ve-submit input:active,
+form#ve-section input.ve-btn:active {
+	box-shadow: 1px 1px .5px rgba(0, 0, 0, .2);
+	-webkit-box-shadow: 1px 1px .5px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 1px 1px .5px rgba(0, 0, 0, .2);
+	position: relative;
+	top: 1px;
+	left: 1px;
+}
+
+form#ve-section #ve-main ol li fieldset {
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	width: 198px;
+	display: block;
+}
+
+form#ve-section #ve-main .image-controls {
+	position: absolute;
+	top: 40%;
+	left: 0%;
+	width: 100%;
+}
+
+form#ve-section #ve-main ol li input::-webkit-input-placeholder {
+    color: #333;
+}
+form#ve-section #ve-main ol li input:-moz-placeholder {
+    color: #333;
+}
+
+/* Add/Edit Image form */
+form#ve-section.ve-edit #ve-main {
+	width: 550px;
+	background: none;
+	border: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	padding: 0;
+}
+
+form#ve-section.ve-edit #ve-main p {
+	margin-bottom: 10px;
+}
+
+form#ve-section.ve-edit fieldset {
+	padding-left: 0;
+}
+
+form#ve-section.ve-edit label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+form#ve-section.ve-edit label em {
+	font-weight: normal;
+}
+
+form#ve-section.ve-edit input, 
+form#ve-section.ve-edit select {
+	display: block;
+	margin-bottom: 10px;
+}
+
+form#ve-section.ve-edit input[type="text"] {
+	background: #fff;
+}
+
+form#ve-section.ve-edit select {
+	width: 300px;
+}
+
+form#ve-section #ve-keywords {
+	width: 287px;
+	font-size: 1em;
+}
+
+form#ve-section #ve-file {
+	font-size: 1em;
+}
+
+form#ve-section input.ve-btn {
+	width: 100px;
+	display: inline;
+}
+
+/* Print Styles */
+#ve-main.ve-print table {
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+#ve-main.ve-print table td {
+	border: none;
+	text-align: center;
+	line-height: 1em;
+	padding: 10px;
+}
+
+#ve-main.ve-print table tr td img {
+	margin-bottom: 5px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#ve-main.ve-print table tr td p {
+	margin-bottom: 0;
+	text-align: center;
+	border: 1px solid #000;
+}
+
+#ve-main.ve-print table tr td.spacer {
+	display: none;
+}
+
+/* Enhanced Elements */
+#ve-dialog {
+	display: none;
+}
+
+/* Template Overrides */
+
+/* 2 Image Per Page */
+.template-2-per-page form#ve-section #ve-main ol {
+	width: 272px;
+}
+
+.template-2-per-page form#ve-section #ve-main ol li fieldset>input {
+	width: 264px;
+}
+
+/* 4 Image Per Page */
+.template-4-per-page form#ve-section #ve-main ol li fieldset>input {
+	width: 222px;
+}
+
+/* 6 Image Per Page */
+.template-6-per-page form#ve-section #ve-main ol {
+	width: 380px;
+}
+
+.template-6-per-page form#ve-section #ve-main ol li fieldset>input {
+	width: 172px;
+}
+
+.template-6-per-page form#ve-section #ve-main ol li fieldset { width: 180px; }
+
+/* 12 Image Per Page */
+.template-12-per-page form#ve-section #ve-main ol {
+	width: 418px;
+}
+.template-12-per-page form#ve-section #ve-main ol li fieldset { width: 126px; }
+
+.template-12-per-page form#ve-section #ve-main ol li fieldset>input {
+	width: 118px;
+}
+
+.template-12-per-page form#ve-section #ve-main .image-controls {
+	top: 18%;
+}
+
+/* 16 Image Per Page */
+.template-16-per-page form#ve-section #ve-main ol {
+	width: 484px;
+}
+.template-16-per-page form#ve-section #ve-main ol li fieldset { width: 104px; }
+
+.template-16-per-page form#ve-section #ve-main ol li fieldset>input {
+	width: 98px;
+}
+
+.template-16-per-page form#ve-section #ve-main .image-controls {
+	top: 10%;
+}

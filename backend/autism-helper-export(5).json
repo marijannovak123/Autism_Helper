@@ -1,0 +1,271 @@
+{
+  "api" : {
+    "categories" : [ {
+      "id" : 0,
+      "name" : "Math"
+    }, {
+      "id" : 1,
+      "name" : "Name color"
+    }, {
+      "id" : 2,
+      "name" : "Guess emotion"
+    } ],
+    "phrases" : [ {
+      "iconPath" : "aac_test.jpg",
+      "id" : 0,
+      "name" : "test"
+    }, {
+      "iconPath" : "gusta.jpg",
+      "id" : 1,
+      "name" : "gusta"
+    } ],
+    "questions" : [ {
+      "answers" : [ {
+        "isCorrect" : true,
+        "questionId" : 0,
+        "text" : "1"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 0,
+        "text" : "8"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 0,
+        "text" : "2"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 0,
+        "text" : "4"
+      } ],
+      "categoryId" : 0,
+      "extraData" : "",
+      "id" : 0,
+      "text" : "2+2?"
+    }, {
+      "answers" : [ {
+        "isCorrect" : false,
+        "questionId" : 1,
+        "text" : "2"
+      }, {
+        "isCorrect" : true,
+        "questionId" : 1,
+        "text" : "1"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 1,
+        "text" : "4"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 1,
+        "text" : "8"
+      } ],
+      "categoryId" : 0,
+      "extraData" : "",
+      "id" : 1,
+      "text" : "2/2?"
+    }, {
+      "answers" : [ {
+        "isCorrect" : false,
+        "questionId" : 2,
+        "text" : "Blue"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 2,
+        "text" : "Purple"
+      }, {
+        "isCorrect" : true,
+        "questionId" : 2,
+        "text" : "Green"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 2,
+        "text" : "Red"
+      } ],
+      "categoryId" : 1,
+      "extraData" : "#1ccc42",
+      "id" : 2,
+      "text" : "What color is this"
+    }, {
+      "answers" : [ {
+        "isCorrect" : true,
+        "questionId" : 3,
+        "text" : "Happy"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 3,
+        "text" : "Scared"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 3,
+        "text" : "Sad"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 3,
+        "text" : "Sleepy"
+      } ],
+      "categoryId" : 2,
+      "extraData" : "beautiful-brunette-cute-774909.jpg",
+      "id" : 3,
+      "text" : "How is this person feeling?"
+    }, {
+      "answers" : [ {
+        "isCorrect" : false,
+        "questionId" : 4,
+        "text" : "Happy"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 4,
+        "text" : "Scared"
+      }, {
+        "isCorrect" : true,
+        "questionId" : 4,
+        "text" : "Sad"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 4,
+        "text" : "Sleepy"
+      } ],
+      "categoryId" : 2,
+      "extraData" : "alone-black-and-white-boy-551590.jpg",
+      "id" : 4,
+      "text" : "Emocione?"
+    } ],
+    "users" : {
+      "FHKT8PF2bhU7mGOC9Rap03KyDjA3" : {
+        "child_scores" : [ {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2047006543",
+          "duration" : 25199,
+          "id" : 717135722,
+          "mistakes" : 5,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526509559218
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2047006543",
+          "duration" : 2604,
+          "id" : 709131434,
+          "mistakes" : 0,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526509568336
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 4436,
+          "id" : 360447421,
+          "mistakes" : 1,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526557183188
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 5769,
+          "id" : 2143512020,
+          "mistakes" : 1,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526563507712
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 3217,
+          "id" : 1811893887,
+          "mistakes" : 1,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526567632053
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 2861,
+          "id" : 1832979684,
+          "mistakes" : 1,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526567654132
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 2127,
+          "id" : 1960245223,
+          "mistakes" : 0,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526567786910
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 1455,
+          "id" : 857497668,
+          "mistakes" : 0,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526667647505
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 5359,
+          "id" : 518072852,
+          "mistakes" : 0,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526681408897
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 3998,
+          "id" : 512381716,
+          "mistakes" : 1,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526681414995
+        }, {
+          "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "duration" : 3919,
+          "id" : 506608555,
+          "mistakes" : 1,
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+          "timestamp" : 1526681420489
+        } ],
+        "children" : [ {
+          "dateOfBirth" : 1116319636265,
+          "gender" : "Male",
+          "id" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2344424",
+          "index" : 0,
+          "name" : "Koko",
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3"
+        }, {
+          "dateOfBirth" : 1231795708917,
+          "gender" : "Male",
+          "id" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD2552961",
+          "index" : 1,
+          "name" : "Roko",
+          "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3"
+        } ],
+        "email" : "marijannovak123@gmail.com",
+        "id" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+        "parentPassword" : "lozinka123",
+        "username" : "Marijan Novak"
+      },
+      "I2TRp3G1v5auHix77Tk7muIJ7Vy1" : {
+        "child_scores" : [ {
+          "childId" : "I2TRp3G1v5auHix77Tk7muIJ7Vy1CHILD-1791118516",
+          "duration" : 8507,
+          "id" : 1361667036,
+          "mistakes" : 6,
+          "parentId" : "I2TRp3G1v5auHix77Tk7muIJ7Vy1",
+          "timestamp" : 1526666192099
+        } ],
+        "children" : [ {
+          "dateOfBirth" : 774640491153,
+          "gender" : "Male",
+          "id" : "I2TRp3G1v5auHix77Tk7muIJ7Vy1CHILD-1791118516",
+          "index" : 0,
+          "name" : "Marijan",
+          "parentId" : "I2TRp3G1v5auHix77Tk7muIJ7Vy1"
+        } ],
+        "email" : "s.novak0102@gmail.com",
+        "id" : "I2TRp3G1v5auHix77Tk7muIJ7Vy1",
+        "parentPassword" : "lozinka123",
+        "username" : "Slađana Novak"
+      },
+      "ePElNIvOKpV20fYTZ4du1usFvto1" : {
+        "children" : [ {
+          "dateOfBirth" : 1339609875254,
+          "gender" : "Male",
+          "id" : "ePElNIvOKpV20fYTZ4du1usFvto1CHILD2344424",
+          "index" : 0,
+          "name" : "Koko",
+          "parentId" : "ePElNIvOKpV20fYTZ4du1usFvto1"
+        } ],
+        "email" : "novakkristijan123@gmail.com",
+        "id" : "ePElNIvOKpV20fYTZ4du1usFvto1",
+        "parentPassword" : "",
+        "username" : "Kristijan Novak"
+      }
+    }
+  }
+}
