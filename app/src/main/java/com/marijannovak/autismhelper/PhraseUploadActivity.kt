@@ -22,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_phrase_upload.*
+import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.toast
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -102,7 +103,7 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
                 }
     }
 
-    fun postToApi(phrase: AacPhrase) {
+    private fun postToApi(phrase: AacPhrase) {
         api.getPhrases()
                 .map { it.size }
                 .flatMapCompletable {
@@ -112,7 +113,7 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
                 .subscribe(object: CompletableObserver {
                     override fun onComplete() {
                         toast("Success")
-                        pbLoading?.dismiss()
+                        dismissLoadingAndClear()
                     }
 
                     override fun onSubscribe(d: Disposable?) {
@@ -121,11 +122,17 @@ class PhraseUploadActivity :  ViewModelActivity<ParentViewModel, UserChildrenJoi
 
                     override fun onError(e: Throwable?) {
                         toast(e!!.message ?: "Error")
-                        pbLoading?.dismiss()
-
+                        dismissLoadingAndClear()
                     }
 
                 })
+    }
+
+    private fun dismissLoadingAndClear() {
+        loadingDialog.dismiss()
+        etIcon.text.clear()
+        ivPhraseIcon.imageResource = R.drawable.img_placeholder
+        etPhraseName.text.clear()
     }
 
 
