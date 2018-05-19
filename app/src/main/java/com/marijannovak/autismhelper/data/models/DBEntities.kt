@@ -112,9 +112,10 @@ data class AacPhrase(
         @PrimaryKey
         var id: Int,
         var name: String,
+        var text: String,
         var iconPath: String
 ) {
-    constructor() : this(0, "", "")
+    constructor() : this(0, "", "", "")
 
     override fun equals(other: Any?): Boolean {
         if(other is AacPhrase) {

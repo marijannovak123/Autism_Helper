@@ -5,16 +5,13 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
-import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.REQUEST_CODE_IMAGE_LOADED
 import com.marijannovak.autismhelper.data.models.AacPhrase
@@ -23,13 +20,12 @@ import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.ImageHelper
-import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.replaceSpacesWithUnderscores
 import kotlinx.android.synthetic.main.fragment_phrases.*
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.toast
 import java.io.File
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
 
 
@@ -62,11 +58,11 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
         }
 
         btnAddPhrase.setOnClickListener {
-            val name = etPhraseName.text.toString().trim()
+            val text = etPhraseText.text.toString().trim()
             val icon = ImageHelper.saveBitmap(activity, loadedBitmap, loadedBitmapName).absolutePath
 
-            if (name.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
-                viewModel.savePhrase(AacPhrase(name.hashCode(), name, icon))
+            if (text.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
+                viewModel.savePhrase(AacPhrase(text.hashCode(), text.replaceSpacesWithUnderscores(), text, icon))
             } else {
                 toast(R.string.invalid_input)
             }
@@ -166,7 +162,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
         this.menu!!.setGroupVisible(R.id.group_menu_phrases, !show)
         if (!show) {
             etIcon.text.clear()
-            etPhraseName.text.clear()
+            etPhraseText.text.clear()
             ivPhraseIcon.imageResource = R.drawable.img_placeholder
             loadedBitmapName = ""
             loadedBitmap = null

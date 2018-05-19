@@ -126,6 +126,7 @@
     <string name="set_speed">Set AAC voice speed</string>
     <string name="this_is_my_voice">Test</string>
     <string name="downloading_resources">Downloading resources</string>
+    <string name="phrase_text">Phrase</string>
 
 
 </resources>
