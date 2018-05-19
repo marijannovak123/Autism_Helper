@@ -19,6 +19,7 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
+import com.marijannovak.autismhelper.utils.mapToList
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -123,10 +124,10 @@ class LoginRepository @Inject constructor(
         return Completable.fromAction {
             userDao.insert(user)
             user.children?.let {
-                childDao.insertMultiple(it)
+                childDao.insertMultiple(it.mapToList())
             }
             user.childScores?.let {
-                childScoreDao.insertMultiple(it)
+                childScoreDao.insertMultiple(it.mapToList())
             }
             prefs.setParentPassword(user.parentPassword ?: "")
         }

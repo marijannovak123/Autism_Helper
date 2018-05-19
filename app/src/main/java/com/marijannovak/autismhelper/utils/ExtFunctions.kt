@@ -19,11 +19,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 
-fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", emptyList(), null)
+fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", emptyMap(), null)
 
-fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyList(), null)
+fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyMap(), null)
 
 /**
  * factory for custom viewmodels with parameters in constructor
@@ -108,4 +109,23 @@ fun ArrayList<String>.toSentence(): String {
  */
 fun String.replaceSpacesWithUnderscores(): String {
     return this.replace(" ", "_").toLowerCase()
+}
+
+/**
+ * map values to list
+ */
+fun <K, V> Map<K, V>.mapToList(): List<V> {
+    val list = ArrayList<V>()
+    this.forEach{
+        list += it.value
+    }
+    return list
+}
+
+fun <V> List<V>.toMap(): Map<String,V> {
+    val map = HashMap<String,V>()
+    this.forEach {
+        map += Pair(UUID.randomUUID().toString(), it)
+    }
+    return map
 }

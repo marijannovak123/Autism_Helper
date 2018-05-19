@@ -24,7 +24,7 @@ class AACAdapter(
     class AACViewHolder(itemView: View) : BaseViewHolder<AacPhrase>(itemView) {
         override fun bind(model: AacPhrase, position: Int, onItemClick: (AacPhrase, Int) -> Unit, onLongItemClick: (AacPhrase, Int) -> Unit) {
             with(itemView) {
-                tvAacName.text = model.name
+                tvAacName.text = model.text
 
                 Glide.with(context)
                         .load(model.iconPath)

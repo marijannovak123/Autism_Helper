@@ -26,12 +26,8 @@ class ParentRepository @Inject constructor(
         private val prefsHelper: PrefsHelper
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
-        return api.getChildren(child.parentId)
-                        .onErrorResumeNext {
-                            Single.just(emptyList())
-                        }.flatMapCompletable {
-                            api.addChild(child.parentId, it.size, child)
-                        }.andThen{
+        return api.addChild(child.parentId, child.id, child)
+                    .andThen{
                             childDao.insert(child)
                         }.handleThreading()
     }
@@ -95,14 +91,14 @@ class ParentRepository @Inject constructor(
     }
 
     fun deleteChild(child: Child): Completable {
-        return api.deleteChild(child.parentId, child.index)
+        return api.deleteChild(child.parentId, child.id)
                 .andThen {
                     childDao.delete(child)
                 }.handleThreading()
     }
 
     fun updateChild(child: Child): Completable {
-        return api.updateChild(child.parentId, child.index, child)
+        return api.updateChild(child.parentId, child.id, child)
                 .andThen {
                     childDao.update(child)
                 }.handleThreading()

@@ -23,25 +23,24 @@ data class User(
         var email: String?,
         var parentPassword: String?,
         @Ignore
-        var children: List<Child>?,
+        var children: Map<String, Child>?,
         @Ignore
         @SerializedName("child_scores")
-        var childScores: List<ChildScore>?
+        var childScores: Map<String, ChildScore>?
 ) {
-    constructor() : this("", "", "", "", emptyList(), null)
+    constructor() : this("", "", "", "", emptyMap(), null)
 }
 
 @Entity(tableName = TABLE_CHILDREN)
 data class Child(
         @PrimaryKey
         var id: String,
-        var index: Int,
         var parentId: String,
         var name: String,
         var gender: String,
         var dateOfBirth: Long
 ) : Serializable {
-    constructor() : this("", 1000, "", "", "", 0)
+    constructor() : this("", "", "", "", 0)
 }
 
 @Entity(tableName = TABLE_CHILD_SCORES)
@@ -84,7 +83,7 @@ data class Question(
         @Ignore
         var answers: List<Answer>
 ) {
-    constructor() : this(0, "", 0, 0, "", null, ArrayList())
+    constructor() : this(0, "", 0, 0, "", null, emptyList())
 
     override fun equals(other: Any?): Boolean {
         if(other is Question) {

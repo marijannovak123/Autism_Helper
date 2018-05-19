@@ -22,6 +22,7 @@ import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.InputValidator
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.toMap
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
 
@@ -75,12 +76,12 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
                         if (another) {
                             addChildDialog(user)
                         } else {
-                            val userWithChildren = user.copy(children = childrenList)
+                            val userWithChildren = user.copy(children = childrenList.toMap())
                             viewModel.saveUserOnlineAndLocally(userWithChildren)
                         }
                     },
                     {
-                        val userWithChildren = user.copy(children = childrenList)
+                        val userWithChildren = user.copy(children = childrenList.toMap())
                         viewModel.saveUserOnlineAndLocally(userWithChildren)
                     }
             )

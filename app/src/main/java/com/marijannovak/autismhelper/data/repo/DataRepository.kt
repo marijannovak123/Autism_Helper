@@ -11,6 +11,7 @@ import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
+import com.marijannovak.autismhelper.utils.mapToList
 import io.reactivex.Completable
 import org.jetbrains.anko.doAsync
 import java.io.File
@@ -78,16 +79,8 @@ class DataRepository @Inject constructor(
                 db.userDao().deleteTable()
                 db.childDao().deleteTable()
                 db.childScoreDao().deleteTable()
-                deleteDataTables()
             }
         }
-    }
-
-    private fun deleteDataTables() {
-        db.questionDao().deleteTable()
-        db.categoriesDao().deleteTable()
-        db.aacDao().deleteTable()
-        db.answerDao().deleteTable()
     }
 
     fun getParentPassword(): String = prefsHelper.getParentPassword()
@@ -227,10 +220,10 @@ class DataRepository @Inject constructor(
         return Completable.fromAction {
             db.userDao().insert(user)
             user.children?.let {
-                db.childDao().updateMultiple(it)
+                db.childDao().updateMultiple(it.mapToList())
             }
             user.childScores?.let {
-                db.childScoreDao().insertMultiple(it)
+                db.childScoreDao().insertMultiple(it.mapToList())
             }
             prefsHelper.setParentPassword(user.parentPassword ?: "")
         }
