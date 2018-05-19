@@ -27,10 +27,10 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/etPhraseName"
+                android:id="@+id/etPhraseText"
                 style="@style/signupEditTextStyle"
                 android:drawableStart="@drawable/ic_account_circle"
-                android:hint="@string/phrase_name"
+                android:hint="@string/phrase_text"
                 android:inputType="text"
                 android:nextFocusForward="@id/etChildDateOfBirth" />
 

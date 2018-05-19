@@ -102,3 +102,10 @@ fun ArrayList<String>.toSentence(): String {
 
     return stringBuilder.toString()
 }
+
+/**
+ * generate a name for phrase from text provided
+ */
+fun String.replaceSpacesWithUnderscores(): String {
+    return this.replace(" ", "_").toLowerCase()
+}
