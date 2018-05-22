@@ -4,12 +4,9 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -21,13 +18,11 @@ import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserUpdateRequest
-import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
 import com.marijannovak.autismhelper.utils.ImageHelper
 import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.IOException
-import java.util.jar.Manifest
 
 
 class ProfileFragment : InjectableFragment<ParentViewModel>() {

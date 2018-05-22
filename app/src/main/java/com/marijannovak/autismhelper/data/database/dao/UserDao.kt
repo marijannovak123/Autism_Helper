@@ -44,14 +44,19 @@ interface UserDao : BaseDao<User> {
     fun getUserRaw(): User
 
     @Transaction
-    fun update(userName: String, parentPassword: String, profilePicPath: String) {
+    fun updateAll(userName: String, parentPassword: String, profilePicPath: String) {
         val user = getUserRaw()
-        Log.e(logTag(), user.username + " " +  user.profilePicPath)
         user.username = userName
         user.parentPassword = parentPassword
         user.profilePicPath = profilePicPath
-        Log.e(logTag(), user.username + " " +  user.profilePicPath)
         insert(user)
-        val users = getAllUsers()
+    }
+
+    @Transaction
+    fun update(userName: String, parentPassword: String) {
+        val user = getUserRaw()
+        user.username = userName
+        user.parentPassword = parentPassword
+        insert(user)
     }
 }

@@ -196,7 +196,7 @@ class DataRepository @Inject constructor(
                     if(user.profilePicPath.isNullOrEmpty()) {
                         onDataDownloaded()
                     } else {
-                        val filename = "${user.id}.jpg"
+                        val filename = "${user.id}${System.currentTimeMillis()}.jpg"
                         val file = File(App.getAppContext().filesDir, filename)
                         val ref = storage.child(user.profilePicPath!!)
                         ref.getFile(file)
@@ -232,7 +232,8 @@ class DataRepository @Inject constructor(
     }
 
     fun syncUserData(): Completable {
-        return db.userDao().getCurrentUserSingle()
+        return db.userDao()
+                .getCurrentUserSingle()
                 .flatMap {
                     api.getUser(it.id)
                 }.flatMapCompletable {
@@ -242,7 +243,7 @@ class DataRepository @Inject constructor(
 
     private fun updateUser(user: User): Completable {
         return Completable.fromAction {
-            db.userDao().insert(user)
+            db.userDao().update(user.username!!, user.parentPassword!!)
             user.children?.let {
                 db.childDao().updateMultiple(it.mapToList())
             }

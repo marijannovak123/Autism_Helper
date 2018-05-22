@@ -70,7 +70,7 @@ class ParentRepository @Inject constructor(
                 .updateParent(userId, userUpdateRequest)
                 .doOnComplete {
                     prefsHelper.setParentPassword(userUpdateRequest.parentPassword)
-                    userDao.update(userUpdateRequest.username, userUpdateRequest.parentPassword, profilePicPath)
+                    userDao.updateAll(userUpdateRequest.username, userUpdateRequest.parentPassword, profilePicPath)
                 }.handleThreading()
     }
 
