@@ -13,8 +13,6 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.rxkotlin.toSingle
 import javax.inject.Inject
 
 class ParentRepository @Inject constructor(
@@ -67,19 +65,20 @@ class ParentRepository @Inject constructor(
         return aacDao.getAllPhrases().handleThreading()
     }
 
-    fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest): Completable {
+    fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String): Completable {
         return api
-                .updateParent(userId, userUpdateRequest).doOnComplete {
+                .updateParent(userId, userUpdateRequest)
+                .doOnComplete {
                     prefsHelper.setParentPassword(userUpdateRequest.parentPassword)
-                    userDao.update(userUpdateRequest.username, userUpdateRequest.parentPassword)
+                    userDao.update(userUpdateRequest.username, userUpdateRequest.parentPassword, profilePicPath)
                 }.handleThreading()
     }
 
-    fun loadUser(): Single<User> {
+    fun loadUser(): Flowable<User> {
         return userDao.getCurrentUser().handleThreading()
     }
 
-    fun loadUserName(): Single<String?> {
+    fun loadUserName(): Flowable<String?> {
         return userDao
                 .getCurrentUser()
                 .map { user -> user.username ?: "Parent" }

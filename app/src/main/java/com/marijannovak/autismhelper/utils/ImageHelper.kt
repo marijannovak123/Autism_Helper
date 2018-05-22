@@ -26,8 +26,24 @@ class ImageHelper {
             if (!file.exists() && loadedBitmap != null) {
                 try {
                     val scaledBitmap = scaleBitmap(loadedBitmap)
-                    val outStream = FileOutputStream(file)
+                    val outStream = FileOutputStream(file, false)
                     scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+                    outStream.flush()
+                    outStream.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            return file
+        }
+
+        fun saveProfileBitmap(activity: Context?, loadedBitmap: Bitmap?, filename: String): File {
+            val file = File(activity!!.filesDir, filename)
+            loadedBitmap?.let {
+                if(file.exists()) file.delete()
+                try {
+                    val outStream = FileOutputStream(file, false)
+                    loadedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
                     outStream.flush()
                     outStream.close()
                 } catch (e: Exception) {

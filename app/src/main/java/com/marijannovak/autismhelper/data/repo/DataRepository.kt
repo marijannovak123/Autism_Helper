@@ -106,7 +106,7 @@ class DataRepository @Inject constructor(
         downloadQuestionImage(0)
     }
 
-    fun downloadQuestionImage(pos: Int) {
+    private fun downloadQuestionImage(pos: Int) {
         val question = questionsWithImgs[pos]
         files = context.filesDir.list()
         val filename = "${question.extraData}"
@@ -161,7 +161,7 @@ class DataRepository @Inject constructor(
                         updatePhraseImgPath(phrase, file.absolutePath).subscribe(
                                 {
                                     if (pos == phrases.size - 1) {
-                                        onDataDownloaded()
+                                        downloadProfilePic()
                                     } else {
                                         downloadPhraseImage(pos + 1)
                                     }
@@ -179,7 +179,7 @@ class DataRepository @Inject constructor(
         } else {
             updatePhraseImgPath(phrase, file.absolutePath).subscribe{
                 if (pos == phrases.size - 1) {
-                    onDataDownloaded()
+                    downloadProfilePic()
                 } else {
                     downloadPhraseImage(pos + 1)
                 }
@@ -187,6 +187,30 @@ class DataRepository @Inject constructor(
         }
 
     }
+
+    private fun downloadProfilePic() {
+        db.userDao()
+                .getCurrentUser()
+                .handleThreading()
+                .subscribe({ user ->
+                    if(user.profilePicPath.isNullOrEmpty()) {
+                        onDataDownloaded()
+                    } else {
+                        val filename = "${user.id}.jpg"
+                        val file = File(App.getAppContext().filesDir, filename)
+                        val ref = storage.child(user.profilePicPath!!)
+                        ref.getFile(file)
+                                .addOnSuccessListener {
+                                    val userWithPic = user
+                                    userWithPic.profilePicPath = file.absolutePath
+                                    doAsync { db.userDao().insert(userWithPic) }
+                                    onDataDownloaded()
+                                }.addOnFailureListener{onDataDownloaded()}
+                    }
+                }, {
+                    onDataDownloaded()
+                })
+}
 
     private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String): Completable {
         val phraseToSave = phrase
@@ -208,7 +232,7 @@ class DataRepository @Inject constructor(
     }
 
     fun syncUserData(): Completable {
-        return db.userDao().getCurrentUser()
+        return db.userDao().getCurrentUserSingle()
                 .flatMap {
                     api.getUser(it.id)
                 }.flatMapCompletable {

@@ -22,13 +22,14 @@ data class User(
         var username: String?,
         var email: String?,
         var parentPassword: String?,
+        var profilePicPath: String?,
         @Ignore
         var children: Map<String, Child>?,
         @Ignore
         @SerializedName("child_scores")
         var childScores: Map<String, ChildScore>?
 ) {
-    constructor() : this("", "", "", "", emptyMap(), null)
+    constructor() : this("", "", "", "", "", emptyMap(), null)
 }
 
 @Entity(tableName = TABLE_CHILDREN)

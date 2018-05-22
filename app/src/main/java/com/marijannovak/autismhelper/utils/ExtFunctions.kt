@@ -22,9 +22,9 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", emptyMap(), null)
+fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", "", emptyMap(), null)
 
-fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", emptyMap(), null)
+fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", "", emptyMap(), null)
 
 /**
  * factory for custom viewmodels with parameters in constructor

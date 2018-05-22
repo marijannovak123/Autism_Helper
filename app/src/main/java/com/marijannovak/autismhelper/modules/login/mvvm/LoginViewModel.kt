@@ -147,7 +147,7 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun throwErrorAndLogOut(msgRes: Int, throwableMessage: String) {
+    private fun throwErrorAndLogOut(msgRes: Int, throwableMessage: String) {
         resourceLiveData.value = Resource.message(msgRes, throwableMessage)
         logOut()
     }

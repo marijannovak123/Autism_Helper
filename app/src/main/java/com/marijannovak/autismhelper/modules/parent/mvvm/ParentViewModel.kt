@@ -1,21 +1,23 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
 import android.arch.lifecycle.MutableLiveData
+import android.graphics.Bitmap
 import android.util.Log
+import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
-import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 //TODO: REORGANIZE REPOSITORIES BY MODELS THEY ARE DATA SOURCE FOR
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
         private val aacRepository: AACRepository,
-        private val prefsHelper: PrefsHelper)
+        private val storageRef: StorageReference)
     : BaseViewModel<UserChildrenJoin>() {
 
     var userName = ""
@@ -131,9 +133,24 @@ class ParentViewModel @Inject constructor(
         )
     }
 
-    fun updateUserData(userId: String, userUpdateRequest: UserUpdateRequest) {
+    fun updateUserData(userId: String, userUpdateRequest: UserUpdateRequest, picPath: String,  bitmap: Bitmap) {
         resourceLiveData.value = Resource.loading()
-        repository.updateUser(userId, userUpdateRequest).subscribe({
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+
+            val storageRef = storageRef.child("$userId.jpg")
+            storageRef.putBytes(data)
+                    .addOnSuccessListener {
+                        updateUserOnApiAndDb(userId, userUpdateRequest, picPath)
+                    }.addOnFailureListener{
+                        resourceLiveData.value = Resource.message(R.string.firebase_upload_error,it.message ?: "Error" )
+                    }
+
+    }
+
+    private fun updateUserOnApiAndDb(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String) {
+        repository.updateUser(userId, userUpdateRequest, profilePicPath).subscribe({
             resourceLiveData.value = Resource.message(R.string.saved, "")
         }, {
             resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "")

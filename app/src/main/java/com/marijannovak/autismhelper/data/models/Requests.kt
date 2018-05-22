@@ -14,5 +14,6 @@ data class ParentPasswordRequest(
 
 data class UserUpdateRequest(
         var username: String,
-        var parentPassword: String
+        var parentPassword: String,
+        var profilePicPath: String
 )

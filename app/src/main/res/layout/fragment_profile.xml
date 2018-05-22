@@ -37,7 +37,10 @@
             style="@style/profileEditTextStyle"
             android:drawableStart="@drawable/ic_mail"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:editable="false"
+            android:clickable="false"
+            android:focusable="false"/>
 
     </android.support.design.widget.TextInputLayout>
 
