@@ -5,10 +5,12 @@ import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Flowable
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Marijan on 23.3.2018..
  */
+@Singleton
 class MainRepository @Inject constructor(private val childDao: ChildDao) {
 
     fun getChildren(): Flowable<List<Child>> {

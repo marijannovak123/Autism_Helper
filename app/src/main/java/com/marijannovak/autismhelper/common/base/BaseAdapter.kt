@@ -1,7 +1,11 @@
 package com.marijannovak.autismhelper.common.base
 
+import android.animation.ObjectAnimator
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import kotlinx.android.synthetic.main.list_item_child.view.*
 
 abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         protected var dataSet: MutableList<T>,
@@ -24,9 +28,9 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         this.notifyDataSetChanged()
     }
 
-    fun deleteItem(model: T) {
-        this.dataSet.remove(model)
-        this.notifyDataSetChanged()
+    fun deleteItem(position: Int) {
+        this.dataSet.removeAt(position)
+        this.notifyItemRemoved(position)
     }
 
     fun addItem(model: T) {
@@ -37,4 +41,12 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
     protected abstract fun createHolder(parent: ViewGroup, viewType: Int): VH
 
     fun datasetCount() = dataSet.size
+
+    protected fun rotationAnimation(view: View, from: Float, to: Float): ObjectAnimator {
+        return  ObjectAnimator.ofFloat(view, "rotation", from, to)
+                .apply {
+                    duration = 300
+                    interpolator = LinearInterpolator()
+                }
+    }
 }

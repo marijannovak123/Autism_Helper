@@ -1,14 +1,11 @@
 package com.marijannovak.autismhelper.modules.login.mvvm
 
 import android.content.Intent
-import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.storage.StorageReference
-import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
@@ -18,17 +15,17 @@ import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.handleThreading
-import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.mapToList
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import java.io.File
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Marijan on 23.3.2018..
  */
+@Singleton
 class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
         private val userDao: UserDao,

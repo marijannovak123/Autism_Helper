@@ -43,11 +43,11 @@ class ChildrenAdapter(
 
                 val expandClickListener = {
                     if(rlExpanded.visibility == View.VISIBLE) {
-                        rotationAnimation(180f, 0f).start()
+                        rotationAnimation(ivArrow, 180f, 0f).start()
                         rlExpanded.visibility = View.GONE
                         expandStates[position] = true
                     } else {
-                        rotationAnimation(0f, 180f).start()
+                        rotationAnimation(ivArrow, 0f, 180f).start()
                         rlExpanded.visibility = View.VISIBLE
                         expandStates[position] = false
                     }
@@ -63,14 +63,6 @@ class ChildrenAdapter(
                 ivDeleteChild.setOnClickListener { onLongItemClick(child, position) }
                 ivEditChild.setOnClickListener { editListener(child, position) }
             }
-        }
-
-        private fun rotationAnimation(from: Float, to: Float): ObjectAnimator {
-            return  ObjectAnimator.ofFloat(itemView.ivArrow, "rotation", from, to)
-                    .apply {
-                        duration = 300
-                        interpolator = LinearInterpolator()
-                    }
         }
 
     }

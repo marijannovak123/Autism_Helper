@@ -9,9 +9,10 @@ import com.marijannovak.autismhelper.data.models.*
  * Created by Marijan on 26.3.2018..
  */
 
-@Database(entities = [(User::class), (Child::class), (ChildScore::class),
-    (Question::class), (Answer::class), (Category::class), (AacPhrase::class)],
-        version = 10, exportSchema = false)
+@Database(entities =
+    [(User::class), (Child::class), (ChildScore::class),
+    (Question::class), (Answer::class), (Category::class),
+        (AacPhrase::class), (FeedItem::class)], version = 11, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -21,4 +22,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun answerDao(): AnswerDao
     abstract fun categoriesDao(): CategoryDao
     abstract fun aacDao(): AACDao
+    abstract fun feedItemDao(): FeedItemDao
 }
+

@@ -12,6 +12,11 @@
             android:title="@string/phrases" />
 
         <item
+            android:id="@+id/rss"
+            android:icon="@drawable/ic_rss_feed"
+            android:title="@string/news"/>
+
+        <item
             android:id="@+id/profile"
             android:icon="@drawable/ic_account_circle"
             android:title="@string/profile" />
