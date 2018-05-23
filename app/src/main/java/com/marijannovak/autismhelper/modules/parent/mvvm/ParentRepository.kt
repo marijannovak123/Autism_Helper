@@ -1,26 +1,28 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
 import android.graphics.Color
+import android.provider.SyncStateContract
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
-import com.marijannovak.autismhelper.data.database.dao.AACDao
-import com.marijannovak.autismhelper.data.database.dao.ChildDao
-import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
-import com.marijannovak.autismhelper.data.database.dao.UserDao
+import com.marijannovak.autismhelper.config.Constants.Companion.RSS_URL
+import com.marijannovak.autismhelper.data.database.dao.*
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.*
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.*
+import io.reactivex.Observable.empty
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ParentRepository @Inject constructor(
         private val childDao: ChildDao,
         private val api: API,
         private val childScoreDao: ChildScoreDao,
         private val aacDao: AACDao,
         private val userDao: UserDao,
+        private val feedItemDao: FeedItemDao,
         private val prefsHelper: PrefsHelper
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
@@ -103,7 +105,19 @@ class ParentRepository @Inject constructor(
                 }.handleThreading()
     }
 
-
+    fun fetchFeeds(): Single<List<FeedItem>> {
+        return api.getFeed(RSS_URL)
+                .onErrorResumeNext { Single.just(Feed()) }
+                .doOnSuccess { feed ->
+                    feed.items?.let {
+                        if(it.isNotEmpty()) {
+                            feedItemDao.insertMultiple(it)
+                        }
+                    }
+                }.flatMap {
+                    feedItemDao.getItems()
+                }.handleThreading()
+    }
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)
 }

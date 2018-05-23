@@ -5,10 +5,11 @@ package com.marijannovak.autismhelper.config
  */
 class Constants {
     companion object {
-        //region firebase rest api
+        //region api
         const val BASE_URL = "https://autism-helper.firebaseio.com/api/"
         const val FIREBASE_AUTH = "auth"
         const val FIREBASE_API_KEY = "2Sm3l55sGpTgeojlAnyREqj5KOwcks1kx379XidA"
+        const val RSS_URL = "https://www.npr.org/feeds/136582388/feed.json"
         //endregion
 
         //region login/signup
@@ -27,6 +28,7 @@ class Constants {
         const val TABLE_CHILDREN = "children"
         const val TABLE_ANSWERS = "answers"
         const val TABLE_AAC = "aac"
+        const val TABLE_RSS = "rss"
         //endregion
 
         //region validation
@@ -62,6 +64,7 @@ class Constants {
         const val FRAGMENT_PHRASES = "phrases_fragment"
         const val FRAGMENT_SETTINGS = "settings_fragment"
         const val FRAGMENT_CHILD_DETAILS = "child_details_fragment"
+        const val FRAGMENT_RSS = "rss_fragment"
         //endregion
 
         //region other

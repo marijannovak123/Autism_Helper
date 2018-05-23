@@ -26,6 +26,7 @@ class ParentViewModel @Inject constructor(
     val phraseLiveData = MutableLiveData<List<AacPhrase>>()
     val userWithChildrenLiveData = MutableLiveData<UserChildrenJoin>()
     val userLiveData = MutableLiveData<User>()
+    val feedLiveData = MutableLiveData<List<FeedItem>>()
 
     fun loadUsername() {
         compositeDisposable.add(
@@ -169,7 +170,7 @@ class ParentViewModel @Inject constructor(
                             userLiveData.value = user
                             resourceLiveData.value = Resource.success(null)
                         },
-                        { resourceLiveData.value = Resource.message(R.string.fetch_user_error, it.message ?: "") }
+                        { resourceLiveData.value = Resource.message(R.string.fetch_error, it.message ?: "") }
                 )
         )
     }
@@ -198,6 +199,16 @@ class ParentViewModel @Inject constructor(
     fun saveSettings(settings: SettingsFragment.Settings) {
         dataRepository.saveSettings(settings)
         resourceLiveData.value = Resource.saved()
+    }
+
+    fun fetchFeeds() {
+        resourceLiveData.value = Resource.loading()
+        repository.fetchFeeds().subscribe({
+            feedLiveData.value = it
+            resourceLiveData.value = Resource.success(null)
+        }, {
+            resourceLiveData.value = Resource.message(R.string.fetch_error, it.message ?: "")
+        })
     }
 
 }

@@ -34,7 +34,7 @@ class CategoriesAdapter(
 
     override fun getItemCount() = dataSet.size + 1
 
-    class CategoriesViewHolder(itemView: View) : BaseViewHolder<Category>(itemView) {
+    inner class CategoriesViewHolder(itemView: View) : BaseViewHolder<Category>(itemView) {
         override fun bind(model: Category, position: Int, onItemClick: (Category, Int) -> Unit, onLongItemClick: (Category, Int) -> Unit) {
             with(itemView) {
                 setOnClickListener { onItemClick(model, position) }
@@ -54,7 +54,7 @@ class CategoriesAdapter(
         }
     }
 //AAC
-    class CategoriesHeaderViewHolder(itemView: View): BaseViewHolder<Category>(itemView) {
+    inner class CategoriesHeaderViewHolder(itemView: View): BaseViewHolder<Category>(itemView) {
         override fun bind(model: Category, position: Int, onItemClick: (Category, Int) -> Unit, onLongItemClick: (Category, Int) -> Unit) {
             with(itemView) {
                 setOnClickListener { onItemClick(Category(0, "AAC", emptyList()), -1) }

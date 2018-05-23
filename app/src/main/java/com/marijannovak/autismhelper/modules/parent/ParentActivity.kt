@@ -16,6 +16,7 @@ import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_CHILDREN
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PHRASES
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PROFILE
+import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_RSS
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
 import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
@@ -45,7 +46,8 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         fragments = mutableMapOf(
                 Pair(FRAGMENT_CHILDREN, ChildrenFragment()),
                 Pair(FRAGMENT_PROFILE, ProfileFragment()),
-                Pair(FRAGMENT_PHRASES, PhrasesFragment())
+                Pair(FRAGMENT_PHRASES, PhrasesFragment()),
+                Pair(FRAGMENT_RSS, RssFragment())
         )
     }
 
@@ -97,13 +99,17 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
         fragmentLoad = when(item.itemId) {
-            R.id.profile, R.id.settings, R.id.phrases, R.id.children -> true
+            R.id.profile, R.id.settings, R.id.phrases, R.id.children, R.id.rss -> true
             else -> false
         }
 
         when (item.itemId) {
             R.id.profile -> {
                 drawerAction = { loadFragment(fragments[FRAGMENT_PROFILE]!!) }
+            }
+
+            R.id.rss -> {
+                drawerAction = { loadFragment(fragments[FRAGMENT_RSS]!!) }
             }
 
             R.id.settings -> {

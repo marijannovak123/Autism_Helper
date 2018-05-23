@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.modules.parent.fragments.ChildrenFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.PhrasesFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.ProfileFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
+import com.marijannovak.autismhelper.modules.parent.fragments.*
 
 //Pass activity class to get that activity's viewmodel
 open class BaseFragment : Fragment() {
@@ -25,6 +22,14 @@ open class BaseFragment : Fragment() {
 
             is ChildrenFragment -> {
                 getString(R.string.children)
+            }
+
+            is SettingsFragment -> {
+                getString(R.string.settings)
+            }
+
+            is RssFragment -> {
+                getString(R.string.news)
             }
 
             is PhrasesFragment -> {
