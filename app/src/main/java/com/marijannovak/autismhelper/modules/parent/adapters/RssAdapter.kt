@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.parent.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseAdapter
 import com.marijannovak.autismhelper.common.base.BaseViewHolder
@@ -25,6 +26,14 @@ class RssAdapter(
 
         override fun bind(model: FeedItem, position: Int, onItemClick: (FeedItem, Int) -> Unit, onLongItemClick: (FeedItem, Int) -> Unit) {
             with(itemView) {
+                Glide.with(context)
+                        .load(model.image)
+                        .into(ivFeedImage)
+
+                tvDatePublished.text = model.datePublished
+                tvFeedSummary.text = model.summary
+                tvTitle.text = model.title
+
                 val expandClickListener = {
                     if(rlExpanded.visibility == View.VISIBLE) {
                         rotationAnimation(ivArrow, 180f, 0f).start()

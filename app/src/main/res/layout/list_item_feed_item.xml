@@ -73,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:id="@+id/ivLink"
+                android:src="@drawable/ic_insert_link"
                 android:layout_alignParentEnd="true"
                 android:contentDescription="@null" />
 
