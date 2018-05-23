@@ -2,7 +2,6 @@ package com.marijannovak.autismhelper.data.network
 
 import com.marijannovak.autismhelper.data.models.*
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -43,7 +42,4 @@ interface API {
 
     @PATCH("users/{userId}/children/{childId}.json")
     fun updateChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
-
-    @GET
-    fun getFeed(@Url feedUrl: String): Single<Feed>
 }

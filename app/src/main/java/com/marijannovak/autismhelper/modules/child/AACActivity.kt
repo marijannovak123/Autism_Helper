@@ -63,8 +63,8 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
     private fun setUpAacData(phrases: List<AacPhrase>?) {
         if (aacDisplayAdapter == null) {
-            aacDisplayAdapter = AACAdapter(emptyList(), { _, position ->
-                aacDisplayAdapter?.deleteItem(position)
+            aacDisplayAdapter = AACAdapter(emptyList(), { aacPhrase, position ->
+                aacDisplayAdapter?.deleteItem(aacPhrase)
                 ttsWords.removeAt(position)
             }, { _, _ -> /*noop*/})
             rvAacDisplay.adapter = aacDisplayAdapter

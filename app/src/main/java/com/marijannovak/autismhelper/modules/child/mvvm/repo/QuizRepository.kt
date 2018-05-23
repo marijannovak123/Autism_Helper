@@ -8,10 +8,9 @@ import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class QuizRepository @Inject constructor(
         private val categoryDao: CategoryDao,
         private val childScoreDao: ChildScoreDao,

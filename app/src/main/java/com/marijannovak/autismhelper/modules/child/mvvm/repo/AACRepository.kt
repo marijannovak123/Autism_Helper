@@ -8,9 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class AACRepository @Inject constructor(private val aacDao: AACDao, private val prefsHelper: PrefsHelper) {
 
     fun getPhrases(): Flowable<List<AacPhrase>> {

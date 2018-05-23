@@ -59,7 +59,7 @@
     <string name="logout_not_success">Logout unsucessful</string>
     <string name="sync_error">Sync error</string>
     <string name="firebase_upload_error">Firebase upload error</string>
-    <string name="fetch_error">Fetching data error</string>
+    <string name="fetch_user_error">Fetch user data error</string>
     <string name="google_sign_in_error">Google Sign In error</string>
     <string name="login_error">Login error</string>
     <string name="register_error">Register failed</string>
@@ -127,6 +127,6 @@
     <string name="this_is_my_voice">Test</string>
     <string name="downloading_resources">Downloading resources</string>
     <string name="phrase_text">Phrase</string>
-    <string name="news">Autism News</string>
+
 
 </resources>

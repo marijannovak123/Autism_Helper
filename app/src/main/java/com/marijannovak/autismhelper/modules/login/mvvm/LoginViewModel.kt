@@ -114,7 +114,7 @@ class LoginViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.fetchAndSaveUser(userId).subscribe(
                         { syncData() },
-                        { error -> throwErrorAndLogOut(R.string.fetch_error, error.message ?: "") }
+                        { error -> throwErrorAndLogOut(R.string.fetch_user_error, error.message ?: "") }
                 )
         )
 

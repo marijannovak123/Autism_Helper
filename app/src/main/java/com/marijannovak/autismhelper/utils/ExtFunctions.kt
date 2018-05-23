@@ -14,7 +14,6 @@ import com.marijannovak.autismhelper.data.models.User
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -72,10 +71,6 @@ fun <T> Flowable<T>.handleThreading(): Flowable<T> {
 }
 
 fun <T> Maybe<T>.handleThreading(): Maybe<T> {
-    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-}
-
-fun <T> io.reactivex.Observable<T>.handleThreading(): Observable<T> {
     return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
 

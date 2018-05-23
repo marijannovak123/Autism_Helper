@@ -21,7 +21,7 @@ class AACAdapter(
         return AACViewHolder(view)
     }
 
-    inner class AACViewHolder(itemView: View) : BaseViewHolder<AacPhrase>(itemView) {
+    class AACViewHolder(itemView: View) : BaseViewHolder<AacPhrase>(itemView) {
         override fun bind(model: AacPhrase, position: Int, onItemClick: (AacPhrase, Int) -> Unit, onLongItemClick: (AacPhrase, Int) -> Unit) {
             with(itemView) {
                 tvAacName.text = model.text

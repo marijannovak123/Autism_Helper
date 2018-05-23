@@ -21,7 +21,4 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     internal abstract fun provideSettingsFragment(): SettingsFragment
-
-    @ContributesAndroidInjector
-    internal abstract fun provideRssFragment(): RssFragment
 }
