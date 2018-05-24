@@ -9,7 +9,11 @@ class Constants {
         const val BASE_URL = "https://autism-helper.firebaseio.com/api/"
         const val FIREBASE_AUTH = "auth"
         const val FIREBASE_API_KEY = "2Sm3l55sGpTgeojlAnyREqj5KOwcks1kx379XidA"
-        const val RSS_URL = "https://www.npr.org/feeds/136582388/feed.json"
+        const val RSS_URL = "https://www.npr.org/rss/rss.php?id=136582388"
+        const val RETROFIT_JSON = "jsonfit"
+        const val RETROFIT_XML = "xmlfit"
+        const val API_JSON = "jsonapi"
+        const val API_XML = "xmlapi"
         //endregion
 
         //region login/signup

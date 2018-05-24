@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
+import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
@@ -20,6 +21,7 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -31,6 +33,7 @@ class LoginRepository @Inject constructor(
         private val userDao: UserDao,
         private val childDao: ChildDao,
         private val childScoreDao: ChildScoreDao,
+        @Named(Constants.API_JSON)
         private val api: API,
         private val prefs: PrefsHelper) {
 

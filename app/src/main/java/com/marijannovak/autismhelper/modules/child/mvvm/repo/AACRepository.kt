@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AACRepository @Inject constructor(private val aacDao: AACDao, private val prefsHelper: PrefsHelper) {
+class AACRepository @Inject constructor(private val aacDao: AACDao) {
 
     fun getPhrases(): Flowable<List<AacPhrase>> {
         return aacDao

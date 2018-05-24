@@ -38,12 +38,11 @@ class RssFragment : InjectableFragment<ParentViewModel>() {
 
     private fun setUpFeedRv(feeds: List<FeedItem>?) {
         feeds?.let {
-            if(feedAdapter == null) {
-                feedAdapter = RssAdapter(emptyList(), { feed, _ -> openItemInBrowser(feed.url) })
+            if(feedAdapter == null || rvFeed.adapter == null) {
+                feedAdapter = RssAdapter(emptyList(), { feed, _ -> openItemInBrowser(feed.link) })
                 rvFeed.adapter = feedAdapter
                 rvFeed.layoutManager = LinearLayoutManager(activity)
                 rvFeed.itemAnimator = DefaultItemAnimator()
-                rvFeed.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.HORIZONTAL))
             }
 
             feedAdapter!!.update(it)
@@ -56,3 +55,4 @@ class RssFragment : InjectableFragment<ParentViewModel>() {
     }
 
 }
+

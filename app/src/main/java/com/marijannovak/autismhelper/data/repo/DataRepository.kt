@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.App
+import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
@@ -16,11 +17,13 @@ import io.reactivex.Completable
 import org.jetbrains.anko.doAsync
 import java.io.File
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Created by Marijan on 26.3.2018..
  */
 class DataRepository @Inject constructor(
+        @Named(Constants.API_JSON)
         private val api: API,
         private val auth: FirebaseAuth,
         private val storage: StorageReference,

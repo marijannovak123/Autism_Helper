@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.modules.parent.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,10 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseAdapter
 import com.marijannovak.autismhelper.common.base.BaseViewHolder
 import com.marijannovak.autismhelper.data.models.FeedItem
+import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.list_item_feed_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RssAdapter(
         feeds: List<FeedItem>,
@@ -26,33 +30,41 @@ class RssAdapter(
 
         override fun bind(model: FeedItem, position: Int, onItemClick: (FeedItem, Int) -> Unit, onLongItemClick: (FeedItem, Int) -> Unit) {
             with(itemView) {
+
+                val imgUrl = model.encoded.substring(model.encoded.indexOf("https"), model.encoded.indexOf("' alt="))
+
                 Glide.with(context)
-                        .load(model.image)
+                        .load(imgUrl)
                         .into(ivFeedImage)
 
-                tvDatePublished.text = model.datePublished
-                tvFeedSummary.text = model.summary
+                val date = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(model.pubDate)
+                val formattedDate = SimpleDateFormat("EEE, dd MMM yyyy HH:mm").format(date)
+
+                Log.e(logTag(), imgUrl)
+
+                tvDatePublished.text = formattedDate
+                tvFeedSummary.text = model.description
                 tvTitle.text = model.title
 
                 val expandClickListener = {
-                    if(rlExpanded.visibility == View.VISIBLE) {
+                    if(llExpanded.visibility == View.VISIBLE) {
                         rotationAnimation(ivArrow, 180f, 0f).start()
-                        rlExpanded.visibility = View.GONE
+                        llExpanded.visibility = View.GONE
                         expandStates[position] = true
                     } else {
                         rotationAnimation(ivArrow, 0f, 180f).start()
-                        rlExpanded.visibility = View.VISIBLE
+                        llExpanded.visibility = View.VISIBLE
                         expandStates[position] = false
                     }
                 }
 
                 ivArrow.setOnClickListener { expandClickListener() }
                 setOnClickListener {
-                    if(rlExpanded.visibility == View.GONE){
+                    if(llExpanded.visibility == View.GONE){
                         expandClickListener()
                     }
                 }
-                ivLink.setOnClickListener { onItemClick(model, position) }
+                tvTitle.setOnClickListener { onItemClick(model, position) }
             }
         }
     }

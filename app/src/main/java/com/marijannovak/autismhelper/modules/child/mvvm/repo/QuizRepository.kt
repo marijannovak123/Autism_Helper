@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.modules.child.mvvm.repo
 
+import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.dao.CategoryDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
@@ -9,12 +10,14 @@ import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class QuizRepository @Inject constructor(
         private val categoryDao: CategoryDao,
         private val childScoreDao: ChildScoreDao,
+        @Named(Constants.API_JSON)
         private val api: API
 ) {
 

@@ -1,10 +1,8 @@
 package com.marijannovak.autismhelper.modules.parent.adapters
 
-import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseAdapter
@@ -42,20 +40,20 @@ class ChildrenAdapter(
                         .into(ivChildGender)
 
                 val expandClickListener = {
-                    if(rlExpanded.visibility == View.VISIBLE) {
+                    if(llExpanded.visibility == View.VISIBLE) {
                         rotationAnimation(ivArrow, 180f, 0f).start()
-                        rlExpanded.visibility = View.GONE
+                        llExpanded.visibility = View.GONE
                         expandStates[position] = true
                     } else {
                         rotationAnimation(ivArrow, 0f, 180f).start()
-                        rlExpanded.visibility = View.VISIBLE
+                        llExpanded.visibility = View.VISIBLE
                         expandStates[position] = false
                     }
                 }
 
                 ivArrow.setOnClickListener { expandClickListener() }
                 setOnClickListener {
-                    if(rlExpanded.visibility == View.GONE){
+                    if(llExpanded.visibility == View.GONE){
                         expandClickListener()
                     }
                 }

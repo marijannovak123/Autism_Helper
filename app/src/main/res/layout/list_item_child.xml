@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/rlExpanded"
+                android:id="@+id/llExpanded"
                 android:padding="10dp">
 
                 <ImageView
