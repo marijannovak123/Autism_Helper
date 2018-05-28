@@ -115,7 +115,9 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_logout -> {
-                viewModel.logOut()
+                DialogHelper.showPromptDialog(this, getString(R.string.really_logout), {
+                    viewModel.logOut()
+                })
                 true
             }
 

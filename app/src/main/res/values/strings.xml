@@ -129,5 +129,7 @@
     <string name="phrase_text">Phrase</string>
     <string name="news">Autism News</string>
     <string name="enter_phrase_text">Enter phrase text</string>
+    <string name="really_logout">Do you really want to logout?</string>
+    <string name="really_exit">Do you really want to exit?</string>
 
 </resources>

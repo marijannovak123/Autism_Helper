@@ -21,6 +21,7 @@ import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.modules.parent.fragments.*
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
+import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_parent.*
 import kotlinx.android.synthetic.main.nav_header.view.*
@@ -128,12 +129,16 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
             }
 
             R.id.logout -> {
-                viewModel.logOut()
+                DialogHelper.showPromptDialog(this, getString(R.string.really_logout), {
+                    viewModel.logOut()
+                })
             }
 
             R.id.exit -> {
-                startActivity(Intent(this@ParentActivity, MainActivity::class.java))
-                finish()
+                DialogHelper.showPromptDialog(this, getString(R.string.really_exit), {
+                    startActivity(Intent(this@ParentActivity, MainActivity::class.java))
+                    finish()
+                })
             }
         }
 
