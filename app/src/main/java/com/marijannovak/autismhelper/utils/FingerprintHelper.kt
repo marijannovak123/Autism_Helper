@@ -8,7 +8,8 @@ import android.os.Build
 import android.os.CancellationSignal
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
-import android.widget.Toast
+import com.marijannovak.autismhelper.R
+import org.jetbrains.anko.toast
 
 @RequiresApi(Build.VERSION_CODES.M)
 class FingerprintHelper(private val context: Context, private val onSuccess: () -> Unit): FingerprintManager.AuthenticationCallback() {
@@ -16,7 +17,6 @@ class FingerprintHelper(private val context: Context, private val onSuccess: () 
     private var cancellationSignal: CancellationSignal? = null
 
     fun startAuth(manager: FingerprintManager, cryptoObject: FingerprintManager.CryptoObject) {
-
         cancellationSignal = CancellationSignal()
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             return
@@ -31,7 +31,7 @@ class FingerprintHelper(private val context: Context, private val onSuccess: () 
     }
 
     override fun onAuthenticationFailed() {
-        Toast.makeText(context, "Authentication failed", Toast.LENGTH_LONG).show()
+       context.toast(R.string.authentication_failed)
     }
 
     override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence) {

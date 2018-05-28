@@ -1,9 +1,6 @@
 package com.marijannovak.autismhelper.utils
 
 import android.Manifest
-import android.animation.Animator
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -14,6 +11,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
+import android.os.Handler
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.support.v4.app.ActivityCompat
@@ -133,32 +131,8 @@ class DialogHelper {
                     if(cipherInit()) {
                         val cryptoObject = FingerprintManager.CryptoObject(cipher)
                         val helper = FingerprintHelper(context, {
-                            val colorFrom = Color.BLACK
-                            val colorTo = Color.GREEN
-                            val colorAnimation = ValueAnimator.ofObject( ArgbEvaluator(), colorFrom, colorTo)
-                            colorAnimation.duration = 50
-                            colorAnimation.addUpdateListener {
-                                animation ->
-                                    animation.addListener(object: Animator.AnimatorListener{
-                                        override fun onAnimationRepeat(animation: Animator?) {
-                                            //NOOP
-                                        }
-
-                                        override fun onAnimationEnd(animation: Animator?) {
-                                            fingerprintListener()
-                                        }
-
-                                        override fun onAnimationCancel(animation: Animator?) {
-                                            //NOOP
-                                        }
-
-                                        override fun onAnimationStart(animation: Animator?) {
-                                            //NOOP
-                                        }
-                                    })
-                                    ivFingerprint.colorFilter = PorterDuffColorFilter(animation?.animatedValue as Int, PorterDuff.Mode.SRC_ATOP)
-                            }
-                            colorAnimation.start()
+                            ivFingerprint.colorFilter = PorterDuffColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP)
+                            Handler().postDelayed(fingerprintListener, 10)
                         })
                         helper.startAuth(fingerprintManager, cryptoObject)
                     }
