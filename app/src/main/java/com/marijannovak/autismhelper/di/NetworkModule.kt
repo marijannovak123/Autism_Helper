@@ -3,7 +3,6 @@ package com.marijannovak.autismhelper.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.API_JSON
 import com.marijannovak.autismhelper.config.Constants.Companion.API_XML

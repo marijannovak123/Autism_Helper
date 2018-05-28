@@ -40,7 +40,6 @@
             android:clickable="true"
             android:cursorVisible="false"
             android:drawableStart="@drawable/ic_date_range"
-            android:editable="false"
             android:focusable="false"
             android:hint="@string/date_of_birth"
             android:inputType="date"

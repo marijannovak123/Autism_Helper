@@ -2,7 +2,6 @@ package com.marijannovak.autismhelper.data.network
 
 import com.marijannovak.autismhelper.data.models.*
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.*
 

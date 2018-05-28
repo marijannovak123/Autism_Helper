@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import kotlinx.android.synthetic.main.list_item_child.view.*
 
 abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         protected var dataSet: MutableList<T>,

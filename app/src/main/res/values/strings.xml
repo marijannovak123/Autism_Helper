@@ -56,7 +56,7 @@
 
     <string name="children">Children</string>
     <string name="error_inserting">Error inserting to database</string>
-    <string name="logout_not_success">Logout unsucessful</string>
+    <string name="logout_not_success">Logout unsuccessful</string>
     <string name="sync_error">Sync error</string>
     <string name="firebase_upload_error">Firebase upload error</string>
     <string name="fetch_error">Fetching data error</string>

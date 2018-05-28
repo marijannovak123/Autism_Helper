@@ -8,7 +8,7 @@ import com.tumblr.remember.Remember
 
 class PrefsHelper {
 
-    fun getParentPassword() = Remember.getString(KEY_PARENT_PASSWORD, "")
+    fun getParentPassword(): String = Remember.getString(KEY_PARENT_PASSWORD, "")
 
     fun setParentPassword(password: String) {
         Remember.putString(KEY_PARENT_PASSWORD, password)

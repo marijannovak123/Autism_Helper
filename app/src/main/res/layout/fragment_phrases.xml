@@ -46,7 +46,6 @@
                 android:clickable="true"
                 android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_image"
-                android:editable="false"
                 android:focusable="false"
                 android:hint="@string/phrase_icon"
                 android:inputType="text"

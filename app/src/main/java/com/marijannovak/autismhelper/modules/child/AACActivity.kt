@@ -4,8 +4,6 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
@@ -16,10 +14,8 @@ import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.toSentence
 import kotlinx.android.synthetic.main.activity_aac.*
-import org.jetbrains.anko.toast
 import java.util.*
 import kotlin.collections.ArrayList
 

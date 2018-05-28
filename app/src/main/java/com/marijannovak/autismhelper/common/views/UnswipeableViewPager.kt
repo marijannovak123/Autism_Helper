@@ -18,4 +18,6 @@ class UnswipeableViewPager : ViewPager {
     override fun onInterceptTouchEvent(ev: MotionEvent?) = false
 
     override fun onTouchEvent(ev: MotionEvent?) = false
+
+
 }

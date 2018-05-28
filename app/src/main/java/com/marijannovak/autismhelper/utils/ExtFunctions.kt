@@ -11,11 +11,8 @@ import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.*
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
@@ -23,9 +20,11 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-fun FirebaseUser.mapToUser(singupRequest: SignupRequest) = User(this.uid, singupRequest.username, singupRequest.email, "", "", emptyMap(), null)
+fun FirebaseUser.mapToUser(singupRequest: SignupRequest)
+        = User(this.uid, singupRequest.username, singupRequest.email, "", "", emptyMap(), null)
 
-fun FirebaseUser.mapToUser() = User(this.uid, this.displayName, this.email, "", "", emptyMap(), null)
+fun FirebaseUser.mapToUser()
+        = User(this.uid, this.displayName, this.email, "", "", emptyMap(), null)
 
 /**
  * factory for custom viewmodels with parameters in constructor
@@ -53,7 +52,7 @@ inline fun <reified T : Fragment> T.isInjectableFragment(): Boolean {
 }
 
 inline fun <reified T : Any> T.logTag(): String {
-    return T::class.java.simpleName
+    return this.javaClass.simpleName
 }
 
 /**

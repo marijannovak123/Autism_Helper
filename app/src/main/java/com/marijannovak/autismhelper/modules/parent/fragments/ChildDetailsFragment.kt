@@ -3,21 +3,15 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
-import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.Child
-import com.marijannovak.autismhelper.data.models.ChildScore
-import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentRepository
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
-import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.fragment_child_details.*
 
 class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
@@ -69,10 +63,6 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
                 bcMistakes.animateXY(0, 300)
             }
         }
-    }
-
-    private fun showBiggerChart(childScore: ChildScore) {
-        //todo: dialog fragment
     }
 
     companion object {

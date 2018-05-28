@@ -10,7 +10,7 @@ import java.io.FileOutputStream
 class ImageHelper {
     companion object {
         fun getImagePath(activity: Context?, uri: Uri): String {
-            val cursor = activity?.contentResolver?.query(uri, null, null, null, null);
+            val cursor = activity?.contentResolver?.query(uri, null, null, null, null)
             cursor?.let {
                 cursor.moveToFirst()
                 val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)

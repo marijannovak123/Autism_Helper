@@ -3,11 +3,8 @@ package com.marijannovak.autismhelper.data.database.dao
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Transaction
-import android.support.v4.app.SupportActivity
 import com.marijannovak.autismhelper.common.base.BaseDao
-import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
-import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.QuestionAnswersJoin
 import io.reactivex.Flowable

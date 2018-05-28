@@ -3,14 +3,10 @@ package com.marijannovak.autismhelper.data.database.dao
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Transaction
-import android.util.Log
 import com.marijannovak.autismhelper.common.base.BaseDao
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.models.UserChildrenJoin
-import com.marijannovak.autismhelper.data.models.UserUpdateRequest
-import com.marijannovak.autismhelper.utils.logTag
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single

@@ -59,20 +59,16 @@ class Constants {
         //region extras
         const val EXTRA_CATEGORY_ID = "category_id"
         const val EXTRA_CHILD = "child"
-        const val EXTRA_SCORE = "score"
         //endregion
 
         //region fragments
         const val FRAGMENT_PROFILE = "profile_fragment"
         const val FRAGMENT_CHILDREN = "children_fragment"
         const val FRAGMENT_PHRASES = "phrases_fragment"
-        const val FRAGMENT_SETTINGS = "settings_fragment"
-        const val FRAGMENT_CHILD_DETAILS = "child_details_fragment"
         const val FRAGMENT_RSS = "rss_fragment"
         //endregion
 
         //region other
-        const val PASSWORD_PLACEHOLDER = "abcdefg1234"
         const val FALSE = "False"
         const val CORRECT = "Correct"
         //endregion

@@ -11,7 +11,6 @@ import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.createFactory
 import com.marijannovak.autismhelper.utils.logTag
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.toast
 import javax.inject.Inject
 
 

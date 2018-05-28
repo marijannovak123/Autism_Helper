@@ -113,7 +113,7 @@ class ParentViewModel @Inject constructor(
 
     }
 
-    fun syncData(firstSync: Boolean) {
+    private fun syncData(firstSync: Boolean) {
         dataRepository.syncData(firstSync).subscribe(
                 {
                     dataRepository.downloadImages ({

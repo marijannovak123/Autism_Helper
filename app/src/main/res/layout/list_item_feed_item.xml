@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:orientation="horizontal"
-            android:weightSum="7">
+            android:weightSum="7"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
