@@ -1,10 +1,17 @@
 package com.marijannovak.autismhelper.modules.main
 
+import android.Manifest
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.hardware.fingerprint.FingerprintManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -17,6 +24,8 @@ import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_enter_password.*
+import org.jetbrains.anko.keyguardManager
 
 
 class MainActivity : ViewModelActivity<MainViewModel, Child>() {
@@ -32,6 +41,21 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
         cvParents.setOnClickListener { enterPasswordDialog() }
         cvChildren.setOnClickListener { viewModel.getChildrenToPick() }
     }
+
+    private fun setUpFingerprintAuth() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val fingerprintManager = getSystemService(Context.FINGERPRINT_SERVICE) as FingerprintManager
+
+            if(fingerprintManager.isHardwareDetected
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
+                    && fingerprintManager.hasEnrolledFingerprints()
+                    && keyguardManager.isKeyguardSecure) {
+                ivFingerprint.visibility = View.VISIBLE
+            }
+        }
+
+    }
+
 
     private fun startChildActivity(child: Child) {
         val intent = Intent(this, PickCategoryActivity::class.java)
@@ -52,6 +76,9 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                     enterPasswordDialog()
                 }
             }
+        }, {
+            startActivity(Intent(this@MainActivity, ParentActivity::class.java))
+            finish()
         })
     }
 

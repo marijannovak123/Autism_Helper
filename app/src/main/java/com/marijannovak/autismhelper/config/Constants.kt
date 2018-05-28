@@ -71,6 +71,7 @@ class Constants {
         //region other
         const val FALSE = "False"
         const val CORRECT = "Correct"
+        const val FINGERPRINT_KEY = "fingerprintkey123321"
         //endregion
     }
 }
