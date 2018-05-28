@@ -61,6 +61,7 @@ class ParentRepository @Inject constructor(
         lineDataSet.color = if(child.gender == GENDERS[0]) Color.CYAN else Color.parseColor("#FF69B4")
         lineDataSet.lineWidth = 5f
         val lineData = LineData(lineDataSet)
+
         val barDataSet = BarDataSet(barEntries, "Mistakes")
         barDataSet.colors = if(child.gender == GENDERS[0]) ColorTemplate.MATERIAL_COLORS.toList() else ColorTemplate.JOYFUL_COLORS.toList()
         val barData = BarData(barDataSet)

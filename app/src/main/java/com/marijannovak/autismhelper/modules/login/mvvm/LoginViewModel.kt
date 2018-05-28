@@ -130,7 +130,7 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun syncData() {
+    private fun syncData() {
         resourceLiveData.value = Resource.loading(R.string.downloading_resources)
         compositeDisposable.add(
                 dataRepository.syncData(true).subscribe(

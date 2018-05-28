@@ -130,8 +130,6 @@ class LoginRepository @Inject constructor(
                 childScoreDao.insertMultiple(it.mapToList())
             }
             prefs.setParentPassword(user.parentPassword ?: "")
-
-
         }
     }
 

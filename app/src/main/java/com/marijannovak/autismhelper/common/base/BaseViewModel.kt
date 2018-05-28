@@ -10,16 +10,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-/**
- * Base class for ViewModels
- * @param T represents data model used
- *
- * @param contentLiveData store model data and observe it from lifecycle owner (activity, fragment)
- * @param errorLiveData show message on change
- * @param stateLiveData indicates current state - loading, message or showing content
- *
- * @param compositeDisposable collect Rx disposables and dispose to prevent memory leaks
- */
 open class BaseViewModel<T> : ViewModel() {
 
     @Inject

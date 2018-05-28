@@ -29,10 +29,12 @@ class DataRepository @Inject constructor(
         private val storage: StorageReference,
         private val db: AppDatabase,
         private val prefsHelper: PrefsHelper,
-        private val context: App) {
+        private val context: App
+) {
 
     private var questionsWithImgs: List<Question> = ArrayList()
     private var phrases: List<AacPhrase> = ArrayList()
+    private var scoresToUpload: List<ChildScore> = ArrayList()
     private lateinit var onDataDownloaded: () -> Unit
     private lateinit var onError: (Throwable) -> Unit
 
@@ -123,8 +125,6 @@ class DataRepository @Inject constructor(
                                 {
                                     if (pos == questionsWithImgs.size - 1) {
                                         downloadPhraseImage(0)
-                                        // onDataDownloaded()
-
                                     } else {
                                         downloadQuestionImage(pos + 1)
                                     }
@@ -250,10 +250,34 @@ class DataRepository @Inject constructor(
             user.children?.let {
                 db.childDao().updateMultiple(it.mapToList())
             }
+
             user.childScores?.let {
                 db.childScoreDao().insertMultiple(it.mapToList())
+                checkIfAnyScoresShouldBeUploaded(it.mapToList())
             }
             prefsHelper.setParentPassword(user.parentPassword ?: "")
+        }
+    }
+
+    private fun checkIfAnyScoresShouldBeUploaded(scores: List<ChildScore>) {
+        db.childScoreDao().queryAll().subscribe({
+            it.forEach {
+                if(!scores.contains(it)) {
+                    scoresToUpload += it
+                }
+            }
+            uploadScores(0)
+        }, {
+            Log.e(logTag(), it.message ?: "")
+        })
+    }
+
+    private fun uploadScores(i: Int) {
+        if(scoresToUpload.isNotEmpty()) {
+            val score = scoresToUpload[i]
+            api.putScore(score.parentId, score.hashCode(), score).subscribe {
+                uploadScores(i+1)
+            }
         }
     }
 
