@@ -14,6 +14,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_DATE
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_EMAIL
 import com.marijannovak.autismhelper.config.Constants.Companion.VALIDATION_NAME
+import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Child
 import org.jetbrains.anko.alert
 import java.util.*
@@ -30,7 +31,7 @@ class DialogHelper {
         }
 
         @SuppressLint("SetTextI18n")
-        fun showDatePicker(context: Context, date: Calendar, etDate: EditText) {
+        private fun showDatePicker(context: Context, date: Calendar, etDate: EditText) {
             val onDateSet = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 date.set(Calendar.YEAR, year)
                 date.set(Calendar.MONTH, month)
@@ -244,6 +245,34 @@ class DialogHelper {
                     alertDialog.dismiss()
                 } else {
                     handleChildAddErrors(errors, etName, etDateOfBirth)
+                }
+            }
+
+            btnNegative.setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            alertDialog.show()
+        }
+
+        fun showEnterPhraseTextDialog(context: Context, onConfirm: (AacPhrase) -> Unit) {
+            val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+            val inflater = LayoutInflater.from(context)
+            val alertView = inflater.inflate(R.layout.dialog_text_phrase, null)
+
+            builder.setView(alertView)
+            builder.setCancelable(false)
+            val alertDialog = builder.create()
+
+            val btnPositive = alertView.findViewById<AppCompatButton>(R.id.btnPositive)
+            val btnNegative = alertView.findViewById<AppCompatButton>(R.id.btnNegative)
+            val etPhraseText = alertView.findViewById<EditText>(R.id.etPhraseText)
+
+            btnPositive.setOnClickListener {
+                val phraseText = etPhraseText.text.toString()
+                if(phraseText.isNotEmpty()) {
+                    onConfirm(AacPhrase(0, phraseText, phraseText, ""))
+                    alertDialog.dismiss()
                 }
             }
 

@@ -14,6 +14,7 @@ import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
+import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.toSentence
@@ -75,8 +76,7 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
             if (aacSelectorAdapter == null) {
                 aacSelectorAdapter = AACAdapter(emptyList(), { phrase, _ ->
                     if(aacDisplayAdapter!!.datasetCount() < 10) {
-                        aacDisplayAdapter?.addItem(phrase)
-                        ttsWords.add(phrase.text)
+                        addItemToDisplay(phrase)
                     } else {
                         showMessage(R.string.max_phrases, null)
                     }
@@ -89,6 +89,11 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
 
             aacSelectorAdapter!!.update(it)
         }
+    }
+
+    private fun addItemToDisplay(phrase: AacPhrase) {
+        aacDisplayAdapter?.addItem(phrase)
+        ttsWords.add(phrase.text)
     }
 
     private fun speak(toSpeak: String) {
@@ -116,16 +121,19 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
         item?.let {
             when (it.itemId) {
                 R.id.action_speak -> {
-                        if (ttsWords.isNotEmpty()) {
-                            speak(ttsWords.toSentence())
-                        } else {
-                            speak(getString(R.string.construct_sentence))
-                        }
+                    if (ttsWords.isNotEmpty()) {
+                        speak(ttsWords.toSentence())
+                    } else {
+                        speak(getString(R.string.construct_sentence))
                     }
-
-                else -> {
-
                 }
+
+               R.id.action_enter_text -> {
+                   DialogHelper.showEnterPhraseTextDialog(this@AACActivity, {
+                       addItemToDisplay(it)
+                   })
+
+               }
             }
         }
 

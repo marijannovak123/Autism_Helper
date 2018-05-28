@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/action_group_aac_activity">
         <item
+            android:id="@+id/action_enter_text"
+            android:icon="@drawable/ic_action_text_fields"
+            app:showAsAction="always"
+            android:title="@string/phrase_text"/>
+
+        <item
             android:id="@+id/action_speak"
             android:icon="@drawable/ic_action_slideshow"
             android:title="@string/speak"

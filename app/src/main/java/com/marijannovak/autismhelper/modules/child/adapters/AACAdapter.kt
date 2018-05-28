@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseAdapter
 import com.marijannovak.autismhelper.common.base.BaseViewHolder
@@ -28,6 +29,7 @@ class AACAdapter(
 
                 Glide.with(context)
                         .load(model.iconPath)
+                        .apply(RequestOptions().placeholder(R.drawable.phrase_placeholder))
                         .into(ivAacImg)
 
                 setOnClickListener { onItemClick(model, position) }
