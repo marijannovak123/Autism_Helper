@@ -10,10 +10,10 @@ import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.PrefsHelper
-import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.mapToList
 import io.reactivex.Completable
+import io.reactivex.Scheduler
 import org.jetbrains.anko.doAsync
 import java.io.File
 import javax.inject.Inject
@@ -29,7 +29,9 @@ class DataRepository @Inject constructor(
         private val storage: StorageReference,
         private val db: AppDatabase,
         private val prefsHelper: PrefsHelper,
-        private val context: App
+        private val context: App,
+        @Named(Constants.SCHEDULER_IO)private val ioScheduler: Scheduler,
+        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
 ) {
 
     private var questionsWithImgs: List<Question> = ArrayList()
@@ -73,7 +75,7 @@ class DataRepository @Inject constructor(
                                 db.aacDao().updateMultiple(it)
                             }
                         }.toCompletable()
-        ).handleThreading()
+        ).subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun logOut(): Completable {
@@ -102,7 +104,7 @@ class DataRepository @Inject constructor(
                             db.userDao().insert(user)
                         }
             )
-        }.handleThreading()
+        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun downloadImages(onComplete: () -> Unit, onError: (t: Throwable) -> Unit) {
@@ -194,7 +196,8 @@ class DataRepository @Inject constructor(
     private fun downloadProfilePic() {
         db.userDao()
                 .getCurrentUser()
-                .handleThreading()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
                 .subscribe({ user ->
                     if(user.profilePicPath.isNullOrEmpty()) {
                         onDataDownloaded()
@@ -241,7 +244,7 @@ class DataRepository @Inject constructor(
                     api.getUser(it.id)
                 }.flatMapCompletable {
                     updateUser(it)
-                }.handleThreading()
+                }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     private fun updateUser(user: User): Completable {

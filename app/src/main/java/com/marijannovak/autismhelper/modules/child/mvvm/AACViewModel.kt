@@ -3,12 +3,16 @@ package com.marijannovak.autismhelper.modules.child.mvvm
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.utils.Resource
 import javax.inject.Inject
 
-class AACViewModel @Inject constructor(private val repository: AACRepository)
-    : BaseViewModel<AacPhrase>() {
+class AACViewModel
+@Inject constructor(
+        private val repository: AACRepository,
+        dataRepository: DataRepository)
+    : BaseViewModel<AacPhrase>(dataRepository) {
 
     fun loadPhrases() {
         compositeDisposable.add(

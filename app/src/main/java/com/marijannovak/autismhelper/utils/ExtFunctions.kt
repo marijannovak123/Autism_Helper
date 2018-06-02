@@ -11,10 +11,6 @@ import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import io.reactivex.*
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -53,29 +49,6 @@ inline fun <reified T : Fragment> T.isInjectableFragment(): Boolean {
 
 inline fun <reified T : Any> T.logTag(): String {
     return this.javaClass.simpleName
-}
-
-/**
- * use threads for RxJava
- */
-fun <T> Single<T>.handleThreading(): Single<T> {
-    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-}
-
-fun Completable.handleThreading(): Completable {
-    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-}
-
-fun <T> Flowable<T>.handleThreading(): Flowable<T> {
-    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-}
-
-fun <T> Maybe<T>.handleThreading(): Maybe<T> {
-    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-}
-
-fun <T> io.reactivex.Observable<T>.handleThreading(): Observable<T> {
-    return this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
 
 /**

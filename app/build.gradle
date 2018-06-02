@@ -35,15 +35,20 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:15.0.0'
 
     //tests
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:preference-v7:27.1.1'
-
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    testImplementation "org.hamcrest:hamcrest-all:1.3"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation 'org.mockito:mockito-core:2.8.9'
-    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    implementation "android.arch.core:core-testing:1.1.1"
+    testImplementation "junit:junit:4.12"
+    //using mockito inline because kotlin functions are final by default
+    // and they cannot be stubbed if not declared open,
+    // using this version of mockito there is no need for declaring every function open
+    testImplementation "org.mockito:mockito-inline:2.8.47"
+
 
     //android/kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -55,6 +60,8 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:support-v4:27.1.1'
 
     //Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'

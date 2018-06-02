@@ -72,6 +72,8 @@ class Constants {
         const val FALSE = "False"
         const val CORRECT = "Correct"
         const val FINGERPRINT_KEY = "fingerprintkey123321"
+        const val SCHEDULER_IO = "io_scheduler"
+        const val SCHEDULER_MAIN = "main_scheduler"
         //endregion
     }
 }

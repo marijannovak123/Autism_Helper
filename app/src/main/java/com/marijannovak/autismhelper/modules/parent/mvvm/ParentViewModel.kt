@@ -7,6 +7,7 @@ import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.*
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
 import com.marijannovak.autismhelper.modules.parent.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.Resource
@@ -17,8 +18,9 @@ import javax.inject.Inject
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
         private val aacRepository: AACRepository,
-        private val storageRef: StorageReference)
-    : BaseViewModel<UserChildrenJoin>() {
+        private val storageRef: StorageReference,
+        private val dataRepository: DataRepository)
+    : BaseViewModel<UserChildrenJoin>(dataRepository) {
 
     var userName = ""
     val userNameLiveData = MutableLiveData<String>()

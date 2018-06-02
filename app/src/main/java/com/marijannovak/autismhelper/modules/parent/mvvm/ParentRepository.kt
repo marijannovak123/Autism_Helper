@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.parent.mvvm
 import android.graphics.Color
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.API_JSON
 import com.marijannovak.autismhelper.config.Constants.Companion.API_XML
 import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
@@ -10,8 +11,12 @@ import com.marijannovak.autismhelper.config.Constants.Companion.RSS_URL
 import com.marijannovak.autismhelper.data.database.dao.*
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.utils.*
-import io.reactivex.*
+import com.marijannovak.autismhelper.utils.PrefsHelper
+import com.marijannovak.autismhelper.utils.toDayMonthString
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Scheduler
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -27,24 +32,28 @@ class ParentRepository @Inject constructor(
         private val aacDao: AACDao,
         private val userDao: UserDao,
         private val feedItemDao: FeedItemDao,
-        private val prefsHelper: PrefsHelper
+        private val prefsHelper: PrefsHelper,
+        @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
+        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
         return jsonApi.addChild(child.parentId, child.id, child)
                     .andThen{
                             childDao.insert(child)
-                        }.handleThreading()
+                        }.subscribeOn(ioScheduler)
+                        .observeOn(mainScheduler)
     }
 
     fun loadUserWithChildren(): Flowable<UserChildrenJoin> {
-        return userDao.getUserWithChildren().handleThreading()
+        return userDao.getUserWithChildren().subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun loadChildScoresLineData(child: Child): Flowable<ChartData> {
         return childScoreDao
                 .getChildScores(child.id)
                 .map {createLineData(it, child)}
-                .handleThreading()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     private fun createLineData(scores: List<ChildScore>, child: Child): ChartData {
@@ -69,7 +78,7 @@ class ParentRepository @Inject constructor(
     }
 
     fun loadPhrases(): Flowable<List<AacPhrase>> {
-        return aacDao.getAllPhrases().handleThreading()
+        return aacDao.getAllPhrases().subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String): Completable {
@@ -78,18 +87,19 @@ class ParentRepository @Inject constructor(
                 .doOnComplete {
                     prefsHelper.setParentPassword(userUpdateRequest.parentPassword)
                     userDao.updateAll(userUpdateRequest.username, userUpdateRequest.parentPassword, profilePicPath)
-                }.handleThreading()
+                }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun loadUser(): Flowable<User> {
-        return userDao.getCurrentUser().handleThreading()
+        return userDao.getCurrentUser().subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun loadUserName(): Flowable<String?> {
         return userDao
                 .getCurrentUser()
                 .map { user -> user.username ?: "Parent" }
-                .handleThreading()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun getParentPassword() : String {
@@ -100,14 +110,16 @@ class ParentRepository @Inject constructor(
         return jsonApi.deleteChild(child.parentId, child.id)
                 .andThen {
                     childDao.delete(child)
-                }.handleThreading()
+                }.subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun updateChild(child: Child): Completable {
         return jsonApi.updateChild(child.parentId, child.id, child)
                 .andThen {
                     childDao.update(child)
-                }.handleThreading()
+                }.subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun fetchFeeds(): Single<List<FeedItem>> {
@@ -121,7 +133,8 @@ class ParentRepository @Inject constructor(
                     }
                 }.flatMap {
                     feedItemDao.getItems()
-                }.handleThreading()
+                }.subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)

@@ -3,12 +3,16 @@ package com.marijannovak.autismhelper.modules.child.mvvm
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.ChildScore
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.QuizRepository
 import com.marijannovak.autismhelper.utils.Resource
 import javax.inject.Inject
 
-class QuizViewModel @Inject constructor(private val repository: QuizRepository) :
-        BaseViewModel<Any>() {
+class QuizViewModel
+@Inject constructor(
+        private val repository: QuizRepository,
+        dataRepository: DataRepository) :
+        BaseViewModel<Any>(dataRepository) {
 
     fun loadCategoryData(categoryId: Int) {
         compositeDisposable.add(

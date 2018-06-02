@@ -7,6 +7,7 @@ import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.mapToUser
 import javax.inject.Inject
@@ -15,7 +16,8 @@ import javax.inject.Inject
  * Created by Marijan on 23.3.2018..
  */
 class LoginViewModel @Inject constructor(
-        private val repository: LoginRepository) : BaseViewModel<User>() {
+        private val repository: LoginRepository,
+        private val dataRepository: DataRepository) : BaseViewModel<User>(dataRepository) {
 
     fun checkLoggedIn() {
         resourceLiveData.value = Resource.loading()
@@ -30,12 +32,13 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    private fun syncUserData(user: List<User>) {
-        dataRepository.syncUserData().subscribe(
-                //go further regardless sync was successful
-                { resourceLiveData.value = Resource.success(user)},
-                { resourceLiveData.value = Resource.success(user)}
-        )
+    private fun syncUserData(users: List<User>) {
+         compositeDisposable.add(
+                 dataRepository.syncUserData().subscribe(
+                        //go further regardless sync was successful
+                        { resourceLiveData.value = Resource.success(users)},
+                        { resourceLiveData.value = Resource.success(users)}
+        ))
     }
 
     fun register(signupRequest: SignupRequest) {

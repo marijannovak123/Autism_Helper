@@ -8,17 +8,15 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.data.database.dao.ChildDao
-import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
-import com.marijannovak.autismhelper.data.database.dao.UserDao
+import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
-import com.marijannovak.autismhelper.utils.handleThreading
 import com.marijannovak.autismhelper.utils.mapToList
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Named
@@ -30,17 +28,17 @@ import javax.inject.Singleton
 @Singleton
 class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
-        private val userDao: UserDao,
-        private val childDao: ChildDao,
-        private val childScoreDao: ChildScoreDao,
+        private val db: AppDatabase,
         @Named(Constants.API_JSON)
         private val api: API,
-        private val prefs: PrefsHelper) {
+        private val prefs: PrefsHelper,
+        @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
+        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
 
     private var currentUser: FirebaseUser? = null
 
     fun isLoggedIn(): Maybe<User> {
-        return userDao.userLoggedIn().handleThreading()
+        return db.userDao().userLoggedIn().subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun register(signupRequest: SignupRequest, listener: GeneralListener<FirebaseUser>) {
@@ -110,24 +108,24 @@ class LoginRepository @Inject constructor(
                         Single.just(true)
                     else Single.just(false)
                 }
-                .handleThreading()
+                .subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun uploadAndSaveUser(user: User): Completable {
         return Completable.mergeArray(
                 api.putUser(user.id, user),
                 saveUser(user)
-        ).handleThreading()
+        ).subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     private fun saveUser(user: User): Completable {
         return Completable.fromAction {
-            userDao.insert(user)
+            db.userDao().insert(user)
             user.children?.let {
-                childDao.insertMultiple(it.mapToList())
+                db.childDao().insertMultiple(it.mapToList())
             }
             user.childScores?.let {
-                childScoreDao.insertMultiple(it.mapToList())
+                db.childScoreDao().insertMultiple(it.mapToList())
             }
             prefs.setParentPassword(user.parentPassword ?: "")
         }
@@ -138,7 +136,7 @@ class LoginRepository @Inject constructor(
                 .flatMapCompletable { user ->
                     saveUser(user)
                 }
-                .handleThreading()
+                .subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
 }

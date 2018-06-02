@@ -10,10 +10,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-open class BaseViewModel<T> : ViewModel() {
-
-    @Inject
-    lateinit var dataRepository: DataRepository
+open class BaseViewModel<T>
+@Inject constructor(
+        private val dataRepository: DataRepository)
+    : ViewModel() {
 
     val resourceLiveData = MutableLiveData<Resource<List<T>>>()
 

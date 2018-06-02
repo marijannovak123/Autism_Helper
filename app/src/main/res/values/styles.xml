@@ -6,8 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@android:color/holo_blue_dark</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-
        <!-- <item name="android:windowBackground">@android:color/holo_blue_dark</item>-->
     </style>
 

@@ -6,9 +6,9 @@ import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.utils.handleThreading
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Scheduler
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -18,13 +18,16 @@ class QuizRepository @Inject constructor(
         private val categoryDao: CategoryDao,
         private val childScoreDao: ChildScoreDao,
         @Named(Constants.API_JSON)
-        private val api: API
+        private val api: API,
+        @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
+        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
 ) {
 
     fun getCategoryData(categoryId: Int): Flowable<CategoryQuestionsAnswersJoin> {
         return categoryDao
                 .getCategoryWithQuestions(categoryId)
-                .handleThreading()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun saveScoreLocallyAndOnline(score: ChildScore): Completable {
@@ -33,6 +36,7 @@ class QuizRepository @Inject constructor(
                 .onErrorComplete()
                 .doOnComplete {
                     childScoreDao.insert(scoreToSave)
-                }.handleThreading()
+                }.subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 }
