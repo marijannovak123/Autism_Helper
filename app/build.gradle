@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-
 ext.dagger_version = "2.13"
 
 android {
@@ -47,7 +46,8 @@ dependencies {
     //using mockito inline because kotlin functions are final by default
     // and they cannot be stubbed if not declared open,
     // using this version of mockito there is no need for declaring every function open
-    testImplementation "org.mockito:mockito-inline:2.8.47"
+    testImplementation "org.mockito:mockito-inline:2.7.6"
+    androidTestImplementation "org.mockito:mockito-inline:2.7.6"
 
 
     //android/kotlin

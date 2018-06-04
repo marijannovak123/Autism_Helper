@@ -23,7 +23,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class NetworkModule {
+open class NetworkModule {
 
     @Singleton
     @Provides
@@ -73,14 +73,14 @@ class NetworkModule {
     @Singleton
     @Provides
     @Named(API_JSON)
-    fun provideJsonApi(@Named(RETROFIT_JSON) retrofit: Retrofit): API {
+    open fun provideJsonApi(@Named(RETROFIT_JSON) retrofit: Retrofit): API {
         return retrofit.create(API::class.java)
     }
 
     @Singleton
     @Provides
     @Named(API_XML)
-    fun provideXmlApi(@Named(RETROFIT_XML) retrofit: Retrofit): API {
+    open fun provideXmlApi(@Named(RETROFIT_XML) retrofit: Retrofit): API {
         return retrofit.create(API::class.java)
     }
 

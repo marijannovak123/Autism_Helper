@@ -6,7 +6,7 @@ import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
-import com.marijannovak.autismhelper.util.BaseTest
+import com.marijannovak.autismhelper.util.BaseUnitTest
 import com.marijannovak.autismhelper.util.TestDataGenerator
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import io.reactivex.Maybe
@@ -16,7 +16,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when` as whenever
 
-class LoginRepoTest: BaseTest(){
+class LoginRepoTest: BaseUnitTest(){
 
     @Mock private lateinit var auth: FirebaseAuth
     @Mock private lateinit var api: API

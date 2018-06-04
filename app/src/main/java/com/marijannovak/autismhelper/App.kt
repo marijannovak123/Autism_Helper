@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.marijannovak.autismhelper.config.Constants.Companion.PREFS_NAME
+import com.marijannovak.autismhelper.di.AppComponent
 import com.marijannovak.autismhelper.di.DaggerAppComponent
 import com.marijannovak.autismhelper.utils.isInjectable
 import com.marijannovak.autismhelper.utils.isInjectableFragment
@@ -23,6 +24,8 @@ import javax.inject.Inject
  * Created by Marijan on 26.3.2018..
  */
 class App: Application(), HasActivityInjector, HasSupportFragmentInjector {
+
+    lateinit var appComponent: AppComponent
 
     @Inject
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
@@ -43,10 +46,11 @@ class App: Application(), HasActivityInjector, HasSupportFragmentInjector {
 
         Remember.init(this, PREFS_NAME)
 
-        DaggerAppComponent.builder()
+        appComponent = DaggerAppComponent.builder()
                 .application(this)
                 .build()
-                .inject(this)
+
+        appComponent.inject(this)
 
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityPaused(activity: Activity?) {

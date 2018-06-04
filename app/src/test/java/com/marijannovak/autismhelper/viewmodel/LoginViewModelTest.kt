@@ -5,7 +5,7 @@ import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
-import com.marijannovak.autismhelper.util.BaseTest
+import com.marijannovak.autismhelper.util.BaseUnitTest
 import com.marijannovak.autismhelper.util.TestDataGenerator
 import com.marijannovak.autismhelper.utils.Resource
 import io.reactivex.Completable
@@ -15,7 +15,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when` as whenever
 
-class LoginViewModelTest: BaseTest() {
+class LoginViewModelTest: BaseUnitTest() {
 
     @Mock private lateinit var loginRepo: LoginRepository
     @Mock private lateinit var dataRepo: DataRepository

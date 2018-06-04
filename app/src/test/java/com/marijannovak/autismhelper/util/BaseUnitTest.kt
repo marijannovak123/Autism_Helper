@@ -10,7 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @Suppress("UNCHECKED_CAST")
 @RunWith(MockitoJUnitRunner::class)
-abstract class BaseTest {
+abstract class BaseUnitTest {
 
     //mock architecture components background work
     @get:Rule
