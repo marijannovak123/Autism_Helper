@@ -1,70 +1,58 @@
-package com.marijannovak.autismhelper.di
+package com.marijannovak.autismhelper.testinjection
 
-import android.arch.persistence.room.Room
 import com.marijannovak.autismhelper.App
-import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.database.dao.*
 import dagger.Module
 import dagger.Provides
+import org.mockito.Mockito
 import javax.inject.Singleton
 
 @Module
-class DbModule {
-    @Singleton
+class TestDbModule {
+
     @Provides
     fun provideDb(app: App): AppDatabase {
-        return Room
-                .databaseBuilder(app, AppDatabase::class.java, Constants.DB_NAME)
-                .fallbackToDestructiveMigration()
-                .build()
+        return Mockito.mock(AppDatabase::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideUserDao(db: AppDatabase): UserDao {
-        return db.userDao()
+        return Mockito.mock(UserDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun providChildDao(db: AppDatabase): ChildDao {
-        return db.childDao()
+        return Mockito.mock(ChildDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideCategoryDao(db: AppDatabase): CategoryDao {
-        return db.categoriesDao()
+       return Mockito.mock(CategoryDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideChildScoreDao(db: AppDatabase): ChildScoreDao {
-        return db.childScoreDao()
+        return Mockito.mock(ChildScoreDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideQuestionDao(db: AppDatabase): QuestionDao {
-        return db.questionDao()
+        return Mockito.mock(QuestionDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideAnswerDao(db: AppDatabase): AnswerDao {
-        return db.answerDao()
+        return Mockito.mock(AnswerDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideAacDao(db: AppDatabase): AACDao {
-        return db.aacDao()
+        return Mockito.mock(AACDao::class.java)
     }
 
-    @Singleton
     @Provides
     fun provideRssDao(db: AppDatabase): FeedItemDao {
-        return db.feedItemDao()
+        return Mockito.mock(FeedItemDao::class.java)
     }
 }

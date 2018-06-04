@@ -29,7 +29,6 @@ import javax.inject.Singleton
 class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
         private val db: AppDatabase,
-        @Named(Constants.API_JSON)
         private val api: API,
         private val prefs: PrefsHelper,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,

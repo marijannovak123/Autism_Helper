@@ -4,8 +4,6 @@ import android.graphics.Color
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.config.Constants.Companion.API_JSON
-import com.marijannovak.autismhelper.config.Constants.Companion.API_XML
 import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.RSS_URL
 import com.marijannovak.autismhelper.data.database.dao.*
@@ -24,10 +22,7 @@ import javax.inject.Singleton
 @Singleton
 class ParentRepository @Inject constructor(
         private val childDao: ChildDao,
-        @Named(API_JSON)
-        private val jsonApi: API,
-        @Named(API_XML)
-        private val xmlApi: API,
+        private val api: API,
         private val childScoreDao: ChildScoreDao,
         private val aacDao: AACDao,
         private val userDao: UserDao,
@@ -37,7 +32,7 @@ class ParentRepository @Inject constructor(
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
 ) {
     fun saveChildLocallyAndOnline(child: Child): Completable {
-        return jsonApi.addChild(child.parentId, child.id, child)
+        return api.addChild(child.parentId, child.id, child)
                     .andThen{
                             childDao.insert(child)
                         }.subscribeOn(ioScheduler)
@@ -82,7 +77,7 @@ class ParentRepository @Inject constructor(
     }
 
     fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String): Completable {
-        return jsonApi
+        return api
                 .updateParent(userId, userUpdateRequest)
                 .doOnComplete {
                     prefsHelper.setParentPassword(userUpdateRequest.parentPassword)
@@ -107,7 +102,7 @@ class ParentRepository @Inject constructor(
     }
 
     fun deleteChild(child: Child): Completable {
-        return jsonApi.deleteChild(child.parentId, child.id)
+        return api.deleteChild(child.parentId, child.id)
                 .andThen {
                     childDao.delete(child)
                 }.subscribeOn(ioScheduler)
@@ -115,7 +110,7 @@ class ParentRepository @Inject constructor(
     }
 
     fun updateChild(child: Child): Completable {
-        return jsonApi.updateChild(child.parentId, child.id, child)
+        return api.updateChild(child.parentId, child.id, child)
                 .andThen {
                     childDao.update(child)
                 }.subscribeOn(ioScheduler)
@@ -123,7 +118,7 @@ class ParentRepository @Inject constructor(
     }
 
     fun fetchFeeds(): Single<List<FeedItem>> {
-        return xmlApi.getFeed(RSS_URL)
+        return api.getFeed(RSS_URL)
                 .onErrorResumeNext { Single.just(RSS()) }
                 .doOnSuccess { feed ->
                     feed.channel.feedItems.let {

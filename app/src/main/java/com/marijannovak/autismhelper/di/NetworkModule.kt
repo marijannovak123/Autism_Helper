@@ -4,12 +4,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.config.Constants.Companion.API_JSON
-import com.marijannovak.autismhelper.config.Constants.Companion.API_XML
 import com.marijannovak.autismhelper.config.Constants.Companion.BASE_URL
-import com.marijannovak.autismhelper.config.Constants.Companion.RETROFIT_JSON
-import com.marijannovak.autismhelper.config.Constants.Companion.RETROFIT_XML
 import com.marijannovak.autismhelper.data.network.API
+import com.marijannovak.autismhelper.data.network.CustomConverterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -19,11 +16,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-open class NetworkModule {
+class NetworkModule {
 
     @Singleton
     @Provides
@@ -46,41 +42,24 @@ open class NetworkModule {
                 }.build()
     }
 
+
     @Singleton
     @Provides
-    @Named(RETROFIT_JSON)
-    fun provideJsonRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(CustomConverterFactory.Builder()
+                        .add(CustomConverterFactory.Xml::class.java, SimpleXmlConverterFactory.createNonStrict())
+                        .add(CustomConverterFactory.Json::class.java, GsonConverterFactory.create())
+                        .build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 
     @Singleton
     @Provides
-    @Named(RETROFIT_XML)
-    fun provideXmlRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(okHttpClient)
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-    }
-
-    @Singleton
-    @Provides
-    @Named(API_JSON)
-    open fun provideJsonApi(@Named(RETROFIT_JSON) retrofit: Retrofit): API {
-        return retrofit.create(API::class.java)
-    }
-
-    @Singleton
-    @Provides
-    @Named(API_XML)
-    open fun provideXmlApi(@Named(RETROFIT_XML) retrofit: Retrofit): API {
+    fun provideApi(retrofit: Retrofit): API {
         return retrofit.create(API::class.java)
     }
 

@@ -44,5 +44,6 @@ interface API {
     fun updateChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
 
     @GET
+    @CustomConverterFactory.Xml
     fun getFeed(@Url feedUrl: String): Single<RSS>
 }

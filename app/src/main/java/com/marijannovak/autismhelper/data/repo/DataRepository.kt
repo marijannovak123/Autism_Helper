@@ -23,7 +23,6 @@ import javax.inject.Named
  * Created by Marijan on 26.3.2018..
  */
 class DataRepository @Inject constructor(
-        @Named(Constants.API_JSON)
         private val api: API,
         private val auth: FirebaseAuth,
         private val storage: StorageReference,

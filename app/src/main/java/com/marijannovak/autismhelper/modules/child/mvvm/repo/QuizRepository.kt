@@ -17,7 +17,6 @@ import javax.inject.Singleton
 class QuizRepository @Inject constructor(
         private val categoryDao: CategoryDao,
         private val childScoreDao: ChildScoreDao,
-        @Named(Constants.API_JSON)
         private val api: API,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
