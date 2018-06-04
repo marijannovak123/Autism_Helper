@@ -9,7 +9,7 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@Config(constants = BuildConfig::class, sdk = [21], application = TestApp::class, manifest = "src/main/AndroidManifest.xml", packageName = "com.marijannovak.autismhelper")
+@Config(constants = BuildConfig::class, sdk = [21], application = TestApp::class)
 @RunWith(RobolectricTestRunner::class)
 class LoginActivityTest {
     @Test

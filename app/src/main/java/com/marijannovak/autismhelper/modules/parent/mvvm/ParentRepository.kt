@@ -85,11 +85,11 @@ class ParentRepository @Inject constructor(
                 }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
-    fun loadUser(): Flowable<User> {
+    fun loadUser(): Single<User> {
         return userDao.getCurrentUser().subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
-    fun loadUserName(): Flowable<String?> {
+    fun loadUserName(): Single<String?> {
         return userDao
                 .getCurrentUser()
                 .map { user -> user.username ?: "Parent" }
