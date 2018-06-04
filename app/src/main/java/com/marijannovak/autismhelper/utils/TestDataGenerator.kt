@@ -1,4 +1,4 @@
-package com.marijannovak.autismhelper.util
+package com.marijannovak.autismhelper.utils
 
 import com.marijannovak.autismhelper.data.models.User
 
