@@ -44,9 +44,8 @@ import javax.crypto.SecretKey
 class DialogHelper {
 
     companion object {
-
-        var keyStore: KeyStore? = null
-        var cipher: Cipher? = null
+        private var keyStore: KeyStore? = null
+        private var cipher: Cipher? = null
 
         fun showPromptDialog(context: Context, message: String, confirmListener: () -> Unit) {
             context.alert(message) {
@@ -302,7 +301,7 @@ class DialogHelper {
             }
         }
 
-        fun showPickChildDialog(context: Context, children: List<Child>, onConfirm: (Child) -> Unit) {
+      /*  fun showPickChildDialog(context: Context, children: List<Child>, onConfirm: (Child) -> Unit) {
             val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
             val inflater = LayoutInflater.from(context)
             val alertView = inflater.inflate(R.layout.dialog_pick_child, null)
@@ -330,7 +329,7 @@ class DialogHelper {
             }
 
             alertDialog.show()
-        }
+        }*/
 
         fun showEditChildDialog(context: Context, child: Child, message: String, onEdit: (Child) -> Unit) {
             val selectedDate: Calendar = Calendar.getInstance()

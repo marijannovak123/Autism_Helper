@@ -1,14 +1,10 @@
 package com.marijannovak.autismhelper.modules.main
 
-import android.Manifest
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.hardware.fingerprint.FingerprintManager
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,16 +15,17 @@ import com.marijannovak.autismhelper.config.Constants.Companion.EXTRA_CHILD
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.modules.child.PickCategoryActivity
 import com.marijannovak.autismhelper.modules.login.LoginActivity
+import com.marijannovak.autismhelper.modules.main.adapters.ChildPickAdapter
 import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_enter_password.*
-import org.jetbrains.anko.keyguardManager
 
 
 class MainActivity : ViewModelActivity<MainViewModel, Child>() {
+
+    private var childPickAdapter: ChildPickAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,25 +34,14 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
         init()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getChildrenToPick()
+    }
+
     private fun init() {
         cvParents.setOnClickListener { enterPasswordDialog() }
-        cvChildren.setOnClickListener { viewModel.getChildrenToPick() }
     }
-
-    private fun setUpFingerprintAuth() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val fingerprintManager = getSystemService(Context.FINGERPRINT_SERVICE) as FingerprintManager
-
-            if(fingerprintManager.isHardwareDetected
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
-                    && fingerprintManager.hasEnrolledFingerprints()
-                    && keyguardManager.isKeyguardSecure) {
-                ivFingerprint.visibility = View.VISIBLE
-            }
-        }
-
-    }
-
 
     private fun startChildActivity(child: Child) {
         val intent = Intent(this, PickCategoryActivity::class.java)
@@ -93,9 +79,9 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
                 Status.SUCCESS -> {
                     it.data?.let {
                         if(it.isEmpty()) {
-                            showMessage(R.string.no_children_short, null)
+                            tvNoChildren.visibility == View.VISIBLE
                         } else {
-                            pickChildDialog(it)
+                            setupPickChildRv(it)
                         }
                     }
                 }
@@ -121,16 +107,18 @@ class MainActivity : ViewModelActivity<MainViewModel, Child>() {
         }
     }
 
-    private fun pickChildDialog(children: List<Child>?) {
-        children?.let {
-            if (children.isNotEmpty()) {
-                if (children.size > 1) {
-                    DialogHelper.showPickChildDialog(this, children, { child -> startChildActivity(child) })
-                } else {
-                    startChildActivity(children[0])
-                }
-            }
+    private fun setupPickChildRv(it: List<Child>) {
+        if(childPickAdapter == null || rvChildrenPick.adapter == null) {
+            childPickAdapter = ChildPickAdapter(emptyList(), {
+                child, _ ->
+                    startChildActivity(child)
+            })
+            rvChildrenPick.adapter = childPickAdapter
+            rvChildrenPick.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            rvChildrenPick.itemAnimator = DefaultItemAnimator()
         }
+
+        childPickAdapter!!.update(it)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -36,7 +36,7 @@ class ChildrenAdapter(
                 tvDateOfBirth.text = child.dateOfBirth.toDateString()
 
                 Glide.with(context)
-                        .load(if(child.gender == GENDERS[0])R.drawable.ic_male else R.drawable.ic_female)
+                        .load(if(child.gender == GENDERS[0])R.drawable.ic_boy else R.drawable.ic_girl)
                         .into(ivChildGender)
 
                 val expandClickListener = {
