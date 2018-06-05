@@ -30,6 +30,14 @@ data class User(
         var childScores: Map<String, ChildScore>?
 ) {
     constructor() : this("", "", "", "", "", emptyMap(), null)
+
+    override fun equals(other: Any?): Boolean {
+        return if (other !is User) {
+            false
+        } else {
+            other.id == this.id && other.username == this.username && other.email == this.email && other.parentPassword == this.parentPassword
+        }
+    }
 }
 
 @Entity(tableName = TABLE_CHILDREN)

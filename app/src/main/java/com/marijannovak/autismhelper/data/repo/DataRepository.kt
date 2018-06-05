@@ -238,7 +238,7 @@ class DataRepository @Inject constructor(
 
     fun syncUserData(): Completable {
         return db.userDao()
-                .getCurrentUserSingle()
+                .getCurrentUser()
                 .flatMap {
                     api.getUser(it.id)
                 }.flatMapCompletable {

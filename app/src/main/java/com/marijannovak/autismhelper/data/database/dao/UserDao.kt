@@ -27,14 +27,11 @@ interface UserDao : BaseDao<User> {
     @Query("SELECT * FROM $TABLE_USER limit 1")
     fun getCurrentUser(): Single<User>
 
-    @Query("SELECT * FROM $TABLE_USER limit 1")
-    fun getCurrentUserSingle(): Single<User>
-
     @Query("DELETE FROM $TABLE_USER")
     fun deleteTable()
 
     @Query("SELECT * FROM $TABLE_USER")
-    fun getAllUsers(): List<User>
+    fun getAllUsers(): Single<List<User>>
 
     @Query("SELECT * FROM $TABLE_USER LIMIT 1")
     fun getUserRaw(): User
