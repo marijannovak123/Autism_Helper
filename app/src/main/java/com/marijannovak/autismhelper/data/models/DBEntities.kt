@@ -8,6 +8,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILDREN
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILD_SCORES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_SENTENCE
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
 import java.io.Serializable
 
@@ -37,6 +38,17 @@ data class User(
         } else {
             other.id == this.id && other.username == this.username && other.email == this.email && other.parentPassword == this.parentPassword
         }
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + (username?.hashCode() ?: 0)
+        result = 31 * result + (email?.hashCode() ?: 0)
+        result = 31 * result + (parentPassword?.hashCode() ?: 0)
+        result = 31 * result + (profilePicPath?.hashCode() ?: 0)
+        result = 31 * result + (children?.hashCode() ?: 0)
+        result = 31 * result + (childScores?.hashCode() ?: 0)
+        return result
     }
 }
 
@@ -134,6 +146,13 @@ data class AacPhrase(
         return false
     }
 }
+
+@Entity(tableName = TABLE_SENTENCE)
+data class SavedSentence(
+        @PrimaryKey(autoGenerate = true)
+        var id: Int = 0,
+        var phrases: List<AacPhrase>
+)
 
 class UserChildrenJoin : Serializable {
     @Embedded

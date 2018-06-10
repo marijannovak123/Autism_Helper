@@ -2,7 +2,9 @@ package com.marijannovak.autismhelper.data.database
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import com.marijannovak.autismhelper.data.database.dao.*
+import com.marijannovak.autismhelper.data.database.typeconverters.SentenceTypeConverter
 import com.marijannovak.autismhelper.data.models.*
 
 /**
@@ -12,7 +14,9 @@ import com.marijannovak.autismhelper.data.models.*
 @Database(entities =
     [(User::class), (Child::class), (ChildScore::class),
     (Question::class), (Answer::class), (Category::class),
-        (AacPhrase::class), (FeedItem::class)], version = 11, exportSchema = false)
+        (AacPhrase::class), (FeedItem::class), (SavedSentence::class)],
+        version = 12, exportSchema = false)
+@TypeConverters(SentenceTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -23,5 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoriesDao(): CategoryDao
     abstract fun aacDao(): AACDao
     abstract fun feedItemDao(): FeedItemDao
+    abstract fun savedSentenceDao(): SavedSentenceDao
 }
 

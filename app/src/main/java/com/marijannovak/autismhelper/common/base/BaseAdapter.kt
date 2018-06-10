@@ -41,6 +41,8 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
 
     fun datasetCount() = dataSet.size
 
+    fun getDataset() = dataSet
+
     protected fun rotationAnimation(view: View, from: Float, to: Float): ObjectAnimator {
         return  ObjectAnimator.ofFloat(view, "rotation", from, to)
                 .apply {

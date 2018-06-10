@@ -67,4 +67,10 @@ class DbModule {
     fun provideRssDao(db: AppDatabase): FeedItemDao {
         return db.feedItemDao()
     }
+
+    @Singleton
+    @Provides
+    fun provideSentenceDao(db: AppDatabase): SavedSentenceDao {
+        return db.savedSentenceDao()
+    }
 }

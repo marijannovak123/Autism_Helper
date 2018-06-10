@@ -27,13 +27,13 @@ import org.jetbrains.anko.toast
 class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
 
     private var quizAdapter: QuizPagerAdapter? = null
-    //todo: to viewmodel
     private var child: Child? = null
     private var startTime: Long
     private var mistakes = 0
     private val soundPool: SoundPool
     private var soundPoolLoaded = false
     private var sounds: Map<String, Int>? = null
+    private var categoryId = -1
 
     init {
         startTime = System.currentTimeMillis()
@@ -51,7 +51,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
         )
 
         if (intent.hasExtra(EXTRA_CATEGORY_ID)) {
-            val categoryId = intent.getIntExtra(EXTRA_CATEGORY_ID, -1)
+            categoryId = intent.getIntExtra(EXTRA_CATEGORY_ID, -1)
             if (categoryId != -1) {
                 viewModel.loadCategoryData(categoryId)
             }
@@ -99,7 +99,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
         if (quizAdapter == null) {
             supportActionBar?.title = "${getString(R.string.question)} 1"
             startTime = System.currentTimeMillis()
-            quizAdapter = QuizPagerAdapter(this, emptyList(),
+            quizAdapter = QuizPagerAdapter(this, categoryId, emptyList(),
                     onItemClick = {
                         if (it) {
                             playSound(true)

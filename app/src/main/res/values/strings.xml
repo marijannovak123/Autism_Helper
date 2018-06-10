@@ -126,11 +126,12 @@
     <string name="set_speed">Set AAC voice speed</string>
     <string name="this_is_my_voice">Test</string>
     <string name="downloading_resources">Downloading resources</string>
-    <string name="phrase_text">Phrase</string>
+    <string name="phrase_text">Enter text</string>
     <string name="news">Autism News</string>
     <string name="enter_phrase_text">Enter phrase text</string>
     <string name="really_logout">Do you really want to logout?</string>
     <string name="really_exit">Do you really want to exit?</string>
     <string name="authentication_failed">Authentication failed</string>
+    <string name="save_sentence">Save sentence</string>
 
 </resources>

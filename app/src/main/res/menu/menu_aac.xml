@@ -5,9 +5,12 @@
         <item
             android:id="@+id/action_enter_text"
             android:icon="@drawable/ic_action_text_fields"
-            app:showAsAction="always"
+            app:showAsAction="never"
             android:title="@string/phrase_text"/>
 
+        <item android:id="@+id/action_save_sentence"
+            app:showAsAction="never"
+            android:title="@string/save_sentence"/>
         <item
             android:id="@+id/action_speak"
             android:icon="@drawable/ic_action_slideshow"

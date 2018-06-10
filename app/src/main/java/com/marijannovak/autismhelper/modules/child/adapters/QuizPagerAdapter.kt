@@ -8,20 +8,29 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
+import com.marijannovak.autismhelper.data.models.Answer
 import com.marijannovak.autismhelper.data.models.QuestionAnswersJoin
-import kotlinx.android.synthetic.main.list_item_question.view.*
+import kotlinx.android.synthetic.main.list_item_question_color.view.*
+import kotlinx.android.synthetic.main.list_item_question_emotion.view.*
 
 class QuizPagerAdapter(
         private val context: Context,
+        private val categoryId: Int,
         private var questionsWithAnswers: List<QuestionAnswersJoin>,
         private val onItemClick: (Boolean) -> Unit
 ) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val view = LayoutInflater.from(context).inflate(R.layout.list_item_question, container, false)
 
-        val question = questionsWithAnswers[position].question
-        val answers = questionsWithAnswers[position].answers
+        return when(categoryId) {
+            1 -> instantiateMathQuestion(container, questionsWithAnswers[position])
+            2 -> instantiateEmotionQuestion(container, questionsWithAnswers[position])
+            else -> instantiateColorQuestion(container, questionsWithAnswers[position])
+        }
+
+       /* val view: View =  LayoutInflater.from(context).inflate(viewRes, container, false)
+
+
 
         with(view) {
             tvQuestion.text = question.text
@@ -52,6 +61,83 @@ class QuizPagerAdapter(
             tvAnswer3.setOnClickListener { onItemClick(answers[2].isCorrect) }
             tvAnswer4.setOnClickListener { onItemClick(answers[3].isCorrect) }
         }
+
+        container.addView(view)
+        return view*/
+    }
+
+    private fun instantiateEmotionQuestion(container: ViewGroup, questionAnswerJoin: QuestionAnswersJoin): View {
+        val view: View =  LayoutInflater.from(context).inflate(R.layout.list_item_question_emotion, container, false)
+
+        with(view) {
+            with(questionAnswerJoin) {
+                tvEmotionQuestion.text = question.text
+
+                Glide.with(context)
+                        .load(getEmotion(answers[0]))
+                        .into(ivAnswer1)
+
+                Glide.with(context)
+                        .load(getEmotion(answers[1]))
+                        .into(ivAnswer2)
+
+                Glide.with(context)
+                        .load(getEmotion(answers[2]))
+                        .into(ivAnswer3)
+
+                Glide.with(context)
+                        .load(getEmotion(answers[3]))
+                        .into(ivAnswer4)
+
+                Glide.with(context)
+                        .load(question.imgPath)
+                        .into(ivEmotionImage)
+
+                ivAnswer1.setOnClickListener { onItemClick(answers[0].isCorrect) }
+                ivAnswer2.setOnClickListener { onItemClick(answers[1].isCorrect) }
+                ivAnswer3.setOnClickListener { onItemClick(answers[2].isCorrect) }
+                ivAnswer4.setOnClickListener { onItemClick(answers[3].isCorrect) }
+            }
+        }
+
+        container.addView(view)
+        return view
+    }
+
+    private fun getEmotion(answer: Answer): Int {
+        return when(answer.text) {
+            "Sad" -> R.drawable.sad
+            "Scared", "Sleepy" -> R.drawable.scare
+            "Surprised" -> R.drawable.shocked
+            "Happy" -> R.drawable.happy
+            "Excited" -> R.drawable.excited
+            "Angry" -> R.drawable.angry
+            else -> R.drawable.happy
+        }
+    }
+
+    private fun instantiateColorQuestion(container: ViewGroup, questionWithAnswers: QuestionAnswersJoin): View {
+        val view: View =  LayoutInflater.from(context).inflate(R.layout.list_item_question_color, container, false)
+
+        with(view) {
+            with(questionWithAnswers) {
+                tvColorQuestion.text = question.text
+                tvAnswer1.text = answers[0].text
+                tvAnswer2.text = answers[1].text
+                tvAnswer3.text = answers[2].text
+                tvAnswer4.text = answers[3].text
+
+                ivColorImage.setBackgroundColor(Color.parseColor(question.extraData))
+            }
+        }
+
+        container.addView(view)
+        return view
+    }
+
+    private fun instantiateMathQuestion(container: ViewGroup, question: QuestionAnswersJoin): View {
+        val view: View =  LayoutInflater.from(context).inflate(R.layout.list_item_question_math, container, false)
+
 
         container.addView(view)
         return view

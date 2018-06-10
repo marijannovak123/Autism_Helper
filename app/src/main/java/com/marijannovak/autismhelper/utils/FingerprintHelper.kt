@@ -12,7 +12,8 @@ import com.marijannovak.autismhelper.R
 import org.jetbrains.anko.toast
 
 @RequiresApi(Build.VERSION_CODES.M)
-class FingerprintHelper(private val context: Context, private val onSuccess: () -> Unit): FingerprintManager.AuthenticationCallback() {
+class FingerprintHelper(private val context: Context, private val onSuccess: () -> Unit)
+    : FingerprintManager.AuthenticationCallback() {
 
     private var cancellationSignal: CancellationSignal? = null
 

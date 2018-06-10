@@ -10,6 +10,7 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.models.SavedSentence
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
@@ -124,12 +125,24 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
                     }
                 }
 
-               R.id.action_enter_text -> {
+                R.id.action_enter_text -> {
                    DialogHelper.showEnterPhraseTextDialog(this@AACActivity, {
                        addItemToDisplay(it)
                    })
 
-               }
+                }
+
+                R.id.action_save_sentence -> {
+                    aacDisplayAdapter?.let {
+                        val sentence = it.getDataset()
+                        if(sentence.isNotEmpty()) {
+                            viewModel.saveSentence(SavedSentence(0, sentence))
+                        }
+                    }
+                }
+
+                else -> {}
+
             }
         }
 

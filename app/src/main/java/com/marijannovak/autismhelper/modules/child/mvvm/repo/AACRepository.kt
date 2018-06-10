@@ -2,7 +2,9 @@ package com.marijannovak.autismhelper.modules.child.mvvm.repo
 
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.dao.AACDao
+import com.marijannovak.autismhelper.data.database.dao.SavedSentenceDao
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.models.SavedSentence
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
@@ -14,6 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class AACRepository @Inject constructor(
         private val aacDao: AACDao,
+        private val sentenceDao: SavedSentenceDao,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
 
@@ -36,6 +39,14 @@ class AACRepository @Inject constructor(
         return Completable.fromAction {
             doAsync {
                 aacDao.delete(phrase)
+            }
+        }
+    }
+
+    fun saveSentence(savedSentence: SavedSentence): Completable {
+        return Completable.fromAction {
+            doAsync {
+                sentenceDao.insert(savedSentence)
             }
         }
     }

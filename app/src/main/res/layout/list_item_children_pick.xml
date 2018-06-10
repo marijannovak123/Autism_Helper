@@ -10,7 +10,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitXY"
-        android:id="@+id/ivChildAvatar"/>
+        android:id="@+id/ivChildAvatar"
+        android:contentDescription="@null" />
 
     <TextView
         android:layout_width="wrap_content"

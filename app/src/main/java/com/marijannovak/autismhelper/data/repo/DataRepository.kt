@@ -85,6 +85,7 @@ class DataRepository @Inject constructor(
                 db.userDao().deleteTable()
                 db.childDao().deleteTable()
                 db.childScoreDao().deleteTable()
+                db.savedSentenceDao().deleteTable()
             }
         }
     }
