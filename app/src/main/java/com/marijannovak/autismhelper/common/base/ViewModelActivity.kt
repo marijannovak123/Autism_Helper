@@ -21,7 +21,7 @@ abstract class ViewModelActivity<V : BaseViewModel<M>, M> : AppCompatActivity() 
 
     protected var pbLoading: LoadingDialog? = null
 
-    abstract fun handleResource(resource: Resource<List<M>>?)
+    abstract fun handleResource(resource: Resource<M>?)
     abstract fun subscribeToData()
 
     override fun onCreate(savedInstanceState: Bundle?) {

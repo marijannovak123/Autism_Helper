@@ -10,6 +10,7 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_aac.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
+class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>() {
 
     private lateinit var tts: TextToSpeech
     private var ttsWords: ArrayList<String> = ArrayList()
@@ -44,12 +45,12 @@ class AACActivity : ViewModelActivity<AACViewModel, AacPhrase>() {
         viewModel.loadPhrases()
     }
 
-    override fun handleResource(resource: Resource<List<AacPhrase>>?) {
-        resource?.let {
+    override fun handleResource(phrasesAndSentences: Resource<PhrasesSavedSentencesJoin>?) {
+        phrasesAndSentences?.let {
             showLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
-                    setUpAacData(it.data)
+                    setUpAacData(it.data!!.phrases)
                 }
 
                 else -> {

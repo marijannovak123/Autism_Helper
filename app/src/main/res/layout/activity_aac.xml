@@ -18,8 +18,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorPrimary" />
+        android:layout_height="2dp"
+        android:background="@color/cardview_dark_background" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvAacSelector"

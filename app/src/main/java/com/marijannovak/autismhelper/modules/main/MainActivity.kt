@@ -23,7 +23,7 @@ import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : ViewModelActivity<MainViewModel, Child>() {
+class MainActivity : ViewModelActivity<MainViewModel, List<Child>>() {
 
     private var childPickAdapter: ChildPickAdapter? = null
 

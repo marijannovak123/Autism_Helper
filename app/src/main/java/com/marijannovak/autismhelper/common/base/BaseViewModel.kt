@@ -15,7 +15,7 @@ open class BaseViewModel<T>
         private val dataRepository: DataRepository)
     : ViewModel() {
 
-    val resourceLiveData = MutableLiveData<Resource<List<T>>>()
+    val resourceLiveData = MutableLiveData<Resource<T>>()
 
     protected var compositeDisposable = CompositeDisposable()
 

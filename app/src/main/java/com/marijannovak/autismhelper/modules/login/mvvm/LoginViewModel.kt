@@ -24,7 +24,7 @@ class LoginViewModel @Inject constructor(
         compositeDisposable.add(
                 repository.isLoggedIn().subscribe(
                         {//sync user data on every first start
-                            syncUserData(listOf(it))
+                            syncUserData(it)
                         },
                         { resourceLiveData.value = Resource.message(R.string.data_load_error, it.message ?: "")},
                         { resourceLiveData.value = Resource.home() }
@@ -32,12 +32,12 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    private fun syncUserData(users: List<User>) {
+    private fun syncUserData(user: User) {
          compositeDisposable.add(
                  dataRepository.syncUserData().subscribe(
                         //go further regardless sync was successful
-                        { resourceLiveData.value = Resource.success(users)},
-                        { resourceLiveData.value = Resource.success(users)}
+                        { resourceLiveData.value = Resource.success(user)},
+                        { resourceLiveData.value = Resource.success(user)}
         ))
     }
 
@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(
         resourceLiveData.value = Resource.loading()
         repository.register(signupRequest, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                resourceLiveData.value = Resource.signedUp(listOf(model.mapToUser(signupRequest)))
+                resourceLiveData.value = Resource.signedUp(model.mapToUser(signupRequest))
             }
 
             override fun onFailure(t: Throwable) {
@@ -99,12 +99,12 @@ class LoginViewModel @Inject constructor(
                             if (it) {
                                 fetchAndSaveUserData(user.uid)
                             } else {
-                                resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
+                                resourceLiveData.value = Resource.signedUp(user.mapToUser())
                             }
                         },
                         {
                             if (it is NoSuchElementException) {
-                                resourceLiveData.value = Resource.signedUp(listOf(user.mapToUser()))
+                                resourceLiveData.value = Resource.signedUp(user.mapToUser())
                             } else {
                                 throwErrorAndLogOut(R.string.error, it.message ?: "")
                             }

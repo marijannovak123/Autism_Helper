@@ -73,7 +73,10 @@ class ParentRepository @Inject constructor(
     }
 
     fun loadPhrases(): Flowable<List<AacPhrase>> {
-        return aacDao.getAllPhrases().subscribeOn(ioScheduler).observeOn(mainScheduler)
+        return aacDao
+                .getAllPhrases()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String): Completable {
@@ -86,7 +89,10 @@ class ParentRepository @Inject constructor(
     }
 
     fun loadUser(): Single<User> {
-        return userDao.getCurrentUser().subscribeOn(ioScheduler).observeOn(mainScheduler)
+        return userDao
+                .getCurrentUser()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun loadUserName(): Single<String?> {

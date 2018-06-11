@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
         private val repository: MainRepository,
         dataRepository: DataRepository)
-    : BaseViewModel<Child>(dataRepository) {
+    : BaseViewModel<List<Child>>(dataRepository) {
 
     fun getChildrenToPick() {
         compositeDisposable.add(

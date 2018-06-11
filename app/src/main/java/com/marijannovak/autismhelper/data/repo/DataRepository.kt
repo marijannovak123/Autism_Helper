@@ -81,13 +81,11 @@ class DataRepository @Inject constructor(
         auth.signOut()
         prefsHelper.setParentPassword("")
         return Completable.fromAction {
-            doAsync {
                 db.userDao().deleteTable()
                 db.childDao().deleteTable()
                 db.childScoreDao().deleteTable()
                 db.savedSentenceDao().deleteTable()
-            }
-        }
+        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun getParentPassword(): String = prefsHelper.getParentPassword()
@@ -222,19 +220,15 @@ class DataRepository @Inject constructor(
         val phraseToSave = phrase
         phraseToSave.iconPath = absolutePath
         return Completable.fromAction {
-            doAsync {
-                db.aacDao().insert(phraseToSave)
-            }
-        }
+            db.aacDao().insert(phraseToSave)
+        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     private fun updateQuestionImgPath(question: Question, path: String): Completable {
         question.imgPath = path
         return Completable.fromAction {
-            doAsync {
-                db.questionDao().insert(question)
-            }
-        }
+            db.questionDao().insert(question)
+        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun syncUserData(): Completable {

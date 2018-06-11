@@ -18,7 +18,7 @@ import com.marijannovak.autismhelper.modules.login.LoginActivity
 import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_pick_category.*
 
-class PickCategoryActivity : ViewModelActivity<ChildViewModel, Category>() {
+class PickCategoryActivity : ViewModelActivity<ChildViewModel, List<Category>>() {
 
     private var categoriesAdapter: CategoriesAdapter? = null
     //to viewmodel

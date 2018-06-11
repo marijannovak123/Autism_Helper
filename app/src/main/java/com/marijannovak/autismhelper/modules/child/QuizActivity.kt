@@ -24,7 +24,7 @@ import com.marijannovak.autismhelper.utils.Resource
 import kotlinx.android.synthetic.main.activity_quiz.*
 import org.jetbrains.anko.toast
 
-class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
+class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJoin>() {
 
     private var quizAdapter: QuizPagerAdapter? = null
     private var child: Child? = null
@@ -68,12 +68,12 @@ class QuizActivity : ViewModelActivity<QuizViewModel, Any>() {
         }
     }
 
-    override fun handleResource(categories: Resource<List<Any>>?) {
+    override fun handleResource(categories: Resource<CategoryQuestionsAnswersJoin>?) {
         categories?.let {
             showLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
-                    val questions = (it.data!![0] as CategoryQuestionsAnswersJoin).questionsAnswers
+                    val questions = (it.data as CategoryQuestionsAnswersJoin).questionsAnswers
                     setUpQuestionsPager(questions)
                 }
 

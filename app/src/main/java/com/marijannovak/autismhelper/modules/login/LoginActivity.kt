@@ -149,7 +149,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
         DialogHelper.showForgotPasswordDialog(this, { email -> viewModel.forgotPassword(email) })
     }
 
-    override fun handleResource(resource: Resource<List<User>>?) {
+    override fun handleResource(resource: Resource<User>?) {
         resource?.let {
             showLoading(it.status, it.message)
             when (it.status) {
@@ -166,7 +166,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
                 }
 
                 Status.SIGNEDUP -> {
-                    addChildDialog(it.data!![0])
+                    addChildDialog(it.data)
                 }
 
                 else -> {

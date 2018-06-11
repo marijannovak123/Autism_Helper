@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.modules.child.mvvm
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.AACRepository
@@ -13,7 +14,7 @@ class AACViewModel
 @Inject constructor(
         private val repository: AACRepository,
         dataRepository: DataRepository)
-    : BaseViewModel<AacPhrase>(dataRepository) {
+    : BaseViewModel<PhrasesSavedSentencesJoin>(dataRepository) {
 
     //todo: load saved sentences
     fun loadPhrases() {

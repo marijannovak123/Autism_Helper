@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.modules.child.mvvm
 
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
+import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.child.mvvm.repo.QuizRepository
@@ -12,12 +13,12 @@ class QuizViewModel
 @Inject constructor(
         private val repository: QuizRepository,
         dataRepository: DataRepository) :
-        BaseViewModel<Any>(dataRepository) {
+        BaseViewModel<CategoryQuestionsAnswersJoin>(dataRepository) {
 
     fun loadCategoryData(categoryId: Int) {
         compositeDisposable.add(
                 repository.getCategoryData(categoryId).subscribe(
-                        { category -> resourceLiveData.value = Resource.success(listOf(category)) },
+                        { category -> resourceLiveData.value = Resource.success(category) },
                         { error -> resourceLiveData.value = Resource.message(R.string.category_load_fail, error.message ?: "") }
                 )
         )

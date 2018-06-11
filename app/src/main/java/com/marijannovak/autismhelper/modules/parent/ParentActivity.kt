@@ -182,7 +182,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         }
     }
 
-    override fun handleResource(resource: Resource<List<UserChildrenJoin>>?) {
+    override fun handleResource(resource: Resource<UserChildrenJoin>?) {
         resource?.let {
             showLoading(it.status, it.message)
             when (it.status) {

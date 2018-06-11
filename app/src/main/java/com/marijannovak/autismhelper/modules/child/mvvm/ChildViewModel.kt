@@ -12,7 +12,7 @@ class ChildViewModel
 @Inject constructor(
         private val repository: ChildRepository,
         dataRepository: DataRepository)
-    : BaseViewModel<Category>(dataRepository) {
+    : BaseViewModel<List<Category>>(dataRepository) {
 
     fun loadCategories() {
         resourceLiveData.value = Resource.loading()

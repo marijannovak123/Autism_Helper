@@ -174,3 +174,8 @@ class CategoryQuestionsAnswersJoin {
     @Relation(parentColumn = "id", entityColumn = "categoryId", entity = Question::class)
     var questionsAnswers: List<QuestionAnswersJoin> = ArrayList()
 }
+
+data class PhrasesSavedSentencesJoin(
+        var phrases: List<AacPhrase>,
+        var sentencesJoin: List<SavedSentence>
+)
