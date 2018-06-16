@@ -23,9 +23,9 @@ class QuizPagerAdapter(
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
 
         return when(categoryId) {
-            1 -> instantiateMathQuestion(container, questionsWithAnswers[position])
+            1 -> instantiateColorQuestion(container, questionsWithAnswers[position])
             2 -> instantiateEmotionQuestion(container, questionsWithAnswers[position])
-            else -> instantiateColorQuestion(container, questionsWithAnswers[position])
+            else -> instantiateMathQuestion(container, questionsWithAnswers[position])
         }
 
        /* val view: View =  LayoutInflater.from(context).inflate(viewRes, container, false)

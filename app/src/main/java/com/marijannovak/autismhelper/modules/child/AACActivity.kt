@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.marijannovak.autismhelper.R
+import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.AacPhrase
@@ -42,7 +43,12 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
             }
         })
 
+
         viewModel.loadPhrases()
+    }
+
+    private fun loadFragment(fragment: BaseFragment) {
+
     }
 
     override fun handleResource(phrasesAndSentences: Resource<PhrasesSavedSentencesJoin>?) {
@@ -70,7 +76,7 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
             rvAacDisplay.layoutManager = GridLayoutManager(this, 5)
         }
 
-        phrases?.let {
+        /*phrases?.let {
             if (aacSelectorAdapter == null) {
                 aacSelectorAdapter = AACAdapter(emptyList(), { phrase, _ ->
                     if(aacDisplayAdapter!!.datasetCount() < 10) {
@@ -86,7 +92,7 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
             }
 
             aacSelectorAdapter!!.update(it)
-        }
+        }*/
     }
 
     private fun addItemToDisplay(phrase: AacPhrase) {

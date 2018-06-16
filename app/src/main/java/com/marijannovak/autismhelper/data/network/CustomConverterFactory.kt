@@ -1,5 +1,6 @@
 package com.marijannovak.autismhelper.data.network
 
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -23,6 +24,10 @@ class CustomConverterFactory(private val mFactoryMap: Map<Class<*>, Converter.Fa
         }
 
         return mFactoryMap[Json::class.java]?.responseBodyConverter(type, annotations, retrofit)
+    }
+
+    override fun requestBodyConverter(type: Type, parameterAnnotations: Array<out Annotation>, methodAnnotations: Array<out Annotation>, retrofit: Retrofit): Converter<*, RequestBody>? {
+        return mFactoryMap[Json::class.java]?.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit)
     }
 
     internal class Builder {

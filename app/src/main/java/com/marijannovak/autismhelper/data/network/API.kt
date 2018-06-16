@@ -25,6 +25,7 @@ interface API {
     @PUT("users/{userId}.json")
     fun putUser(@Path("userId") userId: String, @Body user: User): Completable
 
+    @CustomConverterFactory.Json
     @PUT("users/{userId}/child_scores/{scoreId}.json")
     fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Completable
 

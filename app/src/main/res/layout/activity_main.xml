@@ -6,6 +6,10 @@
     android:background="@color/colorBg"
     tools:context="com.marijannovak.autismhelper.modules.main.MainActivity">
 
+    <com.marijannovak.autismhelper.common.views.MathShapeView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/pbLoading"
         style="?android:attr/progressBarStyleInverse"
