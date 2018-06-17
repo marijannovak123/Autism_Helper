@@ -7,8 +7,8 @@ import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.util.BaseUnitTest
-import com.marijannovak.autismhelper.utils.TestDataGenerator
 import com.marijannovak.autismhelper.utils.PrefsHelper
+import com.marijannovak.autismhelper.utils.TestDataGenerator
 import io.reactivex.Maybe
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.TestScheduler

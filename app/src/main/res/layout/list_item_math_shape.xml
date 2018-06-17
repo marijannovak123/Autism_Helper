@@ -4,13 +4,14 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:id="@+id/ivShape"
         android:scaleType="fitXY"
-        tools:src="@drawable/circle"/>
+        tools:src="@drawable/circle"
+        android:layout_margin="5dp"/>
 
 </LinearLayout>

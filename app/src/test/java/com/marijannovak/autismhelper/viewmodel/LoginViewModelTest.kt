@@ -6,8 +6,8 @@ import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
 import com.marijannovak.autismhelper.util.BaseUnitTest
-import com.marijannovak.autismhelper.utils.TestDataGenerator
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.TestDataGenerator
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import org.junit.Test

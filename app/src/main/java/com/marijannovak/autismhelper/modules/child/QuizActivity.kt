@@ -6,6 +6,7 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -18,9 +19,11 @@ import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.QuestionAnswersJoin
 import com.marijannovak.autismhelper.modules.child.adapters.QuizPagerAdapter
+import com.marijannovak.autismhelper.modules.child.fragments.MathFragment
 import com.marijannovak.autismhelper.modules.child.mvvm.QuizViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.activity_quiz.*
 import org.jetbrains.anko.toast
 
@@ -28,12 +31,13 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
 
     private var quizAdapter: QuizPagerAdapter? = null
     private var child: Child? = null
-    private var startTime: Long
-    private var mistakes = 0
     private val soundPool: SoundPool
     private var soundPoolLoaded = false
     private var sounds: Map<String, Int>? = null
     private var categoryId = -1
+
+    var startTime: Long
+    var mistakes = 0
 
     init {
         startTime = System.currentTimeMillis()
@@ -73,8 +77,13 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
             showLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
-                    val questions = (it.data as CategoryQuestionsAnswersJoin).questionsAnswers
-                    setUpQuestionsPager(questions)
+                    startTime = System.currentTimeMillis()
+                    if(it.data!!.category.id == 0) {
+                        setUpMathFragment()
+                    } else {
+                        val questions = it.data.questionsAnswers
+                        setUpQuestionsPager(questions)
+                    }
                 }
 
                 Status.MESSAGE -> {
@@ -95,10 +104,20 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
         }
     }
 
+    private fun setUpMathFragment() {
+        vpQuestions.visibility = View.GONE
+        llContainer.visibility = View.VISIBLE
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.llContainer, MathFragment.newInstance(1))
+        transaction.addToBackStack(MathFragment.logTag())
+        transaction.commit()
+    }
     private fun setUpQuestionsPager(questionsWithAnswers: List<QuestionAnswersJoin>) {
+        vpQuestions.visibility = View.VISIBLE
+        llContainer.visibility = View.GONE
         if (quizAdapter == null) {
             supportActionBar?.title = "${getString(R.string.question)} 1"
-            startTime = System.currentTimeMillis()
             quizAdapter = QuizPagerAdapter(this, categoryId, emptyList(),
                     onItemClick = {
                         if (it) {
@@ -126,7 +145,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
         quizAdapter!!.updateDataSet(questionsWithAnswers)
     }
 
-    private fun playSound(isCorrect: Boolean) {
+     fun playSound(isCorrect: Boolean) {
         if(viewModel.isSoundOn()) {
             sounds?.let {
                 val toPlay = if(isCorrect) it[CORRECT] else it[FALSE]
@@ -148,9 +167,9 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
         item?.let {
             when(it.itemId) {
                 R.id.action_exit_quiz -> {
-                    DialogHelper.showPromptDialog(this, getString(R.string.close_quiz), {
+                    DialogHelper.showPromptDialog(this, getString(R.string.close_quiz)) {
                         saveScore()
-                    })
+                    }
                 }
             }
         }

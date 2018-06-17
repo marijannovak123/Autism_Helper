@@ -10,7 +10,6 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
-import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton

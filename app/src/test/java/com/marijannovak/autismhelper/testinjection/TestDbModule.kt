@@ -6,7 +6,6 @@ import com.marijannovak.autismhelper.data.database.dao.*
 import dagger.Module
 import dagger.Provides
 import org.mockito.Mockito
-import javax.inject.Singleton
 
 @Module
 class TestDbModule {

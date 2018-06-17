@@ -12,8 +12,7 @@
     android:padding="20dp"
     android:background="@color/colorBg">
 
-    <LinearLayout
-        style="@style/style_input_bubble">
+    <LinearLayout style="@style/style_input_bubble">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

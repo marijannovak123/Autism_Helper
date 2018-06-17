@@ -21,49 +21,10 @@ class QuizPagerAdapter(
 ) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-
         return when(categoryId) {
             1 -> instantiateColorQuestion(container, questionsWithAnswers[position])
-            2 -> instantiateEmotionQuestion(container, questionsWithAnswers[position])
-            else -> instantiateMathQuestion(container, questionsWithAnswers[position])
+            else -> instantiateEmotionQuestion(container, questionsWithAnswers[position])
         }
-
-       /* val view: View =  LayoutInflater.from(context).inflate(viewRes, container, false)
-
-
-
-        with(view) {
-            tvQuestion.text = question.text
-            tvAnswer1.text = answers[0].text
-            tvAnswer2.text = answers[1].text
-            tvAnswer3.text = answers[2].text
-            tvAnswer4.text = answers[3].text
-
-            when (question.categoryId) {
-                1 -> {
-                    ivExtraImage.setBackgroundColor(Color.parseColor(question.extraData))
-                    ivExtraImage.visibility = View.VISIBLE
-                }
-
-                2 -> {
-                    Glide.with(view)
-                            .load(question.imgPath)
-                            .into(ivExtraImage)
-
-                    ivExtraImage.visibility = View.VISIBLE
-                }
-
-                else -> ivExtraImage.visibility = View.GONE
-            }
-
-            tvAnswer1.setOnClickListener { onItemClick(answers[0].isCorrect) }
-            tvAnswer2.setOnClickListener { onItemClick(answers[1].isCorrect) }
-            tvAnswer3.setOnClickListener { onItemClick(answers[2].isCorrect) }
-            tvAnswer4.setOnClickListener { onItemClick(answers[3].isCorrect) }
-        }
-
-        container.addView(view)
-        return view*/
     }
 
     private fun instantiateEmotionQuestion(container: ViewGroup, questionAnswerJoin: QuestionAnswersJoin): View {
@@ -130,14 +91,6 @@ class QuizPagerAdapter(
                 ivColorImage.setBackgroundColor(Color.parseColor(question.extraData))
             }
         }
-
-        container.addView(view)
-        return view
-    }
-
-    private fun instantiateMathQuestion(container: ViewGroup, question: QuestionAnswersJoin): View {
-        val view: View =  LayoutInflater.from(context).inflate(R.layout.list_item_question_math, container, false)
-
 
         container.addView(view)
         return view
