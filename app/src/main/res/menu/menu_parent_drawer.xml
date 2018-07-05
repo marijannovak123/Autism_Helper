@@ -12,6 +12,11 @@
             android:title="@string/phrases" />
 
         <item
+            android:id="@+id/info"
+            android:icon="@drawable/ic_info_outline"
+            android:title="@string/autism_info" />
+
+        <item
             android:id="@+id/rss"
             android:icon="@drawable/ic_rss_feed"
             android:title="@string/news"/>

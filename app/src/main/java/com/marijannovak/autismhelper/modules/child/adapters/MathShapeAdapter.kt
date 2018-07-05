@@ -1,24 +1,26 @@
 package com.marijannovak.autismhelper.modules.child.adapters
 
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.utils.logTag
 import kotlinx.android.synthetic.main.list_item_math_shape.view.*
 import java.util.*
 
 class MathShapeAdapter: RecyclerView.Adapter<MathShapeAdapter.MathShapeViewHolder>() {
         var pickedElements = 0
         var pickedShapeType = -1
+        var colors = ArrayList<Int>()
         private val shapeTypes: Array<Int> = arrayOf(R.drawable.triangle, R.drawable.circle, R.drawable.rectangle)
 
         init {
             val randomNum = Random(System.currentTimeMillis()).nextInt(3)
             pickedShapeType = shapeTypes[randomNum]
+            colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
+            colors.addAll(ColorTemplate.JOYFUL_COLORS.toList())
+            colors.addAll(ColorTemplate.LIBERTY_COLORS.toList())
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MathShapeViewHolder {
@@ -39,18 +41,14 @@ class MathShapeAdapter: RecyclerView.Adapter<MathShapeAdapter.MathShapeViewHolde
 
         override fun onBindViewHolder(holder: MathShapeViewHolder, position: Int) {
             val random = Random(System.currentTimeMillis())
-            val red = random.nextInt(255)
-            val green = random.nextInt(255)
-            val blue = random.nextInt(255)
             val shapeType = random.nextInt(3)
-            val color = Color.argb(255, red, green, blue)
+            val color = colors[random.nextInt(colors.size)]
 
             with(holder.itemView.ivShape) {
                 val shape = shapeTypes[shapeType]
                 if(random.nextBoolean()) {
                     if(shape == pickedShapeType) {
-                        pickedElements += 1
-                        Log.e(logTag(), pickedElements.toString())
+                        pickedElements++
                     }
                     holder.itemView.visibility = View.VISIBLE
                 } else {

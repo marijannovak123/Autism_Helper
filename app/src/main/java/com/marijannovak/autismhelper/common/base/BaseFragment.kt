@@ -16,25 +16,17 @@ open class BaseFragment : Fragment() {
 
     private fun getTitle(): String {
         return when (this) {
-            is ProfileFragment -> {
-                getString(R.string.profile)
-            }
+            is ProfileFragment -> getString(R.string.profile)
 
-            is ChildrenFragment -> {
-                getString(R.string.children)
-            }
+            is ChildrenFragment -> getString(R.string.children)
 
-            is SettingsFragment -> {
-                getString(R.string.settings)
-            }
+            is SettingsFragment -> getString(R.string.settings)
 
-            is RssFragment -> {
-                getString(R.string.news)
-            }
+            is RssFragment -> getString(R.string.news)
 
-            is PhrasesFragment -> {
-                getString(R.string.phrases)
-            }
+            is PhrasesFragment -> getString(R.string.phrases)
+
+            is AutismInfoFragment -> getString(R.string.autism_info)
 
             else -> ""
         }

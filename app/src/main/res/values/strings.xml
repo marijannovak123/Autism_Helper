@@ -104,12 +104,11 @@
     <string name="authentication_failed">Authentication failed</string>
     <string name="save_sentence">Save sentence</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="triangle">triangles</string>
     <string name="circle">circles</string>
     <string name="rectangle">rectangles</string>
     <string name="math_question_format">Count the %s</string>
     <string name="enter_count">Enter count</string>
     <string name="answer">Answer</string>
+    <string name="autism_info">Autism Info</string>
 </resources>
