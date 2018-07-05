@@ -65,6 +65,7 @@ class Constants {
         const val FRAGMENT_CHILDREN = "children_fragment"
         const val FRAGMENT_PHRASES = "phrases_fragment"
         const val FRAGMENT_RSS = "rss_fragment"
+        const val FRAGMENT_INFO = "autism_info_fragment"
         //endregion
 
         //region other

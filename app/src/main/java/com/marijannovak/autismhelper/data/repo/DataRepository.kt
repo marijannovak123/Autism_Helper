@@ -205,9 +205,8 @@ class DataRepository @Inject constructor(
                         val ref = storage.child(user.profilePicPath!!)
                         ref.getFile(file)
                                 .addOnSuccessListener {
-                                    val userWithPic = user
-                                    userWithPic.profilePicPath = file.absolutePath
-                                    doAsync { db.userDao().insert(userWithPic) }
+                                    user.profilePicPath = file.absolutePath
+                                    doAsync { db.userDao().insert(user) }
                                     onDataDownloaded()
                                 }.addOnFailureListener{onDataDownloaded()}
                     }
@@ -217,10 +216,9 @@ class DataRepository @Inject constructor(
 }
 
     private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String): Completable {
-        val phraseToSave = phrase
-        phraseToSave.iconPath = absolutePath
+        phrase.iconPath = absolutePath
         return Completable.fromAction {
-            db.aacDao().insert(phraseToSave)
+            db.aacDao().insert(phrase)
         }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 

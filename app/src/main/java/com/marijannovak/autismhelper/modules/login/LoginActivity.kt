@@ -146,7 +146,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     }
 
     private fun forgotPasswordDialog() {
-        DialogHelper.showForgotPasswordDialog(this, { email -> viewModel.forgotPassword(email) })
+        DialogHelper.showForgotPasswordDialog(this) { email -> viewModel.forgotPassword(email) }
     }
 
     override fun handleResource(resource: Resource<User>?) {

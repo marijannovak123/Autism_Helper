@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebViewClient
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
+import com.marijannovak.autismhelper.common.fragments.LoadingDialog
 import kotlinx.android.synthetic.main.fragment_autism_info.*
 
 class AutismInfoFragment : BaseFragment() {
@@ -23,7 +25,18 @@ class AutismInfoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         wvAutismInfo.settings.javaScriptEnabled = true
-        wvAutismInfo.webViewClient = WebViewClient()
+        wvAutismInfo.webChromeClient = object: WebChromeClient() {
+            var progressDialog: LoadingDialog? = null
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                if(newProgress < 100 && progressDialog == null) {
+                    progressDialog = LoadingDialog()
+                    progressDialog!!.show(fragmentManager, "")
+                } else if(newProgress == 100) {
+                    progressDialog?.dismiss()
+                    progressDialog = null
+                }
+            }
+        }
 
         wvAutismInfo.loadUrl("https://www.autismspeaks.org/what-autism")
     }

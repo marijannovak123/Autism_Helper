@@ -13,6 +13,7 @@ import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_CHILDREN
+import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_INFO
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PHRASES
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_PROFILE
 import com.marijannovak.autismhelper.config.Constants.Companion.FRAGMENT_RSS
@@ -47,7 +48,8 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                 Pair(FRAGMENT_CHILDREN, ChildrenFragment()),
                 Pair(FRAGMENT_PROFILE, ProfileFragment()),
                 Pair(FRAGMENT_PHRASES, PhrasesFragment()),
-                Pair(FRAGMENT_RSS, RssFragment())
+                Pair(FRAGMENT_RSS, RssFragment()),
+                Pair(FRAGMENT_INFO, AutismInfoFragment())
         )
     }
 
@@ -99,7 +101,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     private fun handleNavViewClick(item: MenuItem): Boolean {
         fragmentLoad = when(item.itemId) {
-            R.id.profile, R.id.settings, R.id.phrases, R.id.children, R.id.rss -> true
+            R.id.profile, R.id.settings, R.id.phrases, R.id.children, R.id.rss, R.id.info -> true
             else -> false
         }
 
@@ -124,21 +126,25 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
                 drawerAction = { loadFragment(fragments[FRAGMENT_PHRASES]!!) }
             }
 
+            R.id.info -> {
+                drawerAction = { loadFragment(fragments[FRAGMENT_INFO]!!) }
+            }
+
             R.id.sync -> {
                 viewModel.syncUserAndData()
             }
 
             R.id.logout -> {
-                DialogHelper.showPromptDialog(this, getString(R.string.really_logout), {
+                DialogHelper.showPromptDialog(this, getString(R.string.really_logout)) {
                     viewModel.logOut()
-                })
+                }
             }
 
             R.id.exit -> {
-                DialogHelper.showPromptDialog(this, getString(R.string.really_exit), {
+                DialogHelper.showPromptDialog(this, getString(R.string.really_exit)) {
                     startActivity(Intent(this@ParentActivity, MainActivity::class.java))
                     finish()
-                })
+                }
             }
         }
 

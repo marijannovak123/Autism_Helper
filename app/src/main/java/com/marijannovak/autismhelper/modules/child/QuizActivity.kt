@@ -36,7 +36,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
     private var sounds: Map<String, Int>? = null
     private var categoryId = -1
 
-    var startTime: Long
+    private var startTime: Long
     var mistakes = 0
 
     init {

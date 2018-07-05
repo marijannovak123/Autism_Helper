@@ -29,14 +29,14 @@ class SettingsFragment : InjectableFragment<ParentViewModel>(), SeekBar.OnSeekBa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tts = TextToSpeech(activity, {
+        tts = TextToSpeech(activity) {
             if (it == TextToSpeech.SUCCESS) {
                 ttsSupported = true
                 tts.language = Locale.US
                 tts.setSpeechRate(viewModel.getTtsSpeed())
                 tts.setPitch(viewModel.getTtsPitch())
             }
-        })
+        }
 
         sbPitch.progress = (viewModel.getTtsPitch() * 10).toInt()
         sbSpeed.progress = (viewModel.getTtsSpeed() * 10).toInt()

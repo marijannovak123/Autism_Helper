@@ -57,8 +57,6 @@ class MathFragment : BaseFragment() {
 
     }
 
-
-
     override fun onResume() {
         super.onResume()
         tvMathQuestion.text = String.format(getString(R.string.math_question_format), getString(mathShapeAdapter!!.pickedElementStringRes()))
@@ -70,6 +68,7 @@ class MathFragment : BaseFragment() {
         act?.playSound(true)
         mathShapeAdapter = MathShapeAdapter()
         rvMath.adapter = mathShapeAdapter
+        tvMathQuestion.text = String.format(getString(R.string.math_question_format), getString(mathShapeAdapter!!.pickedElementStringRes()))
         questionNo++
         act?.supportActionBar?.title = "${getString(R.string.question)} $questionNo"
     }
