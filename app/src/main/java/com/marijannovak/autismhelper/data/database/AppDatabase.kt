@@ -13,9 +13,9 @@ import com.marijannovak.autismhelper.data.models.*
 
 @Database(entities =
     [(User::class), (Child::class), (ChildScore::class),
-    (Question::class), (Answer::class), (Category::class),
+    (Question::class), (Answer::class), (Category::class), (PhraseCategory::class),
         (AacPhrase::class), (FeedItem::class), (SavedSentence::class)],
-        version = 12, exportSchema = false)
+        version = 13, exportSchema = false)
 @TypeConverters(SentenceTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -28,5 +28,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun aacDao(): AACDao
     abstract fun feedItemDao(): FeedItemDao
     abstract fun savedSentenceDao(): SavedSentenceDao
+    abstract fun phraseCategoryDao(): PhraseCategoryDao
 }
 

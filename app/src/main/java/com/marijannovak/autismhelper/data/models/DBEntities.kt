@@ -7,6 +7,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CATEGORIES
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILDREN
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_CHILD_SCORES
+import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_PHRASE_CATEGORY
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_QUESTIONS
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_SENTENCE
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_USER
@@ -133,9 +134,10 @@ data class AacPhrase(
         var id: Int,
         var name: String,
         var text: String,
-        var iconPath: String
+        var iconPath: String,
+        var category: Int
 ) {
-    constructor() : this(0, "", "", "")
+    constructor() : this(0, "", "", "", -1)
 
     override fun equals(other: Any?): Boolean {
         if(other is AacPhrase) {
@@ -152,6 +154,14 @@ data class SavedSentence(
         @PrimaryKey(autoGenerate = true)
         var id: Int = 0,
         var phrases: List<AacPhrase>
+)
+
+@Entity(tableName = TABLE_PHRASE_CATEGORY)
+data class PhraseCategory(
+        @PrimaryKey
+        var id: Int,
+        var name: String,
+        var photoPath: String
 )
 
 class UserChildrenJoin : Serializable {
@@ -179,3 +189,5 @@ data class PhrasesSavedSentencesJoin(
         var phrases: List<AacPhrase>,
         var sentencesJoin: List<SavedSentence>
 )
+
+
