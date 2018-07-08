@@ -49,6 +49,10 @@ class Resource<out T>(val status: Status, val data: T?, val message: String?) {
             return Resource(Status.MESSAGE, null, App.getAppContext().resources.getString(msgRes) + " " + throwableMessage)
         }
 
+        fun <T> message(msgRes: Int): Resource<T> {
+            return Resource(Status.MESSAGE, null, App.getAppContext().resources.getString(msgRes))
+        }
+
         fun <T> loading(): Resource<T> {
             return Resource(Status.LOADING, null, null)
         }

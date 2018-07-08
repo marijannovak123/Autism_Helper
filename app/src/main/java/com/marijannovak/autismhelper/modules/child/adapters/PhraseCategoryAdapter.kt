@@ -7,6 +7,7 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseAdapter
 import com.marijannovak.autismhelper.common.base.BaseViewHolder
 import com.marijannovak.autismhelper.data.models.PhraseCategory
+import kotlinx.android.synthetic.main.list_item_category.view.*
 
 class PhraseCategoryAdapter(
         private var phraseCategories: List<PhraseCategory>,
@@ -26,7 +27,7 @@ class PhraseCategoryAdapter(
 
     inner class PhraseCategoryViewHolder(itemView: View): BaseViewHolder<PhraseCategory>(itemView) {
         override fun bind(model: PhraseCategory, position: Int, onItemClick: (PhraseCategory, Int) -> Unit, onLongItemClick: (PhraseCategory, Int) -> Unit) {
-
+            itemView.tvCategoryName.text = model.name
         }
     }
 }

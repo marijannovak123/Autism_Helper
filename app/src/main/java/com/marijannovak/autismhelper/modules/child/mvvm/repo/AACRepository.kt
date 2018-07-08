@@ -2,8 +2,10 @@ package com.marijannovak.autismhelper.modules.child.mvvm.repo
 
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.dao.AACDao
+import com.marijannovak.autismhelper.data.database.dao.PhraseCategoryDao
 import com.marijannovak.autismhelper.data.database.dao.SavedSentenceDao
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.models.PhraseCategory
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
 import io.reactivex.Completable
@@ -18,6 +20,7 @@ import javax.inject.Singleton
 class AACRepository @Inject constructor(
         private val aacDao: AACDao,
         private val sentenceDao: SavedSentenceDao,
+        private val phraseCategoryDao: PhraseCategoryDao,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
 
@@ -48,6 +51,18 @@ class AACRepository @Inject constructor(
         return Completable.fromAction {
                 sentenceDao.insert(savedSentence)
         }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    }
+
+    fun loadPhraseCategories(): Flowable<List<PhraseCategory>> {
+        return phraseCategoryDao.getPhraseCategories()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
+    }
+
+    fun loadSentences(): Flowable<List<SavedSentence>> {
+        return sentenceDao.getSavedSentences()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
 }

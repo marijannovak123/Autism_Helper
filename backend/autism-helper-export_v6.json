@@ -1,0 +1,1005 @@
+{
+  "api" : {
+    "categories" : [ {
+      "id" : 0,
+      "name" : "Math"
+    }, {
+      "id" : 1,
+      "name" : "Name color"
+    }, {
+      "id" : 2,
+      "name" : "Guess emotion"
+    } ],
+    "phrases" : [ {
+      "iconPath" : "aac_test.jpg",
+      "id" : 0,
+      "name" : "test",
+      "text" : "Test"
+    }, {
+      "iconPath" : "good.jpg",
+      "id" : 3178685,
+      "name" : "good",
+      "text" : "Good"
+    }, {
+      "iconPath" : "Hey.jpg",
+      "id" : 72444,
+      "name" : "hey",
+      "text" : "Hey"
+    }, {
+      "iconPath" : "no.jpg",
+      "id" : 2529,
+      "name" : "no",
+      "text" : "No"
+    }, {
+      "iconPath" : "freezing.jpg",
+      "id" : -1472564812,
+      "name" : "freezing",
+      "text" : "Freezing"
+    }, {
+      "iconPath" : "bad.jpg",
+      "id" : 66533,
+      "name" : "bad",
+      "text" : "Bad"
+    }, {
+      "iconPath" : "i.jpg",
+      "id" : 73,
+      "name" : "i",
+      "text" : "I"
+    }, {
+      "iconPath" : "yes.jpg",
+      "id" : 88775,
+      "name" : "yes",
+      "text" : "Yes"
+    }, {
+      "iconPath" : "food.jpg",
+      "id" : 2195582,
+      "name" : "food",
+      "text" : "Food"
+    }, {
+      "iconPath" : "go_home.jpg",
+      "id" : 1798848759,
+      "name" : "go_home",
+      "text" : "Go home"
+    }, {
+      "iconPath" : "dance.jpg",
+      "id" : 65798035,
+      "name" : "dance",
+      "text" : "Dance"
+    }, {
+      "iconPath" : "sick.jpg",
+      "id" : 2576734,
+      "name" : "sick",
+      "text" : "Sick"
+    }, {
+      "iconPath" : "thirsty.jpg",
+      "id" : 318809691,
+      "name" : "thirsty",
+      "text" : "Thirsty"
+    }, {
+      "iconPath" : "hungry.jpg",
+      "id" : -2122236819,
+      "name" : "hungry",
+      "text" : "Hungry"
+    }, {
+      "iconPath" : "sleepy.jpg",
+      "id" : -1815897950,
+      "name" : "sleepy",
+      "text" : "Sleepy"
+    }, {
+      "iconPath" : "dad.jpg",
+      "id" : 68455,
+      "name" : "dad",
+      "text" : "Dad"
+    }, {
+      "iconPath" : "i_am.jpg",
+      "id" : 2208611,
+      "name" : "i_am",
+      "text" : "I am"
+    }, {
+      "iconPath" : "i_want.jpg",
+      "id" : 2123122567,
+      "name" : "i_want",
+      "text" : "I want"
+    } ],
+    "phrase_categories": [
+      {
+        "id": 0,
+        "name": "Self"
+      },
+      {
+        "id": 1,
+        "name": "Actions"
+      },
+      {
+        "id": 2,
+        "name": "Feelings"
+      },
+      {
+        "id": 3,
+        "name": "People"
+      }
+    ],
+    "questions" : [ {
+      "answers" : [ {
+        "isCorrect" : true,
+        "questionId" : 0,
+        "text" : "1"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 0,
+        "text" : "8"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 0,
+        "text" : "2"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 0,
+        "text" : "4"
+      } ],
+      "categoryId" : 0,
+      "extraData" : "",
+      "id" : 0,
+      "text" : "2+2?"
+    }, {
+      "answers" : [ {
+        "isCorrect" : false,
+        "questionId" : 1,
+        "text" : "2"
+      }, {
+        "isCorrect" : true,
+        "questionId" : 1,
+        "text" : "1"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 1,
+        "text" : "4"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 1,
+        "text" : "8"
+      } ],
+      "categoryId" : 0,
+      "extraData" : "",
+      "id" : 1,
+      "text" : "2/2?"
+    }, {
+      "answers" : [ {
+        "isCorrect" : false,
+        "questionId" : 2,
+        "text" : "Blue"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 2,
+        "text" : "Purple"
+      }, {
+        "isCorrect" : true,
+        "questionId" : 2,
+        "text" : "Green"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 2,
+        "text" : "Red"
+      } ],
+      "categoryId" : 1,
+      "extraData" : "#1ccc42",
+      "id" : 2,
+      "text" : "What color is this"
+    }, {
+      "answers" : [ {
+        "isCorrect" : true,
+        "questionId" : 3,
+        "text" : "Happy"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 3,
+        "text" : "Scared"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 3,
+        "text" : "Sad"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 3,
+        "text" : "Excited"
+      } ],
+      "categoryId" : 2,
+      "extraData" : "beautiful-brunette-cute-774909.jpg",
+      "id" : 3,
+      "text" : "How is this person feeling?"
+    }, {
+      "answers" : [ {
+        "isCorrect" : false,
+        "questionId" : 4,
+        "text" : "Happy"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 4,
+        "text" : "Scared"
+      }, {
+        "isCorrect" : true,
+        "questionId" : 4,
+        "text" : "Sad"
+      }, {
+        "isCorrect" : false,
+        "questionId" : 4,
+        "text" : "Surprised"
+      } ],
+      "categoryId" : 2,
+      "extraData" : "alone-black-and-white-boy-551590.jpg",
+      "id" : 4,
+      "text" : "Emocione?"
+    } ],
+    "users" : {
+      "FHKT8PF2bhU7mGOC9Rap03KyDjA3" : {
+        "child_scores" : {
+          "-633096590" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 1878,
+            "id" : 2111387127,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527535046123
+          },
+          "18021796" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2504,
+            "id" : 18021796,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258763463
+          },
+          "21488681" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 31409,
+            "id" : 21488681,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258758787
+          },
+          "63171829" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 55243,
+            "id" : 63171829,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1528122780906
+          },
+          "89846050" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 27656,
+            "id" : 89846050,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529169302913
+          },
+          "91943900" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3215,
+            "id" : 91943900,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258686582
+          },
+          "96768616" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2579,
+            "id" : 96768616,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258681582
+          },
+          "100801406" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3712,
+            "id" : 100801406,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258677349
+          },
+          "137235861" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 7306,
+            "id" : 137235861,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258639632
+          },
+          "146253473" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 81293,
+            "id" : 146253473,
+            "mistakes" : 1,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1528122866325
+          },
+          "168675813" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 20299,
+            "id" : 168675813,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258606177
+          },
+          "239054462" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3441,
+            "id" : 239054462,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258533494
+          },
+          "240519475" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 18208,
+            "id" : 240519475,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529259032566
+          },
+          "243952183" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 18554,
+            "id" : 243952183,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258527782
+          },
+          "245168607" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2857,
+            "id" : 245168607,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529259037187
+          },
+          "248780510" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2996,
+            "id" : 248780510,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529259041653
+          },
+          "299204645" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 10482,
+            "id" : 299204645,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529259093874
+          },
+          "322252113" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 3604,
+            "id" : 322252113,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527966628141
+          },
+          "328386300" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 1655,
+            "id" : 328386300,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527966634015
+          },
+          "336953972" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 14725,
+            "id" : 336953972,
+            "mistakes" : 1,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1528123067106
+          },
+          "374586356" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 1911,
+            "id" : 374586356,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527537632279
+          },
+          "387612737" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2023,
+            "id" : 387612737,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168993441
+          },
+          "391275480" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2910,
+            "id" : 391275480,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168990113
+          },
+          "395142854" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2373,
+            "id" : 395142854,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168985722
+          },
+          "442938375" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2491,
+            "id" : 442938375,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168936375
+          },
+          "446302340" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2972,
+            "id" : 446302340,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168932467
+          },
+          "450769936" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 7842,
+            "id" : 450769936,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168928053
+          },
+          "459991537" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2546,
+            "id" : 459991537,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168918244
+          },
+          "465560470" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2331,
+            "id" : 465560470,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168912768
+          },
+          "505353173" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3167,
+            "id" : 505353173,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258256845
+          },
+          "509171226" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2702,
+            "id" : 509171226,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258252375
+          },
+          "513723204" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 6524,
+            "id" : 513723204,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529258248019
+          },
+          "520265892" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 3887,
+            "id" : 520265892,
+            "mistakes" : 1,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527716555256
+          },
+          "613819520" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 43784,
+            "id" : 613819520,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168756835
+          },
+          "657836451" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 32027,
+            "id" : 657836451,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168711411
+          },
+          "672774458" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 6282,
+            "id" : 672774458,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255012967
+          },
+          "677203304" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2828,
+            "id" : 677203304,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255017495
+          },
+          "679922004" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2240,
+            "id" : 679922004,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255021047
+          },
+          "683361330" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2206,
+            "id" : 683361330,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255024619
+          },
+          "687004915" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 1941,
+            "id" : 687004915,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255027715
+          },
+          "690449474" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 30150,
+            "id" : 690449474,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168677415
+          },
+          "768898412" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 73591,
+            "id" : 768898412,
+            "mistakes" : 3,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529268518427
+          },
+          "778146176" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 4609,
+            "id" : 778146176,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1530826686276
+          },
+          "785004926" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 4730,
+            "id" : 785004926,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1530826679135
+          },
+          "791347494" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 6002,
+            "id" : 791347494,
+            "mistakes" : 1,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1530826672430
+          },
+          "875656335" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 15130,
+            "id" : 875656335,
+            "mistakes" : 11,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527096566846
+          },
+          "880286949" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2685,
+            "id" : 880286949,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527096572066
+          },
+          "880793504" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 5483,
+            "id" : 880793504,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168480718
+          },
+          "884177790" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 1530,
+            "id" : 884177790,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527096576212
+          },
+          "895507113" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 10306,
+            "id" : 895507113,
+            "mistakes" : 1,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527096588234
+          },
+          "967445551" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "duration" : 3019,
+            "id" : 967445551,
+            "mistakes" : 1,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527254671943
+          },
+          "994519143" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 15405,
+            "id" : 994519143,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529168361537
+          },
+          "1073876787" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 4025,
+            "id" : 1073876787,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1526976103720
+          },
+          "1081339640" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 1588,
+            "id" : 1081339640,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527869964872
+          },
+          "1088002254" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 6676,
+            "id" : 1088002254,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529141448865
+          },
+          "1120499077" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 15485,
+            "id" : 1120499077,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529266554803
+          },
+          "1128072431" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2209,
+            "id" : 1128072431,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529257608437
+          },
+          "1132060488" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 4816,
+            "id" : 1132060488,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529257604195
+          },
+          "1140155489" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 60496,
+            "id" : 1140155489,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170581780
+          },
+          "1158202896" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 5390,
+            "id" : 1158202896,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529259987769
+          },
+          "1177949152" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 17313,
+            "id" : 1177949152,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529260007492
+          },
+          "1186195462" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 7144,
+            "id" : 1186195462,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529260016265
+          },
+          "1200702984" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3663,
+            "id" : 1200702984,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170646226
+          },
+          "1215405633" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 14182,
+            "id" : 1215405633,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170661698
+          },
+          "1223373532" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 5572,
+            "id" : 1223373532,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170669819
+          },
+          "1270247595" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3902,
+            "id" : 1270247595,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255634572
+          },
+          "1273806395" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2793,
+            "id" : 1273806395,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255639015
+          },
+          "1277828800" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2565,
+            "id" : 1277828800,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255643008
+          },
+          "1281705133" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2554,
+            "id" : 1281705133,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255647170
+          },
+          "1364068148" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 55773,
+            "id" : 1364068148,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170814548
+          },
+          "1378534670" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 15027,
+            "id" : 1378534670,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170830916
+          },
+          "1482021443" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2706,
+            "id" : 1482021443,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170938928
+          },
+          "1485355038" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 4052,
+            "id" : 1485355038,
+            "mistakes" : 3,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1526745507345
+          },
+          "1486429736" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2805,
+            "id" : 1486429736,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170943576
+          },
+          "1489686720" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2593,
+            "id" : 1489686720,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170947556
+          },
+          "1491270797" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 76698,
+            "id" : 1491270797,
+            "mistakes" : 3,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529269270023
+          },
+          "1493714209" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2839,
+            "id" : 1493714209,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170951603
+          },
+          "1497677838" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2544,
+            "id" : 1497677838,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170955673
+          },
+          "1501452460" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2135,
+            "id" : 1501452460,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170959622
+          },
+          "1504328516" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 1849,
+            "id" : 1504328516,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529170962808
+          },
+          "1562809154" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 7139,
+            "id" : 1562809154,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529266094948
+          },
+          "1570948266" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 7033,
+            "id" : 1570948266,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529266086282
+          },
+          "1604032190" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3328,
+            "id" : 1604032190,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529255982553
+          },
+          "1615430317" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3777,
+            "id" : 1615430317,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529261570839
+          },
+          "1618645511" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 2106,
+            "id" : 1618645511,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529171081636
+          },
+          "1620791023" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3614,
+            "id" : 1620791023,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529261565386
+          },
+          "1625357757" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 4604,
+            "id" : 1625357757,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529261559962
+          },
+          "1632205223" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 3849,
+            "id" : 1632205223,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529261553445
+          },
+          "1636483327" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 20591,
+            "id" : 1636483327,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529260485097
+          },
+          "1637260765" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 13778,
+            "id" : 1637260765,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529261547792
+          },
+          "1941704544" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 6846,
+            "id" : 1296555583,
+            "mistakes" : 3,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1527534993498
+          },
+          "1952146427" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 10970,
+            "id" : 1952146427,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1529261220282
+          },
+          "1984164353" : {
+            "childId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "duration" : 41253,
+            "id" : 1984164353,
+            "mistakes" : 0,
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+            "timestamp" : 1530820620513
+          }
+        },
+        "children" : {
+          "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826" : {
+            "dateOfBirth" : 1527096485584,
+            "gender" : "Female",
+            "id" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD103904826",
+            "name" : "mirko",
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3"
+          },
+          "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374" : {
+            "dateOfBirth" : 1526745438730,
+            "gender" : "Male",
+            "id" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3CHILD71339374",
+            "name" : "Janja Manja",
+            "parentId" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3"
+          }
+        },
+        "email" : "marijannovak123@gmail.com",
+        "id" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3",
+        "parentPassword" : "lozinka123",
+        "profilePicPath" : "FHKT8PF2bhU7mGOC9Rap03KyDjA3.jpg",
+        "username" : "Marijan Novakk"
+      }
+    }
+  }
+}

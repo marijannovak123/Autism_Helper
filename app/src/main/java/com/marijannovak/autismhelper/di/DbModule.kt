@@ -73,4 +73,11 @@ class DbModule {
     fun provideSentenceDao(db: AppDatabase): SavedSentenceDao {
         return db.savedSentenceDao()
     }
+
+    @Singleton
+    @Provides
+    fun providePhraseCategoryDao(db: AppDatabase): PhraseCategoryDao {
+        return db.phraseCategoryDao()
+    }
+
 }

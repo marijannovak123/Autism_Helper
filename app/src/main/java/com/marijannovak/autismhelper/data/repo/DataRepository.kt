@@ -73,6 +73,10 @@ class DataRepository @Inject constructor(
                             } else {
                                 db.aacDao().updateMultiple(it)
                             }
+                        }.toCompletable(),
+                api.getPhraseCategories()
+                        .doOnSuccess{
+                            db.phraseCategoryDao().insertMultiple(it)
                         }.toCompletable()
         ).subscribeOn(ioScheduler).observeOn(mainScheduler)
     }

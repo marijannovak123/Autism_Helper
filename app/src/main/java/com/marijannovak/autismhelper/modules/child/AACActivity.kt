@@ -14,6 +14,7 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
+import com.marijannovak.autismhelper.modules.child.fragments.PhraseCategoryFragment
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
@@ -27,28 +28,29 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
     private lateinit var tts: TextToSpeech
     private var ttsWords: ArrayList<String> = ArrayList()
     private var ttsSupported = false
-    private var aacSelectorAdapter: AACAdapter? = null
     private var aacDisplayAdapter: AACAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aac)
 
-        tts = TextToSpeech(this, {
+        tts = TextToSpeech(this) {
             if (it == TextToSpeech.SUCCESS) {
                 ttsSupported = true
                 tts.language = Locale.US
                 tts.setSpeechRate(viewModel.getTtsSpeed())
                 tts.setPitch(viewModel.getTtsPitch())
             }
-        })
+        }
 
-
-        viewModel.loadPhrases()
+        loadFragment(PhraseCategoryFragment())
     }
 
     private fun loadFragment(fragment: BaseFragment) {
-
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.flContainer, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun handleResource(phrasesAndSentences: Resource<PhrasesSavedSentencesJoin>?) {
@@ -133,10 +135,9 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
                 }
 
                 R.id.action_enter_text -> {
-                   DialogHelper.showEnterPhraseTextDialog(this@AACActivity, {
+                   DialogHelper.showEnterPhraseTextDialog(this@AACActivity) {
                        addItemToDisplay(it)
-                   })
-
+                   }
                 }
 
                 R.id.action_save_sentence -> {

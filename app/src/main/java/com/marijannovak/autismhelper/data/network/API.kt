@@ -44,7 +44,12 @@ interface API {
     @PATCH("users/{userId}/children/{childId}.json")
     fun updateChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
 
+    @GET("phrase_categories.json")
+    fun getPhraseCategories(): Single<List<PhraseCategory>>
+
     @GET
     @CustomConverterFactory.Xml
     fun getFeed(@Url feedUrl: String): Single<RSS>
+
+
 }
