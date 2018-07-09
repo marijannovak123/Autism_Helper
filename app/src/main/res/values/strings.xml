@@ -111,4 +111,6 @@
     <string name="enter_count">Enter count</string>
     <string name="answer">Answer</string>
     <string name="autism_info">Autism Info</string>
+    <string name="sentences">Saved sentences</string>
+    <string name="max_phrases">Maximum number of phrases displayed</string>
 </resources>

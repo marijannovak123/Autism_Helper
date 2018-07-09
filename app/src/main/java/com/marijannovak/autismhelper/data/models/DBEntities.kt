@@ -135,7 +135,7 @@ data class AacPhrase(
         var name: String,
         var text: String,
         var iconPath: String,
-        var category: Int
+        var categoryId: Int
 ) {
     constructor() : this(0, "", "", "", -1)
 
@@ -146,6 +146,15 @@ data class AacPhrase(
             }
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        result = 31 * result + text.hashCode()
+        result = 31 * result + iconPath.hashCode()
+        result = 31 * result + categoryId
+        return result
     }
 }
 
@@ -160,8 +169,7 @@ data class SavedSentence(
 data class PhraseCategory(
         @PrimaryKey
         var id: Int,
-        var name: String,
-        var photoPath: String
+        var name: String
 )
 
 class UserChildrenJoin : Serializable {

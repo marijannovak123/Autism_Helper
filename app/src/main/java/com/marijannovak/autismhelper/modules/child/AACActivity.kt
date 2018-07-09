@@ -43,32 +43,23 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
             }
         }
 
+        setupAacDisplay()
         loadFragment(PhraseCategoryFragment())
     }
 
-    private fun loadFragment(fragment: BaseFragment) {
+    //todo: handle backstack
+    fun loadFragment(fragment: BaseFragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.flContainer, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
 
-    override fun handleResource(phrasesAndSentences: Resource<PhrasesSavedSentencesJoin>?) {
-        phrasesAndSentences?.let {
-            showLoading(it.status, it.message)
-            when (it.status) {
-                Status.SUCCESS -> {
-                    setUpAacData(it.data!!.phrases)
-                }
+    override fun handleResource(resource: Resource<PhrasesSavedSentencesJoin>?) {
 
-                else -> {
-
-                }
-            }
-        }
     }
 
-    private fun setUpAacData(phrases: List<AacPhrase>?) {
+    private fun setupAacDisplay() {
         if (aacDisplayAdapter == null) {
             aacDisplayAdapter = AACAdapter(emptyList(), { _, position ->
                 aacDisplayAdapter?.deleteItem(position)
@@ -77,32 +68,14 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
             rvAacDisplay.adapter = aacDisplayAdapter
             rvAacDisplay.layoutManager = GridLayoutManager(this, 5)
         }
-
-        /*phrases?.let {
-            if (aacSelectorAdapter == null) {
-                aacSelectorAdapter = AACAdapter(emptyList(), { phrase, _ ->
-                    if(aacDisplayAdapter!!.datasetCount() < 10) {
-                        addItemToDisplay(phrase)
-                    } else {
-                        showMessage(R.string.max_phrases, null)
-                    }
-                }, { phrase, _ ->
-                    speak(phrase.name)
-                })
-                rvAacSelector.adapter = aacSelectorAdapter
-                rvAacSelector.layoutManager = GridLayoutManager(this, 5)
-            }
-
-            aacSelectorAdapter!!.update(it)
-        }*/
     }
 
-    private fun addItemToDisplay(phrase: AacPhrase) {
+    fun addItemToDisplay(phrase: AacPhrase) {
         aacDisplayAdapter?.addItem(phrase)
         ttsWords.add(phrase.text)
     }
 
-    private fun speak(toSpeak: String) {
+    fun speak(toSpeak: String) {
         if (ttsSupported) {
             if(viewModel.isSoundOn()) {
                 tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, Bundle(), null)
@@ -161,5 +134,9 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
         tts.stop()
         tts.shutdown()
         super.onDestroy()
+    }
+
+    fun getDisplayedPhrasesNo(): Int {
+        return aacDisplayAdapter!!.datasetCount()
     }
 }

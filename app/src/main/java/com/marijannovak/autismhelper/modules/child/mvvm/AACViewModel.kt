@@ -23,10 +23,10 @@ class AACViewModel
     var phrasesLiveData = MutableLiveData<List<AacPhrase>>()
     var sentenceLivedata = MutableLiveData<List<SavedSentence>>()
 
-    fun loadPhrases() {
+    fun loadPhrases(phraseCategoryId: Int) {
         compositeDisposable.add(
-                repository.getPhrases().subscribe(
-                        { phrases -> resourceLiveData.value = Resource.success(phrases) },
+                repository.getCategoryPhrases(phraseCategoryId).subscribe(
+                        { phrases -> phrasesLiveData.value = phrases },
                         { error -> resourceLiveData.value = Resource.message(R.string.load_error, error.message ?: "") }
                 )
         )
@@ -52,7 +52,7 @@ class AACViewModel
                         })
     }
 
-    fun loadPhrasesAndSentences() {
+    fun loadSentences() {
         compositeDisposable +=
                 repository.loadSentences()
                         .subscribe( {

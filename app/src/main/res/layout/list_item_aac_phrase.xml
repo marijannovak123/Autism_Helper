@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/img_bg"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:layout_marginTop="5dp">
 
     <ImageView
         android:id="@+id/ivAacImg"

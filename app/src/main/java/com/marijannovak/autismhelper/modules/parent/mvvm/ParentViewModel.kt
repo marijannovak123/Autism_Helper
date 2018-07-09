@@ -14,7 +14,6 @@ import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
-//TODO: REORGANIZE REPOSITORIES BY MODELS THEY ARE DATA SOURCE FOR
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
         private val aacRepository: AACRepository,
@@ -26,6 +25,7 @@ class ParentViewModel @Inject constructor(
     val userNameLiveData = MutableLiveData<String>()
     val chartLiveData = MutableLiveData<ParentRepository.ChartData>()
     val phraseLiveData = MutableLiveData<List<AacPhrase>>()
+    val phraseCategoryLiveData = MutableLiveData<List<PhraseCategory>>()
     val userWithChildrenLiveData = MutableLiveData<UserChildrenJoin>()
     val userLiveData = MutableLiveData<User>()
     val feedLiveData = MutableLiveData<List<FeedItem>>()
@@ -211,6 +211,13 @@ class ParentViewModel @Inject constructor(
         }, {
             resourceLiveData.value = Resource.message(R.string.fetch_error, it.message ?: "")
         })
+    }
+
+    fun loadPhraseCategories() {
+        aacRepository.loadPhraseCategories()
+                .subscribe{
+                    phraseCategoryLiveData.value = it
+                }
     }
 
 }

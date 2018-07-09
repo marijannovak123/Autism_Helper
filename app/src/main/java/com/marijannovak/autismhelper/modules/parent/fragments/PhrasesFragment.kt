@@ -9,12 +9,14 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
+import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.REQUEST_CODE_IMAGE_LOADED
 import com.marijannovak.autismhelper.data.models.AacPhrase
+import com.marijannovak.autismhelper.data.models.PhraseCategory
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.parent.ParentActivity
 import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
@@ -32,6 +34,8 @@ import java.io.IOException
 class PhrasesFragment : InjectableFragment<ParentViewModel>() {
 
     private var phrasesAdapter: AACAdapter? = null
+    private var phraseCategoryArrayAdapter: ArrayAdapter<String>? = null
+    private var categories = emptyList<PhraseCategory>()
     private var loadedBitmap: Bitmap? = null
     private var loadedBitmapName: String = ""
 
@@ -62,7 +66,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
             val icon = ImageHelper.saveBitmap(activity, loadedBitmap, loadedBitmapName).absolutePath
 
             if (text.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
-                viewModel.savePhrase(AacPhrase(text.hashCode(), text.replaceSpacesWithUnderscores(), text, icon))
+                viewModel.savePhrase(AacPhrase(text.hashCode(), text.replaceSpacesWithUnderscores(), text, icon, categories[spPhraseCategories.selectedItemPosition].id))
             } else {
                 toast(R.string.invalid_input)
             }
@@ -76,9 +80,24 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                     Observer {
                         setUpPhrasesRv(it)
                     })
+            viewModel.phraseCategoryLiveData.observe(this, Observer { setUpCategorySpinner(it) })
         }
         viewModel.loadPhrases()
+        viewModel.loadPhraseCategories()
+    }
 
+    private fun setUpCategorySpinner(categories: List<PhraseCategory>?) {
+        categories?.let {
+            this.categories = it
+            val categoryNames = ArrayList<String>()
+            categories.forEach{
+                categoryNames.add(it.name)
+            }
+            if(phraseCategoryArrayAdapter == null || spPhraseCategories.adapter == null) {
+                phraseCategoryArrayAdapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, categoryNames)
+                spPhraseCategories.adapter = phraseCategoryArrayAdapter
+            }
+        }
     }
 
     private fun setUpPhrasesRv(phrases: List<AacPhrase>?) {
@@ -86,11 +105,11 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
             if (phrasesAdapter == null || rvPhrases.adapter == null) {
                 phrasesAdapter = AACAdapter(emptyList(), { phrase, _ ->
                     editPhrase(phrase)
-                }, { phrase, _ ->
-                    DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_phrase), {
+                }) { phrase, _ ->
+                    DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_phrase)) {
                         viewModel.deletePhrase(phrase)
-                    })
-                })
+                    }
+                }
                 rvPhrases.adapter = phrasesAdapter
                 rvPhrases.layoutManager = GridLayoutManager(activity, 5)
                 rvPhrases.itemAnimator = DefaultItemAnimator()

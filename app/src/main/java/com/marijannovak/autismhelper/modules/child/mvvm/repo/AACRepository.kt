@@ -35,6 +35,12 @@ class AACRepository @Inject constructor(
                 .observeOn(mainScheduler)
     }
 
+    fun getCategoryPhrases(phraseCategoryId: Int): Flowable<List<AacPhrase>> {
+        return aacDao.getCategoryPhrases(phraseCategoryId)
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
+    }
+
     fun savePhrase(phrase: AacPhrase): Completable {
         return Completable.fromAction {
                 aacDao.insert(phrase)

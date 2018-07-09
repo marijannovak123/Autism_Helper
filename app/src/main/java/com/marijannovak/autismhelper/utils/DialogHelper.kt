@@ -398,7 +398,7 @@ class DialogHelper {
             btnPositive.setOnClickListener {
                 val phraseText = etPhraseText.text.toString()
                 if(phraseText.isNotEmpty()) {
-                    onConfirm(AacPhrase(0, phraseText, phraseText, ""))
+                    onConfirm(AacPhrase(0, phraseText, phraseText, "", 0))
                     alertDialog.dismiss()
                 }
             }

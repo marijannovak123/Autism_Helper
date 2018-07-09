@@ -52,6 +52,13 @@
                 tools:ignore="KeyboardInaccessibleWidget" />
         </android.support.design.widget.TextInputLayout>
 
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spPhraseCategories"
+            android:layout_margin="10dp"/>
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btnAddPhrase"
             style="@style/style_answer_button"

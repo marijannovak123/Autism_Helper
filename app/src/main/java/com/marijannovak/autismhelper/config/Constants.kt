@@ -58,7 +58,7 @@ class Constants {
         const val EXTRA_CATEGORY_ID = "category_id"
         const val EXTRA_CHILD = "child"
         const val EXTRA_QUESTION_NO = "question_no"
-
+        const val EXTRA_PHRASE_CATEGORY = "phrase_category"
         //endregion
 
         //region fragments
