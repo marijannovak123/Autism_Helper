@@ -71,4 +71,10 @@ class AACRepository @Inject constructor(
                 .observeOn(mainScheduler)
     }
 
+    fun deleteSentence(sentence: SavedSentence): Completable {
+        return Completable.fromAction {
+            sentenceDao.delete(sentence)
+        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    }
+
 }

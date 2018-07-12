@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
+import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User

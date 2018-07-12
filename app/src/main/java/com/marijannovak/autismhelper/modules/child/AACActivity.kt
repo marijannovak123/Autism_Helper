@@ -1,25 +1,28 @@
 package com.marijannovak.autismhelper.modules.child
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
-import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
 import com.marijannovak.autismhelper.modules.child.adapters.AACAdapter
 import com.marijannovak.autismhelper.modules.child.fragments.PhraseCategoryFragment
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
+import com.marijannovak.autismhelper.modules.main.MainActivity
 import com.marijannovak.autismhelper.utils.DialogHelper
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.toSentence
 import kotlinx.android.synthetic.main.activity_aac.*
+import kotlinx.android.synthetic.main.fragment_phrase_pick.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,10 +50,9 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
         loadFragment(PhraseCategoryFragment())
     }
 
-    //todo: handle backstack
     fun loadFragment(fragment: BaseFragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.flContainer, fragment)
+        transaction.replace(R.id.flContainer, fragment, fragment.javaClass.simpleName)
         transaction.addToBackStack(null)
         transaction.commit()
     }
@@ -64,6 +66,9 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
             aacDisplayAdapter = AACAdapter(emptyList(), { _, position ->
                 aacDisplayAdapter?.deleteItem(position)
                 ttsWords.removeAt(position)
+                if(aacDisplayAdapter!!.datasetCount() == 0) {
+                    tvNoPhrasesAdded.visibility = View.VISIBLE
+                }
             }, { _, _ -> /*noop*/})
             rvAacDisplay.adapter = aacDisplayAdapter
             rvAacDisplay.layoutManager = GridLayoutManager(this, 5)
@@ -71,8 +76,19 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
     }
 
     fun addItemToDisplay(phrase: AacPhrase) {
+        tvNoPhrasesAdded.visibility = View.GONE
         aacDisplayAdapter?.addItem(phrase)
         ttsWords.add(phrase.text)
+    }
+
+    fun addMultipleItemsToDisplay(phrases: List<AacPhrase>) {
+        tvNoPhrasesAdded.visibility = View.GONE
+        val phraseStrings = ArrayList<String>()
+        phrases.forEach {
+            phraseStrings.add(it.text)
+        }
+        aacDisplayAdapter?.addItems(phrases)
+        ttsWords.addAll(phraseStrings)
     }
 
     fun speak(toSpeak: String) {
@@ -134,6 +150,17 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
         tts.stop()
         tts.shutdown()
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        val phraseCategoryFragment = supportFragmentManager.findFragmentByTag(PhraseCategoryFragment::class.java.simpleName)
+        if(phraseCategoryFragment != null && phraseCategoryFragment.isVisible) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     fun getDisplayedPhrasesNo(): Int {

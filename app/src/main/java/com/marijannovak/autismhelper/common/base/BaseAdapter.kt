@@ -29,11 +29,16 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
 
     fun deleteItem(position: Int) {
         this.dataSet.removeAt(position)
-        this.notifyItemRemoved(position)
+        this.notifyDataSetChanged()
     }
 
     fun addItem(model: T) {
         this.dataSet.add(model)
+        this.notifyDataSetChanged()
+    }
+
+    fun addItems(models: List<T>) {
+        this.dataSet.addAll(models)
         this.notifyDataSetChanged()
     }
 

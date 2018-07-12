@@ -1,7 +1,6 @@
 package com.marijannovak.autismhelper.modules.child.fragments
 
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -47,23 +46,30 @@ class PhrasePickFragment : InjectableFragment<AACViewModel>() {
 
     private fun setUpPhrases(phrases: List<AacPhrase>?) {
         phrases?.let {
-            if(adapter == null || rvPhrasePicker.adapter == null) {
-                adapter = AACAdapter(it, {
-                    phrase, _ ->
+            if(it.isEmpty()) {
+                rvPhrasePicker.visibility = View.GONE
+                tvNoPhrases.visibility = View.VISIBLE
+            } else {
+                rvPhrasePicker.visibility = View.VISIBLE
+                tvNoPhrases.visibility = View.GONE
+                if(adapter == null || rvPhrasePicker.adapter == null) {
+                    adapter = AACAdapter(it, {
+                        phrase, _ ->
                         if(aacActivity.getDisplayedPhrasesNo() < 10) {
                             aacActivity.addItemToDisplay(phrase)
                         } else {
                             aacActivity.showMessage(R.string.max_phrases, null)
                         }
-                }) { phrase, _ ->
-                    aacActivity.speak(phrase.name)
+                    }) { phrase, _ ->
+                        aacActivity.speak(phrase.name)
+                    }
+                    rvPhrasePicker.adapter = adapter
+                    rvPhrasePicker.layoutManager = GridLayoutManager(activity, 5)
+                    rvPhrasePicker.itemAnimator = DefaultItemAnimator()
                 }
-                rvPhrasePicker.adapter = adapter
-                rvPhrasePicker.layoutManager = GridLayoutManager(activity, 5)
-                rvPhrasePicker.itemAnimator = DefaultItemAnimator()
-            }
 
-            adapter!!.update(it)
+                adapter!!.update(it)
+            }
         }
     }
 

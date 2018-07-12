@@ -113,4 +113,7 @@
     <string name="autism_info">Autism Info</string>
     <string name="sentences">Saved sentences</string>
     <string name="max_phrases">Maximum number of phrases displayed</string>
+    <string name="deleted">Deleted</string>
+    <string name="no_phrases">No phrases available</string>
+    <string name="no_sentences">No saved sentences</string>
 </resources>

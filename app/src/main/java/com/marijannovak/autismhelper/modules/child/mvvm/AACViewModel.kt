@@ -62,4 +62,14 @@ class AACViewModel
                         })
     }
 
+    fun deleteSentence(sentence: SavedSentence) {
+        compositeDisposable +=
+                repository.deleteSentence(sentence)
+                        .subscribe({
+                            resourceLiveData.value = Resource.message(R.string.deleted)
+                        }, {
+                            resourceLiveData.value = Resource.message(R.string.error)
+                        })
+    }
+
 }
