@@ -89,6 +89,11 @@ class QuizPagerAdapter(
                 tvAnswer4.text = answers[3].text
 
                 ivColorImage.setBackgroundColor(Color.parseColor(question.extraData))
+
+                tvAnswer1.setOnClickListener { onItemClick(answers[0].isCorrect) }
+                tvAnswer2.setOnClickListener { onItemClick(answers[1].isCorrect) }
+                tvAnswer3.setOnClickListener { onItemClick(answers[2].isCorrect) }
+                tvAnswer4.setOnClickListener { onItemClick(answers[3].isCorrect) }
             }
         }
 
