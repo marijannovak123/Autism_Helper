@@ -99,13 +99,12 @@ data class Question(
         var id: Int,
         var text: String,
         var categoryId: Int,
-        var typeId: Int,
         var extraData: String?,
         var imgPath: String?,
         @Ignore
         var answers: List<Answer>
 ) {
-    constructor() : this(0, "", 0, 0, "", null, emptyList())
+    constructor() : this(0, "", 0, "", null, emptyList())
 
     override fun equals(other: Any?): Boolean {
         if(other is Question) {
