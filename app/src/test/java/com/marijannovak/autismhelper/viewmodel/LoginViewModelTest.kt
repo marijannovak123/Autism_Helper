@@ -19,7 +19,7 @@ class LoginViewModelTest: BaseUnitTest() {
 
     @Mock private lateinit var loginRepo: LoginRepository
     @Mock private lateinit var dataRepo: DataRepository
-    @Mock private lateinit var observer: Observer<Resource<List<User>>>
+    @Mock private lateinit var observer: Observer<Resource<User>>
 
     private lateinit var loginViewModel: LoginViewModel
     private val user: User = TestDataGenerator.testUser()
@@ -37,6 +37,6 @@ class LoginViewModelTest: BaseUnitTest() {
         loginViewModel.checkLoggedIn()
 
         verify(observer).onChanged(Resource.loading())
-        verify(observer).onChanged(Resource.success(listOf(user)))
+        verify(observer).onChanged(Resource.success(user))
     }
 }

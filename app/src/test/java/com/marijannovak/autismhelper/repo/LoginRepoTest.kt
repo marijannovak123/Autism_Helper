@@ -49,6 +49,5 @@ class LoginRepoTest: BaseUnitTest(){
         //wait for scheduler to finish before asserting
         testObserver.awaitTerminalEvent()
         testObserver.assertValue(user)
-
     }
 }

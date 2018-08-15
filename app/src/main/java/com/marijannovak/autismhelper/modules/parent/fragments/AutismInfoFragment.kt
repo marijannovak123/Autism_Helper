@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.webkit.WebViewClient
 
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
@@ -35,6 +36,15 @@ class AutismInfoFragment : BaseFragment() {
                     progressDialog?.dismiss()
                     progressDialog = null
                 }
+            }
+
+
+        }
+
+        wvAutismInfo.webViewClient = object: WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                view?.loadUrl(url)
+                return true
             }
         }
 

@@ -138,17 +138,17 @@ class ParentViewModel @Inject constructor(
 
     fun updateUserData(userId: String, userUpdateRequest: UserUpdateRequest, picPath: String,  bitmap: Bitmap) {
         resourceLiveData.value = Resource.loading()
-            val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            val data = baos.toByteArray()
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
 
-            val storageRef = storageRef.child("$userId.jpg")
-            storageRef.putBytes(data)
-                    .addOnSuccessListener {
-                        updateUserOnApiAndDb(userId, userUpdateRequest, picPath)
-                    }.addOnFailureListener{
-                        resourceLiveData.value = Resource.message(R.string.firebase_upload_error,it.message ?: "Error" )
-                    }
+        val storageRef = storageRef.child("$userId.jpg")
+        storageRef.putBytes(data)
+                .addOnSuccessListener {
+                    updateUserOnApiAndDb(userId, userUpdateRequest, picPath)
+                }.addOnFailureListener{
+                    resourceLiveData.value = Resource.message(R.string.firebase_upload_error,it.message ?: "Error" )
+                }
 
     }
 

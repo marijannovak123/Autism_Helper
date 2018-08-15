@@ -17,7 +17,6 @@ class UserDaoTest: BaseDaoTest() {
     @Before
     override fun setUp() {
         super.setUp()
-
         userDao = db.userDao()
         userDao.getCurrentUser().test().assertNoValues()
 

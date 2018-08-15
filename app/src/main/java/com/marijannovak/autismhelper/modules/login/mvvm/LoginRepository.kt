@@ -37,7 +37,10 @@ class LoginRepository @Inject constructor(
     private var currentUser: FirebaseUser? = null
 
     fun isLoggedIn(): Maybe<User> {
-        return db.userDao().userLoggedIn().subscribeOn(ioScheduler).observeOn(mainScheduler)
+        return db.userDao()
+                .userLoggedIn()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
     fun register(signupRequest: SignupRequest, listener: GeneralListener<FirebaseUser>) {
@@ -132,10 +135,9 @@ class LoginRepository @Inject constructor(
 
     fun fetchAndSaveUser(userId: String): Completable {
         return api.getUser(userId)
-                .flatMapCompletable { user ->
-                    saveUser(user)
-                }
-                .subscribeOn(ioScheduler).observeOn(mainScheduler)
+                .flatMapCompletable { user -> saveUser(user) }
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
     }
 
 }

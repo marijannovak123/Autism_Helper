@@ -116,24 +116,23 @@ class LoginViewModel @Inject constructor(
     private fun fetchAndSaveUserData(userId: String) {
         compositeDisposable.add(
                 repository.fetchAndSaveUser(userId).subscribe(
-                        { syncData() },
+                        { syncContet() },
                         { error -> throwErrorAndLogOut(R.string.fetch_error, error.message ?: "") }
                 )
         )
-
     }
 
     fun saveUserOnlineAndLocally(user: User) {
         resourceLiveData.value = Resource.loading()
         compositeDisposable.add(
                 repository.uploadAndSaveUser(user).subscribe(
-                        { syncData() },
+                        { syncContet() },
                         { throwErrorAndLogOut(R.string.firebase_upload_error, it.message ?: "") }
                 )
         )
     }
 
-    private fun syncData() {
+    private fun syncContet() {
         resourceLiveData.value = Resource.loading(R.string.downloading_resources)
         compositeDisposable.add(
                 dataRepository.syncData(true).subscribe(

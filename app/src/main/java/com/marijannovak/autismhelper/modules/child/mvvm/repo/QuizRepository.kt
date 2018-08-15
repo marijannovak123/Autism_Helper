@@ -31,11 +31,14 @@ class QuizRepository @Inject constructor(
 
     fun saveScoreLocallyAndOnline(score: ChildScore): Completable {
         val scoreToSave = score.copy(id = Math.abs(score.hashCode()))
-        return api.putScore(scoreToSave.parentId, scoreToSave.id, scoreToSave)
-                .onErrorComplete()
-                .doOnComplete {
-                    childScoreDao.insert(scoreToSave)
-                }.subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+        with(scoreToSave) {
+            return api.putScore(parentId, id, this)
+                    .onErrorComplete()
+                    .doOnComplete {
+                        childScoreDao.insert(scoreToSave)
+                    }.subscribeOn(ioScheduler)
+                    .observeOn(mainScheduler)
+        }
+
     }
 }
