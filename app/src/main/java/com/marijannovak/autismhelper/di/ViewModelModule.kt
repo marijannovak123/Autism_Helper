@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.di
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
 import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel

@@ -1,11 +1,11 @@
 package com.marijannovak.autismhelper.modules.parent
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import android.view.MenuItem
 import android.view.View
 import com.marijannovak.autismhelper.R
@@ -61,7 +61,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
         loadFragment(fragments[FRAGMENT_CHILDREN]!!)
         navView.menu.findItem(R.id.children).isChecked = true
         navView.setNavigationItemSelectedListener { item -> handleNavViewClick(item) }
-        drawerLayout.addDrawerListener(object: DrawerLayout.DrawerListener {
+        drawerLayout.addDrawerListener(object: androidx.drawerlayout.widget.DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
                 navView.tvProfileName?.let {
                     if(it.text.isEmpty()) {

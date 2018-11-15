@@ -2,7 +2,7 @@ package com.marijannovak.autismhelper.modules.parent.fragments
 
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

@@ -16,7 +16,7 @@
         android:text="@string/add_child_profile"
         android:textSize="20sp" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -28,9 +28,9 @@
             android:inputType="text"
             android:nextFocusForward="@id/etChildDateOfBirth" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -45,7 +45,7 @@
             android:inputType="date"
             tools:ignore="KeyboardInaccessibleWidget" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
         android:id="@+id/spGender"

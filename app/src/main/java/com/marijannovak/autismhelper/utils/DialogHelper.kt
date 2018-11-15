@@ -14,8 +14,8 @@ import android.os.Build
 import android.os.Handler
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.support.v4.app.ActivityCompat
-import android.support.v7.widget.AppCompatButton
+import androidx.core.app.ActivityCompat
+import androidx.appcompat.widget.AppCompatButton
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*

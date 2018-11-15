@@ -1,7 +1,7 @@
 package com.marijannovak.autismhelper.modules.child.fragments
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseFragment
@@ -41,7 +41,7 @@ class MathFragment : BaseFragment() {
         super.onStart()
         mathShapeAdapter = MathShapeAdapter()
         rvMath.adapter = mathShapeAdapter
-        rvMath.layoutManager = GridLayoutManager(context, 6)
+        rvMath.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 6)
 
         btnSubmitCount.setOnClickListener {
             val answer = etCount.text.toString().toInt()

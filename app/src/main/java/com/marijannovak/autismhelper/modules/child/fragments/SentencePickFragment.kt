@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.modules.child.fragments
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,8 +50,8 @@ class SentencePickFragment : InjectableFragment<AACViewModel>() {
                         viewModel.deleteSentence(sentence)
                     })
                     rvSentences.adapter = sentenceAdapter
-                    rvSentences.layoutManager = LinearLayoutManager(activity)
-                    rvSentences.itemAnimator = DefaultItemAnimator()
+                    rvSentences.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                    rvSentences.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
                 }
 
                 sentenceAdapter!!.update(it)

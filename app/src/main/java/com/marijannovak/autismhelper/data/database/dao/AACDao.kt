@@ -1,8 +1,8 @@
 package com.marijannovak.autismhelper.data.database.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
 import com.marijannovak.autismhelper.common.base.BaseDao
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_AAC
 import com.marijannovak.autismhelper.data.models.AacPhrase

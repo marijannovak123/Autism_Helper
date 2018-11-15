@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.di
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.AppDatabase

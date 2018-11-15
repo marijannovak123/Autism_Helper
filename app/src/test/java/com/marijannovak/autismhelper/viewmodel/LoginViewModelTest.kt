@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.viewmodel
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository

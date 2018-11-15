@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.modules.child.mvvm
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.AacPhrase

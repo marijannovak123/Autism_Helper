@@ -3,7 +3,7 @@ package com.marijannovak.autismhelper.modules.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.KEY_SIGNUP_REQUEST

@@ -95,7 +95,7 @@ class ParentRepository @Inject constructor(
                 .observeOn(mainScheduler)
     }
 
-    fun loadUserName(): Single<String?> {
+    fun loadUserName(): Single<String> {
         return userDao
                 .getCurrentUser()
                 .map { user -> user.username ?: "Parent" }

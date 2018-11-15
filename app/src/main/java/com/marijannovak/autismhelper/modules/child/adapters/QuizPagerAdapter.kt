@@ -2,7 +2,7 @@ package com.marijannovak.autismhelper.modules.child.adapters
 
 import android.content.Context
 import android.graphics.Color
-import android.support.v4.view.PagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ class QuizPagerAdapter(
         private val categoryId: Int,
         private var questionsWithAnswers: List<QuestionAnswersJoin>,
         private val onItemClick: (Boolean) -> Unit
-) : PagerAdapter() {
+) : androidx.viewpager.widget.PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         return when(categoryId) {

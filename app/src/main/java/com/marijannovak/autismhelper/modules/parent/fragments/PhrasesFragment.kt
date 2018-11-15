@@ -1,13 +1,13 @@
 package com.marijannovak.autismhelper.modules.parent.fragments
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.*
 import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
@@ -111,8 +111,8 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                     }
                 }
                 rvPhrases.adapter = phrasesAdapter
-                rvPhrases.layoutManager = GridLayoutManager(activity, 5)
-                rvPhrases.itemAnimator = DefaultItemAnimator()
+                rvPhrases.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 5)
+                rvPhrases.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
             }
 
             phrasesAdapter!!.update(it)

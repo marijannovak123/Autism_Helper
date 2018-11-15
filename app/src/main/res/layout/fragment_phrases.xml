@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".modules.parent.fragments.PhrasesFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPhrases"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,7 +22,7 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -34,9 +34,9 @@
                 android:inputType="text"
                 android:nextFocusForward="@id/etChildDateOfBirth" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -50,7 +50,7 @@
                 android:hint="@string/phrase_icon"
                 android:inputType="text"
                 tools:ignore="KeyboardInaccessibleWidget" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <Spinner
@@ -59,7 +59,7 @@
             android:id="@+id/spPhraseCategories"
             android:layout_margin="10dp"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddPhrase"
             style="@style/style_answer_button"
             android:layout_margin="20dp"

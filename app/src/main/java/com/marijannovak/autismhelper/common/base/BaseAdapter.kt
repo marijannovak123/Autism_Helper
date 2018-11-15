@@ -1,7 +1,7 @@
 package com.marijannovak.autismhelper.common.base
 
 import android.animation.ObjectAnimator
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -10,7 +10,7 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         protected var dataSet: MutableList<T>,
         protected var onItemClick: (T, Int) -> Unit,
         protected var onLongItemClick: (T, Int) -> Unit)
-    : RecyclerView.Adapter<VH>() {
+    : androidx.recyclerview.widget.RecyclerView.Adapter<VH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return createHolder(parent, viewType)

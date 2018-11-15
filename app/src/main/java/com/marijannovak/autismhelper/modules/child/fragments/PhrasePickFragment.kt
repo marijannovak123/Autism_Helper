@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.modules.child.fragments
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,8 +64,8 @@ class PhrasePickFragment : InjectableFragment<AACViewModel>() {
                         aacActivity.speak(phrase.name)
                     }
                     rvPhrasePicker.adapter = adapter
-                    rvPhrasePicker.layoutManager = GridLayoutManager(activity, 5)
-                    rvPhrasePicker.itemAnimator = DefaultItemAnimator()
+                    rvPhrasePicker.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 5)
+                    rvPhrasePicker.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
                 }
 
                 adapter!!.update(it)

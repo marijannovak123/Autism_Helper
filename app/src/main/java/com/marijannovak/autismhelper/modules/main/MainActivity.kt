@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.modules.main
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -114,8 +114,8 @@ class MainActivity : ViewModelActivity<MainViewModel, List<Child>>() {
                     startChildActivity(child)
             })
             rvChildrenPick.adapter = childPickAdapter
-            rvChildrenPick.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            rvChildrenPick.itemAnimator = DefaultItemAnimator()
+            rvChildrenPick.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
+            rvChildrenPick.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
         }
 
         childPickAdapter!!.update(it)

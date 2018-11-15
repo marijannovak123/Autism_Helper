@@ -1,21 +1,21 @@
 package com.marijannovak.autismhelper.common.fragments
 
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.marijannovak.autismhelper.R
 
-class LoadingDialog : DialogFragment() {
+class LoadingDialog : androidx.fragment.app.DialogFragment() {
 
     private var tvLoadingMessage: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.TransparentDialog)
+        setStyle(androidx.fragment.app.DialogFragment.STYLE_NO_TITLE, R.style.TransparentDialog)
         this.isCancelable = false
     }
 
@@ -27,7 +27,7 @@ class LoadingDialog : DialogFragment() {
         tvLoadingMessage = view.findViewById(R.id.tvLoadingMessage)
     }
 
-    fun showWithMessage(supportFragmentManager: FragmentManager, message: String?) {
+    fun showWithMessage(supportFragmentManager: androidx.fragment.app.FragmentManager, message: String?) {
         message?.let {
             tvLoadingMessage?.text = it
         }

@@ -3,9 +3,9 @@ package com.marijannovak.autismhelper
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.marijannovak.autismhelper.config.Constants.Companion.PREFS_NAME
 import com.marijannovak.autismhelper.di.AppComponent
 import com.marijannovak.autismhelper.di.DaggerAppComponent
@@ -30,13 +30,13 @@ class App: Application(), HasActivityInjector, HasSupportFragmentInjector {
     @Inject
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
     @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
 
     override fun activityInjector(): AndroidInjector<Activity> {
         return activityInjector
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment> {
         return fragmentInjector
     }
 
@@ -83,11 +83,11 @@ class App: Application(), HasActivityInjector, HasSupportFragmentInjector {
                         AndroidInjection.inject(activity)
                     }
 
-                    if (it is FragmentActivity) {
+                    if (it is androidx.fragment.app.FragmentActivity) {
                         it.supportFragmentManager
                                 .registerFragmentLifecycleCallbacks(
-                                        object : FragmentManager.FragmentLifecycleCallbacks() {
-                                            override fun onFragmentCreated(fm: FragmentManager?, f: Fragment?, savedInstanceState: Bundle?) {
+                                        object : androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks() {
+                                            override fun onFragmentCreated(fm: androidx.fragment.app.FragmentManager, f: androidx.fragment.app.Fragment, savedInstanceState: Bundle?) {
                                                 f?.let {
                                                     if (it.isInjectableFragment()) {
                                                         AndroidSupportInjection.inject(f)

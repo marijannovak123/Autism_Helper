@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Autism_Helper.iml" filepath="$PROJECT_DIR$/Autism_Helper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/autismhelper.iml" filepath="$PROJECT_DIR$/autismhelper.iml" />
     </modules>
   </component>
 </project>

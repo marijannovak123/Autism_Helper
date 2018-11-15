@@ -1,13 +1,13 @@
 package com.marijannovak.autismhelper.common.base
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.modules.parent.fragments.*
 
 //Pass activity class to get that activity's viewmodel
-open class BaseFragment : Fragment() {
+open class BaseFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.data.models
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_AAC
 import com.marijannovak.autismhelper.config.Constants.Companion.TABLE_ANSWERS

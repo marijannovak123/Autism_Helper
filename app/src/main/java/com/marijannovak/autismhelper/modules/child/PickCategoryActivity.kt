@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.modules.child
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
 import com.marijannovak.autismhelper.common.enums.Status
@@ -85,8 +85,8 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, List<Category>>()
                     //NOOP
                 })
 
-                rvCategories.layoutManager = LinearLayoutManager(this)
-                rvCategories.itemAnimator = DefaultItemAnimator()
+                rvCategories.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+                rvCategories.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
                 rvCategories.adapter = categoriesAdapter
             }
 

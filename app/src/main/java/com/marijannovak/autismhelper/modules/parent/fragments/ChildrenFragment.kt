@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.modules.parent.fragments
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.*
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
@@ -63,8 +63,8 @@ class ChildrenFragment : InjectableFragment<ParentViewModel>() {
                                 viewModel.updateChild(it)
                             })
                     })
-                    rvChildren.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                    rvChildren.itemAnimator = DefaultItemAnimator()
+                    rvChildren.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
+                    rvChildren.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
                     rvChildren.adapter = adapter
                 }
                 adapter!!.update(it)

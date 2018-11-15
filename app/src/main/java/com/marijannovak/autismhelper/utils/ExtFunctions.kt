@@ -2,9 +2,9 @@ package com.marijannovak.autismhelper.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.support.v4.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.common.base.InjectableFragment
 import com.marijannovak.autismhelper.common.base.ViewModelActivity
@@ -44,7 +44,7 @@ inline fun <reified T : Activity> T.isInjectable(): Boolean {
 /**
  * check if should inject into fragment
  */
-inline fun <reified T : Fragment> T.isInjectableFragment(): Boolean {
+inline fun <reified T : androidx.fragment.app.Fragment> T.isInjectableFragment(): Boolean {
     return InjectableFragment::class.java.isAssignableFrom(this.javaClass)
 }
 

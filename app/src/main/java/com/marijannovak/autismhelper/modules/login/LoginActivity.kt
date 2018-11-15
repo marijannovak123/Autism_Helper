@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.modules.login
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.view.View

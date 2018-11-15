@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.modules.child.adapters
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import com.marijannovak.autismhelper.R
 import kotlinx.android.synthetic.main.list_item_math_shape.view.*
 import java.util.*
 
-class MathShapeAdapter: RecyclerView.Adapter<MathShapeAdapter.MathShapeViewHolder>() {
+class MathShapeAdapter: androidx.recyclerview.widget.RecyclerView.Adapter<MathShapeAdapter.MathShapeViewHolder>() {
         var pickedElements = 0
         var pickedShapeType = -1
         var colors = ArrayList<Int>()
@@ -62,6 +62,6 @@ class MathShapeAdapter: RecyclerView.Adapter<MathShapeAdapter.MathShapeViewHolde
         }
 
 
-    inner class MathShapeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    inner class MathShapeViewHolder(itemView: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView)
 
 }

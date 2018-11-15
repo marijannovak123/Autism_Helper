@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.modules.parent.mvvm
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.storage.StorageReference

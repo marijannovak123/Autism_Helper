@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.modules.child
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -71,7 +71,7 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
                 }
             }, { _, _ -> /*noop*/})
             rvAacDisplay.adapter = aacDisplayAdapter
-            rvAacDisplay.layoutManager = GridLayoutManager(this, 5)
+            rvAacDisplay.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 5)
         }
     }
 

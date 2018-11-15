@@ -1,12 +1,12 @@
 package com.marijannovak.autismhelper.modules.parent.fragments
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,8 +40,8 @@ class RssFragment : InjectableFragment<ParentViewModel>() {
             if(feedAdapter == null || rvFeed.adapter == null) {
                 feedAdapter = RssAdapter(emptyList(), { feed, _ -> openItemInBrowser(feed.link) })
                 rvFeed.adapter = feedAdapter
-                rvFeed.layoutManager = LinearLayoutManager(activity)
-                rvFeed.itemAnimator = DefaultItemAnimator()
+                rvFeed.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                rvFeed.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
             }
 
             feedAdapter!!.update(it)

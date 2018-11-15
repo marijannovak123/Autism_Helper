@@ -1,9 +1,9 @@
 package com.marijannovak.autismhelper.modules.child.fragments
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.*
+import androidx.appcompat.widget.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,8 +50,8 @@ class PhraseCategoryFragment: InjectableFragment<AACViewModel>() {
 
                 }
                 rvPhraseCategories.adapter = phraseCategoryAdapter
-                rvPhraseCategories.layoutManager = GridLayoutManager(activity, 4)
-                rvPhraseCategories.itemAnimator = DefaultItemAnimator()
+                rvPhraseCategories.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 4)
+                rvPhraseCategories.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
             }
 
             phraseCategoryAdapter!!.update(it)

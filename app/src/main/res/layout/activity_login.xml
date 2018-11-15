@@ -14,7 +14,7 @@
 
     <LinearLayout style="@style/style_input_bubble">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
@@ -25,13 +25,11 @@
                 android:inputType="textEmailAddress"
                 android:nextFocusForward="@id/etUsername" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="#000000">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/etPassword"
@@ -41,7 +39,7 @@
                 android:inputType="textPassword"
                 android:nextFocusForward="@id/etConfirmPassword" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/tvForgotPassword"

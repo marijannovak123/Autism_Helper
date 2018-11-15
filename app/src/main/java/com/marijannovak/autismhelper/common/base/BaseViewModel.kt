@@ -1,7 +1,7 @@
 package com.marijannovak.autismhelper.common.base
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.data.repo.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
@@ -31,11 +31,11 @@ open class BaseViewModel<T>
                 resourceLiveData.value = Resource.home()
             }
 
-            override fun onSubscribe(d: Disposable?) {
+            override fun onSubscribe(d: Disposable) {
                 compositeDisposable.add(d)
             }
 
-            override fun onError(e: Throwable?) {
+            override fun onError(e: Throwable) {
                 resourceLiveData.value = Resource.message(R.string.logout_not_success, e!!.message ?: "")
             }
         })
