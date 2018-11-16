@@ -13,6 +13,7 @@ import com.marijannovak.autismhelper.repositories.ParentRepository
 import com.marijannovak.autismhelper.ui.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 class ParentViewModel @Inject constructor(
@@ -81,19 +82,16 @@ class ParentViewModel @Inject constructor(
         )
     }
 
-    fun loadPhrases() {
-        resourceLiveData.value = Resource.loading()
-        compositeDisposable.add(
-                repository.loadPhrases().subscribe(
-                        {
-                            phraseLiveData.value = it
-                            resourceLiveData.value = Resource.success(null)
-                        },
-                        { resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "") }
-                )
-        )
+    fun subscribeToPhrases() {
+        setLoading()
+        uiScope.launch {
+            val phrasesChannel = repository.loadPhrases()
+            for(phrases in phrasesChannel) {
+                setSuccess()
+                phraseLiveData.value = phrases
+            }
+        }
     }
-
 
     fun savePhrase(phrase: AacPhrase) {
         resourceLiveData.value = Resource.loading()

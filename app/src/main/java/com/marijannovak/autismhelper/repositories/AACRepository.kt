@@ -4,6 +4,7 @@ import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.dao.AACDao
 import com.marijannovak.autismhelper.data.database.dao.PhraseCategoryDao
 import com.marijannovak.autismhelper.data.database.dao.SavedSentenceDao
+import com.marijannovak.autismhelper.data.database.datasource.AacDataSource
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.PhraseCategory
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
@@ -11,28 +12,22 @@ import com.marijannovak.autismhelper.data.models.SavedSentence
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.channels.ReceiveChannel
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class AACRepository @Inject constructor(
+        private val aacSource: AacDataSource,
         private val aacDao: AACDao,
         private val sentenceDao: SavedSentenceDao,
         private val phraseCategoryDao: PhraseCategoryDao,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
 
-    fun getPhrases(): Flowable<PhrasesSavedSentencesJoin> {
-        return Flowable.zip(
-                    aacDao.getAllPhrases(),
-                    sentenceDao.getSavedSentences(),
-                    BiFunction<List<AacPhrase>, List<SavedSentence>, PhrasesSavedSentencesJoin> {
-                        phrases, sentences -> PhrasesSavedSentencesJoin(phrases, sentences)
-                    }
-                ).subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun getPhrases(): ReceiveChannel<PhrasesSavedSentencesJoin> {
+        return aacSource.getPhraseSentencesJoinChannel()
     }
 
     fun getCategoryPhrases(phraseCategoryId: Int): Flowable<List<AacPhrase>> {

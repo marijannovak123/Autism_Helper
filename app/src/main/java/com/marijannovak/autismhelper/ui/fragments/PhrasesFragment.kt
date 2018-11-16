@@ -80,7 +80,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                     })
             viewModel.phraseCategoryLiveData.observe(this, Observer { setUpCategorySpinner(it) })
         }
-        viewModel.loadPhrases()
+        viewModel.subscribeToPhrases()
         viewModel.loadPhraseCategories()
     }
 
@@ -113,7 +113,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                 rvPhrases.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
             }
 
-            phrasesAdapter!!.update(it)
+            phrasesAdapter?.update(it)
         }
     }
 

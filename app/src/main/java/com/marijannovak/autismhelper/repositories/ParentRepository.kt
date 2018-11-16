@@ -7,6 +7,7 @@ import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.GENDERS
 import com.marijannovak.autismhelper.config.Constants.Companion.RSS_URL
 import com.marijannovak.autismhelper.data.database.dao.*
+import com.marijannovak.autismhelper.data.database.datasource.AacDataSource
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
@@ -15,6 +16,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import kotlinx.coroutines.channels.ReceiveChannel
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -28,6 +30,7 @@ class ParentRepository @Inject constructor(
         private val userDao: UserDao,
         private val feedItemDao: FeedItemDao,
         private val prefsHelper: PrefsHelper,
+        private val aacSource: AacDataSource,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
 ) {
@@ -72,11 +75,12 @@ class ParentRepository @Inject constructor(
         return ChartData(lineData, barData, dates)
     }
 
-    fun loadPhrases(): Flowable<List<AacPhrase>> {
-        return aacDao
-                .getAllPhrases()
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun loadPhrases(): ReceiveChannel<List<AacPhrase>> {
+        return aacSource.getAllPhrasesChannel()
+//        return aacDao
+//                .getAllPhrases()
+//                .subscribeOn(ioScheduler)
+//                .observeOn(mainScheduler)
     }
 
     fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String): Completable {

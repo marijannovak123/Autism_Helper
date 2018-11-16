@@ -7,6 +7,7 @@ import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.SingleEventLiveData
+import com.marijannovak.autismhelper.utils.State
 import com.marijannovak.autismhelper.utils.Status
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.CompositeDisposable
@@ -38,9 +39,31 @@ open class BaseViewModel<M>
     protected var compositeDisposable = CompositeDisposable()
 
     override fun onCleared() {
+        viewModelJob.cancel()
         compositeDisposable.clear()
         compositeDisposable.dispose()
         super.onCleared()
+    }
+
+    protected fun setData(data: M?) {
+        dataLiveData.value = data
+        statusLiveData.value = Status(state = State.SUCCESS)
+    }
+
+    protected fun setError(error: Throwable) {
+        statusLiveData.value = Status(state = State.MESSAGE, message = error.message ?: "", messageId = R.string.error)
+    }
+
+    protected fun setMessage(message: String) {
+        statusLiveData.value = Status(state = State.MESSAGE, message = message, messageId = null)
+    }
+
+    protected fun setLoading() {
+        statusLiveData.value = Status(state = State.LOADING)
+    }
+
+    protected fun setSuccess() {
+        statusLiveData.value = Status(state = State.SUCCESS)
     }
 
     fun logOut() {
