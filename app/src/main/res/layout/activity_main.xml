@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBg"
-    tools:context="com.marijannovak.autismhelper.modules.main.MainActivity">
+    tools:context="com.marijannovak.autismhelper.ui.activities.MainActivity">
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/pbLoading"

@@ -1,9 +1,6 @@
 package com.marijannovak.autismhelper.di
 
-import com.marijannovak.autismhelper.modules.child.fragments.PhraseCategoryFragment
-import com.marijannovak.autismhelper.modules.child.fragments.PhrasePickFragment
-import com.marijannovak.autismhelper.modules.child.fragments.SentencePickFragment
-import com.marijannovak.autismhelper.modules.parent.fragments.*
+import com.marijannovak.autismhelper.ui.fragments.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

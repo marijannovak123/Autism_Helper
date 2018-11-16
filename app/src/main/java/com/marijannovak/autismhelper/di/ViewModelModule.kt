@@ -1,11 +1,11 @@
 package com.marijannovak.autismhelper.di
 
 import androidx.lifecycle.ViewModel
-import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
-import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
-import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
-import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
-import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
+import com.marijannovak.autismhelper.viewmodels.AACViewModel
+import com.marijannovak.autismhelper.viewmodels.ChildViewModel
+import com.marijannovak.autismhelper.viewmodels.LoginViewModel
+import com.marijannovak.autismhelper.viewmodels.MainViewModel
+import com.marijannovak.autismhelper.viewmodels.ParentViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

@@ -1,21 +1,39 @@
 package com.marijannovak.autismhelper.common.base
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.data.repo.DataRepository
+import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.SingleEventLiveData
+import com.marijannovak.autismhelper.utils.Status
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-open class BaseViewModel<T>
-@Inject constructor(
-        private val dataRepository: DataRepository)
-    : ViewModel() {
+open class BaseViewModel<M>
+@Inject constructor(): ViewModel() {
 
-    val resourceLiveData = MutableLiveData<Resource<T>>()
+    @Inject lateinit var dataRepository: DataRepository
+
+    private var dataLiveData = MutableLiveData<M>()
+    private var statusLiveData = SingleEventLiveData<Status>()
+
+    val data: LiveData<M>
+        get() = dataLiveData
+
+    val status: LiveData<Status>
+        get() = statusLiveData
+
+    private val viewModelJob = Job()
+    val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    val resourceLiveData = MutableLiveData<Resource<M>>()
 
     protected var compositeDisposable = CompositeDisposable()
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="2"
-    tools:context=".modules.parent.fragments.ChildDetailsFragment">
+    tools:context=".ui.fragments.ChildDetailsFragment">
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lcTimeScores"

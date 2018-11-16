@@ -1,12 +1,12 @@
 package com.marijannovak.autismhelper.di
 
-import com.marijannovak.autismhelper.modules.child.AACActivity
-import com.marijannovak.autismhelper.modules.child.PickCategoryActivity
-import com.marijannovak.autismhelper.modules.child.QuizActivity
-import com.marijannovak.autismhelper.modules.login.LoginActivity
-import com.marijannovak.autismhelper.modules.login.SignUpActivity
-import com.marijannovak.autismhelper.modules.main.MainActivity
-import com.marijannovak.autismhelper.modules.parent.ParentActivity
+import com.marijannovak.autismhelper.ui.activities.AACActivity
+import com.marijannovak.autismhelper.ui.activities.PickCategoryActivity
+import com.marijannovak.autismhelper.ui.activities.QuizActivity
+import com.marijannovak.autismhelper.ui.activities.LoginActivity
+import com.marijannovak.autismhelper.ui.activities.SignUpActivity
+import com.marijannovak.autismhelper.ui.activities.MainActivity
+import com.marijannovak.autismhelper.ui.activities.ParentActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

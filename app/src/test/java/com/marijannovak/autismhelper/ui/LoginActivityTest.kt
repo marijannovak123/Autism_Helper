@@ -1,7 +1,7 @@
 package com.marijannovak.autismhelper.ui
 
 import com.marijannovak.autismhelper.BuildConfig
-import com.marijannovak.autismhelper.modules.login.LoginActivity
+import com.marijannovak.autismhelper.ui.activities.LoginActivity
 import com.marijannovak.autismhelper.testinjection.TestApp
 import org.junit.Test
 import org.junit.runner.RunWith

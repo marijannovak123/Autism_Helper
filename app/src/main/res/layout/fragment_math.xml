@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".modules.child.fragments.MathFragment">
+    tools:context=".ui.fragments.MathFragment">
 
         <TextView
             android:id="@+id/tvMathQuestion"

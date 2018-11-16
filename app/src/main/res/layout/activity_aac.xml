@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".modules.child.AACActivity"
+    tools:context=".ui.activities.AACActivity"
     android:background="@color/colorBg">
 
     <RelativeLayout

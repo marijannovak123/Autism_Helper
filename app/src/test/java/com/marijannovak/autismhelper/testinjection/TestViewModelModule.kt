@@ -1,10 +1,10 @@
 package com.marijannovak.autismhelper.testinjection
 
-import com.marijannovak.autismhelper.modules.child.mvvm.AACViewModel
-import com.marijannovak.autismhelper.modules.child.mvvm.ChildViewModel
-import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
-import com.marijannovak.autismhelper.modules.main.mvvm.MainViewModel
-import com.marijannovak.autismhelper.modules.parent.mvvm.ParentViewModel
+import com.marijannovak.autismhelper.viewmodels.AACViewModel
+import com.marijannovak.autismhelper.viewmodels.ChildViewModel
+import com.marijannovak.autismhelper.viewmodels.LoginViewModel
+import com.marijannovak.autismhelper.viewmodels.MainViewModel
+import com.marijannovak.autismhelper.viewmodels.ParentViewModel
 import dagger.Module
 import dagger.Provides
 import org.mockito.Mockito

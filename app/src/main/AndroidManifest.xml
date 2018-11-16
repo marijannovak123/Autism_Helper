@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".modules.login.LoginActivity"
+            android:name=".ui.activities.LoginActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -30,20 +30,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.main.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/parent_child" />
         <activity
-            android:name=".modules.parent.ParentActivity"
+            android:name=".ui.activities.ParentActivity"
             android:label="@string/parent"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".modules.child.PickCategoryActivity"
+            android:name=".ui.activities.PickCategoryActivity"
             android:label="@string/pick_category"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".modules.login.SignUpActivity"
+            android:name=".ui.activities.SignUpActivity"
             android:label="@string/sign_up" />
-        <activity android:name=".modules.child.QuizActivity" />
-        <activity android:name=".modules.child.AACActivity" />
+        <activity android:name=".ui.activities.QuizActivity" />
+        <activity android:name=".ui.activities.AACActivity" />
     </application>
 </manifest>

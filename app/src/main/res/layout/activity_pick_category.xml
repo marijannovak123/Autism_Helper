@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorBg"
-    tools:context=".modules.child.PickCategoryActivity">
+    tools:context=".ui.activities.PickCategoryActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"

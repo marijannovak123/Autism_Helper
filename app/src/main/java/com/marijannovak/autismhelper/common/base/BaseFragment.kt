@@ -1,10 +1,9 @@
 package com.marijannovak.autismhelper.common.base
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import com.marijannovak.autismhelper.R
-import com.marijannovak.autismhelper.modules.parent.fragments.*
+import com.marijannovak.autismhelper.ui.fragments.*
 
 //Pass activity class to get that activity's viewmodel
 open class BaseFragment : androidx.fragment.app.Fragment() {

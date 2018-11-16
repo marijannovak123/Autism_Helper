@@ -5,7 +5,7 @@ import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
+import com.marijannovak.autismhelper.repositories.LoginRepository
 import com.marijannovak.autismhelper.util.BaseUnitTest
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.TestDataGenerator

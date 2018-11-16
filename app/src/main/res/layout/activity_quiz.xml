@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBg"
-    tools:context=".modules.child.QuizActivity">
+    tools:context=".ui.activities.QuizActivity">
 
     <com.marijannovak.autismhelper.common.views.UnswipeableViewPager
         android:id="@+id/vpQuestions"

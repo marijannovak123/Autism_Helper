@@ -2,9 +2,9 @@ package com.marijannovak.autismhelper.viewmodel
 
 import androidx.lifecycle.Observer
 import com.marijannovak.autismhelper.data.models.User
-import com.marijannovak.autismhelper.data.repo.DataRepository
-import com.marijannovak.autismhelper.modules.login.mvvm.LoginRepository
-import com.marijannovak.autismhelper.modules.login.mvvm.LoginViewModel
+import com.marijannovak.autismhelper.repositories.DataRepository
+import com.marijannovak.autismhelper.repositories.LoginRepository
+import com.marijannovak.autismhelper.viewmodels.LoginViewModel
 import com.marijannovak.autismhelper.util.BaseUnitTest
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.TestDataGenerator
