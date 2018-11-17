@@ -69,7 +69,7 @@ class MainActivity : ViewModelActivity<MainViewModel, List<Child>>() {
 
     override fun handleResource(resource: Resource<List<Child>>?) {
         resource?.let {
-            showLoading(it.status, it.message)
+            handleLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let {

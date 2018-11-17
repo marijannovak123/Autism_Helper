@@ -74,7 +74,7 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
 
     override fun handleResource(categories: Resource<CategoryQuestionsAnswersJoin>?) {
         categories?.let {
-            showLoading(it.status, it.message)
+            handleLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
                     startTime = System.currentTimeMillis()

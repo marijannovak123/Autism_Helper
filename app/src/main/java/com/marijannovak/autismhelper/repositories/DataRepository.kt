@@ -6,12 +6,15 @@ import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.App
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.database.datasource.DataSource
+import com.marijannovak.autismhelper.data.database.datasource.UserDataSource
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
+import com.marijannovak.autismhelper.data.network.service.DataService
+import com.marijannovak.autismhelper.data.network.service.UserService
 import com.marijannovak.autismhelper.ui.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.logTag
-import com.marijannovak.autismhelper.utils.mapToList
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import org.jetbrains.anko.doAsync
@@ -25,17 +28,20 @@ import javax.inject.Named
 class DataRepository @Inject constructor(
         private val api: API,
         private val auth: FirebaseAuth,
+        private val dataService: DataService,
+        private val dataSource: DataSource,
         private val storage: StorageReference,
         private val db: AppDatabase,
+        private val userDataSource: UserDataSource,
+        private val userService: UserService,
         private val prefsHelper: PrefsHelper,
         private val context: App,
         @Named(Constants.SCHEDULER_IO)private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
 ) {
 
-    private var questionsWithImgs: List<Question> = ArrayList()
-    private var phrases: List<AacPhrase> = ArrayList()
-    private var scoresToUpload: List<ChildScore> = ArrayList()
+    private lateinit var questionsWithImgs: List<Question>
+    private lateinit var phrases: List<AacPhrase>
     private lateinit var onDataDownloaded: () -> Unit
     private lateinit var onError: (Throwable) -> Unit
 
@@ -45,40 +51,23 @@ class DataRepository @Inject constructor(
         files = context.filesDir.list()
     }
 
-    fun syncData(firstSync: Boolean): Completable {
-        return Completable.mergeArray(
-                api.getCategories()
-                        .doOnSuccess {
-                            db.categoriesDao().insertMultiple(it)
-                        }.toCompletable(),
-                api.getQuestions()
-                        .doOnSuccess {
-                            if(firstSync) {
-                                db.questionDao().insertMultiple(it)
-                            } else {
-                                db.questionDao().updateMultiple(it)
-                            }
-                            for (question: Question in it) {
-                                db.answerDao().insertMultiple(question.answers)
-                                if (question.categoryId == 2) {
-                                    questionsWithImgs += question
-                                }
-                            }
-                        }.toCompletable(),
-                api.getPhrases()
-                        .doOnSuccess {
-                            phrases = it
-                            if(firstSync) {
-                                db.aacDao().insertMultiple(it)
-                            } else {
-                                db.aacDao().updateMultiple(it)
-                            }
-                        }.toCompletable(),
-                api.getPhraseCategories()
-                        .doOnSuccess{
-                            db.phraseCategoryDao().insertMultiple(it)
-                        }.toCompletable()
-        ).subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun syncData(firstSync: Boolean) {
+        val categories = dataService.getCategories()
+        val questions = dataService.getQuestions()
+        val phrases = dataService.getPhrases()
+        val phraseCategories = dataService.getPhraseCategories()
+
+        val questionsWithImgs = ArrayList<Question>()
+        questions.forEach {
+            if(it.categoryId == 2) {//todo: to constant!
+                questionsWithImgs += it
+            }
+        }
+
+        this.phrases = phrases
+
+        val contentWrapper = ContentWrapper(categories, questions, phrases, phraseCategories)
+        dataSource.saveContent(contentWrapper, firstSync)
     }
 
     fun logOut(): Completable {
@@ -233,52 +222,33 @@ class DataRepository @Inject constructor(
         }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
-    fun syncUserData(): Completable {
-        return db.userDao()
-                .getCurrentUser()
-                .flatMap {
-                    api.getUser(it.id)
-                }.flatMapCompletable {
-                    updateUser(it)
-                }.subscribeOn(ioScheduler).observeOn(mainScheduler)
-    }
+    suspend fun syncUserData() {
+        val currentUserId = userDataSource.getLoggedInUser().id
+        val userData = userService.getUserData(currentUserId)
+        userDataSource.updateUser(userData)
 
-    private fun updateUser(user: User): Completable {
-        return Completable.fromAction {
-            db.userDao().update(user.username!!, user.parentPassword!!)
-            user.children?.let {
-                db.childDao().updateMultiple(it.mapToList())
-            }
-
-            user.childScores?.let {
-                db.childScoreDao().insertMultiple(it.mapToList())
-                checkIfAnyScoresShouldBeUploaded(it.mapToList())
-            }
-            prefsHelper.setParentPassword(user.parentPassword ?: "")
-        }
-    }
-
-    private fun checkIfAnyScoresShouldBeUploaded(scores: List<ChildScore>) {
-        db.childScoreDao().queryAll().subscribe({
-            it.forEach {
-                if(!scores.contains(it)) {
-                    scoresToUpload += it
-                }
-            }
-            uploadScores(0)
-        }, {
-            Log.e(logTag(), it.message ?: "")
-        })
-    }
-
-    private fun uploadScores(i: Int) {
+        val onlineScores = userData.childScores?.values?.toList() ?: emptyList()
+        val scoresToUpload = userDataSource.getScoresToUpload(onlineScores)
         if(scoresToUpload.isNotEmpty()) {
-            val score = scoresToUpload[i]
-            api.putScore(score.parentId, score.hashCode(), score).subscribe {
-                uploadScores(i+1)
-            }
+            userService.uploadScores(currentUserId, scoresToUpload)
         }
     }
+
+//    private fun updateUser(user: User) {
+//
+//        return Completable.fromAction {
+//            db.userDao().update(user.username!!, user.parentPassword!!)
+//            user.children?.let {
+//                db.childDao().updateMultiple(it.mapToList())
+//            }
+//
+//            user.childScores?.let {
+//                db.childScoreDao().insertMultiple(it.mapToList())
+//                checkIfAnyScoresShouldBeUploaded(it.mapToList())
+//            }
+//            prefsHelper.setParentPassword(user.parentPassword ?: "")
+//        }
+//    }
 
     fun isSoundOn(): Boolean {
         return prefsHelper.isSoundOn()

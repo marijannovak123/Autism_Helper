@@ -41,7 +41,7 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, List<Category>>()
 
     override fun handleResource(resource: Resource<List<Category>>?) {
         resource?.let {
-            showLoading(it.status, it.message)
+            handleLoading(it.status, it.message)
             when (it.status) {
                 Status.SUCCESS -> {
                     setCategoriesData(it.data)

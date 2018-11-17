@@ -21,6 +21,8 @@ class AppModule {
         return App.getAppContext()
     }
 
+
+
     @Singleton
     @Provides
     fun provideSharedPrefs(): PrefsHelper {

@@ -187,7 +187,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
 
     override fun handleResource(resource: Resource<UserChildrenJoin>?) {
         resource?.let {
-            showLoading(it.status, it.message)
+            handleLoading(it.status, it.message)
             when (it.status) {
                 Status.HOME -> {
                     val intent = Intent(this@ParentActivity, LoginActivity::class.java)

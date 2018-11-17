@@ -15,7 +15,7 @@ interface ChildScoreDao : BaseDao<ChildScore> {
     fun getChildScores(childId: String): Flowable<List<ChildScore>>
 
     @Query("SELECT * FROM $TABLE_CHILD_SCORES")
-    fun queryAll(): Single<List<ChildScore>>
+    fun queryAll(): List<ChildScore>
 
     @Query("SELECT * FROM $TABLE_CHILD_SCORES WHERE id = :id")
     fun getChildScoreById(id: Int): Flowable<ChildScore>

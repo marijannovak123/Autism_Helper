@@ -4,13 +4,14 @@ import android.content.Intent
 import com.google.firebase.auth.FirebaseUser
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
+import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.repositories.LoginRepository
-import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.mapToUser
+import com.marijannovak.autismhelper.utils.*
+import kotlinx.android.synthetic.main.list_item_child.view.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -21,42 +22,43 @@ class LoginViewModel @Inject constructor(
 ): BaseViewModel<User>() {
 
     fun checkLoggedIn() {
-        resourceLiveData.value = Resource.loading()
-        compositeDisposable.add(
-                repository.isLoggedIn().subscribe(
-                        {//sync user data on every first start
+        setLoading()
+        uiScope.launch {
+            repository.isLoggedIn()
+                    .onSuccess { user ->
+                        user?.let {
                             syncUserData(it)
-                        },
-                        { resourceLiveData.value = Resource.message(R.string.data_load_error, it.message ?: "")},
-                        { resourceLiveData.value = Resource.home() }
-                )
-        )
+                        } ?: setState(Status.HOME)
+                    }.onError { setMessage(R.string.data_load_error) }
+        }
     }
 
     private fun syncUserData(user: User) {
-         compositeDisposable.add(
-                 dataRepository.syncUserData().subscribe(
-                        //go further regardless sync was successful
-                        { resourceLiveData.value = Resource.success(user)},
-                        { resourceLiveData.value = Resource.success(user)}
-        ))
+        setLoading()
+        uiScope.launch {
+            dataRepository.syncUserData()
+        }.invokeOnCompletion { error ->
+            error?.let {
+                setMessage(R.string.data_load_error)
+            } ?: setData(user)
+        }
     }
 
     fun register(signupRequest: SignupRequest) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         repository.register(signupRequest, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
                 resourceLiveData.value = Resource.signedUp(model.mapToUser(signupRequest))
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.register_error, t.message!!)
+                setMessage(R.string.register_error)
             }
         })
     }
 
     fun login(email: String, password: String) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         repository.login(email, password, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
                 fetchAndSaveUserData(model.uid)
@@ -81,7 +83,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun googleSignIn(data: Intent) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         repository.googleSignIn(data, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
                 checkIfUserAlreadyExists(model)
@@ -94,64 +96,55 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun checkIfUserAlreadyExists(user: FirebaseUser) {
-        compositeDisposable.add(
-                repository.checkIfUserExists(user.uid).subscribe(
-                        {
-                            if (it) {
-                                fetchAndSaveUserData(user.uid)
-                            } else {
-                                resourceLiveData.value = Resource.signedUp(user.mapToUser())
-                            }
-                        },
-                        {
-                            if (it is NoSuchElementException) {
-                                resourceLiveData.value = Resource.signedUp(user.mapToUser())
-                            } else {
-                                throwErrorAndLogOut(R.string.error, it.message ?: "")
-                            }
-                        }
-                )
-        )
+        uiScope.launch {
+            repository.checkIfUserExists(user.uid)
+                    .onSuccess {
+                        fetchAndSaveUserData(user.uid)
+                    }.onError {
+                        if(it is NoSuchElementException)
+                        else throwErrorAndLogOut(R.string.error)
+                    }
+        }
     }
 
     private fun fetchAndSaveUserData(userId: String) {
-        compositeDisposable.add(
-                repository.fetchAndSaveUser(userId).subscribe(
-                        { syncContet() },
-                        { error -> throwErrorAndLogOut(R.string.fetch_error, error.message ?: "") }
-                )
-        )
+        uiScope.launch {
+            repository.fetchAndSaveUser(userId)
+        }.invokeOnCompletion { error ->
+            error?.let {
+                throwErrorAndLogOut(R.string.fetch_error)
+            } ?: syncContent()
+        }
     }
 
     fun saveUserOnlineAndLocally(user: User) {
-        resourceLiveData.value = Resource.loading()
-        compositeDisposable.add(
-                repository.uploadAndSaveUser(user).subscribe(
-                        { syncContet() },
-                        { throwErrorAndLogOut(R.string.firebase_upload_error, it.message ?: "") }
-                )
-        )
+        setLoading()
+        uiScope.launch {
+            repository.uploadAndSaveUser(user)
+        }.invokeOnCompletion { error ->
+            error?.let {
+                throwErrorAndLogOut(R.string.firebase_upload_error)
+            } ?: syncContent()
+        }
     }
 
-    private fun syncContet() {
-        resourceLiveData.value = Resource.loading(R.string.downloading_resources)
-        compositeDisposable.add(
-                dataRepository.syncData(true).subscribe(
-                        {
-                            dataRepository.downloadImages({
-                                    resourceLiveData.value = Resource.success(null) },
-                                    {
-                                        throwErrorAndLogOut(R.string.sync_error, it.message ?: "")
-                                    })
-
-                         },
-                        { throwErrorAndLogOut(R.string.sync_error, it.message ?: "") }
-                )
-        )
+    private fun syncContent() {
+        setLoading(R.string.downloading_resources)
+        uiScope.launch {
+            dataRepository.syncData(true)
+        }.invokeOnCompletion { error ->
+            error?.let {
+                throwErrorAndLogOut(R.string.sync_error)
+            } ?: downloadImages()
+        }
     }
 
-    private fun throwErrorAndLogOut(msgRes: Int, throwableMessage: String) {
-        resourceLiveData.value = Resource.message(msgRes, throwableMessage)
+    private fun downloadImages() {
+        dataRepository.downloadImages({ setSuccess()}, { throwErrorAndLogOut(R.string.sync_error) })
+    }
+
+    private fun throwErrorAndLogOut(msgRes: Int) {
+        setMessage(msgRes)
         logOut()
     }
 }

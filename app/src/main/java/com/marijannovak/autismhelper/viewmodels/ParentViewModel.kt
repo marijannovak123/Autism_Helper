@@ -98,32 +98,38 @@ class ParentViewModel @Inject constructor(
         compositeDisposable.add(
                 aacRepository.savePhrase(phrase).subscribe(
                         { resourceLiveData.value = Resource.saved() },
-                        { resourceLiveData.value = Resource.message(R.string.error_saving_phrase, it.message ?: "") }
+                        { setMessage(R.string.error_saving_phrase) }
                 )
         )
     }
 
     fun syncUserAndData() {
-            resourceLiveData.value = Resource.loading()
-            dataRepository.syncUserData().subscribe({
-               syncData(false)
-            }, {
-                resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "")
-            })
-
+        setLoading()
+        uiScope.launch {
+            dataRepository.syncUserData()
+        }.invokeOnCompletion { error ->
+            error?.let {
+                setMessage(R.string.sync_error)
+            } ?: syncData(false)
+        }
     }
 
     private fun syncData(firstSync: Boolean) {
-        dataRepository.syncData(firstSync).subscribe(
-                {
-                    dataRepository.downloadImages ({
-                        resourceLiveData.value = Resource.message(R.string.data_synced, "")
-                    }, {
-                        resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "")
-                    })
-                },
-                { resourceLiveData.value = Resource.message(R.string.sync_error, it.message ?: "") }
-        )
+        uiScope.launch {
+            dataRepository.syncData(firstSync)
+        }.invokeOnCompletion { error ->
+            error?.let {
+                setMessage(R.string.sync_error)
+            } ?: downloadImages()
+        }
+    }
+
+    private fun downloadImages() {
+        dataRepository.downloadImages ({
+            setMessage(R.string.data_synced)
+        }, {
+            setMessage(R.string.sync_error)
+        })
     }
 
     fun deletePhrase(phrase: AacPhrase) {

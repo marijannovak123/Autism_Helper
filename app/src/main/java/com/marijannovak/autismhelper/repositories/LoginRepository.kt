@@ -1,6 +1,7 @@
 package com.marijannovak.autismhelper.repositories
 
 import android.content.Intent
+import androidx.room.EmptyResultSetException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -9,13 +10,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.data.database.AppDatabase
+import com.marijannovak.autismhelper.data.database.datasource.UserDataSource
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.data.network.API
-import com.marijannovak.autismhelper.utils.PrefsHelper
-import com.marijannovak.autismhelper.utils.mapToList
+import com.marijannovak.autismhelper.data.network.service.UserService
+import com.marijannovak.autismhelper.utils.*
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
@@ -29,6 +30,8 @@ import javax.inject.Singleton
 class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
         private val db: AppDatabase,
+        private val userSource: UserDataSource,
+        private val userService: UserService,
         private val api: API,
         private val prefs: PrefsHelper,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
@@ -36,11 +39,15 @@ class LoginRepository @Inject constructor(
 
     private var currentUser: FirebaseUser? = null
 
-    fun isLoggedIn(): Maybe<User> {
-        return db.userDao()
-                .userLoggedIn()
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun isLoggedIn(): LoadResult<User?> {
+        return try {
+            val user = userSource.getLoggedInUser()
+            Success(user)
+        } catch (e: EmptyResultSetException) {
+            Success(null)
+        } catch (e: Exception) {
+            Failure(e)
+        }
     }
 
     fun register(signupRequest: SignupRequest, listener: GeneralListener<FirebaseUser>) {
@@ -100,44 +107,32 @@ class LoginRepository @Inject constructor(
 
     }
 
-    fun checkIfUserExists(userId: String): Single<Boolean> {
-        return api
-                .getUser(userId)
-                .flatMap { user: User ->
-                    if (user.id.isNotEmpty() && user.username != null
-                            && user.username!!.isNotEmpty() && user.email != null
-                            && user.email!!.isNotEmpty())
-                        Single.just(true)
-                    else Single.just(false)
-                }
-                .subscribeOn(ioScheduler).observeOn(mainScheduler)
-    }
-
-    fun uploadAndSaveUser(user: User): Completable {
-        return Completable.mergeArray(
-                api.putUser(user.id, user),
-                saveUser(user)
-        ).subscribeOn(ioScheduler).observeOn(mainScheduler)
-    }
-
-    private fun saveUser(user: User): Completable {
-        return Completable.fromAction {
-            db.userDao().insert(user)
-            user.children?.let {
-                db.childDao().insertMultiple(it.mapToList())
+    suspend fun checkIfUserExists(userId: String): LoadResult<Boolean> {
+        return try {
+            val user = userService.getUserData(userId)
+            return when {
+                userDataFilled(user) -> Success(true)
+                else -> Success(false)
             }
-            user.childScores?.let {
-                db.childScoreDao().insertMultiple(it.mapToList())
-            }
-            prefs.setParentPassword(user.parentPassword ?: "")
+        } catch (e: Exception) {
+            Failure(e)
         }
     }
 
-    fun fetchAndSaveUser(userId: String): Completable {
-        return api.getUser(userId)
-                .flatMapCompletable { user -> saveUser(user) }
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    private fun userDataFilled(user: User): Boolean {
+        return (user.id.isNotEmpty() && user.username != null
+                && user.username!!.isNotEmpty() && user.email != null
+                && user.email!!.isNotEmpty())
+    }
+
+    suspend fun uploadAndSaveUser(user: User) {
+        userService.uploadUser(user)
+        userSource.saveUser(user)
+    }
+
+    suspend fun fetchAndSaveUser(userId: String) {
+        val user = userService.getUserData(userId)
+        userSource.saveUser(user)
     }
 
 }

@@ -3,6 +3,8 @@ package com.marijannovak.autismhelper.data.network
 import com.marijannovak.autismhelper.data.models.*
 import io.reactivex.Completable
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
+import retrofit2.Response
 import retrofit2.http.*
 
 /**
@@ -11,19 +13,19 @@ import retrofit2.http.*
 interface API {
 
     @GET("questions.json")
-    fun getQuestions(): Single<List<Question>>
+    fun getQuestions(): Deferred<List<Question>>
 
     @GET("categories.json")
-    fun getCategories(): Single<List<Category>>
+    fun getCategories(): Deferred<List<Category>>
 
     @GET("phrases.json")
-    fun getPhrases(): Single<List<AacPhrase>>
+    fun getPhrases(): Deferred<List<AacPhrase>>
 
     @GET("users/{userId}.json")
-    fun getUser(@Path("userId") userId: String): Single<User>
+    fun getUser(@Path("userId") userId: String): Deferred<User>
 
     @PUT("users/{userId}.json")
-    fun putUser(@Path("userId") userId: String, @Body user: User): Completable
+    fun putUser(@Path("userId") userId: String, @Body user: User): Deferred<Unit>
 
     @CustomConverterFactory.Json
     @PUT("users/{userId}/child_scores/{scoreId}.json")
@@ -45,7 +47,7 @@ interface API {
     fun updateChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
 
     @GET("phrase_categories.json")
-    fun getPhraseCategories(): Single<List<PhraseCategory>>
+    fun getPhraseCategories(): Deferred<List<PhraseCategory>>
 
     @GET
     @CustomConverterFactory.Xml

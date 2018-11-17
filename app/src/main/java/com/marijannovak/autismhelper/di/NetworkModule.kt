@@ -3,6 +3,7 @@ package com.marijannovak.autismhelper.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.marijannovak.autismhelper.config.Constants
 import com.marijannovak.autismhelper.config.Constants.Companion.BASE_URL
 import com.marijannovak.autismhelper.data.network.API
@@ -54,6 +55,7 @@ class NetworkModule {
                         .add(CustomConverterFactory.Json::class.java, GsonConverterFactory.create())
                         .build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
     }
 

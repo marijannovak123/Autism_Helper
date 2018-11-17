@@ -17,11 +17,8 @@ import com.marijannovak.autismhelper.config.Constants.Companion.RESULT_CODE_SIGN
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.utils.*
 import com.marijannovak.autismhelper.viewmodels.LoginViewModel
-import com.marijannovak.autismhelper.utils.DialogHelper
-import com.marijannovak.autismhelper.utils.InputValidator
-import com.marijannovak.autismhelper.utils.Resource
-import com.marijannovak.autismhelper.utils.toMap
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
 
@@ -150,7 +147,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
 
     override fun handleResource(resource: Resource<User>?) {
         resource?.let {
-            showLoading(it.status, it.message)
+            handleLoading(it.status, it.message)
             when (it.status) {
                 Status.HOME -> {
                     llContent.visibility = View.VISIBLE

@@ -2,7 +2,7 @@ package com.marijannovak.autismhelper.common.base
 
 import com.marijannovak.autismhelper.utils.Failure
 import com.marijannovak.autismhelper.utils.Success
-import com.marijannovak.autismhelper.utils.Result
+import com.marijannovak.autismhelper.utils.LoadResult
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,7 +10,7 @@ import retrofit2.Response
 
 abstract class BaseRepository {
 
-    suspend fun <M : Any> getRemoteData(call: Deferred<Response<M>>, logicBlock: suspend (M) -> Result<M>): Result<M> {
+    suspend fun <M : Any> getRemoteData(call: Deferred<Response<M>>, logicBlock: suspend (M) -> LoadResult<M>): LoadResult<M> {
         return try {
             val response = call.await()
             if(response.isSuccessful) {
@@ -27,7 +27,7 @@ abstract class BaseRepository {
         }
     }
 
-    suspend fun <M: Any> getRemoteDataList(apiCall: Deferred<Response<List<M>>>, logicBlock: suspend (List<M>) -> Result<List<M>>): Result<List<M>> {
+    suspend fun <M: Any> getRemoteDataList(apiCall: Deferred<Response<List<M>>>, logicBlock: suspend (List<M>) -> LoadResult<List<M>>): LoadResult<List<M>> {
         return withContext(Dispatchers.IO) {
             try {
                 val loadedData = apiCall.await()
@@ -42,7 +42,7 @@ abstract class BaseRepository {
         }
     }
 
-    suspend fun <M: Any> getLocalData(dbCall: Deferred<M>, logicBlock: suspend (M) -> Result<M>): Result<M> {
+    suspend fun <M: Any> getLocalData(dbCall: Deferred<M>, logicBlock: suspend (M) -> LoadResult<M>): LoadResult<M> {
         return withContext(Dispatchers.Default) {
             try {
                 val loadedData = dbCall.await()
@@ -57,7 +57,7 @@ abstract class BaseRepository {
         }
     }
 
-    suspend fun completableNetworkCall(call: Deferred<Response<Nothing>>): Result<Boolean> {
+    suspend fun completableNetworkCall(call: Deferred<Response<Nothing>>): LoadResult<Boolean> {
         return try {
             val result = call.await()
             if(result.isSuccessful) {
