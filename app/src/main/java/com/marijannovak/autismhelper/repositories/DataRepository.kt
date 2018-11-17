@@ -63,7 +63,8 @@ class DataRepository @Inject constructor(
                 questionsWithImgs += it
             }
         }
-
+        
+        this.questionsWithImgs = questionsWithImgs
         this.phrases = phrases
 
         val contentWrapper = ContentWrapper(categories, questions, phrases, phraseCategories)
