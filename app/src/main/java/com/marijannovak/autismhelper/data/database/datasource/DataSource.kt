@@ -38,41 +38,6 @@ class DataSource @Inject constructor(
                     }
                 }
             }.await()
-
-            //       return Completable.mergeArray(
-//                api.getCategories()
-//                        .doOnSuccess {
-//                            db.categoriesDao().insertMultiple(it)
-//                        }.toCompletable(),
-//                api.getQuestions()
-//                        .doOnSuccess {
-//                            if(firstSync) {
-//                                db.questionDao().insertMultiple(it)
-//                            } else {
-//                                db.questionDao().updateMultiple(it)
-//                            }
-//                            for (question: Question in it) {
-//                                db.answerDao().insertMultiple(question.answers)
-//                                if (question.categoryId == 2) {
-//                                    questionsWithImgs += question
-//                                }
-//                            }
-//                        }.toCompletable(),
-//                api.getPhrases()
-//                        .doOnSuccess {
-//                            phrases = it
-//                            if(firstSync) {
-//                                db.aacDao().insertMultiple(it)
-//                            } else {
-//                                db.aacDao().updateMultiple(it)
-//                            }
-//                        }.toCompletable(),
-//                api.getPhraseCategories()
-//                        .doOnSuccess{
-//                            db.phraseCategoryDao().insertMultiple(it)
-//                        }.toCompletable()
-//        ).subscribeOn(ioScheduler)
-//                .observeOn(mainScheduler)
         }
     }
 }

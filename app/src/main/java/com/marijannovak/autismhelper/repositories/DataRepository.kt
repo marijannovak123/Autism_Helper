@@ -52,22 +52,19 @@ class DataRepository @Inject constructor(
     }
 
     suspend fun syncData(firstSync: Boolean) {
-        val categories = dataService.getCategories()
-        val questions = dataService.getQuestions()
-        val phrases = dataService.getPhrases()
-        val phraseCategories = dataService.getPhraseCategories()
-
-        val questionsWithImgs = ArrayList<Question>()
-        questions.forEach {
-            if(it.categoryId == 2) {//todo: to constant!
-                questionsWithImgs += it
+        val contentWrapper = dataService.getContent()
+        with(contentWrapper) {
+            val questionsWithImgs = ArrayList<Question>()
+            questions.forEach {
+                if(it.categoryId == 2) {//todo: to constant!
+                    questionsWithImgs += it
+                }
             }
+
+            this@DataRepository.questionsWithImgs = questionsWithImgs
+            this@DataRepository.phrases = phrases
         }
 
-        this.questionsWithImgs = questionsWithImgs
-        this.phrases = phrases
-
-        val contentWrapper = ContentWrapper(categories, questions, phrases, phraseCategories)
         dataSource.saveContent(contentWrapper, firstSync)
     }
 

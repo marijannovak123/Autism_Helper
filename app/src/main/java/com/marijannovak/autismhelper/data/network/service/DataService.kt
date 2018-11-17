@@ -1,9 +1,6 @@
 package com.marijannovak.autismhelper.data.network.service
 
-import com.marijannovak.autismhelper.data.models.AacPhrase
-import com.marijannovak.autismhelper.data.models.Category
-import com.marijannovak.autismhelper.data.models.PhraseCategory
-import com.marijannovak.autismhelper.data.models.Question
+import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.data.network.API
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,27 +9,15 @@ import javax.inject.Inject
 class DataService @Inject constructor (
         private val api: API
 ) {
-    suspend fun getCategories(): List<Category> {
+
+    suspend fun getContent(): ContentWrapper {
         return withContext(Dispatchers.IO) {
-            api.getCategories().await()
+            val categories = api.getCategories().await()
+            val questions = api.getQuestions().await()
+            val phrases = api.getPhrases().await()
+            val phraseCategories = api.getPhraseCategories().await()
+            ContentWrapper(categories, questions, phrases, phraseCategories)
         }
     }
 
-    suspend fun getQuestions(): List<Question> {
-        return withContext(Dispatchers.IO) {
-            api.getQuestions().await()
-        }
-    }
-
-    suspend fun getPhrases(): List<AacPhrase> {
-        return withContext(Dispatchers.IO) {
-            api.getPhrases().await()
-        }
-    }
-
-    suspend fun getPhraseCategories(): List<PhraseCategory> {
-        return withContext(Dispatchers.IO) {
-            api.getPhraseCategories().await()
-        }
-    }
 }
