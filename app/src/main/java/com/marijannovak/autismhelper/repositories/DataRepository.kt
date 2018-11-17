@@ -63,7 +63,7 @@ class DataRepository @Inject constructor(
                 questionsWithImgs += it
             }
         }
-        
+
         this.questionsWithImgs = questionsWithImgs
         this.phrases = phrases
 
@@ -99,7 +99,7 @@ class DataRepository @Inject constructor(
         }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
-    fun downloadImages(onComplete: () -> Unit, onError: (t: Throwable) -> Unit) {
+    fun downloadImages(onComplete: () -> Unit = {}, onError: (t: Throwable) -> Unit = {} ) {
         this.onDataDownloaded = onComplete
         this.onError = onError
         downloadQuestionImage(0)
@@ -145,7 +145,7 @@ class DataRepository @Inject constructor(
 
     }
 
-    private fun downloadPhraseImage(pos: Int) {
+    private fun downloadPhraseImage(pos: Int) {//TODO: THIS TO INTENT SERVICE!!
         val phrase = phrases[pos]
         files = context.filesDir.list()
         val filename = "${phrase.iconPath}.jpg"

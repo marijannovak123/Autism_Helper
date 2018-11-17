@@ -107,7 +107,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.0.0'
 
-    implementation 'com.awesomedroidapps:inappstoragereader:1.0.2'
+//    implementation 'com.awesomedroidapps:inappstoragereader:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -140,7 +140,8 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun downloadImages() {
-        dataRepository.downloadImages({ setSuccess()}, { throwErrorAndLogOut(R.string.sync_error) })
+        setSuccess()
+        dataRepository.downloadImages()
     }
 
     private fun throwErrorAndLogOut(msgRes: Int) {
