@@ -1,6 +1,6 @@
 package com.marijannovak.autismhelper.data.network.service
 
-import com.marijannovak.autismhelper.data.models.*
+import com.marijannovak.autismhelper.data.models.ContentWrapper
 import com.marijannovak.autismhelper.data.network.API
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

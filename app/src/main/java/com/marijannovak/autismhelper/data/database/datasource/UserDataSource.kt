@@ -1,13 +1,11 @@
 package com.marijannovak.autismhelper.data.database.datasource
 
-import android.util.Log
 import com.marijannovak.autismhelper.data.database.dao.ChildDao
 import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.utils.PrefsHelper
-import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.mapToList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

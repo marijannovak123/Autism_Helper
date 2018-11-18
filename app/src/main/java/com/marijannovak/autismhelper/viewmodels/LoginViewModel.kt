@@ -10,7 +10,6 @@ import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
 import com.marijannovak.autismhelper.repositories.LoginRepository
 import com.marijannovak.autismhelper.utils.*
-import kotlinx.android.synthetic.main.list_item_child.view.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,10 +36,11 @@ class LoginViewModel @Inject constructor(
         setLoading()
         uiScope.launch {
             dataRepository.syncUserData()
-        }.invokeOnCompletion { error ->
-            error?.let {
-                setMessage(R.string.data_load_error)
-            } ?: setData(user)
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.data_load_error)
+                        } ?: setData(user)
+                    }
         }
     }
 
@@ -98,11 +98,15 @@ class LoginViewModel @Inject constructor(
     private fun checkIfUserAlreadyExists(user: FirebaseUser) {
         uiScope.launch {
             repository.checkIfUserExists(user.uid)
-                    .onSuccess {
-                        fetchAndSaveUserData(user.uid)
+                    .onSuccess { exists ->
+                        if(exists) fetchAndSaveUserData(user.uid)
+                        else resourceLiveData.value = Resource.signedUp(user.mapToUser())
                     }.onError {
-                        if(it is NoSuchElementException)
-                        else throwErrorAndLogOut(R.string.error)
+                        if(it is NoSuchElementException || it is KotlinNullPointerException) {
+                            resourceLiveData.value = Resource.signedUp(user.mapToUser())
+                        } else {
+                            throwErrorAndLogOut(R.string.error)
+                        }
                     }
         }
     }
@@ -110,10 +114,11 @@ class LoginViewModel @Inject constructor(
     private fun fetchAndSaveUserData(userId: String) {
         uiScope.launch {
             repository.fetchAndSaveUser(userId)
-        }.invokeOnCompletion { error ->
-            error?.let {
-                throwErrorAndLogOut(R.string.fetch_error)
-            } ?: syncContent()
+                    .onCompletion { error ->
+                        error?.let {
+                            throwErrorAndLogOut(R.string.fetch_error)
+                        } ?: syncContent()
+                    }
         }
     }
 
@@ -121,10 +126,11 @@ class LoginViewModel @Inject constructor(
         setLoading()
         uiScope.launch {
             repository.uploadAndSaveUser(user)
-        }.invokeOnCompletion { error ->
-            error?.let {
-                throwErrorAndLogOut(R.string.firebase_upload_error)
-            } ?: syncContent()
+                    .onCompletion { error ->
+                        error?.let {
+                            throwErrorAndLogOut(R.string.firebase_upload_error)
+                        } ?: syncContent()
+                    }
         }
     }
 
@@ -132,10 +138,11 @@ class LoginViewModel @Inject constructor(
         setLoading(R.string.downloading_resources)
         uiScope.launch {
             dataRepository.syncData(true)
-        }.invokeOnCompletion { error ->
-            error?.let {
-                throwErrorAndLogOut(R.string.sync_error)
-            } ?: downloadImages()
+                    .onCompletion { error ->
+                        error?.let {
+                            throwErrorAndLogOut(R.string.sync_error)
+                        } ?: downloadImages()
+                    }
         }
     }
 

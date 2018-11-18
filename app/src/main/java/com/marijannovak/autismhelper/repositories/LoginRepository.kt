@@ -8,19 +8,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.marijannovak.autismhelper.common.listeners.GeneralListener
-import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.database.datasource.UserDataSource
 import com.marijannovak.autismhelper.data.models.SignupRequest
 import com.marijannovak.autismhelper.data.models.User
-import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.data.network.service.UserService
-import com.marijannovak.autismhelper.utils.*
-import io.reactivex.Completable
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import com.marijannovak.autismhelper.utils.Completion
+import com.marijannovak.autismhelper.utils.Failure
+import com.marijannovak.autismhelper.utils.LoadResult
+import com.marijannovak.autismhelper.utils.Success
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -29,13 +25,9 @@ import javax.inject.Singleton
 @Singleton
 class LoginRepository @Inject constructor(
         private val auth: FirebaseAuth,
-        private val db: AppDatabase,
         private val userSource: UserDataSource,
-        private val userService: UserService,
-        private val api: API,
-        private val prefs: PrefsHelper,
-        @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
-        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
+        private val userService: UserService
+) {
 
     private var currentUser: FirebaseUser? = null
 
@@ -104,18 +96,15 @@ class LoginRepository @Inject constructor(
         } catch (e: ApiException) {
             listener.onFailure(e)
         }
-
     }
 
     suspend fun checkIfUserExists(userId: String): LoadResult<Boolean> {
-        return try {
+        return LoadResult.create {
             val user = userService.getUserData(userId)
-            return when {
-                userDataFilled(user) -> Success(true)
-                else -> Success(false)
+            when {
+                userDataFilled(user) -> true
+                else -> false
             }
-        } catch (e: Exception) {
-            Failure(e)
         }
     }
 
@@ -125,14 +114,18 @@ class LoginRepository @Inject constructor(
                 && user.email!!.isNotEmpty())
     }
 
-    suspend fun uploadAndSaveUser(user: User) {
-        userService.uploadUser(user)
-        userSource.saveUser(user)
+    suspend fun uploadAndSaveUser(user: User): Completion {
+        return Completion.create {
+            userService.uploadUser(user)
+            userSource.saveUser(user)
+        }
     }
 
-    suspend fun fetchAndSaveUser(userId: String) {
-        val user = userService.getUserData(userId)
-        userSource.saveUser(user)
+    suspend fun fetchAndSaveUser(userId: String): Completion {
+        return Completion.create {
+            val user = userService.getUserData(userId)
+            userSource.saveUser(user)
+        }
     }
 
 }

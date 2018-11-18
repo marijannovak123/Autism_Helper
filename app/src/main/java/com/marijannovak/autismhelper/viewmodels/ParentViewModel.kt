@@ -1,21 +1,22 @@
 package com.marijannovak.autismhelper.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.*
-import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.repositories.AACRepository
 import com.marijannovak.autismhelper.repositories.ParentRepository
 import com.marijannovak.autismhelper.ui.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
+import com.marijannovak.autismhelper.utils.onCompletion
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
+
 class ParentViewModel @Inject constructor(
         private val repository: ParentRepository,
         private val aacRepository: AACRepository,
@@ -107,20 +108,22 @@ class ParentViewModel @Inject constructor(
         setLoading()
         uiScope.launch {
             dataRepository.syncUserData()
-        }.invokeOnCompletion { error ->
-            error?.let {
-                setMessage(R.string.sync_error)
-            } ?: syncData(false)
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.sync_error)
+                        } ?: syncData(false)
+                    }
         }
     }
 
     private fun syncData(firstSync: Boolean) {
         uiScope.launch {
             dataRepository.syncData(firstSync)
-        }.invokeOnCompletion { error ->
-            error?.let {
-                setMessage(R.string.sync_error)
-            } ?: downloadImages()
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.sync_error)
+                        } ?: downloadImages()
+                    }
         }
     }
 
