@@ -21,7 +21,7 @@ class AacDataSource @Inject constructor(
 
     suspend fun getAllPhrasesChannel(): ReceiveChannel<List<AacPhrase>> {
         return withContext(Dispatchers.IO) {
-            aacDao.getAllPhrases().openSubscription()
+            aacDao.getAllPhrases().distinctUntilChanged().openSubscription()
         }
     }
 

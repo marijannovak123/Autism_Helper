@@ -64,7 +64,10 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
             val icon = ImageHelper.saveBitmap(activity, loadedBitmap, loadedBitmapName).absolutePath
 
             if (text.isNotEmpty() && loadedBitmap != null && loadedBitmapName.isNotEmpty() && icon.isNotEmpty()) {
-                viewModel.savePhrase(AacPhrase(text.hashCode(), text.replaceSpacesWithUnderscores(), text, icon, categories[spPhraseCategories.selectedItemPosition].id))
+                viewModel.savePhrase(
+                        AacPhrase(text.hashCode(),
+                                text.replaceSpacesWithUnderscores(),
+                                text, icon, categories[spPhraseCategories.selectedItemPosition].id))
             } else {
                 toast(R.string.invalid_input)
             }
@@ -74,10 +77,7 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            viewModel.phraseLiveData.observe(this,
-                    Observer {
-                        setUpPhrasesRv(it)
-                    })
+            viewModel.phraseLiveData.observe(this, Observer { setUpPhrasesRv(it) })
             viewModel.phraseCategoryLiveData.observe(this, Observer { setUpCategorySpinner(it) })
         }
         viewModel.subscribeToPhrases()
@@ -107,8 +107,9 @@ class PhrasesFragment : InjectableFragment<ParentViewModel>() {
                     DialogHelper.showPromptDialog(activity as ParentActivity, getString(R.string.delete_phrase)) {
                         viewModel.deletePhrase(phrase)
                     }
-                }
+                }.apply { setHasStableIds(true) }
                 rvPhrases.adapter = phrasesAdapter
+                rvPhrases.setHasFixedSize(true)
                 rvPhrases.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 5)
                 rvPhrases.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
             }

@@ -22,6 +22,10 @@ abstract class BaseAdapter<VH : BaseViewHolder<T>, T>(
         holder.bind(dataSet[position], position, onItemClick, onLongItemClick)
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     fun update(dataSet: List<T>) {
         this.dataSet = dataSet.toMutableList()
         this.notifyDataSetChanged()

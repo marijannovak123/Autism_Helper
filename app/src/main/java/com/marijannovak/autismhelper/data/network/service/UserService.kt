@@ -13,7 +13,8 @@ class UserService @Inject constructor(
 ) {
     suspend fun getUserData(userId: String): User? {
         return withContext(Dispatchers.IO) {
-            api.getUser(userId).await()
+            val response = api.getUser(userId).await()
+            response.body()
         }
     }
 
