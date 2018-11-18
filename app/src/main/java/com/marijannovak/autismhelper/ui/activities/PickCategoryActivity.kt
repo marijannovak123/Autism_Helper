@@ -31,7 +31,7 @@ class PickCategoryActivity : ViewModelActivity<ChildViewModel, List<Category>>()
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { handleResource(it) })
+        viewModel.resource.observe(this, Observer { handleResource(it) })
     }
 
     override fun onResume() {

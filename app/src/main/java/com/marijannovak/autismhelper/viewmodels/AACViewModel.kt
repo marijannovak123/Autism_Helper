@@ -10,7 +10,10 @@ import com.marijannovak.autismhelper.data.models.SavedSentence
 import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.repositories.AACRepository
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.onCompletion
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.list_item_child.view.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AACViewModel
@@ -23,52 +26,53 @@ class AACViewModel
     var sentenceLivedata = MutableLiveData<List<SavedSentence>>()
 
     fun loadPhrases(phraseCategoryId: Int) {
-        compositeDisposable.add(
-                repository.getCategoryPhrases(phraseCategoryId).subscribe(
-                        { phrases -> phrasesLiveData.value = phrases },
-                        { error -> resourceLiveData.value = Resource.message(R.string.load_error, error.message ?: "") }
-                )
-        )
+        uiScope.launch {
+            val categoryPhrasesChannel = repository.getCategoryPhrases(phraseCategoryId)
+            for(categoryPhrases in categoryPhrasesChannel) {
+                phrasesLiveData.postValue(categoryPhrases)
+            }
+        }
     }
 
     fun saveSentence(sentence: SavedSentence) {
-        compositeDisposable.add(
-                repository.saveSentence(sentence).subscribe({
-                    resourceLiveData.value = Resource.success(null)
-                }, {
-                    resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "")
-                })
-        )
+        setLoading()
+        uiScope.launch {
+            repository.saveSentence(sentence)
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.save_error)
+                        } ?: setSuccess()
+                    }
+        }
     }
 
     fun loadPhraseCategories() {
-        compositeDisposable +=
-                repository.loadPhraseCategories()
-                        .subscribe({
-                            phraseCategoryLiveData.value  = it
-                        }, {
-                            resourceLiveData.value = Resource.message(R.string.load_error)
-                        })
+        uiScope.launch {
+            val phraseCategoryChannel = repository.loadPhraseCategories()
+            for(phraseCategories in phraseCategoryChannel) {
+                phraseCategoryLiveData.postValue(phraseCategories)
+            }
+        }
     }
 
     fun loadSentences() {
-        compositeDisposable +=
-                repository.loadSentences()
-                        .subscribe( {
-                            sentenceLivedata.value = it
-                        }, {
-                            resourceLiveData.value = Resource.message(R.string.load_error)
-                        })
+        uiScope.launch {
+            val sentenceChannel = repository.loadSentences()
+            for(sentences in sentenceChannel) {
+                sentenceLivedata.postValue(sentences)
+            }
+        }
     }
 
     fun deleteSentence(sentence: SavedSentence) {
-        compositeDisposable +=
-                repository.deleteSentence(sentence)
-                        .subscribe({
-                            resourceLiveData.value = Resource.message(R.string.deleted)
-                        }, {
-                            resourceLiveData.value = Resource.message(R.string.error)
-                        })
+        uiScope.launch {
+            repository.deleteSentence(sentence)
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.error)
+                        } ?: setMessage(R.string.deleted)
+                    }
+        }
     }
 
 }

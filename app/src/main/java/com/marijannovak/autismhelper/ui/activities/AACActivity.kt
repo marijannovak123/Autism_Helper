@@ -101,7 +101,7 @@ class AACActivity : ViewModelActivity<AACViewModel, PhrasesSavedSentencesJoin>()
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { handleResource(it) })
+        viewModel.resource.observe(this, Observer { handleResource(it) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

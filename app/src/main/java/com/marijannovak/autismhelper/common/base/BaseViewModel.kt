@@ -24,7 +24,7 @@ open class BaseViewModel<M> @Inject constructor(): ViewModel() {
     private val viewModelJob = Job()
     val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val resourceLiveData = MutableLiveData<Resource<M>>()
+    private val resourceLiveData = MutableLiveData<Resource<M>>()
 
     val resource: LiveData<Resource<M>>
         get() = resourceLiveData
@@ -62,6 +62,10 @@ open class BaseViewModel<M> @Inject constructor(): ViewModel() {
 
     protected fun setState(status: Status) {
         resourceLiveData.value = Resource(status, null, null)
+    }
+
+    protected fun setStateAndData(status: Status, data: M?) {
+        resourceLiveData.value = Resource(status, data, null)
     }
 
     fun logOut() {

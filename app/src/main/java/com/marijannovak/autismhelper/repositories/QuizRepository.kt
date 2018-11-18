@@ -1,44 +1,36 @@
 package com.marijannovak.autismhelper.repositories
 
-import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.data.database.dao.CategoryDao
-import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
+import com.marijannovak.autismhelper.data.database.datasource.CategoryDataSource
+import com.marijannovak.autismhelper.data.database.datasource.ChildDataSource
 import com.marijannovak.autismhelper.data.models.CategoryQuestionsAnswersJoin
 import com.marijannovak.autismhelper.data.models.ChildScore
-import com.marijannovak.autismhelper.data.network.API
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
+import com.marijannovak.autismhelper.data.network.service.ChildService
+import com.marijannovak.autismhelper.utils.Completion
+import kotlinx.coroutines.channels.ReceiveChannel
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class QuizRepository @Inject constructor(
-        private val categoryDao: CategoryDao,
-        private val childScoreDao: ChildScoreDao,
-        private val api: API,
-        @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
-        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
+        private val categorySource: CategoryDataSource,
+        private val childSource: ChildDataSource,
+        private val childService: ChildService
 ) {
 
-    fun getCategoryData(categoryId: Int): Flowable<CategoryQuestionsAnswersJoin> {
-        return categoryDao
-                .getCategoryWithQuestions(categoryId)
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun getCategoryData(categoryId: Int): ReceiveChannel<CategoryQuestionsAnswersJoin> {
+        return categorySource.getCategoryWithQuestionsChannel(categoryId)
     }
 
-    fun saveScoreLocallyAndOnline(score: ChildScore): Completable {
+    suspend fun saveScoreLocallyAndOnline(score: ChildScore): Completion {
         val scoreToSave = score.copy(id = Math.abs(score.hashCode()))
-        with(scoreToSave) {
-            return api.putScore(parentId, id, this)
-                    .onErrorComplete()
-                    .doOnComplete {
-                        childScoreDao.insert(scoreToSave)
-                    }.subscribeOn(ioScheduler)
-                    .observeOn(mainScheduler)
+        try {
+            childService.uploadScore(scoreToSave)
+        } catch (e: Exception) {
+            //don't throw exception, continue with inserting to db
         }
 
+        return Completion.create {
+            childSource.insertScore(scoreToSave)
+        }
     }
 }

@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
         setLoading()
         repository.register(signupRequest, object : GeneralListener<FirebaseUser> {
             override fun onSucces(model: FirebaseUser) {
-                resourceLiveData.value = Resource.signedUp(model.mapToUser(signupRequest))
+                setStateAndData(Status.SIGNEDUP, model.mapToUser(signupRequest))
             }
 
             override fun onFailure(t: Throwable) {
@@ -100,10 +100,10 @@ class LoginViewModel @Inject constructor(
             repository.checkIfUserExists(user.uid)
                     .onSuccess { exists ->
                         if(exists) fetchAndSaveUserData(user.uid)
-                        else resourceLiveData.value = Resource.signedUp(user.mapToUser())
+                        else setStateAndData(Status.SIGNEDUP, user.mapToUser())
                     }.onError {
                         if(it is NoSuchElementException || it is KotlinNullPointerException) {
-                            resourceLiveData.value = Resource.signedUp(user.mapToUser())
+                            setStateAndData(Status.SIGNEDUP, user.mapToUser())
                         } else {
                             throwErrorAndLogOut(R.string.error)
                         }

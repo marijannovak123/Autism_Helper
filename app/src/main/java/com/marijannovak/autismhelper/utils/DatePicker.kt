@@ -1,12 +1,12 @@
 package com.marijannovak.autismhelper.utils
 
 import android.app.DatePickerDialog
-import android.app.DialogFragment
 import android.content.Context
+import androidx.fragment.app.DialogFragment
 import java.util.*
 
 
-class DatePicker : DialogFragment() {
+class DatePicker: DialogFragment() {
 
     companion object {
         @JvmStatic

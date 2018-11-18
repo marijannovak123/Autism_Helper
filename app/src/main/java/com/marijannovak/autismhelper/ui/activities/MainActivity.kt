@@ -64,7 +64,7 @@ class MainActivity : ViewModelActivity<MainViewModel, List<Child>>() {
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
+        viewModel.resource.observe(this, Observer { resource -> handleResource(resource) })
     }
 
     override fun handleResource(resource: Resource<List<Child>>?) {

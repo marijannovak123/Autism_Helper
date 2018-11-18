@@ -44,7 +44,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel, User>() {
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { resource ->
+        viewModel.resource.observe(this, Observer { resource ->
             resource?.let {
                 handleResource(it)
             }

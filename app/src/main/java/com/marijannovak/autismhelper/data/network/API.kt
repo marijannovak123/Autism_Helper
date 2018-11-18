@@ -29,7 +29,7 @@ interface API {
 
     @CustomConverterFactory.Json
     @PUT("users/{userId}/child_scores/{scoreId}.json")
-    fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Completable
+    fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Deferred<Unit>
 
     @PUT("users/{userId}/children/{childId}.json")
     fun addChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable

@@ -185,6 +185,6 @@ class QuizActivity : ViewModelActivity<QuizViewModel, CategoryQuestionsAnswersJo
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { categories -> handleResource(categories) })
+        viewModel.resource.observe(this, Observer { categories -> handleResource(categories) })
     }
 }

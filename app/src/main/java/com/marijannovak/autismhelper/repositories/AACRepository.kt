@@ -22,8 +22,6 @@ import javax.inject.Singleton
 class AACRepository @Inject constructor(
         private val aacSource: AacDataSource,
         private val aacDao: AACDao,
-        private val sentenceDao: SavedSentenceDao,
-        private val phraseCategoryDao: PhraseCategoryDao,
         @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
         @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
 
@@ -31,49 +29,40 @@ class AACRepository @Inject constructor(
         return aacSource.getPhraseSentencesJoinChannel()
     }
 
-    fun getCategoryPhrases(phraseCategoryId: Int): Flowable<List<AacPhrase>> {
-        return aacDao.getCategoryPhrases(phraseCategoryId)
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun getCategoryPhrases(phraseCategoryId: Int): ReceiveChannel<List<AacPhrase>> {
+        return aacSource.getCategoryPhrasesChannel(phraseCategoryId)
     }
 
     suspend fun savePhrase(phrase: AacPhrase): Completion {
         return Completion.create {
             aacSource.savePhrase(phrase)
         }
-//        return Completable.fromAction {
-//                aacDao.insert(phrase)
-//        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
-    fun deletePhrase(phrase: AacPhrase): Completable {
-        return Completable.fromAction {
-            aacDao.delete(phrase)
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun deletePhrase(phrase: AacPhrase): Completion {
+        return Completion.create {
+            aacSource.deletePhrase(phrase)
+        }
     }
 
-    fun saveSentence(savedSentence: SavedSentence): Completable {
-        return Completable.fromAction {
-                sentenceDao.insert(savedSentence)
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun saveSentence(savedSentence: SavedSentence): Completion {
+        return Completion.create {
+            aacSource.saveSentence(savedSentence)
+        }
     }
 
-    fun loadPhraseCategories(): Flowable<List<PhraseCategory>> {
-        return phraseCategoryDao.getPhraseCategories()
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun loadPhraseCategories(): ReceiveChannel<List<PhraseCategory>> {
+        return aacSource.getPhraseCategoriesChannel()
     }
 
-    fun loadSentences(): Flowable<List<SavedSentence>> {
-        return sentenceDao.getSavedSentences()
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    fun loadSentences(): ReceiveChannel<List<SavedSentence>> {
+        return aacSource.getSavedSentences()
     }
 
-    fun deleteSentence(sentence: SavedSentence): Completable {
-        return Completable.fromAction {
-            sentenceDao.delete(sentence)
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun deleteSentence(sentence: SavedSentence): Completion {
+        return Completion.create {
+            aacSource.deleteSentence(sentence)
+        }
     }
 
 }

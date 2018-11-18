@@ -38,35 +38,34 @@ class ParentViewModel @Inject constructor(
                         {
                             userName = it
                             userNameLiveData.value = it
-                            resourceLiveData.value = Resource.success(null)
+                            setSuccess()
                         },
                         {
-                            Log.e(logTag(), it.message)
-                            resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "")
+                            setMessage(R.string.load_error)
                         }
                 )
         )
     }
 
     fun loadUserWithChildren() {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         compositeDisposable.add(
                 repository.loadUserWithChildren().subscribe(
                         {
                             userWithChildrenLiveData.value = it
-                            resourceLiveData.value = Resource.success(null)
+                            setSuccess()
                         },
-                        { resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "") }
+                        { setMessage(R.string.load_error) }
                 )
         )
     }
 
     fun saveChild(child: Child) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         compositeDisposable.add(
                 repository.saveChildLocallyAndOnline(child).subscribe(
-                        { resourceLiveData.value = Resource.saved() },
-                        { it -> resourceLiveData.value = Resource.message(R.string.error_inserting, it.message ?: "") }
+                        { setState(Status.SAVED) },
+                        { setMessage(R.string.error_inserting) }
                 )
         )
     }
@@ -76,9 +75,9 @@ class ParentViewModel @Inject constructor(
                 repository.loadChildScoresLineData(child).subscribe(
                         {
                             chartLiveData.value = it
-                            resourceLiveData.value = Resource.success(null)
+                            setSuccess()
                         },
-                        { resourceLiveData.value = Resource.message(R.string.load_error, it.message ?: "") }
+                        { setMessage(R.string.load_error) }
                 )
         )
     }
@@ -144,15 +143,17 @@ class ParentViewModel @Inject constructor(
     }
 
     fun deletePhrase(phrase: AacPhrase) {
-        resourceLiveData.value = Resource.loading()
-        aacRepository.deletePhrase(phrase).subscribe(
-                { /*no need for message, the phrase is gone instantly if deleted*/ },
-                { resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "") }
-        )
+        setLoading()
+        uiScope.launch {
+            aacRepository.deletePhrase(phrase)
+                    .onCompletion { error ->
+                        error?.let { setMessage(R.string.save_error) }
+                    }
+        }
     }
 
     fun updateUserData(userId: String, userUpdateRequest: UserUpdateRequest, picPath: String,  bitmap: Bitmap) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
@@ -162,21 +163,21 @@ class ParentViewModel @Inject constructor(
                 .addOnSuccessListener {
                     updateUserOnApiAndDb(userId, userUpdateRequest, picPath)
                 }.addOnFailureListener{
-                    resourceLiveData.value = Resource.message(R.string.firebase_upload_error,it.message ?: "Error" )
+                    setMessage(R.string.firebase_upload_error)
                 }
 
     }
 
     private fun updateUserOnApiAndDb(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String) {
         repository.updateUser(userId, userUpdateRequest, profilePicPath).subscribe({
-            resourceLiveData.value = Resource.message(R.string.saved, "")
+            setMessage(R.string.saved)
         }, {
-            resourceLiveData.value = Resource.message(R.string.save_error, it.message ?: "")
+            setMessage(R.string.save_error)
         })
     }
 
     fun loadUser() {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         compositeDisposable.add(
                 repository.loadUser().subscribe(
                         {
@@ -185,54 +186,56 @@ class ParentViewModel @Inject constructor(
                                 if(it.isEmpty()) user.parentPassword = repository.getParentPassword()
                             }
                             userLiveData.value = user
-                            resourceLiveData.value = Resource.success(null)
+                            setSuccess()
                         },
-                        { resourceLiveData.value = Resource.message(R.string.fetch_error, it.message ?: "") }
+                        { setMessage(R.string.fetch_error) }
                 )
         )
     }
 
     fun deleteChild(child: Child) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         compositeDisposable.add(
                 repository.deleteChild(child).subscribe({
-                    resourceLiveData.value = Resource.message(R.string.child_deleted, "")
+                    setMessage(R.string.child_deleted)
                 }, {
-                    resourceLiveData.value = Resource.message(R.string.error, it.message ?: "")
+                    setMessage(R.string.error)
                 })
         )
     }
 
     fun updateChild(child: Child) {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         compositeDisposable.add(
                 repository.updateChild(child).subscribe(
-                        {resourceLiveData.value = Resource.message(R.string.child_updated, "")},
-                        {resourceLiveData.value = Resource.message(R.string.error, it.message ?: "")}
+                        {setMessage(R.string.child_updated)},
+                        {setMessage(R.string.error)}
                 )
         )
     }
 
     fun saveSettings(settings: Settings) {
         dataRepository.saveSettings(settings)
-        resourceLiveData.value = Resource.saved()
+        setState(Status.SAVED)
     }
 
     fun fetchFeeds() {
-        resourceLiveData.value = Resource.loading()
+        setLoading()
         repository.fetchFeeds().subscribe({
             feedLiveData.value = it
-            resourceLiveData.value = Resource.success(null)
+            setSuccess()
         }, {
-            resourceLiveData.value = Resource.message(R.string.fetch_error, it.message ?: "")
+            setMessage(R.string.fetch_error)
         })
     }
 
     fun loadPhraseCategories() {
-        aacRepository.loadPhraseCategories()
-                .subscribe{
-                    phraseCategoryLiveData.value = it
-                }
+        uiScope.launch {
+            val phraseCategoryChannel = aacRepository.loadPhraseCategories()
+            for(phraseCategories in phraseCategoryChannel) {
+                phraseCategoryLiveData.postValue(phraseCategories)
+            }
+        }
     }
 
 }

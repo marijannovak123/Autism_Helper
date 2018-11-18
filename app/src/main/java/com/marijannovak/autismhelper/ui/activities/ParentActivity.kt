@@ -150,7 +150,7 @@ class ParentActivity : ViewModelActivity<ParentViewModel, UserChildrenJoin>() {
     }
 
     override fun subscribeToData() {
-        viewModel.resourceLiveData.observe(this, Observer { resource -> handleResource(resource) })
+        viewModel.resource.observe(this, Observer { resource -> handleResource(resource) })
         viewModel.userNameLiveData.observe(this, Observer { username -> navView.tvProfileName?.text = username })
     }
 
