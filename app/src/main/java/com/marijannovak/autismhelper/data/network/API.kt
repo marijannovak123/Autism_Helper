@@ -22,7 +22,7 @@ interface API {
     fun getPhrases(): Deferred<List<AacPhrase>>
 
     @GET("users/{userId}.json")
-    fun getUser(@Path("userId") userId: String): Deferred<User>
+    fun getUser(@Path("userId") userId: String): Deferred<User?>
 
     @PUT("users/{userId}.json")
     fun putUser(@Path("userId") userId: String, @Body user: User): Deferred<Unit>

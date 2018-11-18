@@ -65,7 +65,7 @@ class LoginViewModel @Inject constructor(
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.login_error, t.message!!)
+                setMessage(R.string.login_error)
             }
         })
     }
@@ -73,11 +73,11 @@ class LoginViewModel @Inject constructor(
     fun forgotPassword(email: String) {
         repository.forgotPassword(email, object : GeneralListener<Any> {
             override fun onSucces(model: Any) {
-                resourceLiveData.value = Resource.message(R.string.success, "")
+                setMessage(R.string.success)
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.error, t.message ?: "")
+                setMessage(R.string.error)
             }
         })
     }
@@ -90,7 +90,7 @@ class LoginViewModel @Inject constructor(
             }
 
             override fun onFailure(t: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.google_sign_in_error, t.message ?: "")
+                setMessage(R.string.google_sign_in_error)
             }
         })
     }

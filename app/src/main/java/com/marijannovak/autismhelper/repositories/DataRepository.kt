@@ -11,10 +11,10 @@ import com.marijannovak.autismhelper.data.database.datasource.UserDataSource
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.Question
+import com.marijannovak.autismhelper.data.models.Settings
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.data.network.service.DataService
 import com.marijannovak.autismhelper.data.network.service.UserService
-import com.marijannovak.autismhelper.ui.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.Completion
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.logTag
@@ -233,9 +233,9 @@ class DataRepository @Inject constructor(
         return Completion.create {
             val currentUserId = userDataSource.getLoggedInUser().id
             val userData = userService.getUserData(currentUserId)
-            userDataSource.updateUser(userData)
+            userData?.let { userDataSource.updateUser(it) }
 
-            val onlineScores = userData.childScores?.values?.toList() ?: emptyList()
+            val onlineScores = userData?.childScores?.values?.toList() ?: emptyList()
             val scoresToUpload = userDataSource.getScoresToUpload(onlineScores)
             if(scoresToUpload.isNotEmpty()) {
                 userService.uploadScores(currentUserId, scoresToUpload)
@@ -255,7 +255,7 @@ class DataRepository @Inject constructor(
         return prefsHelper.getTtsPitch()
     }
 
-    fun saveSettings(settings: SettingsFragment.Settings) {
+    fun saveSettings(settings: Settings) {
         prefsHelper.setSoundsOn(settings.soundOn)
         prefsHelper.setTtsPitch(settings.ttsPitch)
         prefsHelper.setTtsSpeed(settings.ttsSpeed)

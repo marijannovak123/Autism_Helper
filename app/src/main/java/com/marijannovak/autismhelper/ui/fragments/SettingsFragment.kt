@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.SeekBar
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
+import com.marijannovak.autismhelper.data.models.Settings
 import com.marijannovak.autismhelper.ui.activities.ParentActivity
 import com.marijannovak.autismhelper.viewmodels.ParentViewModel
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -88,6 +89,4 @@ class SettingsFragment : InjectableFragment<ParentViewModel>(), SeekBar.OnSeekBa
         }
         return super.onOptionsItemSelected(item)
     }
-
-     data class Settings(var soundOn: Boolean, var ttsSpeed: Float, var ttsPitch: Float)
 }

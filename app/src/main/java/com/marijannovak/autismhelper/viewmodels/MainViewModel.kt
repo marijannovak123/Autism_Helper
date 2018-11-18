@@ -1,11 +1,9 @@
 package com.marijannovak.autismhelper.viewmodels
 
-import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
 import com.marijannovak.autismhelper.data.models.Child
-import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.repositories.MainRepository
-import com.marijannovak.autismhelper.utils.Resource
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -16,13 +14,12 @@ class MainViewModel @Inject constructor(
 ): BaseViewModel<List<Child>>() {
 
     fun getChildrenToPick() {
-        compositeDisposable.add(
-                repository.getChildren().subscribe(
-                        { children -> resourceLiveData.value = Resource.success(children) },
-                        { resourceLiveData.value = Resource.message(R.string.children_load_fail, it.message ?: "") }
-                )
-        )
-
+        uiScope.launch {
+            val childrenChannel = repository.getChildren()
+            for(children in childrenChannel) {
+                setData(children)
+            }
+        }
     }
 
 }

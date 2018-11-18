@@ -101,10 +101,7 @@ class LoginRepository @Inject constructor(
     suspend fun checkIfUserExists(userId: String): LoadResult<Boolean> {
         return LoadResult.create {
             val user = userService.getUserData(userId)
-            when {
-                userDataFilled(user) -> true
-                else -> false
-            }
+            user?.let { userDataFilled(it) } ?: false
         }
     }
 
@@ -124,7 +121,7 @@ class LoginRepository @Inject constructor(
     suspend fun fetchAndSaveUser(userId: String): Completion {
         return Completion.create {
             val user = userService.getUserData(userId)
-            userSource.saveUser(user)
+            user?.let { userSource.saveUser(it) }
         }
     }
 

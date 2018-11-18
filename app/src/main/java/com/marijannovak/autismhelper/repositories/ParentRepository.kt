@@ -9,6 +9,7 @@ import com.marijannovak.autismhelper.config.Constants.Companion.RSS_URL
 import com.marijannovak.autismhelper.data.database.dao.*
 import com.marijannovak.autismhelper.data.database.datasource.AacDataSource
 import com.marijannovak.autismhelper.data.models.*
+import com.marijannovak.autismhelper.data.models.ChartData
 import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.toDayMonthString
@@ -26,7 +27,6 @@ class ParentRepository @Inject constructor(
         private val childDao: ChildDao,
         private val api: API,
         private val childScoreDao: ChildScoreDao,
-        private val aacDao: AACDao,
         private val userDao: UserDao,
         private val feedItemDao: FeedItemDao,
         private val prefsHelper: PrefsHelper,
@@ -55,24 +55,27 @@ class ParentRepository @Inject constructor(
     }
 
     private fun createLineData(scores: List<ChildScore>, child: Child): ChartData {
-        val sorted = scores.sortedWith(Comparator { o1, o2 -> (o1.timestamp-o2.timestamp).toInt()})
+        val sortedScores = scores.sortedBy { it.timestamp }
         var lineEntries: List<Entry> = emptyList()
         var barEntries: List<BarEntry> = emptyList()
         var dates: List<String> = emptyList()
-        for (i in 0 until scores.size) {
-            lineEntries += Entry(i.toFloat(), sorted[i].duration / 1000f)
-            barEntries += BarEntry(i.toFloat(), sorted[i].mistakes.toFloat())
-            dates += sorted[i].timestamp.toDayMonthString()
+
+        sortedScores.forEachIndexed { i, score ->
+            lineEntries += Entry(i.toFloat(), score.duration / 1000f)
+            barEntries += BarEntry(i.toFloat(), score.mistakes.toFloat())
+            dates += score.timestamp.toDayMonthString()
         }
+
         val lineDataSet = LineDataSet(lineEntries, "Duration in seconds")
         lineDataSet.color = if(child.gender == GENDERS[0]) Color.CYAN else Color.parseColor("#FF69B4")
         lineDataSet.lineWidth = 5f
-        val lineData = LineData(lineDataSet)
+        val durationData = LineData(lineDataSet)
 
         val barDataSet = BarDataSet(barEntries, "Mistakes")
         barDataSet.colors = if(child.gender == GENDERS[0]) ColorTemplate.MATERIAL_COLORS.toList() else ColorTemplate.JOYFUL_COLORS.toList()
-        val barData = BarData(barDataSet)
-        return ChartData(lineData, barData, dates)
+        val mistakeData = BarData(barDataSet)
+
+        return ChartData(durationData, mistakeData, dates)
     }
 
     suspend fun loadPhrases(): ReceiveChannel<List<AacPhrase>> {
@@ -141,7 +144,5 @@ class ParentRepository @Inject constructor(
                 }.subscribeOn(ioScheduler)
                 .observeOn(mainScheduler)
     }
-
-    data class ChartData(var lineData: LineData, var barData: BarData, var dates: List<String>)
 }
 

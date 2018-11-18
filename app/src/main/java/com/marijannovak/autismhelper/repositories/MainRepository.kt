@@ -1,12 +1,9 @@
 package com.marijannovak.autismhelper.repositories
 
-import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.data.database.dao.ChildDao
+import com.marijannovak.autismhelper.data.database.datasource.ChildDataSource
 import com.marijannovak.autismhelper.data.models.Child
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
+import kotlinx.coroutines.channels.ReceiveChannel
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -14,15 +11,11 @@ import javax.inject.Singleton
  */
 @Singleton
 class MainRepository @Inject constructor(
-        private val childDao: ChildDao,
-        @Named(Constants.SCHEDULER_IO) private val ioScheduler: Scheduler,
-        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler) {
+        private val childSource: ChildDataSource
+) {
 
-    fun getChildren(): Flowable<List<Child>> {
-        return childDao
-                .getChildren()
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
+    suspend fun getChildren(): ReceiveChannel<List<Child>> {
+        return childSource.childrenChannel()
     }
 
 }

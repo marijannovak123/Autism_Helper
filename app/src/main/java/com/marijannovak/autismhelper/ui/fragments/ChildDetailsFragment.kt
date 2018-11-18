@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.InjectableFragment
+import com.marijannovak.autismhelper.data.models.ChartData
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.repositories.ParentRepository
 import com.marijannovak.autismhelper.viewmodels.ParentViewModel
@@ -29,10 +30,7 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            viewModel.chartLiveData.observe(this,
-                    Observer {
-                        setupChartData(it)
-                    })
+            viewModel.chartLiveData.observe(this, Observer { setupChartData(it) })
 
             child?.let {
                 (activity as AppCompatActivity).supportActionBar?.title = it.name + getString(R.string.its_scores)
@@ -41,7 +39,7 @@ class ChildDetailsFragment : InjectableFragment<ParentViewModel>() {
         }
     }
 
-    private fun setupChartData(chartData: ParentRepository.ChartData?) {
+    private fun setupChartData(chartData: ChartData?) {
         chartData?.let {
             if (lcTimeScores.data == null && bcMistakes.data == null) {
                 val dateFormatter = IAxisValueFormatter { value, _ ->

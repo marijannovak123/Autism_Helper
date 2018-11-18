@@ -11,7 +11,7 @@ import javax.inject.Inject
 class UserService @Inject constructor(
         private val api: API
 ) {
-    suspend fun getUserData(userId: String): User {
+    suspend fun getUserData(userId: String): User? {
         return withContext(Dispatchers.IO) {
             api.getUser(userId).await()
         }

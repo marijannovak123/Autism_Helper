@@ -16,8 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-open class BaseViewModel<M>
-@Inject constructor(): ViewModel() {
+open class BaseViewModel<M> @Inject constructor(): ViewModel() {
 
     @Inject lateinit var resRepo: ResourceRepository
     @Inject lateinit var dataRepository: DataRepository

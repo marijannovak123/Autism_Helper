@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.R
 import com.marijannovak.autismhelper.common.base.BaseViewModel
+import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.data.models.*
 import com.marijannovak.autismhelper.repositories.AACRepository
 import com.marijannovak.autismhelper.repositories.ParentRepository
-import com.marijannovak.autismhelper.ui.fragments.SettingsFragment
 import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.logTag
 import com.marijannovak.autismhelper.utils.onCompletion
@@ -25,7 +25,7 @@ class ParentViewModel @Inject constructor(
 
     var userName = ""
     val userNameLiveData = MutableLiveData<String>()
-    val chartLiveData = MutableLiveData<ParentRepository.ChartData>()
+    val chartLiveData = MutableLiveData<ChartData>()
     val phraseLiveData = MutableLiveData<List<AacPhrase>>()
     val phraseCategoryLiveData = MutableLiveData<List<PhraseCategory>>()
     val userWithChildrenLiveData = MutableLiveData<UserChildrenJoin>()
@@ -89,19 +89,27 @@ class ParentViewModel @Inject constructor(
             val phrasesChannel = repository.loadPhrases()
             for(phrases in phrasesChannel) {
                 setSuccess()
-                phraseLiveData.value = phrases
+                phraseLiveData.postValue(phrases)
             }
         }
     }
 
     fun savePhrase(phrase: AacPhrase) {
-        resourceLiveData.value = Resource.loading()
-        compositeDisposable.add(
-                aacRepository.savePhrase(phrase).subscribe(
-                        { resourceLiveData.value = Resource.saved() },
-                        { setMessage(R.string.error_saving_phrase) }
-                )
-        )
+        setLoading()
+        uiScope.launch {
+            aacRepository.savePhrase(phrase)
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.error_saving_phrase)
+                        } ?: setState(Status.SAVED)
+                    }
+        }
+//        compositeDisposable.add(
+//                aacRepository.savePhrase(phrase).subscribe(
+//                        { resourceLiveData.value = Resource.saved() },
+//                        { setMessage(R.string.error_saving_phrase) }
+//                )
+//        )
     }
 
     fun syncUserAndData() {
@@ -205,7 +213,7 @@ class ParentViewModel @Inject constructor(
         )
     }
 
-    fun saveSettings(settings: SettingsFragment.Settings) {
+    fun saveSettings(settings: Settings) {
         dataRepository.saveSettings(settings)
         resourceLiveData.value = Resource.saved()
     }

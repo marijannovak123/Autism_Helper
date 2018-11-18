@@ -9,6 +9,7 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.PhraseCategory
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
+import com.marijannovak.autismhelper.utils.Completion
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
@@ -36,10 +37,13 @@ class AACRepository @Inject constructor(
                 .observeOn(mainScheduler)
     }
 
-    fun savePhrase(phrase: AacPhrase): Completable {
-        return Completable.fromAction {
-                aacDao.insert(phrase)
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun savePhrase(phrase: AacPhrase): Completion {
+        return Completion.create {
+            aacSource.savePhrase(phrase)
+        }
+//        return Completable.fromAction {
+//                aacDao.insert(phrase)
+//        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
     }
 
     fun deletePhrase(phrase: AacPhrase): Completable {

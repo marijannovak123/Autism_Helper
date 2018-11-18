@@ -6,7 +6,8 @@ sealed class LoadResult<out T : Any?> {
     companion object {
         inline fun <T> create(block: () -> T): LoadResult<T> {
             return try {
-                Success(block())
+                val result = block()
+                Success(result)
             } catch (e: Exception) {
                 Failure(e)
             }
@@ -40,7 +41,5 @@ inline fun <T : Any?> LoadResult<T>.onError(action: (Throwable) -> Unit) {
     if (this is Failure && error != null) action(error)
 }
 
-inline fun Completion.onCompletion(action: (Throwable?) -> Unit) {
-    action(error)
-}
+inline fun Completion.onCompletion(action: (Throwable?) -> Unit) { action(error) }
 

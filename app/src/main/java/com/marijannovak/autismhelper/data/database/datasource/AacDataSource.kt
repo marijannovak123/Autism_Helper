@@ -8,6 +8,7 @@ import com.marijannovak.autismhelper.data.models.SavedSentence
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.reactive.openSubscription
 import kotlinx.coroutines.withContext
@@ -33,6 +34,14 @@ class AacDataSource @Inject constructor(
                         phrases, sentences -> PhrasesSavedSentencesJoin(phrases, sentences)
                     }
             ).openSubscription()
+        }
+    }
+
+    suspend fun savePhrase(phrase: AacPhrase) {
+        return withContext(Dispatchers.IO) {
+            async {
+                aacDao.insert(phrase)
+            }.await()
         }
     }
 }

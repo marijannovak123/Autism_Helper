@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 interface BaseDao<in T> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(model: T): Long
+    fun insert(model: T)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMultiple(modelList: List<T>)
