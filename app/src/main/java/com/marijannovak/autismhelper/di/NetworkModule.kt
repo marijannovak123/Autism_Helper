@@ -13,7 +13,6 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
@@ -54,7 +53,6 @@ class NetworkModule {
                         .add(CustomConverterFactory.Xml::class.java, SimpleXmlConverterFactory.createNonStrict())
                         .add(CustomConverterFactory.Json::class.java, GsonConverterFactory.create())
                         .build())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
     }

@@ -32,26 +32,26 @@ interface API {
     fun putScore(@Path("userId") userId: String, @Path("scoreId") scoreId: Int, @Body score: ChildScore): Deferred<Unit>
 
     @PUT("users/{userId}/children/{childId}.json")
-    fun addChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
+    fun addChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Deferred<Unit>
 
     @DELETE("users/{userId}/children/{childId}.json")
-    fun deleteChild(@Path("userId") userId: String, @Path("childId") childId: String): Completable
+    fun deleteChild(@Path("userId") userId: String, @Path("childId") childId: String): Deferred<Unit>
 
     @PATCH("users/{userId}.json")
-    fun updateParentPassword(@Path("userId") userId: String, @Body password: ParentPasswordRequest): Completable
+    fun updateParentPassword(@Path("userId") userId: String, @Body password: ParentPasswordRequest): Deferred<Unit>
 
     @PATCH("users/{userId}.json")
-    fun updateParent(@Path("userId") userId: String, @Body user: UserUpdateRequest): Completable
+    fun updateParent(@Path("userId") userId: String, @Body user: UserUpdateRequest): Deferred<Unit>
 
     @PATCH("users/{userId}/children/{childId}.json")
-    fun updateChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Completable
+    fun updateChild(@Path("userId") userId: String, @Path("childId") childId: String, @Body child: Child): Deferred<Unit>
 
     @GET("phrase_categories.json")
     fun getPhraseCategories(): Deferred<List<PhraseCategory>>
 
     @GET
     @CustomConverterFactory.Xml
-    fun getFeed(@Url feedUrl: String): Single<RSS>
+    fun getFeed(@Url feedUrl: String): Deferred<RSS>
 
 
 }

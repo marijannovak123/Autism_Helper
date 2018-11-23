@@ -7,12 +7,8 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.PhraseCategory
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
-import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.repositories.AACRepository
-import com.marijannovak.autismhelper.utils.Resource
 import com.marijannovak.autismhelper.utils.onCompletion
-import io.reactivex.rxkotlin.plusAssign
-import kotlinx.android.synthetic.main.list_item_child.view.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

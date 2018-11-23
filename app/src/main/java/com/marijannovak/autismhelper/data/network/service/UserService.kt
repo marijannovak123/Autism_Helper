@@ -1,7 +1,9 @@
 package com.marijannovak.autismhelper.data.network.service
 
 import com.marijannovak.autismhelper.data.models.ChildScore
+import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.data.models.UserUpdateRequest
 import com.marijannovak.autismhelper.data.network.API
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -29,6 +31,18 @@ class UserService @Inject constructor(
     suspend fun uploadUser(user: User) {
         return withContext(Dispatchers.IO) {
             api.putUser(user.id, user).await()
+        }
+    }
+
+    suspend fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest) {
+        return withContext(Dispatchers.IO) {
+            api.updateParent(userId, userUpdateRequest).await()
+        }
+    }
+
+    suspend fun updateParentPassword(id: String, parentPasswordRequest: ParentPasswordRequest) {
+        return withContext(Dispatchers.IO) {
+            api.updateParentPassword(id, parentPasswordRequest).await()
         }
     }
 

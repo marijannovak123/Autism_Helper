@@ -1,46 +1,34 @@
 package com.marijannovak.autismhelper.repositories
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.StorageReference
 import com.marijannovak.autismhelper.App
-import com.marijannovak.autismhelper.config.Constants
-import com.marijannovak.autismhelper.data.database.AppDatabase
 import com.marijannovak.autismhelper.data.database.datasource.DataSource
 import com.marijannovak.autismhelper.data.database.datasource.UserDataSource
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.ParentPasswordRequest
 import com.marijannovak.autismhelper.data.models.Question
 import com.marijannovak.autismhelper.data.models.Settings
-import com.marijannovak.autismhelper.data.network.API
 import com.marijannovak.autismhelper.data.network.service.DataService
 import com.marijannovak.autismhelper.data.network.service.UserService
 import com.marijannovak.autismhelper.utils.Completion
 import com.marijannovak.autismhelper.utils.PrefsHelper
-import com.marijannovak.autismhelper.utils.logTag
-import io.reactivex.Completable
-import io.reactivex.Scheduler
 import org.jetbrains.anko.doAsync
 import java.io.File
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Created by Marijan on 26.3.2018..
  */
 class DataRepository @Inject constructor(
-        private val api: API,
         private val auth: FirebaseAuth,
         private val dataService: DataService,
         private val dataSource: DataSource,
         private val storage: StorageReference,
-        private val db: AppDatabase,
         private val userDataSource: UserDataSource,
         private val userService: UserService,
         private val prefsHelper: PrefsHelper,
-        private val context: App,
-        @Named(Constants.SCHEDULER_IO)private val ioScheduler: Scheduler,
-        @Named(Constants.SCHEDULER_MAIN) private val mainScheduler: Scheduler
+        private val context: App
 ) {
 
     private var questionsWithImgs: List<Question> = ArrayList()
@@ -72,31 +60,26 @@ class DataRepository @Inject constructor(
         }
     }
 
-    fun logOut(): Completable {
-        auth.signOut()
-        prefsHelper.setParentPassword("")
-        return Completable.fromAction {
-            db.userDao().deleteTable()
-            db.childDao().deleteTable()
-            db.childScoreDao().deleteTable()
-            db.savedSentenceDao().deleteTable()
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun logOut(): Completion {
+        return Completion.create {
+            auth.signOut()
+            prefsHelper.setParentPassword("")
+            dataSource.clearDb()
+        }
     }
 
     fun getParentPassword(): String = prefsHelper.getParentPassword()
 
-    fun saveParentPassword(password: String): Completable {
-        prefsHelper.setParentPassword(password)
-        return db.userDao().getCurrentUser()
-                .flatMapCompletable {
-                    user ->
-                    Completable.mergeArray(
-                            api.updateParentPassword(user.id, ParentPasswordRequest(password)),
-                            Completable.fromAction {
-                                db.userDao().insert(user)
-                            }
-                    )
-                }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    suspend fun saveParentPassword(password: String): Completion {
+        return Completion.create {
+            prefsHelper.setParentPassword(password)
+
+            val dbUser = userDataSource.getCurrentUser()
+            dbUser.parentPassword = password
+
+            userService.updateParentPassword(dbUser.id, ParentPasswordRequest(password))
+            userDataSource.insertUserSuspending(dbUser)
+        }
     }
 
     fun downloadImages(onComplete: () -> Unit = {}, onError: (t: Throwable) -> Unit = {} ) {
@@ -112,36 +95,34 @@ class DataRepository @Inject constructor(
             val filename = "${question.extraData}"
             val file = File(App.getAppContext().filesDir, filename)
             if (!files.contains(question.extraData)) {
-                Log.e(logTag(), "Downloading ${questionsWithImgs[pos].extraData}")
                 val ref = storage.child(question.extraData!!)
                 ref.getFile(file)
                         .addOnSuccessListener {
-                            updateQuestionImgPath(question, file.absolutePath).subscribe(
-                                    {
-                                        if (pos == questionsWithImgs.lastIndex) {
-                                            downloadPhraseImage(0)
-                                        } else {
-                                            downloadQuestionImage(pos + 1)
-                                        }
-                                    },
-                                    {
-                                        onError(it)
-                                        Log.e(logTag(), "FAIL ${question.extraData!!}")
-                                    }
-                            )
-                        }
-                        .addOnFailureListener {
+                            try {
+                                updateQuestionImgPath(question, file.absolutePath)
+                                if (pos == questionsWithImgs.lastIndex) {
+                                    downloadPhraseImage(0)
+                                } else {
+                                    downloadQuestionImage(pos + 1)
+                                }
+                            } catch (e: Exception) {
+                                onError(e)
+                            }
+                        }.addOnFailureListener {
                             onError(it)
-                            Log.e(logTag(), "FAIL ${question.extraData!!}")
                         }
             } else {
-                updateQuestionImgPath(question, file.absolutePath).subscribe {
+                try {
+                    updateQuestionImgPath(question, file.absolutePath)
                     if (pos == questionsWithImgs.lastIndex) {
                         downloadPhraseImage(0)
                     } else {
                         downloadQuestionImage(pos + 1)
                     }
+                } catch (e: Exception) {
+                    onError(e)
                 }
+
             }
         } else {
             downloadPhraseImage()
@@ -155,35 +136,32 @@ class DataRepository @Inject constructor(
             val filename = "${phrase.iconPath}.jpg"
             val file = File(App.getAppContext().filesDir, filename)
             if (!files.contains(phrase.iconPath)) {
-                Log.e(logTag(), "Downloading ${phrases[pos].iconPath}")
                 val ref = storage.child(phrase.iconPath)
                 ref.getFile(file)
                         .addOnSuccessListener {
-                            updatePhraseImgPath(phrase, file.absolutePath).subscribe(
-                                    {
-                                        if (pos == phrases.lastIndex) {
-                                            downloadProfilePic()
-                                        } else {
-                                            downloadPhraseImage(pos + 1)
-                                        }
-                                    },
-                                    {
-                                        onError(it)
-                                        Log.e(logTag(), "FAIL ${phrase.iconPath}")
-                                    }
-                            )
-                        }
-                        .addOnFailureListener {
+                            try {
+                                updatePhraseImgPath(phrase, file.absolutePath)
+                                if (pos == phrases.lastIndex) {
+                                    downloadProfilePic()
+                                } else {
+                                    downloadPhraseImage(pos + 1)
+                                }
+                            } catch (e: Exception) {
+                                onError(e)
+                            }
+                        }.addOnFailureListener {
                             onError(it)
-                            Log.e(logTag(), "FAIL ${phrase.iconPath}")
                         }
             } else {
-                updatePhraseImgPath(phrase, file.absolutePath).subscribe{
+                try {
+                    updatePhraseImgPath(phrase, file.absolutePath)
                     if (pos == phrases.lastIndex) {
                         downloadProfilePic()
                     } else {
                         downloadPhraseImage(pos + 1)
                     }
+                } catch (e: Exception) {
+                    onError(e)
                 }
             }
         } else {
@@ -192,41 +170,36 @@ class DataRepository @Inject constructor(
     }
 
     private fun downloadProfilePic() {
-        db.userDao()
-                .getCurrentUser()
-                .subscribeOn(ioScheduler)
-                .observeOn(mainScheduler)
-                .subscribe({ user ->
-                    if(user.profilePicPath.isNullOrEmpty()) {
-                        onDataDownloaded()
-                    } else {
-                        val filename = "${user.id}${System.currentTimeMillis()}.jpg"
-                        val file = File(App.getAppContext().filesDir, filename)
-                        val ref = storage.child(user.profilePicPath!!)
-                        ref.getFile(file)
-                                .addOnSuccessListener {
-                                    user.profilePicPath = file.absolutePath
-                                    doAsync { db.userDao().insert(user) }
-                                    onDataDownloaded()
-                                }.addOnFailureListener{onDataDownloaded()}
-                    }
-                }, {
-                    onDataDownloaded()
-                })
+        val user = userDataSource.getCurrentUserRaw()
+        try {
+            if(user.profilePicPath.isNullOrEmpty()) {
+                onDataDownloaded()
+            } else {
+                val filename = "${user.id}${System.currentTimeMillis()}.jpg"
+                val file = File(App.getAppContext().filesDir, filename)
+                val ref = storage.child(user.profilePicPath!!)
+                ref.getFile(file)
+                        .addOnSuccessListener {
+                            user.profilePicPath = file.absolutePath
+                            doAsync {
+                                userDataSource.insertUserNonSuspending(user)
+                            }
+                            onDataDownloaded()
+                        }.addOnFailureListener{
+                            onDataDownloaded()
+                        }
+            }
+        } catch (e: Exception) {
+            onDataDownloaded()
+        }
     }
 
-    private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String): Completable {
-        phrase.iconPath = absolutePath
-        return Completable.fromAction {
-            db.aacDao().insert(phrase)
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    private fun updatePhraseImgPath(phrase: AacPhrase, absolutePath: String) {
+        dataSource.updatePhraseImgPath(phrase, absolutePath)
     }
 
-    private fun updateQuestionImgPath(question: Question, path: String): Completable {
-        question.imgPath = path
-        return Completable.fromAction {
-            db.questionDao().insert(question)
-        }.subscribeOn(ioScheduler).observeOn(mainScheduler)
+    private fun updateQuestionImgPath(question: Question, path: String) {
+        dataSource.updateQuestionImgPath(question, path)
     }
 
     suspend fun syncUserData(): Completion {

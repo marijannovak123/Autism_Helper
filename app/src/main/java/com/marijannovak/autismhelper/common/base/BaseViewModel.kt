@@ -8,12 +8,14 @@ import com.marijannovak.autismhelper.common.enums.Status
 import com.marijannovak.autismhelper.repositories.DataRepository
 import com.marijannovak.autismhelper.repositories.ResourceRepository
 import com.marijannovak.autismhelper.utils.Resource
+import com.marijannovak.autismhelper.utils.onCompletion
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class BaseViewModel<M> @Inject constructor(): ViewModel() {
@@ -29,12 +31,8 @@ open class BaseViewModel<M> @Inject constructor(): ViewModel() {
     val resource: LiveData<Resource<M>>
         get() = resourceLiveData
 
-    protected var compositeDisposable = CompositeDisposable()
-
     override fun onCleared() {
         viewModelJob.cancel()
-        compositeDisposable.clear()
-        compositeDisposable.dispose()
         super.onCleared()
     }
 
@@ -69,19 +67,14 @@ open class BaseViewModel<M> @Inject constructor(): ViewModel() {
     }
 
     fun logOut() {
-        dataRepository.logOut().subscribe(object : CompletableObserver {
-            override fun onComplete() {
-                resourceLiveData.value = Resource.home()
-            }
-
-            override fun onSubscribe(d: Disposable) {
-                compositeDisposable.add(d)
-            }
-
-            override fun onError(e: Throwable) {
-                resourceLiveData.value = Resource.message(R.string.logout_not_success, e.message ?: "")
-            }
-        })
+        uiScope.launch {
+            dataRepository.logOut()
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.logout_not_success)
+                        } ?: setState(Status.HOME)
+                    }
+        }
     }
 
     fun isSoundOn() = dataRepository.isSoundOn()
@@ -90,10 +83,14 @@ open class BaseViewModel<M> @Inject constructor(): ViewModel() {
 
     fun saveParentPassword(password: String) {
         setLoading()
-        dataRepository.saveParentPassword(password).subscribe(
-                { resourceLiveData.value = Resource.next() },
-                { resourceLiveData.value = Resource.message(R.string.error_saving, it.message ?: "" ) }
-        )
+        uiScope.launch {
+            dataRepository.saveParentPassword(password)
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.error_saving)
+                        } ?: setState(Status.NEXT)
+                    }
+        }
     }
 
     fun getTtsSpeed() = dataRepository.getTtsSpeed()

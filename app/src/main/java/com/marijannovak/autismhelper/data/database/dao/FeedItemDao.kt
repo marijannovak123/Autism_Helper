@@ -11,5 +11,5 @@ import io.reactivex.Single
 interface FeedItemDao: BaseDao<FeedItem> {
 
     @Query("SELECT * FROM $TABLE_RSS")
-    fun getItems(): Single<List<FeedItem>>
+    fun getItems(): List<FeedItem>
 }

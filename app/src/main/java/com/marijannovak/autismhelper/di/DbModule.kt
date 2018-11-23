@@ -16,6 +16,7 @@ class DbModule {
     fun provideDb(context: App): AppDatabase {
         return Room
                 .databaseBuilder(context, AppDatabase::class.java, Constants.DB_NAME)
+                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build()
     }

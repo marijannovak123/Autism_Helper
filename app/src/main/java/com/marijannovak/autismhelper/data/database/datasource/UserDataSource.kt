@@ -5,10 +5,14 @@ import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.database.dao.UserDao
 import com.marijannovak.autismhelper.data.models.ChildScore
 import com.marijannovak.autismhelper.data.models.User
+import com.marijannovak.autismhelper.data.models.UserChildrenJoin
+import com.marijannovak.autismhelper.utils.LoadResult
 import com.marijannovak.autismhelper.utils.PrefsHelper
 import com.marijannovak.autismhelper.utils.mapToList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.reactive.openSubscription
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -64,4 +68,51 @@ class UserDataSource @Inject constructor(
             }.await()
         }
     }
+
+    suspend fun getCurrentUserName(): String {
+        return withContext(Dispatchers.IO) {
+            async {
+                userDao.getCurrentUser()?.username ?: "Parent"
+            }.await()
+        }
+    }
+
+    suspend fun getCurrentUser(): User {
+        return withContext(Dispatchers.IO) {
+            async {
+                userDao.getCurrentUser()
+            }.await()
+        }
+    }
+
+    suspend fun updateAll(username: String, parentPassword: String, profilePicPath: String) {
+        return withContext(Dispatchers.IO) {
+            async {
+                userDao.updateAll(username, parentPassword, profilePicPath)
+            }.await()
+        }
+    }
+
+    suspend fun getUserWithChildrenChannel(): ReceiveChannel<UserChildrenJoin> {
+        return withContext(Dispatchers.IO) {
+            userDao.getUserWithChildren().distinctUntilChanged().openSubscription()
+        }
+    }
+
+    fun insertUserNonSuspending(user: User) {
+        userDao.insert(user)
+    }
+
+    suspend fun insertUserSuspending(user: User) {
+        return withContext(Dispatchers.IO) {
+            async {
+                userDao.insert(user)
+            }.await()
+        }
+    }
+
+    fun getCurrentUserRaw(): User {
+        return userDao.getCurrentUser()
+    }
+
 }
