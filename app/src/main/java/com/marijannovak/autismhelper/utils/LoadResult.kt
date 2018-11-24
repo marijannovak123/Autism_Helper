@@ -15,7 +15,7 @@ sealed class LoadResult<out T : Any?> {
     }
 }
 
-class Completion(val error: Throwable? = null): LoadResult<Nothing>() {
+class Completion(val error: Throwable? = null) {
     companion object {
         inline fun create(block: () -> Unit): Completion {
             return try {
