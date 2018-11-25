@@ -5,9 +5,7 @@ import com.marijannovak.autismhelper.data.database.dao.*
 import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.ContentWrapper
 import com.marijannovak.autismhelper.data.models.Question
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
+import com.marijannovak.autismhelper.utils.CoroutineHelper
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
@@ -20,29 +18,27 @@ class DataSource @Inject constructor(
         private val database: AppDatabase
 ) {
     suspend fun saveContent(contentWrapper: ContentWrapper, firstSync: Boolean) {
-        return withContext(Dispatchers.IO) {
-            async {
-                with(contentWrapper) {
-                    categoryDao.insertMultiple(categories)
-                    phraseCategoryDao.insertMultiple(phraseCategories)
+        return CoroutineHelper.deferredCall {
+            with(contentWrapper) {
+                categoryDao.insertMultiple(categories)
+                phraseCategoryDao.insertMultiple(phraseCategories)
 
-                    if(firstSync) {
-                        questionDao.insertMultiple(questions)
-                    } else {
-                        questionDao.updateMultiple(questions)
-                    }
-
-                    questions.forEach {
-                        answerDao.insertMultiple(it.answers)
-                    }
-
-                    if(firstSync) {
-                        aacDao.insertMultiple(phrases)
-                    } else {
-                        aacDao.updateMultiple(phrases)
-                    }
+                if(firstSync) {
+                    questionDao.insertMultiple(questions)
+                } else {
+                    questionDao.updateMultiple(questions)
                 }
-            }.await()
+
+                questions.forEach {
+                    answerDao.insertMultiple(it.answers)
+                }
+
+                if(firstSync) {
+                    aacDao.insertMultiple(phrases)
+                } else {
+                    aacDao.updateMultiple(phrases)
+                }
+            }
         }
     }
 
@@ -54,18 +50,14 @@ class DataSource @Inject constructor(
     }
 
     suspend fun clearDb() {
-        return withContext(Dispatchers.IO) {
-            async {
-                database.clearAllTables()
-            }.await()
+        return CoroutineHelper.deferredCall {
+            database.clearAllTables()
         }
     }
 
     suspend fun insertPhrase(phrase: AacPhrase) {
-        return withContext(Dispatchers.IO) {
-            async {
-                aacDao.insert(phrase)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            aacDao.insert(phrase)
         }
     }
 

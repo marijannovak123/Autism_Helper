@@ -9,12 +9,9 @@ import com.marijannovak.autismhelper.data.database.dao.ChildScoreDao
 import com.marijannovak.autismhelper.data.models.ChartData
 import com.marijannovak.autismhelper.data.models.Child
 import com.marijannovak.autismhelper.data.models.ChildScore
+import com.marijannovak.autismhelper.utils.CoroutineHelper
 import com.marijannovak.autismhelper.utils.toDayMonthString
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.reactive.openSubscription
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ChildDataSource @Inject constructor(
@@ -22,31 +19,27 @@ class ChildDataSource @Inject constructor(
         private val childScoreDao: ChildScoreDao
 ) {
     suspend fun childrenChannel(): ReceiveChannel<List<Child>> {
-        return withContext(Dispatchers.IO) {
-            childDao.getChildren().openSubscription()
+        return CoroutineHelper.openFlowableChannel{
+            childDao.getChildren()
         }
     }
 
     suspend fun insertScore(score: ChildScore) {
-        return withContext(Dispatchers.IO) {
-            async {
-                childScoreDao.insert(score)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            childScoreDao.insert(score)
         }
     }
 
     suspend fun insertChild(child: Child) {
-        return withContext(Dispatchers.IO) {
-            async {
-                childDao.insert(child)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            childDao.insert(child)
         }
     }
 
     suspend fun getScoresLineDataChannel(child: Child): ReceiveChannel<ChartData> {
-        return withContext(Dispatchers.IO) {
-            childScoreDao.getChildScores(child.id).map { createLineData(it, child) }
-                    .distinctUntilChanged().openSubscription()
+        return CoroutineHelper.openFlowableChannel {
+            childScoreDao.getChildScores(child.id)
+                    .map { createLineData(it, child) }
         }
     }
 
@@ -75,18 +68,14 @@ class ChildDataSource @Inject constructor(
     }
 
     suspend fun deleteChild(child: Child) {
-        return withContext(Dispatchers.IO) {
-            async {
-                childDao.delete(child)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            childDao.delete(child)
         }
     }
 
     suspend fun updateChild(child: Child) {
-        return withContext(Dispatchers.IO) {
-            async {
-                childDao.update(child)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            childDao.update(child)
         }
     }
 }

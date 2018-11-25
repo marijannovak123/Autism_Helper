@@ -7,13 +7,10 @@ import com.marijannovak.autismhelper.data.models.AacPhrase
 import com.marijannovak.autismhelper.data.models.PhraseCategory
 import com.marijannovak.autismhelper.data.models.PhrasesSavedSentencesJoin
 import com.marijannovak.autismhelper.data.models.SavedSentence
+import com.marijannovak.autismhelper.utils.CoroutineHelper
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.reactive.openSubscription
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AacDataSource @Inject constructor(
@@ -23,68 +20,62 @@ class AacDataSource @Inject constructor(
 ) {
 
     suspend fun getAllPhrasesChannel(): ReceiveChannel<List<AacPhrase>> {
-        return withContext(Dispatchers.IO) {
-            aacDao.getAllPhrases().distinctUntilChanged().openSubscription()
+        return CoroutineHelper.openFlowableChannel {
+            aacDao.getAllPhrases()
         }
     }
 
     suspend fun getPhraseSentencesJoinChannel(): ReceiveChannel<PhrasesSavedSentencesJoin> {
-        return withContext(Dispatchers.IO) {
+        return CoroutineHelper.openFlowableChannel {
             Flowable.zip(
                     aacDao.getAllPhrases(),
                     sentenceDao.getSavedSentences(),
-                    BiFunction<List<AacPhrase>, List<SavedSentence>, PhrasesSavedSentencesJoin> {
-                        phrases, sentences -> PhrasesSavedSentencesJoin(phrases, sentences)
+                    BiFunction<List<AacPhrase>, List<SavedSentence>, PhrasesSavedSentencesJoin> { phrases, sentences ->
+                        PhrasesSavedSentencesJoin(phrases, sentences)
                     }
-            ).openSubscription()
+            )
         }
     }
 
     suspend fun savePhrase(phrase: AacPhrase) {
-        return withContext(Dispatchers.IO) {
-            async {
-                aacDao.insert(phrase)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            aacDao.insert(phrase)
         }
     }
 
     suspend fun getCategoryPhrasesChannel(phraseCategoryId: Int): ReceiveChannel<List<AacPhrase>> {
-        return withContext(Dispatchers.IO) {
-            aacDao.getCategoryPhrases(phraseCategoryId).distinctUntilChanged().openSubscription()
+        return CoroutineHelper.openFlowableChannel {
+            aacDao.getCategoryPhrases(phraseCategoryId)
         }
     }
 
     suspend fun saveSentence(savedSentence: SavedSentence) {
-        return withContext(Dispatchers.IO) {
-            async {
-                sentenceDao.insert(savedSentence)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            sentenceDao.insert(savedSentence)
         }
     }
 
     suspend fun getPhraseCategoriesChannel(): ReceiveChannel<List<PhraseCategory>> {
-        return withContext(Dispatchers.IO) {
-            phraseCategoryDao.getPhraseCategories().distinctUntilChanged().openSubscription()
+        return CoroutineHelper.openFlowableChannel {
+            phraseCategoryDao.getPhraseCategories()
         }
     }
 
-    fun getSavedSentences(): ReceiveChannel<List<SavedSentence>> {
-        return sentenceDao.getSavedSentences().distinctUntilChanged().openSubscription()
+    suspend fun getSavedSentences(): ReceiveChannel<List<SavedSentence>> {
+        return CoroutineHelper.openFlowableChannel {
+            sentenceDao.getSavedSentences()
+        }
     }
 
     suspend fun deleteSentence(sentence: SavedSentence) {
-        return withContext(Dispatchers.IO) {
-            async {
-                sentenceDao.delete(sentence)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            sentenceDao.delete(sentence)
         }
     }
 
     suspend fun deletePhrase(phrase: AacPhrase) {
-        return withContext(Dispatchers.IO) {
-            async {
-                aacDao.delete(phrase)
-            }.await()
+        return CoroutineHelper.deferredCall {
+            aacDao.delete(phrase)
         }
     }
 }

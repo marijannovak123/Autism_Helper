@@ -2,6 +2,7 @@ package com.marijannovak.autismhelper.data.network.service
 
 import com.marijannovak.autismhelper.data.models.ContentWrapper
 import com.marijannovak.autismhelper.data.network.API
+import com.marijannovak.autismhelper.utils.CoroutineHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

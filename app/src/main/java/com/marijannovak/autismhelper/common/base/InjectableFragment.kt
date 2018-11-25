@@ -15,10 +15,8 @@ open class InjectableFragment<V : BaseViewModel<*>> : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         val factory = viewModel.createFactory()
-        viewModel = ViewModelProviders.of(activity as androidx.fragment.app.FragmentActivity, factory).get(viewModel.javaClass)
-        Log.e(logTag(), "ViewModelInstance $viewModel")
+        viewModel = ViewModelProviders.of(this, factory).get(viewModel.javaClass)
     }
 
 }

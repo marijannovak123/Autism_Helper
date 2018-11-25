@@ -45,7 +45,7 @@ class AACRepository @Inject constructor(
         return aacSource.getPhraseCategoriesChannel()
     }
 
-    fun loadSentences(): ReceiveChannel<List<SavedSentence>> {
+    suspend fun loadSentences(): ReceiveChannel<List<SavedSentence>> {
         return aacSource.getSavedSentences()
     }
 
