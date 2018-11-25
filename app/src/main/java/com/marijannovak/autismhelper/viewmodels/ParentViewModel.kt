@@ -60,8 +60,11 @@ class ParentViewModel @Inject constructor(
         setLoading()
         uiScope.launch {
             repository.saveChildLocallyAndOnline(child)
-                    .onSuccess { setState(Status.SAVED) }
-                    .onError { setMessage(R.string.error_inserting) }
+                    .onCompletion { error ->
+                        error?.let {
+                            setMessage(R.string.error_inserting)
+                        } ?: setState(Status.SAVED)
+                    }
         }
     }
 

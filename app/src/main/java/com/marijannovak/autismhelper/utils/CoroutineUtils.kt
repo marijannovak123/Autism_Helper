@@ -12,17 +12,16 @@ sealed class LoadResult<out T : Any?> {
                 Failure(e)
             }
         }
-    }
-}
 
-class Completion(val error: Throwable? = null) {
-    companion object {
-        inline fun create(block: () -> Unit): Completion {
-            return try {
-                block.invoke()
-                Completion()
+        inline fun <T> refreshDataAndLoadFromDb(refreshBlock: () -> Unit, loadBlock: () -> T): LoadResult<T> {
+            try {
+                refreshBlock()
             } catch (e: Exception) {
-                Completion(e)
+                //ignore exception, load data already existing locally
+            }
+
+            return create {
+                loadBlock()
             }
         }
     }
@@ -41,5 +40,21 @@ inline fun <T : Any?> LoadResult<T>.onError(action: (Throwable) -> Unit) {
     if (this is Failure && error != null) action(error)
 }
 
+class Completion(val error: Throwable? = null) {
+    companion object {
+        inline fun create(block: () -> Unit): Completion {
+            return try {
+                block.invoke()
+                Completion()
+            } catch (e: Exception) {
+                Completion(e)
+            }
+        }
+    }
+}
+
 inline fun Completion.onCompletion(action: (Throwable?) -> Unit) { action(error) }
+
+
+
 

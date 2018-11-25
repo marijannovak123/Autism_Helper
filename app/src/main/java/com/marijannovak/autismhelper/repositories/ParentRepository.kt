@@ -84,15 +84,14 @@ class ParentRepository @Inject constructor(
     }
 
     suspend fun fetchFeeds(): LoadResult<List<FeedItem>> {
-        try {
-            val feed = feedService.getFeed()
-            feedDataSource.saveRss(feed)
-        } catch (e: Exception) {
-            //ignore api exception
-        }
-        return LoadResult.create {
-            feedDataSource.getItems()
-        }
+        return LoadResult.refreshDataAndLoadFromDb(
+                refreshBlock = {
+                    val feed = feedService.getFeed()
+                    feedDataSource.saveRss(feed)
+                }, loadBlock = {
+                    feedDataSource.getItems()
+                }
+        )
     }
 }
 
