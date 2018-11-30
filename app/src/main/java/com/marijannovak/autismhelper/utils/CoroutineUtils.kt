@@ -6,9 +6,23 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.reactive.openSubscription
 import retrofit2.Response
 
+
+/**
+ * Helpers for MVVM + Repository + DatSource/Service architecture with Kotlin Coroutines
+ * by Marijan Novak
+ */
+
+
+/**
+ * Result to return to ViewModel to handle results, holds data or error
+ */
 sealed class LoadResult<out T : Any?> {
 
     companion object {
+        /**
+         * Create load data call, catching any exceptions thrown.
+         * If call is successful return the result, otherwise failure.
+         */
         inline fun <T> create(block: () -> T): LoadResult<T> {
             return try {
                 val result = block()
@@ -18,7 +32,11 @@ sealed class LoadResult<out T : Any?> {
             }
         }
 
-        inline fun <T> refreshDataAndLoadFromDb(refreshBlock: () -> Unit, loadBlock: () -> T): LoadResult<T> {
+        /**
+         * Try refreshing data in local storage by fetching from remote source in refreshBlock, load
+         * local data regardless it was refreshed or not
+         */
+        inline fun <T> refreshAndLoadLocalData(refreshBlock: () -> Unit, loadBlock: () -> T): LoadResult<T> {
             try {
                 refreshBlock()
             } catch (e: Exception) {
@@ -29,25 +47,77 @@ sealed class LoadResult<out T : Any?> {
                 loadBlock()
             }
         }
+
+        /**
+         * Combine T1 and T2 calls results, pass combineBlock to implement combination class R
+         */
+        suspend inline fun <T1, T2, R> combineResult(
+                call1: Deferred<T1>,
+                call2: Deferred<T2>,
+                combineBlock: (T1, T2) -> R
+        ): LoadResult<R> {
+            return create {
+                val result1 = call1.await()
+                val result2 = call2.await()
+                combineBlock(result1, result2)
+            }
+        }
+
+        /**
+         * Analogous to the previous one, but combining three calls
+         */
+        suspend inline fun <T1, T2, T3, R> combineResult(
+                call1: Deferred<T1>,
+                call2: Deferred<T2>,
+                call3: Deferred<T3>,
+                combineBlock: (T1, T2, T3) -> R
+        ): LoadResult<R> {
+            return create {
+                val result1 = call1.await()
+                val result2 = call2.await()
+                val result3 = call3.await()
+                combineBlock(result1, result2, result3)
+            }
+        }
     }
 }
 
+/**
+ * Represents successful data load and returns the data
+ */
 data class Success<out T : Any?>(val data: T) : LoadResult<T>()
 
+/**
+ * Represents failure in loading data, return the exception thrown
+ */
 data class Failure(val error: Throwable?) : LoadResult<Nothing>()
 
+/**
+ * Handle successful call. Invoke action block passed. Return same result
+ * to further use it for onError
+ */
 inline fun <T : Any?> LoadResult<T>.onSuccess(action: (T) -> Unit): LoadResult<T> {
     if (this is Success) action(data)
     return this
 }
 
+/**
+ * Handle failure loading result and invoke the action passed. Return the
+ * result to further use it for onSuccess etc.
+ */
 inline fun <T : Any?> LoadResult<T>.onError(action: (Throwable) -> Unit): LoadResult<T> {
     if (this is Failure && error != null) action(error)
     return this
 }
 
+/**
+ * Represents completable call that returns no data. If exception thrown return it, otherwise null
+ */
 class Completion(val error: Throwable? = null) {
     companion object {
+        /**
+         * Call passed block and return Completion result
+         */
         inline fun create(block: () -> Unit): Completion {
             return try {
                 block.invoke()
@@ -56,38 +126,79 @@ class Completion(val error: Throwable? = null) {
                 Completion(e)
             }
         }
+
+        /**
+         * Execute multiple Completion calls in parallel
+         */
+        suspend inline fun executeMultiple(vararg calls: Deferred<Any>): Completion {
+            return create {
+                calls.asList().awaitAll()
+            }
+        }
+
     }
 }
 
-inline fun Completion.onCompletion(action: (Throwable?) -> Unit) {
-    action(error)
-}
+/**
+ * Handle Completion result
+ */
+inline fun Completion.onCompletion(action: (Throwable?) -> Unit) { action(error) }
 
+
+
+/**
+ * Create calls passed to Repository from DataSource and Service
+ */
 class CoroutineHelper {
     companion object {
-        suspend fun <T> deferredCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, call: () -> T): T {
+        /**
+         * Make an async call on preferred dispatcher
+         */
+        suspend fun <T> deferredCall(
+                dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                call: () -> T
+        ): T {
             return withContext(dispatcher) {
                 async { call() }.await()
             }
         }
 
-        suspend fun <T> openFlowableChannel(dispatcher: CoroutineDispatcher = Dispatchers.IO, call: () -> Flowable<T>): ReceiveChannel<T> {
+        /**
+         * Return a ReceiveChannel from a Flowable (used for Flowable returned from Room DB)
+         */
+        suspend fun <T> openFlowableChannel(
+                dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                call: () -> Flowable<T>
+        ): ReceiveChannel<T> {
             return withContext(dispatcher) {
                 call().distinctUntilChanged().openSubscription()
             }
         }
 
-        suspend fun <T> awaitDeferred(dispatcher: CoroutineDispatcher = Dispatchers.IO, call: () -> Deferred<T>): T {
+        /**
+         * Await a Deferred on a preferred Dispatcher
+         */
+        suspend fun <T> awaitDeferred(
+                dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                call: () -> Deferred<T>
+        ): T {
             return withContext(dispatcher) {
                 call().await()
             }
         }
 
-        suspend fun <T> awaitDeferredResponse(dispatcher: CoroutineDispatcher = Dispatchers.IO, block: () -> Deferred<Response<T?>>): T? {
+        /**
+         * Await a Deferred with a Retrofit Response and return the body if successful
+         */
+        suspend fun <T> awaitDeferredResponse(
+                dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                block: () -> Deferred<Response<T?>>
+        ): T? {
             return withContext(dispatcher) {
                 block().await().body()
             }
         }
+
     }
 }
 

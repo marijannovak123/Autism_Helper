@@ -84,7 +84,7 @@ class ParentRepository @Inject constructor(
     }
 
     suspend fun fetchFeeds(): LoadResult<List<FeedItem>> {
-        return LoadResult.refreshDataAndLoadFromDb(
+        return LoadResult.refreshAndLoadLocalData(
                 refreshBlock = {
                     val feed = feedService.getFeed()
                     feedDataSource.saveRss(feed)

@@ -17,7 +17,11 @@ class FeedDataSource @Inject constructor(
 
     suspend fun saveRss(feed: RSS) {
         return CoroutineHelper.deferredCall {
-            feedItemDao.insertMultiple(feed.channel.feedItems)
+            with(feed.channel) {
+                if(feedItems.isNotEmpty()) {
+                    feedItemDao.insertMultiple(feed.channel.feedItems)
+                }
+            }
         }
     }
 
