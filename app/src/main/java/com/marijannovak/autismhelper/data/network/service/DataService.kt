@@ -12,13 +12,16 @@ class DataService @Inject constructor (
 ) {
 
     suspend fun getContent(): ContentWrapper {
-        return withContext(Dispatchers.IO) {
-            val categories = api.getCategories().await()
-            val questions = api.getQuestions().await()
-            val phrases = api.getPhrases().await()
-            val phraseCategories = api.getPhraseCategories().await()
-            ContentWrapper(categories, questions, phrases, phraseCategories)
+        return CoroutineHelper.combineResult(
+                api.getCategories(),
+                api.getQuestions(),
+                api.getPhrases(),
+                api.getPhraseCategories()
+        ) {
+            categories, questions, phrases, phraseCategories ->
+                ContentWrapper(categories, questions, phrases, phraseCategories)
         }
+
     }
 
 }

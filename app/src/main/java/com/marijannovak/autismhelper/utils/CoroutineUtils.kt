@@ -47,38 +47,6 @@ sealed class LoadResult<out T : Any?> {
                 loadBlock()
             }
         }
-
-        /**
-         * Combine T1 and T2 calls results, pass combineBlock to implement combination class R
-         */
-        suspend inline fun <T1, T2, R> combineResult(
-                call1: Deferred<T1>,
-                call2: Deferred<T2>,
-                combineBlock: (T1, T2) -> R
-        ): LoadResult<R> {
-            return create {
-                val result1 = call1.await()
-                val result2 = call2.await()
-                combineBlock(result1, result2)
-            }
-        }
-
-        /**
-         * Analogous to the previous one, but combining three calls
-         */
-        suspend inline fun <T1, T2, T3, R> combineResult(
-                call1: Deferred<T1>,
-                call2: Deferred<T2>,
-                call3: Deferred<T3>,
-                combineBlock: (T1, T2, T3) -> R
-        ): LoadResult<R> {
-            return create {
-                val result1 = call1.await()
-                val result2 = call2.await()
-                val result3 = call3.await()
-                combineBlock(result1, result2, result3)
-            }
-        }
     }
 }
 
@@ -197,6 +165,51 @@ class CoroutineHelper {
             return withContext(dispatcher) {
                 block().await().body()
             }
+        }
+
+        /**
+         * Combine T1 and T2 calls results, pass combineBlock to implement combination class R
+         */
+        suspend inline fun <T1, T2, R> combineResult(
+                call1: Deferred<T1>,
+                call2: Deferred<T2>,
+                combineBlock: (T1, T2) -> R
+        ): R {
+            val result1 = call1.await()
+            val result2 = call2.await()
+            return combineBlock(result1, result2)
+        }
+
+        /**
+         * Analogous to the previous one, but combining three calls
+         */
+        suspend inline fun <T1, T2, T3, R> combineResult(
+                call1: Deferred<T1>,
+                call2: Deferred<T2>,
+                call3: Deferred<T3>,
+                combineBlock: (T1, T2, T3) -> R
+        ): R {
+            val result1 = call1.await()
+            val result2 = call2.await()
+            val result3 = call3.await()
+            return combineBlock(result1, result2, result3)
+        }
+
+        /**
+         * Analogous to the previous one, but combining four calls
+         */
+        suspend inline fun <T1, T2, T3, T4, R> combineResult(
+                call1: Deferred<T1>,
+                call2: Deferred<T2>,
+                call3: Deferred<T3>,
+                call4: Deferred<T4>,
+                combineBlock: (T1, T2, T3, T4) -> R
+        ): R {
+            val result1 = call1.await()
+            val result2 = call2.await()
+            val result3 = call3.await()
+            val result4 = call4.await()
+            return combineBlock(result1, result2, result3, result4)
         }
 
     }
