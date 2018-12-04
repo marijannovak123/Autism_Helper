@@ -142,7 +142,9 @@ class ParentViewModel @Inject constructor(
         uiScope.launch {
             aacRepository.deletePhrase(phrase)
                     .onCompletion { error ->
-                        error?.let { setMessage(R.string.save_error) }
+                        error?.let {
+                            setMessage(R.string.save_error)
+                        }
                     }
         }
     }

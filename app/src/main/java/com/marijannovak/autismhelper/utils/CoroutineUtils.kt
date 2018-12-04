@@ -95,15 +95,6 @@ class Completion(val error: Throwable? = null) {
             }
         }
 
-        /**
-         * Execute multiple Completion calls in parallel
-         */
-        suspend inline fun executeMultiple(vararg calls: Deferred<Any>): Completion {
-            return create {
-                calls.asList().awaitAll()
-            }
-        }
-
     }
 }
 
@@ -127,7 +118,7 @@ class CoroutineHelper {
                 call: () -> T
         ): T {
             return withContext(dispatcher) {
-                async { call() }.await()
+                 call()
             }
         }
 
@@ -210,6 +201,18 @@ class CoroutineHelper {
             val result3 = call3.await()
             val result4 = call4.await()
             return combineBlock(result1, result2, result3, result4)
+        }
+
+        /**
+         * Execute multiple Completion calls in parallel
+         */
+        suspend inline fun executeMultiple(
+                dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                vararg calls: Deferred<Any>
+        ): List<Any> {
+            return withContext(dispatcher) {
+                calls.asList().awaitAll()
+            }
         }
 
     }

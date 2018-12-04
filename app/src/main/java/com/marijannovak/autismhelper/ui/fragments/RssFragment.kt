@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_rss.*
 class RssFragment : InjectableFragment<ParentViewModel>() {
 
     private var feedAdapter: RssAdapter? = null
-    private var startTime = 0L
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rss, container, false)
@@ -31,12 +30,10 @@ class RssFragment : InjectableFragment<ParentViewModel>() {
             viewModel.feedLiveData.observe(this, Observer { feeds -> setUpFeedRv(feeds) })
         }
 
-        startTime = System.currentTimeMillis()
         viewModel.fetchFeeds()
     }
 
     private fun setUpFeedRv(feeds: List<FeedItem>?) {
-        Log.e("Feeds", "${System.currentTimeMillis()-startTime}")
         feeds?.let {
             if(feedAdapter == null || rvFeed.adapter == null) {
                 feedAdapter = RssAdapter(emptyList(), { feed, _ -> openItemInBrowser(feed.link) })
