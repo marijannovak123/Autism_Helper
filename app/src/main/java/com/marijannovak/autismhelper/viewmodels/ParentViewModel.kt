@@ -80,11 +80,14 @@ class ParentViewModel @Inject constructor(
     fun subscribeToPhrases() {
         setLoading()
         uiScope.launch {
-            val phrasesChannel = repository.loadPhrases()
-            for(phrases in phrasesChannel) {
-                setSuccess()
-                phraseLiveData.postValue(phrases)
-            }
+            repository.loadPhrases()
+                    .onSuccess { setSuccess(); phraseLiveData.value = it }
+                    .onError { setMessage(R.string.error) }
+//            val phrasesChannel = repository.loadPhrases()
+//            for(phrases in phrasesChannel) {
+//                setSuccess()
+//                phraseLiveData.postValue(phrases)
+//            }
         }
     }
 
@@ -98,12 +101,6 @@ class ParentViewModel @Inject constructor(
                         } ?: setState(Status.SAVED)
                     }
         }
-//        compositeDisposable.add(
-//                aacRepository.savePhrase(phrase).subscribe(
-//                        { resourceLiveData.value = Resource.saved() },
-//                        { setMessage(R.string.error_saving_phrase) }
-//                )
-//        )
     }
 
     fun syncUserAndData() {

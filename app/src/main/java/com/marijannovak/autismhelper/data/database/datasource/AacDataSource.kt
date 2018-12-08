@@ -78,4 +78,8 @@ class AacDataSource @Inject constructor(
             aacDao.delete(phrase)
         }
     }
+
+    suspend fun getPhrasesSuspend(): List<AacPhrase> {
+        return aacDao.getPhrasesSuspend()
+    }
 }

@@ -10,9 +10,7 @@ class FeedDataSource @Inject constructor(
         private val feedItemDao: FeedItemDao
 ) {
     suspend fun getItems(): List<FeedItem> {
-        return CoroutineHelper.deferredCall {
-            feedItemDao.getItems()
-        }
+        return feedItemDao.getItems()
     }
 
     suspend fun saveRss(feed: RSS) {

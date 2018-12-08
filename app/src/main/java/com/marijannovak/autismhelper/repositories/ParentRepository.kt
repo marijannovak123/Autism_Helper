@@ -41,8 +41,10 @@ class ParentRepository @Inject constructor(
         return childDataSource.getScoresLineDataChannel(child)
     }
 
-    suspend fun loadPhrases(): ReceiveChannel<List<AacPhrase>> {
-        return aacSource.getAllPhrasesChannel()
+    suspend fun loadPhrases(): LoadResult<List<AacPhrase>> {
+        return LoadResult.create {
+            aacSource.getPhrasesSuspend()
+        }
     }
 
     suspend fun updateUser(userId: String, userUpdateRequest: UserUpdateRequest, profilePicPath: String): Completion {

@@ -14,6 +14,9 @@ interface AACDao : BaseDao<AacPhrase> {
     @Query("SELECT * FROM $TABLE_AAC")
     fun getAllPhrases(): Flowable<List<AacPhrase>>
 
+    @Query("SELECT * FROM $TABLE_AAC")
+    suspend fun getPhrasesSuspend(): List<AacPhrase>
+
     @Query("SELECT * FROM $TABLE_AAC WHERE categoryId = :categoryId")
     fun getCategoryPhrases(categoryId: Int): Flowable<List<AacPhrase>>
 
